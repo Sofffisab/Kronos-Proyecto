@@ -1,0 +1,21 @@
+
+  :root {
+    --secondaryColor: #D9D9D9;
+    --mainColor: white;
+    --fontContrast: #000;
+    --tertiaryColor: #A2A2A2;
+    --darkerTertiaryColor: #898585;
+    --textColor: rgb(255, 255, 255);
+    --font: 'inter';
+    --classyFont: 'Castoro Titling';
+    --smallerHeaderSize: .7rem;
+    --headerSize: 1.3rem;
+    --mediumSize: 1.1;
+    --biggerHeaderSize: 2.5rem;
+    --defaultFontWeight: 300;
+    --decal: #575F1082;
+    --errorColor: #B20000;
+    --linkColor: #4240BE;
+    --easeTransition: ease .15s all;
+    --slowerTransition: ease .3s all;
+  }

@@ -1,0 +1,57 @@
+.PgContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    margin-top: 12.5vh;
+    margin-left: 22.5%;
+    transition: var(--easeTransition);
+}
+.topMenuPgContent {
+    transition: var(--easeTransition);
+    position: relative;
+  width: 100%;
+  background-color: var(--mainColor);
+  padding: 1%;
+  box-sizing: border-box;
+  height: min-content;
+  }
+  .topMenuPgContent div {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  #topMenuContentTitle {
+  gap: 60%
+  }
+  #topMenuPgContentList {
+  gap: 1%;
+  font-family: var(--font);
+  
+  }
+  #topMenuPgContentList p {
+  cursor: pointer;
+  padding: 1%;
+  margin-bottom: .25%;
+  border-radius: 15px;
+  width: 15%;
+  text-align: center;
+  }
+  #topMenuPgContentList p:hover {
+  background-color: var(--secondaryColor);
+  
+  }
+  .compartirBtn {
+    align-items: center;
+    display: flex;
+  background-color: var(--darkerTertiaryColor);
+  color: var(--textColor);
+  padding: 1%;
+  width: min-content;
+  border-radius: 15px;
+  }
+  .compartirBtn button {
+    color: inherit;
+    font-family: var(--font);
+    font-size: var(--mediumSize);
+  }
