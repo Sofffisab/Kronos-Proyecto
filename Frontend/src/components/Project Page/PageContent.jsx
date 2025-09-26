@@ -10,8 +10,7 @@ const [selected, setSelected] = useState(1)
 
 return (<div className='PgContent' style={props.SbOpen?{marginLeft: '0px', width: '100%'} : {}}>
 <SelectBar setSelected={setSelected} selected={selected} SbOpen={props.SbOpen}/>
-<List/>
-
+{selected==1? 'calendario' : selected==2?<List/> : selected==3? 'tablero' : selected==4? 'mensajes' : null}
 </div>
 )
 
