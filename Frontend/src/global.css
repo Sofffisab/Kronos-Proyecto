@@ -19,3 +19,6 @@
     --easeTransition: ease .15s all;
     --slowerTransition: ease .3s all;
   }
+  .material-symbols-outlined {
+    user-select: none;
+  }

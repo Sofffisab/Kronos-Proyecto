@@ -61,6 +61,7 @@ font-size: var(--mediumSize);
     
 }
 .category div {
+    
     display: flex;
     align-items: center;
     padding: 1.5vmin;
@@ -74,5 +75,22 @@ font-size: var(--mediumSize);
 }
 
 .table {
+    font-family: var(--font);
     width: 100%;
+    
+}
+.table span {
+cursor: pointer;
+}
+
+hr {
+    opacity: 0.3
+}
+
+.table p {
+padding-left: 1.5vmin;
+color: var(--fontContrast);
+opacity: 47%;
+cursor: pointer;
+
 }

@@ -9,6 +9,7 @@ const content = toggleTasks?   props.tasks : <Separator/>
         <div className='table'>
             <div><span onClick={() =>setToggleTasks(!toggleTasks)}className='material-symbols-outlined'>keyboard_arrow_{toggleTasks? 'down' : 'up'}</span>{props.name}</div>
         <div >{content}</div>
+        <p >Agregar tarea...</p>
         </div>
     )
 }
