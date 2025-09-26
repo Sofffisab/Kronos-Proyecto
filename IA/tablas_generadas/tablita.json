@@ -1,66 +1,82 @@
 [
     {
-        "criterion_or_website": "Website Description",
-        "conclusion": "",
-        "Newegg": "Minorista online líder en hardware y electrónica para PC, popular entre entusiastas y constructores de PC.",
-        "Amazon": "El gigante del comercio electrónico global que ofrece una vasta selección de componentes de PC y electrónica.",
-        "PcComponentes": "Tienda online española líder en informática y tecnología, conocida por precios competitivos y servicio al cliente.",
-        "Rity PC": "Un sitio web de e-commerce especializado en componentes de PC, con una interfaz sencilla y enfocado en la exhibición de productos populares."
-    },
-    {
         "criterion_or_website": "Typography & Readability",
-        "conclusion": "Implementar una mayor variación tipográfica para destacar información crucial, como precios o promociones. Considerar el uso de fuentes web optimizadas para una carga más rápida.",
-        "Newegg": "Newegg utiliza una tipografía clara y legible, a menudo en tonos oscuros sobre fondos claros, lo que favorece una buena experiencia de lectura prolongada. Las jerarquías visuales están bien definidas mediante tamaños y pesos de fuente.",
-        "Amazon": "Amazon emplea una tipografía sencilla y universal (mayormente Arial o similar) para asegurar la máxima legibilidad en todos los dispositivos. El texto es claro y el tamaño de fuente es consistente para facilitar la lectura.",
-        "PcComponentes": "PcComponentes utiliza una tipografía moderna y clara, con un buen contraste que facilita la lectura de descripciones y especificaciones de productos. La coherencia tipográfica mejora la experiencia.",
-        "Rity PC": "Emplea una tipografía sans-serif clara y legible sobre fondos blancos, asegurando un buen contraste visual. Los títulos son prominentes, facilitando la jerarquía de la información presentada."
+        "conclusion": "Considerar diversificar los pesos o tamaños de fuente para crear una mejor jerarquía visual. Asegurar un espaciado consistente para mejorar el flujo del texto y la escaneabilidad, realzando el atractivo.",
+        "PCComponentes": "Utiliza fuentes sans-serif claras para nombres y descripciones de productos, asegurando excelente legibilidad. La jerarquía del texto está bien definida, haciendo que la información sea fácil de escanear y consumir.",
+        "Amazon (PC Section)": "Emplea fuentes estándar de Amazon como Amazon Ember, ofreciendo buena legibilidad. Los tamaños de fuente varían apropiadamente para títulos y detalles, aunque la densidad de contenido puede ser alta.",
+        "Coolmod": "Presenta una tipografía moderna y limpia. Los encabezados destacan y el texto principal es cómodamente legible, contribuyendo a una interfaz de usuario profesional y estéticamente atractiva.",
+        "PCity": "Utiliza una fuente sans-serif simple y limpia para títulos y descripciones, proporcionando una legibilidad decente. La tipografía general parece estándar y funcional, sin un estilo distintivo marcado."
     },
     {
         "criterion_or_website": "Colors & Branding",
-        "conclusion": "Podría introducir un color de acento secundario para elementos interactivos, haciendo el sitio más dinámico. Un uso más consistente del azul podría reforzar la identidad de marca.",
-        "Newegg": "Su paleta de colores predominante es el negro, gris y naranja, transmitiendo una imagen de tecnología, modernidad y fiabilidad. El naranja actúa como acento para llamadas a la acción importantes, reforzando la marca.",
-        "Amazon": "La marca se basa en el azul y naranja sobre fondos blancos, proyectando confianza, accesibilidad y eficiencia. El uso del naranja para acciones importantes es distintivo y efectivo en el branding.",
-        "PcComponentes": "Su branding se caracteriza por el blanco, negro y rojo/naranja, transmitiendo energía, dinamismo y ofertas. El uso de colores vibrantes destaca promociones y elementos interactivos importantes.",
-        "Rity PC": "La paleta se basa en un azul vibrante en la cabecera, con blanco y negro para el contenido principal. El branding es minimalista, con un logo de ratón sencillo y un nombre corto."
+        "conclusion": "Introducir un color de acento complementario para aumentar el interés visual y destacar elementos clave. Desarrollar una identidad de marca más allá del azul y blanco, reflejando su valor único.",
+        "PCComponentes": "Los colores de marca dominantes son el rojo y el blanco, transmitiendo energía y fiabilidad. El esquema de color se aplica consistentemente en todos los elementos, reforzando el reconocimiento de marca.",
+        "Amazon (PC Section)": "Utiliza la familiar paleta naranja, azul y blanco de Amazon, significando confianza y amplias ofertas. Los colores resaltan eficazmente las llamadas a la acción y la información crucial.",
+        "Coolmod": "Predominantemente negro, blanco, con acentos azules o verdes. Esta paleta sugiere una imagen de marca moderna, tecnológica y premium. Los colores se usan estratégicamente para lograr impacto visual.",
+        "PCity": "Presenta un encabezado azul brillante con texto blanco, ofreciendo un aspecto limpio y directo. Esta combinación de colores proporciona buen contraste, pero carece de una personalidad de marca distintiva."
     },
     {
         "criterion_or_website": "Visual Elements",
-        "conclusion": "Integrar imágenes de productos con múltiples vistas o modelos 3D para una mejor apreciación. Añadir íconos más descriptivos o elementos gráficos para categorías.",
-        "Newegg": "Abundan las imágenes de productos de alta calidad, diagramas técnicos y videos, cruciales para informar al comprador de componentes. Los iconos son funcionales y ayudan a la navegación.",
-        "Amazon": "Muestra innumerables imágenes de productos desde múltiples ángulos y con zooms, así como videos explicativos. El diseño es funcional, priorizando el contenido sobre la estética elaborada.",
-        "PcComponentes": "Presenta imágenes de alta calidad de productos, banners de ofertas atractivos y maquetas de configuración de PC. El diseño visual es limpio y moderno, priorizando la información clave.",
-        "Rity PC": "Muestra imágenes de productos en cajas blancas uniformes, claras y funcionales. Los iconos son básicos y el diseño carece de elementos gráficos complejos o animaciones atractivas."
+        "conclusion": "Incorporar elementos visuales más diversos y de alta calidad, como gráficos explicativos o vídeos cortos. Asegurar que todas las imágenes mantengan un estilo y resolución consistentes para un aspecto profesional.",
+        "PCComponentes": "Abundancia de imágenes de productos de alta calidad, miniaturas detalladas y vídeos ocasionales. Los iconos son claros y funcionales, apoyando una rica experiencia visual para los compradores en línea.",
+        "Amazon (PC Section)": "Uso extensivo de imágenes de productos, fotos generadas por usuarios y reseñas en vídeo. Los elementos visuales son diversos e informativos, aunque la calidad puede variar entre los listados.",
+        "Coolmod": "Muestra fotografías de productos nítidas y profesionales, además de banners bien diseñados. Los iconos son modernos, y los elementos visuales contribuyen a una experiencia de usuario atractiva y de alta gama.",
+        "PCity": "Muestra imágenes claras de productos en un carrusel, de apariencia estándar. Los iconos (búsqueda, usuario) son básicos. Se beneficiaría de imágenes de productos bien iluminadas y consistentes."
     },
     {
         "criterion_or_website": "Navigation & UX",
-        "conclusion": "Evaluar simplificar los menús de navegación para reducir la carga cognitiva del usuario y optimizar el flujo de búsqueda de productos. Añadir más opciones de filtrado inteligente.",
-        "Newegg": "Ofrece una navegación robusta con múltiples filtros y categorías detalladas, optimizada para la búsqueda de componentes específicos. La experiencia de usuario se centra en la eficiencia y el acceso rápido a la información técnica.",
-        "Amazon": "Su navegación es extremadamente intuitiva, basada en una potente búsqueda y un sistema de categorías omnipresente. La UX está diseñada para la compra rápida y la gestión eficiente de grandes catálogos.",
-        "PcComponentes": "La navegación es lógica y bien estructurada, con un menú principal intuitivo y filtros eficaces. La experiencia de usuario se enfoca en la facilidad de búsqueda y configuración de productos.",
-        "Rity PC": "La navegación es directa con una barra de búsqueda y enlaces clave en la cabecera. La experiencia de usuario parece ser simple, aunque quizás limitada en opciones de filtrado."
+        "conclusion": "Mejorar la navegación con categorías más detalladas o un mega-menú para una mejor descubribilidad. Mejorar la retroalimentación al usuario en elementos interactivos para guiar las acciones del usuario eficazmente.",
+        "PCComponentes": "Navegación superior y lateral intuitiva con amplias opciones de filtrado. El viaje del usuario está optimizado para encontrar productos rápidamente, ofreciendo una experiencia de compra fluida y eficiente.",
+        "Amazon (PC Section)": "Navegación integral con potente búsqueda y filtros. A pesar de su vastedad, la UX está refinada para el descubrimiento eficiente de productos, aunque puede ser abrumadora para usuarios nuevos.",
+        "Coolmod": "Estructura de navegación limpia y lógica. Los menús están bien organizados, y la experiencia de usuario general es fluida, haciendo que la navegación y compra sean sencillas y agradables.",
+        "PCity": "Navegación superior simple (Información, Arma tu PC, Comparar) y una barra de búsqueda prominente. La estructura parece básica pero funcional, sugiriendo facilidad de uso para su alcance limitado."
     },
     {
         "criterion_or_website": "Organization & Structure",
-        "conclusion": "Revisar la estructura de las categorías de productos para asegurar una lógica intuitiva y evitar la confusión. La información de las fichas de producto podría ser más consistente y fácil de escanear.",
-        "Newegg": "El sitio está altamente estructurado por categorías de productos, con una organización lógica que facilita encontrar artículos específicos. Utiliza una arquitectura de información profunda pero bien indexada.",
-        "Amazon": "La estructura de Amazon es masiva pero bien organizada con jerarquías claras de categorías y subcategorías. El sistema de listados de productos y páginas de detalle es altamente eficiente.",
-        "PcComponentes": "Posee una organización clara por categorías y subcategorías de productos, permitiendo una exploración eficiente. La estructura de las fichas de producto es detallada y bien organizada.",
-        "Rity PC": "La página principal está bien organizada con títulos claros y una cuadrícula de productos populares. La estructura es sencilla, priorizando la visibilidad de los artículos destacados."
+        "conclusion": "Introducir una organización más jerárquica para componentes y guías para evitar la sobrecarga de contenido. Implementar divisores de sección claros o señales visuales para mejorar la escaneabilidad.",
+        "PCComponentes": "Categorías altamente estructuradas, páginas de productos con especificaciones detalladas y secciones de reseñas. La información está agrupada lógicamente, facilitando la comparación y decisiones informadas.",
+        "Amazon (PC Section)": "Amplios listados de productos con categorías jerárquicas, reseñas de clientes y artículos relacionados. La densidad de información es alta, pero la estructura permite una exploración detallada.",
+        "Coolmod": "Categorías de productos claras, páginas de productos bien estructuradas e información de soporte fácilmente accesible. El diseño del contenido es limpio, ayudando a los usuarios a encontrar detalles específicos.",
+        "PCity": "El contenido se organiza en secciones principales como 'Aprende, Arma y Compara' y 'Componentes populares' en un flujo simple. La estructura actual es plana y directa."
     },
     {
         "criterion_or_website": "Accessibility",
-        "conclusion": "Implementar herramientas para ajustar el tamaño del texto y el contraste, y asegura la navegabilidad completa mediante teclado. Ofrece alternativas de texto para todos los elementos no textuales y subtítulos para videos.",
-        "Newegg": "Aunque no se enfoca primariamente en esto en sus comunicaciones, las prácticas estándar de contraste y etiquetado suelen estar presentes, aunque podría mejorar en algunos aspectos para usuarios con discapacidades.",
-        "Amazon": "Como plataforma global, Amazon suele incorporar características básicas de accesibilidad, como texto alternativo para imágenes y navegación por teclado, pero la variabilidad puede existir en el contenido generado por vendedores.",
-        "PcComponentes": "PcComponentes generalmente cumple con pautas de accesibilidad básicas, como buena legibilidad y navegación clara, pero como muchos sitios, podría beneficiarse de auditorías específicas para personas con diversas discapacidades.",
-        "Rity PC": "El alto contraste entre el texto negro y el fondo blanco favorece la legibilidad. Sin embargo, no se aprecian características avanzadas de accesibilidad como texto alternativo específico."
+        "conclusion": "Implementar texto alternativo completo para todas las imágenes y asegurar el soporte total de navegación por teclado. Revisar los ratios de contraste de color en todos los elementos para cumplir con WCAG.",
+        "PCComponentes": "Generalmente sigue las mejores prácticas de accesibilidad, ofreciendo buen contraste y navegación con teclado. Realizan esfuerzos continuos para mejorar la experiencia para todos los usuarios.",
+        "Amazon (PC Section)": "Busca una amplia accesibilidad, proporcionando funciones como compatibilidad con lectores de pantalla y navegación con teclado. Su gran base de usuarios impulsa mejoras continuas de accesibilidad.",
+        "Coolmod": "Considera la accesibilidad en su diseño, ofreciendo ratios de contraste razonables y estados de enfoque claros. Se esfuerza por proporcionar una experiencia usable para diversos usuarios.",
+        "PCity": "El sitio web parece tener un buen contraste de color en el encabezado. Sin embargo, no se pueden discernir directamente detalles sobre texto alternativo o navegación con teclado desde la imagen."
     },
     {
-        "criterion_or_website": "Functionality & Interactivity",
-        "conclusion": "Podrías añadir más funcionalidades interactivas, como un configurador de productos más avanzado o herramientas de comparación visuales. Optimiza los tiempos de carga para todas las interacciones.",
-        "Newegg": "Presenta herramientas interactivas como filtros avanzados, constructores de PC y comparadores de productos. Los comentarios y valoraciones de usuarios son elementos interactivos clave para la toma de decisiones.",
-        "Amazon": "Ofrece funcionalidades como listas de deseos, comparaciones, reviews de usuarios, preguntas y respuestas, y un sofisticado sistema de recomendaciones personalizadas, fomentando la interacción.",
-        "PcComponentes": "Integra funcionalidades como configuradores de PC, comparadores de productos, un sistema de opiniones y un servicio de atención al cliente interactivo, enriqueciendo la experiencia de compra.",
-        "Rity PC": "Ofrece funcionalidad básica de búsqueda y navegación en el sitio. Faltan herramientas interactivas avanzadas como configuradores de PC o filtros detallados para refinar la búsqueda."
+        "criterion_or_website": "Functionality",
+        "conclusion": "Exponer y destacar claramente funcionalidades avanzadas como 'Arma tu PC' y 'Comparar'. Considerar añadir reseñas de usuarios, listas de deseos o filtros detallados para enriquecer la experiencia.",
+        "PCComponentes": "Ofrece búsqueda avanzada, filtros, herramientas de comparación de productos, un configurador de PC y reseñas de clientes. Las funcionalidades de e-commerce son robustas y de alto rendimiento.",
+        "Amazon (PC Section)": "Proporciona una vasta gama de funcionalidades, incluyendo búsqueda avanzada, listas de deseos, compra con un clic, reseñas de clientes y recomendaciones personalizadas para los usuarios.",
+        "Coolmod": "Cuenta con un configurador de PC, especificaciones detalladas de productos, chat de soporte al cliente y procesos de pago eficientes. Las funcionalidades están diseñadas para entusiastas de PC.",
+        "PCity": "Las funcionalidades clave incluyen una barra de búsqueda y, potencialmente, herramientas 'Arma tu PC' y 'Comparar'. La visualización de productos e información básica están presentes."
+    },
+    {
+        "criterion_or_website": "Interactivity",
+        "conclusion": "Introducir filtrado dinámico para listados de productos y estados interactivos al pasar el ratón sobre las tarjetas de productos. Implementar un sistema de calificación o comentarios para fomentar la participación comunitaria.",
+        "PCComponentes": "Incluye configuradores de productos interactivos, opciones de ordenar/filtrar, carrito de compras dinámico y sistemas de comentarios/valoración. El engagement es alto debido a los numerosos elementos interactivos.",
+        "Amazon (PC Section)": "Alta interactividad con carruseles de productos dinámicos, descripciones expandibles, preguntas y respuestas interactivas y un robusto sistema de reseñas que fomenta la participación del usuario.",
+        "Coolmod": "Los elementos interactivos incluyen filtros de productos, un configurador avanzado, efectos hover en productos y soporte por chat en vivo, mejorando la exploración y el engagement del usuario.",
+        "PCity": "La interactividad visible es limitada: una barra de búsqueda, enlaces de navegación clicables y un carrusel de productos. La imagen sugiere una interacción básica en lugar de funciones avanzadas."
+    },
+    {
+        "criterion_or_website": "SEO (Search Engine Optimization)",
+        "conclusion": "Optimizar los títulos de página y meta descripciones con palabras clave relevantes. Asegurar que las imágenes tengan texto alternativo descriptivo e implementar una sección de blog para contenido SEO-friendly.",
+        "PCComponentes": "Fuerte SEO con URLs bien estructuradas, títulos de productos descriptivos y contenido enriquecido. Parece altamente optimizado para palabras clave relevantes, logrando altas posiciones en búsquedas.",
+        "Amazon (PC Section)": "Aprovecha su autoridad de dominio y descripciones de productos extensas, contenido generado por usuarios y enlaces internos para un potente SEO. Posiciona bien para numerosas consultas.",
+        "Coolmod": "Buenas prácticas de SEO con meta descripciones claras, palabras clave relevantes en el contenido y una estructura de sitio bien indexada. Se centra en palabras clave de nicho para entusiastas.",
+        "PCity": "No se puede evaluar directamente desde la imagen. Sin embargo, una estructura de sitio clara y títulos descriptivos ('Componentes populares') son señales iniciales positivas para el SEO."
+    },
+    {
+        "criterion_or_website": "Conclusion",
+        "conclusion": "El sitio web tiene una base sólida para construir PCs. Se recomienda refinar el branding visual, enriquecer las funcionalidades interactivas y expandir el contenido para una experiencia más atractiva y competitiva.",
+        "PCComponentes": "Plataforma líder de e-commerce, reconocida por su extenso catálogo, precios competitivos y excelente servicio al cliente en el mercado de componentes de PC y tecnología en general.",
+        "Amazon (PC Section)": "Ofrece una variedad de productos incomparable y eficiencia logística. Su robusta plataforma proporciona una experiencia de compra generalmente fiable, pese a la alta densidad de información.",
+        "Coolmod": "Destaca por su enfoque especializado en hardware de PC de alto rendimiento, su excelente soporte al cliente y una selección de productos curada para entusiastas exigentes.",
+        "PCity": "Presenta una interfaz limpia y funcional para la navegación y configuración de componentes de PC. Tiene un propósito claro pero actualmente carece de características avanzadas y branding distintivo."
     }
 ]

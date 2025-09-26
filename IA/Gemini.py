@@ -146,10 +146,11 @@ def createJson(prompt, img_path="image.jpg"):
     else:
         conclusion = " ".join(df.iloc[-1].dropna().tolist())
 
-    print("Conclusión de tabla hecha")
+    print("Conclusión de tabla hecho")
 
-    if conclusion:
-        createImgSearching(conclusion, img_path)
+    if not conclusion.strip():
+        conclusion = "No hubo sugerencias claras, pero mejora la navegación y la accesibilidad visual."
+    
 
 
 
@@ -176,14 +177,15 @@ def createImg(prompt):
 #crear img buscando en internet (con texto + img opcional)
 def createImgSearching(prompt, img_path=None):
     contents = [
-        {"role": "user", "parts": [{"text": (
-           " Crea una imagen realista del sitio web mostrado en la imagen adjunta, incorporando las mejoras indicadas en la conclusión:"
-            "- Ajustar colores y tipografía para mejor legibilidad."
-            "- Reorganizar botones importantes para navegación más intuitiva."
-            "- Añadir iconos y elementos visuales que mejoren la experiencia."
-            "- Mantener el estilo general del sitio original."
-            "No inventes nuevos elementos, solo mejora lo que ya existe. La imagen debe mostrar claramente los cambios sugeridos. Mantiene las dimensiones de la img original"
-            f"Tema: {prompt}"
+        {"role": "user", "parts": [{"text": (f"""
+            Crea una imagen realista del sitio web mostrado en la imagen adjunta, incorporando las mejoras indicadas en la conclusión:
+           - Ajustar colores y tipografía para mejor legibilidad.
+           - Reorganizar botones importantes para navegación más intuitiva.
+           - Añadir iconos y elementos visuales que mejoren la experiencia.
+           - Mantener el estilo general del sitio original.
+           No inventes nuevos elementos, solo mejora lo que ya existe. La imagen debe mostrar claramente los cambios sugeridos. Mantiene las dimensiones de la img original
+            Tema: {prompt}
+            """
         )}]}
     ]
 
@@ -229,15 +231,15 @@ def createImgSearching(prompt, img_path=None):
         print("No se generó ninguna imagen para este prompt.")
 
 
+theme = 'PC MARKET'
 
-
-createJson("""
+createJson(f"""
 Generate a comparison table with the following exact columns: 
-Website, Typography & Readability, Colors & Branding, Visual Elements, Navigation & UX, Organization & Structure, Accessibility, Functionality & Interactivity. 
-The table must include rows for the 3 most popular websites related to the topic PC MARKETS, plus the website shown in the provided image. There should be exactly 10 rows in total (one per topic/criterion). 
+Website, Typography & Readability, Colors & Branding, Visual Elements, Navigation & UX, Organization & Structure, Accessibility, Functionality, Interactivity and SEO (Search Engine Optimization). 
+The table must include rows for the 3 most popular websites related to the topic {theme}, plus the website shown in the provided image. There should be exactly 11 rows in total (one per topic/criterion + conclusion). 
 Each row must have 5 cells (4 websites + 1 Conclusion). Each cell must contain a descriptive sentence of 20 - 30 words. 
-In the Conclusion column (shown as the last one), write specific improvement suggestions only for the last website (the one from the image) comparing it to the other 3 websites. Do NOT compare it directly, but identify things what could be improved. Avoid mentioning the names of any websites in the improvement suggestions. 
-Output must be structured, consistent, and in JSON schema format. Write all words and letters correctly, avoid using just symbols. 
+In the Conclusion column (shown as the last one), write specific improvement suggestions only for the last website (the one from the image) comparing it to the other 3 websites. Do NOT compare it directly, but identify things what could be improved remarkking also the good things. Avoid mentioning the names of any websites in the improvement suggestions. 
+Output must be structured, consistent, and in JSON schema format. 
 On the top of each website column, also provide a very brief description of each website.
 """)
 
