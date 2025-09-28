@@ -4,7 +4,7 @@ export default function SimpleButton(props) {
 
 return(
 
-<Link to={props.link}><button onClick={props.onClick} disabled={props.disabled} className={props.class}
+<Link className={props.class} to={props.link}><span className='material-symbols-outlined'>{props.icon}</span><button onClick={props.onClick} disabled={props.disabled} 
 >{props.text}</button></Link>
 
 

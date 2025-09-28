@@ -1,472 +1,608 @@
 
-:root {
-  --secondaryColor: #D9D9D9;
-  --mainColor: white;
-  --tertiaryColor: #A2A2A2;
-  --textColor: rgb(255, 255, 255);
-  --font: 'inter';
-  --classyFont: 'Castoro Titling';
-  --headerSize: 1.3rem;
-  --biggerHeaderSize: 2.5rem;
-  --defaultFontWeight: 300;
-  --decal: #575F1082;
-  --errorColor: #B20000;
-  --linkColor: #4240BE;
-  --textSize: 
-}
-body {
+  body {
 
-  margin: 0px;
-}
-a {
-  color: var(--textColor);
-  text-decoration: none;
-}
-button {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-}
-.RouteSelectorBox {
-  width: fit-content;
-  height: fit-content;
-  padding: 1.5em;
-  background-color: aquamarine;
-  font-family: Arial, Helvetica, sans-serif;
-  border-radius: 15px;
-}
-.disabledModalOff {
-  visibility: hidden;
-}
-.disabledModalOn {
-  top: 0px;
-  left: 0px;
-  position: absolute;
-  z-index: 1000;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.275);
-  color: white;
-  font-family: Arial, Helvetica, sans-serif;
-  display: flex;
-  visibility: visible;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-}
-
-.formError {
-  color:var(--errorColor);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.NavBar {
-width: 100%;
-z-index: 100;
-display: flex;
-align-items: center;
-position: fixed;
-top: 0px;
-left: 0px;
-box-sizing: border-box;
-background-color: var(--secondaryColor);
-height: 12vh;
-justify-content: space-between;
-padding: 0.5rem;
-padding-left: 4rem;
-padding-right: 4rem;
-}
-.NavBarLeftDiv img {
-height: 100%;
-cursor: pointer;
- object-fit: cover;
-  
+    margin: 0px;
   }
-  .NavBarRightDiv {
-gap: 1.5rem;
-    display: flex;
-    align-items: center;
-
+  a {
+    color: var(--textColor);
+    text-decoration: none;
   }
-  .NavBarLeftDiv {
-height: 100%;
-align-items: center;
-gap: 1.5rem;
-display: flex;
-    
+  button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
   }
-  .NavButton1 {
-    color:var(--textColor);
-    font-family: var(--font);
-    font-size: 15px;
-    font-size: var(--headerSize);
-
-    font-weight: var(--defaultFontWeight);
+  .RouteSelectorBox {
+    width: fit-content;
+    height: fit-content;
+    padding: 1.5em;
+    background-color: aquamarine;
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 15px;
   }
-  .NavButton2 {
-
-background-color: var(--tertiaryColor);
-padding: 0.5rem;
-color: var(--textColor);
-font-size: var(--headerSize);
-font-weight: var(--defaultFontWeight);
+  .disabledModalOff {
+    visibility: hidden;
   }
-
-  .NavBarLeftDiv a {
-font-family: var(--classyFont);
-color: var(--decal);
-font-size: var(--headerSize);
-height: 100%;
-display: flex;
-align-items: center;
-
-  }
-  #logoTxt {
-margin-top: .75rem;
-
-  }
-
-  .LandingTitle {
-width: 100%;
-font-family: var(--classyFont);
-margin-top: 10rem;
-text-align: center;
-margin-bottom: 4rem;
-
-  }
-  .LandingTitle h1 {
-
-    font-size: 4.5rem;
-    font-weight: 50;
-    margin-bottom: 1rem;
-
-  }
-  .LandingTitle p {
-font-size: var(--headerSize);
-
-  }
-
-  .LandingPage {
-    width: 100%;
-display: flex;
-justify-content: center;
-align-items: center;
-flex-direction: column;
-
-  }
-
-  .EmpezarBtn {
-
-    background-color: var(--tertiaryColor);
-font-family: var(--font);
-color: var(--textColor);
-width: 15rem;
-border-radius: 1rem;
-padding: 1rem;
-font-size: var(--headerSize);
-
-  }
-
-  .gallery {
-
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    grid-auto-rows: 10px;
-    gap: 10px;
-  }
-
-  .gallery img {
-    width: 100%;
-    height: 100%;
-    grid-row-end: span var(--rows, 20);
-    border-radius: 10px;
-    object-fit: cover;
-    display: block;
-    transition: all ease .3s;
-  }
-  .gallery img:hover {
-opacity: 90%;
-transform: scale(1.01);
-z-index: 1;
-
-  }
-
-  .login {
-width: fit-content;
-text-align: center;
-display: flex;
-align-items: center;
-flex-direction: column;
-margin-top: 1rem;
-gap: 1.5rem;
-font-family: var(--font);
-
-  }
-  
-  .login input {
-
-padding: 1rem;
-width: 20rem;
-border-radius: .5rem;
-border-color: var(--tertiaryColor);
-border-width: 0.15rem;
-border-style: solid;
-
-  }
-  .errorInput {
-    border-color: var(--errorColor) !important;
-
-  }
-  .errorInput:focus {
-   outline: none;
-
-  }
-  .inputBox {
-    display: flex;
-    align-items: center;
-    position: relative;
-  }
-  .inputBox .material-symbols-outlined {
-
-position: absolute;
-left: -2rem;
-color: var(--tertiaryColor);
-  }
-  .login button {
-
-    width: 22rem;
-    background-color: var(--tertiaryColor);
-    padding: .7rem;
-    border-radius: 1.5rem;
-color: var(--textColor);
-font-size: var(--headerSize);
-
-  }
-
-  .loginPage {
-
-display: flex;
-flex-direction: column;
-align-items: center;
-text-align: center;
-padding-top: 5rem;
-font-family: var(--font);
-
-  }
-  .loginTitle {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-  }
-  .loginTitle h1{
-margin: 0;
-font-weight: var(--defaultFontWeight);
-width:15rem;
-  }
-
-  .loginTitle p {
-color:var(--tertiaryColor);
-font-size: 1.3rem;
-
-  }
-  
-  .emptyNav {
-
-    width: 100%;
-    display: flex;
-    align-items: center;
-    position: fixed;
+  .disabledModalOn {
     top: 0px;
     left: 0px;
-    box-sizing: border-box;
-    background-color: var(--mainColor);
-    height: 12vh;
-    justify-content: space-between;
-    padding: 0.5em;
-
+    position: absolute;
+    z-index: 1000;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.275);
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    visibility: visible;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
   }
-  .emptyNav button {
-display: none;
 
+  .formError {
+    color:var(--errorColor);
+    font-family: Arial, Helvetica, sans-serif;
   }
-  .login label {
+
+  .NavBar {
+  width: 100%;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  box-sizing: border-box;
+  background-color: var(--secondaryColor);
+  height: 12vh;
+  justify-content: space-between;
+  padding: 0.5rem;
+  padding-left: 4rem;
+  padding-right: 4rem;
+  }
+  .NavBarLeftDiv img {
+  height: 100%;
+  cursor: pointer;
+  object-fit: cover;
     
+    }
+    .NavBarRightDiv {
+  gap: 1.5rem;
+      display: flex;
+      align-items: center;
+
+    }
+    .NavBarLeftDiv {
+  height: 100%;
+  align-items: center;
+  gap: 1.5rem;
+  display: flex;
+      
+    }
+    .NavButton1 {
+      color:var(--textColor);
+      font-family: var(--font);
+      font-size: 15px;
+      font-size: var(--headerSize);
+
+      font-weight: var(--defaultFontWeight);
+    }
+    .NavButton2 {
+
+  background-color: var(--tertiaryColor);
+  padding: 0.5rem;
+  color: (var(--textColor));
+  font-size: var(--headerSize);
+  font-weight: var(--defaultFontWeight);
+    }
+
+    .NavBarLeftDiv a {
+  font-family: var(--classyFont);
+  color: var(--decal);
+  font-size: var(--headerSize);
+  height: 100%;
+  display: flex;
+  align-items: center;
+
+    }
+    #logoTxt {
+  margin-top: .75rem;
+
+    }
+
+    .LandingTitle {
+  width: 100%;
+  font-family: var(--classyFont);
+  margin-top: 10rem;
+  text-align: center;
+  margin-bottom: 4rem;
+
+    }
+    .LandingTitle h1 {
+
+      font-size: 4.5rem;
+      font-weight: 50;
+      margin-bottom: 1rem;
+
+    }
+    .LandingTitle p {
+  font-size: var(--headerSize);
+
+    }
+
+    .LandingPage {
+      width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+    }
+
+    .EmpezarBtn {
+
+  background-color: var(--tertiaryColor);
+  color: var(--textColor);
+  width: 10%;
+  text-align: center;
+  border-radius: 1rem;
+  padding: 1rem;
+    }
+  .EmpezarBtn button {
+    font-size: var(--HeaderSize);
+    color: var(--textColor);
+  }
+   
+
+    .gallery {
+
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-auto-rows: 10px;
+      gap: 10px;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 100%;
+      grid-row-end: span var(--rows, 20);
+      border-radius: 10px;
+      object-fit: cover;
+      display: block;
+      transition: all ease .3s;
+    }
+    .gallery img:hover {
+  opacity: 90%;
+  transform: scale(1.01);
+  z-index: 1;
+
+    }
+
+    .login {
+  width: fit-content;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 1rem;
+  gap: 1.5rem;
+  font-family: var(--font);
+
+    }
+    
+    .login input {
+
+  padding: 1rem;
+  width: 20rem;
+  border-radius: .5rem;
+  border-color: var(--tertiaryColor);
+  border-width: 0.15rem;
+  border-style: solid;
+
+    }
+    .errorInput {
+      border-color: var(--errorColor) !important;
+
+    }
+    .errorInput:focus {
+    outline: none;
+
+    }
+    .inputBox {
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+    .inputBox .material-symbols-outlined {
+
+  position: absolute;
+  left: -2rem;
+  color: var(--tertiaryColor);
+    }
+    .login button {
+
+      width: 22rem;
+      background-color: var(--tertiaryColor);
+      padding: .7rem;
+      border-radius: 1.5rem;
+  color: var(--textColor);
+  font-size: var(--headerSize);
+
+    }
+
+    .loginPage {
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-top: 5rem;
+  font-family: var(--font);
+
+    }
+    .loginTitle {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .loginTitle h1{
+  margin: 0;
+  font-weight: var(--defaultFontWeight);
+  width:15rem;
+    }
+
+    .loginTitle p {
+  color:var(--tertiaryColor);
+  font-size: 1.3rem;
+
+    }
+    
+    .emptyNav {
+
+      width: 100%;
+      display: flex;
+      align-items: center;
+      position: fixed;
+      top: 0px;
+      left: 0px;
+      box-sizing: border-box;
+      background-color: var(--mainColor);
+      height: 12vh;
+      justify-content: space-between;
+      padding: 0.5em;
+
+    }
+    .emptyNav button {
+  display: none;
+
+    }
+    .login label {
+      
+      margin-bottom: -1rem;
+      font-size: .9rem;
+      color:var(--tertiaryColor);
+      align-self: flex-start;
+    }
+    .login a {
+      
+      font-size: .9rem;
+      color:var(--tertiaryColor);
+      align-self: flex-start;
+      text-decoration: underline var(--tertiaryColor);
+      
+        }
+    .register {
+      width: fit-content;
+      text-align: center;
+      display: flex;
+      
+      align-items: center;
+    margin-top: 1rem;
+      font-family: var(--font);
+    }
+    
+    .register input {
+      padding: .7rem;
+      width: 15rem;
+      border-radius: .5rem;
+      border-color: var(--tertiaryColor);
+      border-width: 0.15rem;
+      border-style: solid;
+      font-size: var(--headerSize);
+    
+    }
+  .register button {
+
+    background-color: var(--tertiaryColor);
+    height: max-content;
+    padding: .7rem;
+    border-color: var(--tertiaryColor);
+      border-width: 0.35rem;
+      border-style: solid;
+    margin: 0;
+    border-radius: .5rem;
+    font-size: var(--headerSizes);
+    color: var(--mainColor);
+
+  }
+  .FooterBox a{
+    color: var(--decal);
+  font-family: var(--classyFont);
+  font-size: var(--biggerHeaderSize);
+
+  }
+  .FooterBox img {
+  height: 6rem;
+  width: auto;
+  object-fit: cover;
+  }
+  .FooterBox {
+    padding-left: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: 1rem;
+  }
+  .footer {
+    margin-top: 3rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+  
+    margin-bottom: 3rem;
+  }
+  .topLine {
+  background-color: var(--secondaryColor);
+  height: .2rem;
+  width: 100%;
+
+  }
+  .FooterIcons {
+    padding-left: 2rem;
+
+  }
+
+  .loadingContainer {
+
+    height: 100vh;
+    width: 98.9vw;
+  display: flex;
+  position: relative;
+  top: 0px;
+  left: 0px;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--mainColor);
+  z-index: 100;
+  }
+  .svg {
+
+    height: 10rem;
+    width: auto;
+  }
+
+  .register label {
+      
     margin-bottom: -1rem;
     font-size: .9rem;
     color:var(--tertiaryColor);
     align-self: flex-start;
-   }
-   .login a {
-    
-    font-size: .9rem;
-    color:var(--tertiaryColor);
-    align-self: flex-start;
-    text-decoration: underline var(--tertiaryColor);
-    
-      }
-   .register {
-    width: fit-content;
-    text-align: center;
-    display: flex;
-    
-    align-items: center;
-   margin-top: 1rem;
-    font-family: var(--font);
-   }
-   
-   .register input {
-    padding: .7rem;
-    width: 15rem;
-    border-radius: .5rem;
-    border-color: var(--tertiaryColor);
-    border-width: 0.15rem;
-    border-style: solid;
-    font-size: var(--headerSize);
-  
-   }
-.register button {
+  }
 
-  background-color: var(--tertiaryColor);
-  height: max-content;
-  padding: .7rem;
-  border-color: var(--tertiaryColor);
-    border-width: 0.35rem;
-    border-style: solid;
-  margin: 0;
-  border-radius: .5rem;
-  font-size: var(--headerSizes);
-  color: var(--mainColor);
+  #firstInputRegister {
+    border-top-right-radius: 0rem;
+    border-bottom-right-radius: 0rem;
 
-}
-.FooterBox a{
-  color: var(--decal);
-font-family: var(--classyFont);
-font-size: var(--biggerHeaderSize);
+  }
 
-}
-.FooterBox img {
-height: 6rem;
-width: auto;
-object-fit: cover;
-}
-.FooterBox {
-  padding-left: 2rem;
-display: flex;
-align-items: center;
-gap: 1rem;
-height: 1rem;
-}
-.footer {
-  margin-top: 3rem;
-  width: 100%;
+  .biggerRegisterContainer {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   gap: 5rem;
- 
-  margin-bottom: 3rem;
-}
-.topLine {
-background-color: var(--secondaryColor);
-height: .2rem;
-width: 100%;
+  margin-bottom: .9rem;
+  }
+  .smallerRegisterContainer {
+    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .input2Box a{
 
-}
-.FooterIcons {
-  padding-left: 2rem;
+    color: var(--linkColor);
+    text-decoration: underline;
+    margin-right: 4rem;
 
-}
+  }
+  
+  .smallerRegisterContainer .material-symbols-outlined {
 
-.loadingContainer {
+  position: absolute;
+  left: 17rem;
+  top: 7rem;
+  color: var(--tertiaryColor);
+  }
 
-  height: 100vh;
-  width: 98.9vw;
-display: flex;
-position: relative;
-top: 0px;
-left: 0px;
-justify-content: center;
-align-items: center;
-background-color: var(--mainColor);
-z-index: 100;
-}
-.svg {
+  .imgInput {
+    position: relative;
+    height: 15rem;
+    width: auto;
+  }
+  #registerImg {
+  opacity: 0%;
+  cursor: pointer;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  }
 
-  height: 10rem;
+  #imgRegister {
+  height: 100%;
   width: auto;
-}
 
-.register label {
-    
-  margin-bottom: -1rem;
-  font-size: .9rem;
-  color:var(--tertiaryColor);
-  align-self: flex-start;
- }
+  }
 
- #firstInputRegister {
-  border-top-right-radius: 0rem;
-  border-bottom-right-radius: 0rem;
-
- }
-
- .biggerRegisterContainer {
-display: flex;
-justify-content: center;
-gap: 5rem;
-margin-bottom: .9rem;
- }
- .smallerRegisterContainer {
-  gap: 1rem;
+  .gmailIngresado {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  opacity: 55%;
+
+  }
+  #userNameIco {
+  font-size: 2rem;
+  }
+
+  .NavSearch {
+  box-shadow: 0px 4px 28px -3px rgba(0,0,0,0.37)
+  ;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  height: 12.5vh;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 1rem;
+  padding-left: 5%;
+  padding-right: 5%;
+  background-color: var(--secondaryColor);
+  display: flex;
+  align-items: center;
+  font-family: var(--font);
+  z-index: 100;
+  justify-content: space-between;
+  }
+  .searchBar {
   position: relative;
- }
- .input2Box a{
+  width: 40vw;
 
-  color: var(--linkColor);
-  text-decoration: underline;
-  margin-right: 4rem;
+  height: min-content;
+  color: black;
+  box-sizing: border-box;
+  }
+  .searchBar span{
+    position: absolute;
+    left:1rem;
+  
+    }
+    .searchBar input {
+  background-color: var(--tertiaryColor);
+  border: none;
+  border-radius: 60px;
+  width: 100%;
+  padding: 1rem;
+  padding-left: 3rem;
+    }
+    .NavSearch div {
+      display: flex;
+      align-items: center;
+    }
+    #leftIcons {
+      gap: 2vw;
+      font-size: var(--headerSize);
+    }
+    #leftIcons span {
+      cursor: pointer;
+  font-size: 2.5rem;
+    }
+    #rightIcon1{
+      height: 4vmin;
+    }
+    #rightIcon2{
+      height: 8vmin;
+    }
+    #rightIcons {
+      gap: 1vw
+    }
 
- }
- 
-.smallerRegisterContainer .material-symbols-outlined {
-
-position: absolute;
-left: 17rem;
-top: 7rem;
-color: var(--tertiaryColor);
+    .sideBar {
+      overflow: auto;
+transition: var(--slowerTransition);
+position: fixed;
+top: 12.5vh;
+font-family: var(--font);
+background-color: var(--secondaryColor);
+width: 22.5%;
+height: calc(100vh - 12.5vh);
+box-sizing: border-box;
+color: var(--fontContrast);
+padding: 3%;
+padding-top: 1%;
 }
-
-.imgInput {
-  position: relative;
-  height: 15rem;
-  width: auto;
+.invitarBtn {
+  background-color: var(--tertiaryColor);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3%;
+  border-radius: 7.5px;
+  box-sizing: border-box;
+  width: 75%;
+  margin-left: 12.5%;
+  margin-top: 15%;
 }
-#registerImg {
-opacity: 0%;
-cursor: pointer;
-position: absolute;
-left: 0;
-top: 0;
-width: 100%;
-height: 100%;
-z-index: 100;
+.invitarBtn button {
+  font-weight: 700;
 }
-
-#imgRegister {
-height: 100%;
-width: auto;
-
+.invitarBtn span {
+  color: var(--fontContrast);
 }
-
-.gmailIngresado {
+.tabs {
 display: flex;
-align-items: center;
-gap: 1rem;
-opacity: 55%;
+justify-content: center;
+align-items: flex-start;
+flex-direction: column;
+gap: .5vh;
+padding-left: 0px;
+}
+.tabs div {
+  width: 100%;
+  box-sizing: border-box ;
+  font-size: var(--smallerheaderSize);
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  gap: 3%;
+  padding: 0%;
+  border-radius: 25px;
+  transition: var(--easeTransition);
+}
+.tabs div:hover {
+background-color: #e6e6e6;
+}
+.tabs span {
+  font-size: calc(var(--biggerHeaderSize)*.9);
+}
+#addBtn {
+background-color: var(--tertiaryColor);
+width: min-content;
+padding: 0 2% 0 2%;
 
 }
-#userNameIco {
-font-size: 2rem;
+.separator {
+margin: 0%;
+border: none;
+border-top: inset .1rem black !important;
+}
+
+.proyectosTitle {
+font-size: var(--smallerHeaderSize);
+font-family: var(--font);
+}
+
+.titleSbContainer {
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.titleSbContainer span {
+cursor: pointer;
+
 }

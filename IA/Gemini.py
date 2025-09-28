@@ -1,4 +1,4 @@
-# pip install -r lib.txt
+# pip install -r lib.txt --no-warn-script-location.
 import os
 import json
 from google import genai
@@ -12,6 +12,8 @@ import pandas as pd
 import datetime
 from tabulate import tabulate
 import json
+import time
+import random
 
 client = genai.Client(api_key="AIzaSyAkiW5YQ7ONHn8i4qadg0KTzXRPRfy3r3E")
 
@@ -31,11 +33,6 @@ class TableData(BaseModel):
 
 SAVE_DIR = "tablas_generadas"
 os.makedirs(SAVE_DIR, exist_ok=True)
-
-
-#ingreso de img
-with open('image.jpg','rb') as f:
-    inserted_img = f.read()
 
 #acceso a buscar en google
 grounding_tool = types.Tool(
@@ -61,7 +58,8 @@ def retry_request(func, *args, **kwargs):
 
 #crear texto
 def createTxt(prompt):
-    response = client.models.generate_content(
+    response = retry_request(
+        client.models.generate_content,
         model="gemini-2.5-flash",
         contents=prompt,
         config = types.GenerateContentConfig(
@@ -73,7 +71,8 @@ def createTxt(prompt):
 
 #crear tabla e img buscando en internet
 def createJson(prompt, img_path="image.jpg"):
-    response = client.models.generate_content(
+    response = retry_request(
+        client.models.generate_content,
         model="gemini-2.5-flash",
         contents=(
             "Crea un prompt en base a tu función de busqueda en internet para poder conseguir información acerca del siguiente prompt y darselo a otra IA generadora de tablas " + prompt
@@ -90,7 +89,8 @@ def createJson(prompt, img_path="image.jpg"):
         inserted_img = f.read()
 
 #hacer tablita
-    response = client.models.generate_content(
+    response = retry_request(
+        client.models.generate_content,
         model="gemini-2.5-flash",
         contents=[
             prompt_board,
@@ -115,8 +115,13 @@ def createJson(prompt, img_path="image.jpg"):
         row_dict.pop("websites", None)
         row_dict.update(websites_dict)
         rows.append(row_dict)
+        
 
-    df = pd.DataFrame(rows)    
+    df = pd.DataFrame(rows)
+    
+    #para que vaya la columna de conclusion al final
+    cols = [col for col in df.columns if col != "conclusion"] + ["conclusion"]
+    df = df[cols]
 
     # Guardar JSON
     json_path = os.path.join(SAVE_DIR, "tablita.json")
@@ -141,16 +146,18 @@ def createJson(prompt, img_path="image.jpg"):
     else:
         conclusion = " ".join(df.iloc[-1].dropna().tolist())
 
-    print("Conclusión hecha")
+    print("Conclusión de tabla hecho")
 
-    if conclusion:
-        createImgSearching(conclusion, img_path)
+    if not conclusion.strip():
+        conclusion = "No hubo sugerencias claras, pero mejora la navegación y la accesibilidad visual."
+    
 
 
 
 #crear img
 def createImg(prompt):
-    response = client.models.generate_content(
+    response = retry_request(
+        client.models.generate_content,
         model="gemini-2.0-flash-preview-image-generation",
         contents=[
             {"role": "user", "parts": [{"text": prompt}]}
@@ -170,14 +177,15 @@ def createImg(prompt):
 #crear img buscando en internet (con texto + img opcional)
 def createImgSearching(prompt, img_path=None):
     contents = [
-        {"role": "user", "parts": [{"text": (
-           " Crea una imagen realista del sitio web mostrado en la imagen adjunta, incorporando las mejoras indicadas en la conclusión:"
-            "- Ajustar colores y tipografía para mejor legibilidad."
-            "- Reorganizar botones importantes para navegación más intuitiva."
-            "- Añadir iconos y elementos visuales que mejoren la experiencia."
-            "- Mantener el estilo general del sitio original."
-            "No inventes nuevos elementos, solo mejora lo que ya existe. La imagen debe mostrar claramente los cambios sugeridos."
-            f"Tema: {prompt}"
+        {"role": "user", "parts": [{"text": (f"""
+            Crea una imagen realista del sitio web mostrado en la imagen adjunta, incorporando las mejoras indicadas en la conclusión:
+           - Ajustar colores y tipografía para mejor legibilidad.
+           - Reorganizar botones importantes para navegación más intuitiva.
+           - Añadir iconos y elementos visuales que mejoren la experiencia.
+           - Mantener el estilo general del sitio original.
+           No inventes nuevos elementos, solo mejora lo que ya existe. La imagen debe mostrar claramente los cambios sugeridos. Mantiene las dimensiones de la img original
+            Tema: {prompt}
+            """
         )}]}
     ]
 
@@ -189,7 +197,8 @@ def createImgSearching(prompt, img_path=None):
             types.Part.from_bytes(data=inserted_img, mime_type="image/jpeg")
         )
 
-    response = client.models.generate_content(
+    response = retry_request(
+        client.models.generate_content,
         model="gemini-2.5-flash",
         contents=contents,
         config=types.GenerateContentConfig(
@@ -201,15 +210,14 @@ def createImgSearching(prompt, img_path=None):
     prompt_img = response.text
 
     # Generar img final
-    response_img = client.models.generate_content(
+    response_img = retry_request(
+        client.models.generate_content,
         model="gemini-2.0-flash-preview-image-generation",
         contents=[{"role": "user", "parts": [{"text": prompt_img}]}],
         config=types.GenerateContentConfig(
             response_modalities=["TEXT", "IMAGE"]
         )
     )
-
-    print(response_img)
 
     if response_img.candidates and response_img.candidates[0].content:
         for part in response_img.candidates[0].content.parts:
@@ -223,17 +231,17 @@ def createImgSearching(prompt, img_path=None):
         print("No se generó ninguna imagen para este prompt.")
 
 
+theme = 'PC MARKET'
 
-
-createJson("Generate a comparison table with the following exact columns: Website, Typography, Colors, "
-"Formal vs. Informal, Characters / Icons / Emblems, Accessibility, Navigation (important buttons), Organization, "
-"Extra features, Tutorials or Instructions, Conclusion. The table must include rows for 3 different websites that you will choose, "
-"and the website shown in the provided image. These 3 websites have to be the most popular relationated to the topic SOCIAL MEDIA. There should be exactly 10 rows in total (one per topic/criterion). Each row "
-"must have 5 cells (4 websites + 1 Conclusion). Each cell must contain a descriptive sentence of 15–20 words. In the Conclusion "
-"column, write specific improvement suggestions only for the last website (the one from the image). Do NOT compare it directly with each site, "
-"but detect with things should it improve (without mentioning the others websites neither the one to upgrade). Avoid starting sentences with the exact name of the websites. "
-"Just state clearly what could be improved in the last site. Output must be structured, consistent, and in JSON schema format. Write "
-"correctly the words ant letters, not just simbols On te top of each column, where you put the name of each website, also put an extremely breve descripction of each one.")
+createJson(f"""
+Generate a comparison table with the following exact columns: 
+Website, Typography & Readability, Colors & Branding, Visual Elements, Navigation & UX, Organization & Structure, Accessibility, Functionality, Interactivity and SEO (Search Engine Optimization). 
+The table must include rows for the 3 most popular websites related to the topic {theme}, plus the website shown in the provided image. There should be exactly 11 rows in total (one per topic/criterion + conclusion). 
+Each row must have 5 cells (4 websites + 1 Conclusion). Each cell must contain a descriptive sentence of 20 - 30 words. 
+In the Conclusion column (shown as the last one), write specific improvement suggestions only for the last website (the one from the image) comparing it to the other 3 websites. Do NOT compare it directly, but identify things what could be improved remarkking also the good things. Avoid mentioning the names of any websites in the improvement suggestions. 
+Output must be structured, consistent, and in JSON schema format. 
+On the top of each website column, also provide a very brief description of each website.
+""")
 
 #createTxt("como son los diseños de las páginas web de mercado libre, pedido ya y amazon? hazme una descripción teniendo en cuenta: Sitio Web, Tipografía, Colores, Formal o informal, Personajes-iconos-emblemas, Accesibilidad, Capacidad de navegación, Organización (botones importantes), Funciones extras, Tutoriales o instrucciones")
 
