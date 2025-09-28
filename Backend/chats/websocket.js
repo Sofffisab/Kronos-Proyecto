@@ -51,28 +51,22 @@ function setupwebsocketserver(wss, JWT_SECRET, prisma) {
             });
 
             const messageWithSender = {
-                ...savedMessage,
-                personaId: personaId,
+              ...mensajesguardados,
+              personaId: personaId,
             };
 
-            wss.clients.forEach(async client => {
-                if (client.readyState === WebSocket.OPEN && client.personaId) {
-                    try {
-                        const isMember = await prisma.tiene_pc.findFirst({
-                            where: {
-                                id_chat: parseInt(chatId, 10),
-                                id_persona: client.personaId
-                            }
-                        });
-
-                        if (isMember) {
-                            client.send(JSON.stringify(messageWithSender));
-                        }
-                    } catch (error) {
-                        console.error('Error broadcasting message:', error);
-                    }
-                }
+            const chatMembers = await prisma.tiene_pc.findMany({
+              where: { id_chat: parseInt(chatId, 10) },
+              select: { id_persona: true }
             });
+            const memberIds = chatMembers.map(member => member.id_persona);
+
+            wss.clients.forEach(client => {
+              if (client.readyState === WebSocket.OPEN && memberIds.includes(client.personaId)) {
+                client.send(JSON.stringify(messageWithSender));
+              }
+            });
+
         } catch (error) {
             console.error("Error saving message to database or broadcasting:", error);
         }

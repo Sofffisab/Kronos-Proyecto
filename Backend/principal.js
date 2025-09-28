@@ -1,10 +1,12 @@
-import express from 'express';
-import { PrismaClient } from '@prisma/client';
+import prismaPkg from '@prisma/client';
+const { PrismaClient } = prismaPkg;
+import { default as express } from 'express';
 import dotenv from 'dotenv';
 import expressWs from 'express-ws';
+
 import setuprouter from './rutas.js';
 import setupsesiones from './sesiones/sesiones.js';
-import setupcalendario from './calendario.js';
+import setupcalendario from './calendario/calendario.js';
 import setupautenticacion from './autenticacion.js';
 import setuparchivos from './archivos/archivos.js';
 import setupwebsocketserver from './chats/websocket.js';
@@ -16,8 +18,9 @@ dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET || 'contrasenia-jeje';
 const prisma = new PrismaClient();
-const { app, getWss } = expressWs(express()); 
-const wss = getWss(); 
+const app = express();
+expressWs(app); 
+const wss = app.getWss();
 
 const { login, signup } = setupsesiones(JWT_SECRET);
 const { authentication } = setupautenticacion(JWT_SECRET);

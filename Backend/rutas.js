@@ -1,4 +1,5 @@
-import { Router } from 'express';
+import pkg from 'express';
+const { Router } = pkg;
 
 const setuprouter = ({ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers}) => {
     const router = Router();
@@ -12,7 +13,7 @@ const setuprouter = ({ login, signup, authentication, getevents, permision, redi
     router.delete("/api/calendar/events/:eventId", authentication, deleteevents);
     router.put("/api/calendar/events/:eventId", authentication, updateevents);
     router.get("/api/files/:nombrearchivo", authentication, seefile);
-    router.post("/api/files", authentication, uploadfile);
+    router.post("/api/files/projects/:proyectoId", authentication, uploadfile);
     router.post("/projects/:proyectoId/chat/create", authentication, createchat);
     router.get("/chat/:chatId/messages", authentication, getchatmessages);
     router.put("/messages/:messageId/read", authentication, updatemessagestatus);

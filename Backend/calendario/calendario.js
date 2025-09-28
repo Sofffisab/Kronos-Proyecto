@@ -1,5 +1,7 @@
-import { PrismaClient } from '@prisma/client';
-import { google } from 'googleapis';
+import prismaPkg from '@prisma/client';
+const { PrismaClient } = prismaPkg;
+import pkg from 'googleapis'; 
+const { google } = pkg;
 import dotenv from 'dotenv';
 dotenv.config();
 const prisma = new PrismaClient();
