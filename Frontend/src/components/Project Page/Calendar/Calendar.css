@@ -1,0 +1,21 @@
+.fc {
+    width: 100%;
+    height: 100%;
+    font-family: var(--font);
+    overflow: hidden;
+}
+.fc > * {
+    width: 100%;
+    height: 100%
+}
+.fc a {
+    color: var(--fontContrast);
+}
+.fc-toolbar {
+    padding: 1%;
+    box-sizing: border-box;
+    height: 10vh
+}
+.fc-daygrid-day-number, .fc-col-header-cell-cushion  {
+    user-select: none;
+}

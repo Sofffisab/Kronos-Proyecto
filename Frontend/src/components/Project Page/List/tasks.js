@@ -10,7 +10,7 @@
 {
     name: 'bege',
     icon: 'foto',
-    priority: 'nigga',
+    priority: 'hola',
     date: '2/2/02',
     state: 'unreso',
     id: 2,

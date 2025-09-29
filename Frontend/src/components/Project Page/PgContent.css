@@ -55,3 +55,19 @@
     font-family: var(--font);
     font-size: var(--mediumSize);
   }
+  
+#IaBtn {
+  position: fixed;
+  cursor: pointer;
+  right: 1%;
+  z-index: 100;
+  opacity: 50%;
+  bottom: 1%;
+  transition: var(--easeTransition);
+  transform: rotateY(180deg);
+}
+#IaBtn:hover {
+opacity: 100%;
+transform: scale(1.1);
+transform: rotateY(0deg);
+}
