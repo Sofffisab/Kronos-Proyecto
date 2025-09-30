@@ -19,3 +19,14 @@
 .fc-daygrid-day-number, .fc-col-header-cell-cushion  {
     user-select: none;
 }
+.fc .fc-button-primary {
+    background-color: transparent;
+    color: var(--fontContrast);
+    border: none;
+    transition: var(--easeTransition);
+}
+.fc .fc-button-primary:hover {
+    background-color: var(--secondaryColor);
+    opacity: 70%;
+    color: var(--fontContrast);
+}

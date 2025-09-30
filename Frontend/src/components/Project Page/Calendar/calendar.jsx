@@ -7,6 +7,12 @@ export default function Calendar(props) {
         <FullCallendar
         plugins={[ dayGridPlugin ]}
         initialView="dayGridMonth"
+        customButtons={{year:{text: "year"}}}
+        headerToolbar={{
+            start: 'title', 
+            center: '',
+            end: 'prevYear prev today next nextYear' 
+          }}
        />
     )
 }
