@@ -1,4 +1,4 @@
-# pip install -r lib.txt
+# pip install -r lib.txt --no-warn-script-location.
 import os
 import json
 from google import genai
