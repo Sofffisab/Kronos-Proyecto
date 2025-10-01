@@ -1,0 +1,29 @@
+.bg {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(1, 1, 1, 0.442);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.inputModal {
+  background-color: var(--mainColor);
+  height: fit-content;
+  width: fit-content;
+  padding: 15%;
+  border-radius: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 1%;
+  box-sizing: border-box;
+}
+.triggerDisabledBox {
+  height: fit-content;
+  width: fit-content;
+}
