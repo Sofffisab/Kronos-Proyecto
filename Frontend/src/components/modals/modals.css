@@ -1,5 +1,5 @@
 .bg {
-  position: absolute;
+  position: fixed;
   top: 0px;
   left: 0px;
   height: 100%;
@@ -11,19 +11,39 @@
   justify-content: center;
 }
 .inputModal {
+  font-family: var(--font);
   background-color: var(--mainColor);
   height: fit-content;
-  width: fit-content;
+  width: 20vw;
   padding: 15%;
   border-radius: 50px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  gap: 1%;
+  gap: 1vh;
   box-sizing: border-box;
+}
+.submitBtn {
+  background-color: var(--secondaryColor);
+  padding: 3%;
+  width: 80%;
+  text-align: center;
+  border-radius: 15px;
+  transition: var(--easeTransition);
+}
+.submitBtn:hover {
+  background-color: var(--tertiaryColor);
 }
 .triggerDisabledBox {
   height: fit-content;
   width: fit-content;
+}
+.inputModal select,
+input {
+  padding: 3%;
+  width: 100%;
+  border-radius: 5px;
+  border: solid black 2px;
+  font-family: var(--font);
 }

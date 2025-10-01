@@ -15,6 +15,7 @@ export default function InputModal(props) {
           <select id="person">
             <option value="bege">Bege</option>
             <option value="pipa">pipa</option>
+            <option value="mathias">mathias</option>
           </select>
           <label>Limite</label>
           <input id="date" type="date" />
@@ -29,7 +30,7 @@ export default function InputModal(props) {
             <option value="Resolved">Resolved</option>
             <option value="Unresolved">Unresolved</option>
           </select>
-          <SimpleButton text="Crear" onClick={props.submit} />
+          <SimpleButton class="submitBtn" text="Crear" onClick={props.submit} />
         </div>
       }
     />

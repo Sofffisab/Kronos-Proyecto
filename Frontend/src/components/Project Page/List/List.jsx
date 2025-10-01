@@ -8,7 +8,7 @@ import Table from "./table";
 import Task from "./Task";
 export default function List(props) {
   const [modal, toggleModal] = useState(false);
-  const [tasks, setTasks] = useState(props.tasks);
+  const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
     if (modal) {

@@ -2,7 +2,7 @@ import { useState } from "react";
 import Separator from "../../Separator";
 
 export default function Table(props) {
-  const [toggleTasks, setToggleTasks] = useState(true);
+  const [toggleTasks, setToggleTasks] = useState(false);
   const style = toggleTasks ? "tasks" : "tasksCollapsed";
 
   return (
