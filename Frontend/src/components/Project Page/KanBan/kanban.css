@@ -1,0 +1,65 @@
+.table {
+  display: block;
+  height: 100%;
+}
+.top {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    text-align: center;
+    border-bottom: 1px solid var(--fontContrast);
+    
+}
+.top div {
+
+    border-right: 1px solid var(--fontContrast);
+    padding: 5%;
+    font-size: var(--headerSize);
+   
+}
+#last {
+    border-right: none ;
+   
+}
+.bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    height: fit-content;
+    min-height: 100%;
+}
+.bottom div {
+    border-right: 1px solid var(--fontContrast);
+    padding: 5%;
+    border-bottom: 1px solid var(--fontContrast);
+    display: flex;
+    flex-direction: column;
+    gap: 2%;
+    justify-content: flex-start;
+    align-items: center;
+}
+#terminada {
+    border-right: none ;
+}
+.tarea {
+    box-sizing: border-box;
+    border: none !important;
+    width: 100%;
+    height: 15%;
+    border-bottom-right-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.riesgo {
+    background-color: #CD8E8E;
+}
+.atrasada {
+    background-color: #C5926E;
+}
+.proceso {
+    background-color: #E5E579;
+}
+.terminado {
+    background-color: yellowgreen;
+}
