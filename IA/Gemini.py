@@ -15,8 +15,9 @@ import json
 import time
 import random
 
-client = genai.Client(api_key="AIzaSyAkiW5YQ7ONHn8i4qadg0KTzXRPRfy3r3E")
-
+#client = genai.Client(api_key="AIzaSyAkiW5YQ7ONHn8i4qadg0KTzXRPRfy3r3E")
+#nueva api xq nos quedamos sin tokens
+client = genai.Client(api_key="AIzaSyCXUdPHjrG_z0lIM0lyEIKlgnYvihzRvYE")
 
 #modelo de la tabla
 class WebsiteValue(BaseModel):
@@ -150,8 +151,9 @@ def createJson(prompt, img_path="image.jpg"):
 
     if not conclusion.strip():
         conclusion = "No hubo sugerencias claras, pero mejora la navegación y la accesibilidad visual."
-    
 
+    if img_path and os.path.exists(img_path):
+        createImgSearching(prompt=conclusion, img_path=img_path)
 
 
 #crear img
@@ -176,6 +178,14 @@ def createImg(prompt):
 
 #crear img buscando en internet (con texto + img opcional)
 def createImgSearching(prompt, img_path=None):
+
+    #para conseguir los tamaños de la img del input y respetarlos
+    if img_path and os.path.exists(img_path):
+        with Image.open(img_path) as img:
+            inserted_img = img.tobytes()  # si querés pasar los bytes
+            width, height = img.size
+
+
     contents = [
         {"role": "user", "parts": [{"text": (f"""
             Crea una imagen realista del sitio web mostrado en la imagen adjunta, incorporando las mejoras indicadas en la conclusión:
@@ -183,13 +193,13 @@ def createImgSearching(prompt, img_path=None):
            - Reorganizar botones importantes para navegación más intuitiva.
            - Añadir iconos y elementos visuales que mejoren la experiencia.
            - Mantener el estilo general del sitio original.
-           No inventes nuevos elementos, solo mejora lo que ya existe. La imagen debe mostrar claramente los cambios sugeridos. Mantiene las dimensiones de la img original
+           No inventes nuevos elementos, solo mejora lo que ya existe. La imagen debe mostrar claramente los cambios sugeridos.Mantener el mismo tamaño y proporción que la imagen original: ancho={width}px, alto={height}px.
             Tema: {prompt}
             """
         )}]}
     ]
 
-    # si viene img, se añade al contents (input)
+# si viene img, se añade al contents (input)
     if img_path and os.path.exists(img_path):
         with open(img_path, "rb") as f:
             inserted_img = f.read()
@@ -216,7 +226,7 @@ def createImgSearching(prompt, img_path=None):
         contents=[{"role": "user", "parts": [{"text": prompt_img}]}],
         config=types.GenerateContentConfig(
             response_modalities=["TEXT", "IMAGE"],
-            temperature=0.8,
+            temperature=0.2,
             top_p=0.9,
             top_k=40 
         )
