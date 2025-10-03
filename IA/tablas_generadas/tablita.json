@@ -1,90 +1,90 @@
 [
     {
         "criterion_or_website": "Typography & Readability",
-        "conclusion": "Consider introducing subtle font variations for emphasis without compromising clarity. Larger text for product descriptions or specifications could further improve user accessibility.",
-        "Newegg": "Employs varied font sizes and weights for product details and reviews. Text is generally clear, but some dense pages can feel overwhelming.",
-        "Micro Center": "Features clean, modern typography that prioritizes clear product descriptions and specifications. Readability is consistently high across all content.",
-        "Amazon": "Uses a standardized, easily readable font for product titles and descriptions, maintaining consistency across its vast marketplace. Text can be small on some elements.",
-        "Sitio Web de la Imagen": "Utilizes clear, legible fonts for titles and product names, contributing to good overall readability. Text contrast against backgrounds is effective."
+        "conclusion": "",
+        "PcComponentes": "Utiliza tipografías Sans-serif claras que garantizan una excelente legibilidad en todas las secciones. El tamaño y espaciado favorecen una lectura cómoda y eficiente.",
+        "Amazon": "Presenta tipografías estándar y un diseño funcional que prioriza la información. La legibilidad es alta, aunque el volumen de texto puede resultar denso en ocasiones.",
+        "Newegg": "Emplea fuentes limpias y tamaños adecuados para asegurar una lectura fluida. La jerarquía visual de los textos ayuda a identificar rápidamente la información clave.",
+        "PCPartPicker": "La tipografía es funcional y clara, aunque en ocasiones la uniformidad de tamaño puede dificultar la jerarquía visual de contenidos importantes."
     },
     {
         "criterion_or_website": "Colors & Branding",
-        "conclusion": "While the current blue and white scheme is clean, exploring a secondary accent color could add depth. Ensure brand elements are consistently applied, perhaps with a more prominent logo presence.",
-        "Newegg": "Recognizable black, red, and white color scheme, conveying a tech-focused, professional brand image. Consistent branding reinforces identity across sections.",
-        "Micro Center": "Features a distinct red, black, and white palette, reflecting its retail presence and tech expertise. Branding is strong, highlighting categories effectively.",
-        "Amazon": "Employs its iconic orange and blue accents against a predominantly white background, establishing instant recognition. Branding is ubiquitous, focusing on trust.",
-        "Sitio Web de la Imagen": "Adopts a clean blue and white color scheme, providing a fresh and simple aesthetic. The mouse-shaped logo offers a memorable, tech-centric brand identity."
+        "conclusion": "",
+        "PcComponentes": "Su vibrante paleta de colores corporativos (naranja y blanco/gris) es consistente, creando una identidad de marca moderna y fácilmente reconocible en todo el sitio.",
+        "Amazon": "Utiliza una paleta de colores simple y reconocible (azul, naranja, blanco). El branding se centra en la familiaridad y confianza, con un logo omnipresente.",
+        "Newegg": "Predominan los tonos azules y grises, que transmiten profesionalidad y tecnología. El branding es sutil pero consistente, reforzando su imagen en el sector.",
+        "PCPartPicker": "La interfaz usa colores básicos (azul, blanco, negro) de forma consistente. El branding es funcional, centrado en la herramienta más que en una estética llamativa."
     },
     {
         "criterion_or_website": "Visual Elements",
-        "conclusion": "Consider increasing the size of product thumbnails and adding more visual details like multiple angles or zoom features. Implementing product comparison overlays could greatly enhance decision-making.",
-        "Newegg": "Showcases high-quality product images, detailed specifications, and user-submitted photos. Videos and interactive elements enhance product understanding and engagement.",
-        "Micro Center": "Provides excellent product photography, often with multiple angles and clear details. In-store pickup icons and comparison visuals are also well-integrated.",
-        "Amazon": "Displays a wide array of product images, including customer-uploaded photos and videos. Visuals are crucial for comparison, though quality varies by seller.",
-        "Sitio Web de la Imagen": "Features clear product images for popular components, aiding quick identification. The overall layout is clean and uncluttered, focusing user attention on listed items."
+        "conclusion": "",
+        "PcComponentes": "Destaca por imágenes de producto de alta resolución y vídeos descriptivos. Los iconos son intuitivos y complementan la información textual, mejorando la experiencia de compra.",
+        "Amazon": "Abundantes imágenes de productos y vistas de 360 grados. Los elementos visuales son informativos y funcionales, aunque el diseño general puede parecer menos moderno.",
+        "Newegg": "Ofrece imágenes de productos detalladas y galerías interactivas. Los elementos gráficos son limpios y contribuyen a una presentación profesional del hardware.",
+        "PCPartPicker": "Los elementos visuales son principalmente imágenes de productos, esquemas y gráficos para compatibilidad. Son funcionales, pero la estética es secundaria a la claridad informativa."
     },
     {
         "criterion_or_website": "Navigation & UX",
-        "conclusion": "Improving the visibility of sub-categories or adding hover-activated mega menus could streamline exploration. Implementing breadcrumbs or dynamic filtering would also greatly enhance navigation efficiency.",
-        "Newegg": "Offers extensive categorization, advanced filters, and a robust search function, enabling precise product discovery. Navigation can be deep but is well-structured.",
-        "Micro Center": "Features intuitive navigation with clear categories and an effective search bar. The distinction between online and in-store availability enhances user experience.",
-        "Amazon": "Known for its universal search bar and extensive filtering options, simplifying product discovery across diverse categories. Navigation is familiar and highly efficient.",
-        "Sitio Web de la Imagen": "Presents a clear top-level navigation with 'Información,' 'Arma tu PC,' and 'Comparar' options. The search bar is prominent, suggesting straightforward user interaction."
+        "conclusion": "",
+        "PcComponentes": "Navegación intuitiva con menús desplegables claros y un buscador eficiente. La experiencia de usuario es fluida, facilitando la búsqueda y compra de componentes.",
+        "Amazon": "La navegación es amplia y familiar, aunque a veces saturada. La UX se enfoca en la eficiencia del proceso de compra, con un flujo bien establecido y conocido.",
+        "Newegg": "Presenta una navegación lógica y estructurada, con categorías bien definidas. La UX está diseñada para exploradores de tecnología, con filtros avanzados y fácil acceso a comparativas.",
+        "PCPartPicker": "Navegación clara y orientada a la función, facilitando la búsqueda y compatibilidad de componentes. La UX es altamente funcional, ideal para construir PCs paso a paso."
     },
     {
         "criterion_or_website": "Organization & Structure",
-        "conclusion": "Introducing more detailed product categories and subcategories would improve discoverability. Structuring product information with clear headings and bullet points on individual pages would enhance clarity.",
-        "Newegg": "Highly structured with detailed product pages, review sections, and comprehensive filtering. Information is logically grouped, supporting informed purchasing decisions.",
-        "Micro Center": "Well-organized product categories and dedicated sections for new arrivals or deals. Site structure supports both casual browsing and targeted searches effectively.",
-        "Amazon": "Employs a highly scalable structure with extensive product categories, subcategories, and detailed listing pages. Information is organized to handle millions of products efficiently.",
-        "Sitio Web de la Imagen": "Displays a clear 'Componentes populares' section with a consistent grid layout. The overall structure appears logical, separating main actions like 'Arma tu PC' clearly."
+        "conclusion": "",
+        "PcComponentes": "Contenido bien jerarquizado y organizado por categorías y subcategorías claras. La estructura facilita la exploración y búsqueda de productos específicos.",
+        "Amazon": "Organización de contenido vasta y compleja, pero con una estructura de categorías coherente. Permite una buena visibilidad de productos, a pesar de la enorme oferta.",
+        "Newegg": "Estructura lógica y bien definida, optimizada para el hardware. Las fichas de producto son detalladas, y las guías de compra están bien integradas.",
+        "PCPartPicker": "La estructura se centra en la compatibilidad de componentes, con listas y filtros. Es muy organizada para su propósito específico de montaje de PCs."
     },
     {
         "criterion_or_website": "Accessibility",
-        "conclusion": "Enhancing alt-text for all images and interactive elements would improve screen reader compatibility. Ensuring all form inputs have proper labels and focus indicators would further boost accessibility.",
-        "Newegg": "Generally good, with keyboard navigation support and clear alt-text for images. Efforts are made to meet WCAG standards, though complex layouts pose challenges.",
-        "Micro Center": "Strives for good accessibility with clear form labels and sufficient color contrast. Its focus on customer service extends to ensuring a usable online experience.",
-        "Amazon": "Benefits from extensive resources dedicated to accessibility, aiming for compliance with WCAG standards. Features like screen reader support are well-implemented.",
-        "Sitio Web de la Imagen": "Features high color contrast between text and background, ensuring good readability. The layout appears simple and straightforward, potentially aiding keyboard navigation for all users."
+        "conclusion": "",
+        "PcComponentes": "Cumple con estándares básicos de accesibilidad, aunque siempre hay margen de mejora. Se percibe un esfuerzo por hacer el sitio usable para diversos usuarios.",
+        "Amazon": "Invierte en accesibilidad para un público global. Presenta opciones para personalizar la experiencia, buscando ser inclusivo para usuarios con diversas necesidades.",
+        "Newegg": "Se esfuerza en ofrecer un sitio accesible, con etiquetas Alt en imágenes y buen contraste. Apunta a la inclusión, aunque no es su característica principal.",
+        "PCPartPicker": "La accesibilidad básica está presente en su diseño funcional y textual. Sin embargo, podría beneficiarse de una auditoría WCAG para optimizar la experiencia inclusiva."
     },
     {
         "criterion_or_website": "Functionality",
-        "conclusion": "Ensure all promised functionalities like 'Arma tu PC' and 'Comparar' are fully realized and highly intuitive. Implementing detailed product filtering options would significantly enhance user control.",
-        "Newegg": "Offers robust search, filtering, comparison tools, and a comprehensive checkout process. The PC builder tool is a standout feature for enthusiasts.",
-        "Micro Center": "Provides accurate stock availability (online/in-store), reliable checkout, and effective product filtering. Its custom PC configurator is highly valued by users.",
-        "Amazon": "Features a highly optimized shopping cart, one-click ordering, and robust customer support. Product reviews, Q&A, and recommendation engines are key functionalities.",
-        "Sitio Web de la Imagen": "Includes a visible search bar and main navigation points, suggesting core functionality like product searching and information access. Advanced tools are implied."
+        "conclusion": "",
+        "PcComponentes": "Ofrece filtros avanzados, comparadores de productos y un configurador de PC muy completo. Estas funcionalidades mejoran significativamente la decisión de compra.",
+        "Amazon": "Funcionalidades robustas, incluyendo el carrito, la lista de deseos y el seguimiento de pedidos. Su proceso de compra es altamente eficiente y consolidado.",
+        "Newegg": "Dispone de herramientas como configuradores de PC, filtros exhaustivos y listas de compatibilidad. Su funcionalidad es clave para usuarios expertos en hardware.",
+        "PCPartPicker": "Su funcionalidad principal es la verificación de compatibilidad de componentes, filtros potentes y guías de montaje. Es esencialmente una herramienta interactiva."
     },
     {
         "criterion_or_website": "Interactivity",
-        "conclusion": "Adding interactive elements like hover-over product details or quick-view options could enrich engagement. Incorporating customer reviews or a basic Q&A section would foster community and trust.",
-        "Newegg": "Engages users with product reviews, Q&A sections, wishlists, and a robust community forum. Dynamic product displays and interactive configurators are present.",
-        "Micro Center": "Encourages interaction through customer reviews, in-store pickup options, and personalized recommendations. Live chat support offers direct engagement.",
-        "Amazon": "Highly interactive with user reviews, ratings, Q&A, and personalized recommendations. Its seamless purchase flow and wishlists foster strong engagement.",
-        "Sitio Web de la Imagen": "Displays popular components in an engaging grid, and implied features suggest interactive tools. Clear clickable elements guide user actions effectively."
+        "conclusion": "",
+        "PcComponentes": "Incorpora chats en vivo, opiniones de usuarios, y opciones de personalización en configuradores. Fomenta la participación y la toma de decisiones informada.",
+        "Amazon": "Alta interactividad a través de reseñas, preguntas y respuestas, y recomendaciones personalizadas. Fomenta un ecosistema de compra y comunidad activo.",
+        "Newegg": "Ofrece foros de discusión, comentarios detallados de productos y guías interactivas. Mantiene a los usuarios comprometidos y explorando su catálogo técnico.",
+        "PCPartPicker": "La interactividad se centra en la selección de componentes y la visualización de compatibilidades. Podría añadir más elementos sociales o de gamificación para engagement."
     },
     {
-        "criterion_or_website": "SEO (Search Engine Optimization)",
-        "conclusion": "Implement descriptive page titles, meta descriptions, and clean URLs for every product. Utilizing structured data markup (Schema.org) for products would improve search engine visibility and rich snippets.",
-        "Newegg": "Benefits from high domain authority, relevant keywords in product titles/descriptions, and a vast content library. Structured data markup is likely used.",
-        "Micro Center": "Leverages local SEO for its physical stores and optimizes product pages for specific component searches. Blog content and guides contribute to organic visibility.",
-        "Amazon": "Dominates search results due to its massive product catalog, high authority, and user-generated content (reviews). Product-specific pages are highly optimized.",
-        "Sitio Web de la Imagen": "While content is minimal, proper use of titles, descriptions, and structured URLs would be crucial. Focus on long-tail keywords relevant to PC components."
+        "criterion_or_website": "SEO",
+        "conclusion": "",
+        "PcComponentes": "Goza de una excelente visibilidad en buscadores, con una estrategia SEO bien definida y un contenido optimizado para el mercado de PC en español.",
+        "Amazon": "Domina el SEO por su autoridad de dominio y la vasta cantidad de contenido. Su visibilidad es inigualable en un amplio espectro de búsquedas de productos.",
+        "Newegg": "Presenta un SEO sólido, especialmente para búsquedas de hardware específico. Su contenido técnico y la estructura del sitio favorecen un buen posicionamiento.",
+        "PCPartPicker": "Su SEO es bueno para búsquedas específicas de compatibilidad y construcción de PCs. La optimización de palabras clave podría enfocarse en guías y tutoriales para mejorar aún más."
     },
     {
-        "criterion_or_website": "Conclusion",
-        "conclusion": "The site has a good foundational design, but expanding content, visual details, and advanced interactive tools would elevate the user experience significantly. Focus on detailed product information and community.",
-        "Newegg": "Newegg remains a premier destination for PC hardware, praised for its vast selection, competitive pricing, and comprehensive feature set, catering to enthusiasts.",
-        "Micro Center": "Micro Center offers a unique blend of online convenience and invaluable in-store expertise, making it a strong choice for builders needing immediate support.",
-        "Amazon": "Amazon provides unparalleled convenience and selection across a broad spectrum of PC components, leveraging its extensive logistics and trusted marketplace for a diverse audience.",
-        "Sitio Web de la Imagen": "The site presents a clean, user-friendly interface with clear goals for PC enthusiasts. It establishes a solid foundation for guiding users through component selection."
+        "criterion_or_website": "Performance/Loading Speed",
+        "conclusion": "",
+        "PcComponentes": "Mantiene una velocidad de carga rápida y un rendimiento optimizado. Esto asegura una experiencia de navegación fluida y satisfactoria para el usuario.",
+        "Amazon": "A pesar de su enorme complejidad, Amazon carga relativamente rápido. Su rendimiento está altamente optimizado para manejar un volumen masivo de tráfico y productos.",
+        "Newegg": "Ofrece una buena velocidad de carga y un rendimiento web estable. La optimización de imágenes y scripts contribuye a una experiencia ágil.",
+        "PCPartPicker": "La velocidad de carga es eficiente, dado el volumen de datos de compatibilidad que maneja. La optimización continua de recursos es clave para mantener la fluidez."
     },
     {
-        "criterion_or_website": "Overall Conclusion",
-        "conclusion": "To elevate the user experience, the site should prioritize richer content, advanced filtering, and interactive tools beyond basic browsing. Enhancing product imagery and fostering community engagement would be beneficial additions.",
-        "Newegg": "Newegg stands out with its extensive inventory, specialized focus on PC components, and strong community support, making it a go-to for enthusiasts and builders.",
-        "Micro Center": "Micro Center excels in customer service, offering a valuable blend of in-store expertise and online convenience, particularly for local pick-ups and bundles.",
-        "Amazon": "Amazon provides unmatched accessibility and a vast product range, favored for its swift delivery, competitive pricing, and robust customer review system across various sellers.",
-        "Sitio Web de la Imagen": "The Image Site, 'Rity', offers a clean, intuitive platform for PC enthusiasts to learn, build, and compare. Its direct approach simplifies navigation and component display."
+        "criterion_or_website": "+Final Conclusion",
+        "conclusion": "El sitio web analizado posee una base sólida en su estructura y funcionalidades esenciales, ofreciendo una experiencia adecuada para el usuario. Sin embargo, para capitalizar su potencial, se sugiere optimizar la jerarquía visual y la interactividad. Mejorar el rendimiento de carga e implementar una estrategia SEO más robusta también potenciarían su visibilidad y engagement. Se recomienda explorar nuevas funcionalidades para enriquecer la oferta y destacarse en el competitivo mercado.",
+        "PcComponentes": "",
+        "Amazon": "",
+        "Newegg": "",
+        "PCPartPicker": ""
     }
 ]

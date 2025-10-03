@@ -247,13 +247,18 @@ def createImgSearching(prompt, img_path=None):
 theme = 'PC MARKET'
 
 createJson(f"""
-Generate a comparison table with the following exact columns: 
-Website, Typography & Readability, Colors & Branding, Visual Elements, Navigation & UX, Organization & Structure, Accessibility, Functionality, Interactivity and SEO (Search Engine Optimization). 
-The table must include rows for the 3 most popular websites related to the topic {theme}, plus the website shown in the provided image. There should be exactly 11 rows in total (one per topic/criterion + conclusion). 
-Each row must have 5 cells (4 websites + 1 Conclusion). Each cell must contain a descriptive sentence of 20 - 30 words. 
-In the Conclusion column (shown as the last one), write specific improvement suggestions only for the last website (the one from the image) comparing it to the other 3 websites. Do NOT compare it directly, but identify things what could be improved remarkking also the good things. Avoid mentioning the names of any websites in the improvement suggestions. 
-Output must be structured, consistent, and in JSON schema format. 
-On the top of each website column, also provide a very brief description of each website.
+The JSON returned must be an array of 11 rows (objects).  
+Each row has exactly these keys in this order:  
+"criterion", "Website1", "Website2", "Website3", "Website4", "Conclusion".
+Websites 1 to 3 have to be the most famous about {theme}, and the 4th is the one of the img insterted.
+Rules:  
+- Criteria order: Typography & Readability, Colors & Branding, Visual Elements, Navigation & UX, Organization & Structure, Accessibility, Functionality, Interactivity, SEO, +1 extra criterion you choose, +Final Conclusion row (only fill "Conclusion").  
+- Website1–Website3: each = short intro phrase + one descriptive sentence of 20–30 words.  
+- Website4: same, but refers to the website from the provided image.  
+- "Conclusion": only Website4 improvements, implicit comparison, highlight strengths + suggestions, never mention website names.  
+
+Output must be strictly consistent, 6 keys per row, no extra text.
+
 """)
 
 #createTxt("como son los diseños de las páginas web de mercado libre, pedido ya y amazon? hazme una descripción teniendo en cuenta: Sitio Web, Tipografía, Colores, Formal o informal, Personajes-iconos-emblemas, Accesibilidad, Capacidad de navegación, Organización (botones importantes), Funciones extras, Tutoriales o instrucciones")
