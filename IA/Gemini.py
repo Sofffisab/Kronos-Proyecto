@@ -248,8 +248,8 @@ theme = 'PC MARKET'
 
 createJson(f"""
 The JSON returned must be an array of 11 rows (objects).  
-Each row has exactly these keys in this order:  
-"criterion", "Website1", "Website2", "Website3", "Website4", "Conclusion".
+Each row has these keys in this order:  
+"criterion", "(NamePage1)", "(NamePage2)", "(NamePage3)", "(NamePage4)", "Conclusion".
 Websites 1 to 3 have to be the most famous about {theme}, and the 4th is the one of the img insterted.
 Rules:  
 - Criteria order: Typography & Readability, Colors & Branding, Visual Elements, Navigation & UX, Organization & Structure, Accessibility, Functionality, Interactivity, SEO, +1 extra criterion you choose, +Final Conclusion row (only fill "Conclusion").  

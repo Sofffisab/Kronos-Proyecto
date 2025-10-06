@@ -1,90 +1,90 @@
 [
     {
         "criterion_or_website": "Typography & Readability",
-        "conclusion": "",
-        "PcComponentes": "Utiliza tipografías Sans-serif claras que garantizan una excelente legibilidad en todas las secciones. El tamaño y espaciado favorecen una lectura cómoda y eficiente.",
-        "Amazon": "Presenta tipografías estándar y un diseño funcional que prioriza la información. La legibilidad es alta, aunque el volumen de texto puede resultar denso en ocasiones.",
-        "Newegg": "Emplea fuentes limpias y tamaños adecuados para asegurar una lectura fluida. La jerarquía visual de los textos ayuda a identificar rápidamente la información clave.",
-        "PCPartPicker": "La tipografía es funcional y clara, aunque en ocasiones la uniformidad de tamaño puede dificultar la jerarquía visual de contenidos importantes."
+        "conclusion": "Se podría mejorar la jerarquía visual del texto y el contraste para destacar información crucial, haciendo que la lectura sea más dinámica y menos monótona.",
+        "Newegg": "Newegg es conocido por su enfoque limpio. Su tipografía clara y el espaciado adecuado mejoran la legibilidad de descripciones de productos y especificaciones técnicas, facilitando la navegación.",
+        "Amazon": "Amazon utiliza una tipografía sencilla y familiar. La consistencia en el tamaño y estilo de fuente en todo el sitio garantiza una experiencia de lectura cómoda y accesible para los usuarios.",
+        "Micro Center": "Micro Center presenta una fuente estándar para su contenido. El contraste de colores y la jerarquía visual de su texto ayudan a los usuarios a diferenciar fácilmente la información clave del producto y las ofertas.",
+        "PCity": "PCity emplea una tipografía limpia y estándar que asegura una buena legibilidad general. Los títulos son claros, aunque la jerarquía visual entre diferentes elementos de texto podría ser más pronunciada para guiar mejor al usuario."
     },
     {
         "criterion_or_website": "Colors & Branding",
-        "conclusion": "",
-        "PcComponentes": "Su vibrante paleta de colores corporativos (naranja y blanco/gris) es consistente, creando una identidad de marca moderna y fácilmente reconocible en todo el sitio.",
-        "Amazon": "Utiliza una paleta de colores simple y reconocible (azul, naranja, blanco). El branding se centra en la familiaridad y confianza, con un logo omnipresente.",
-        "Newegg": "Predominan los tonos azules y grises, que transmiten profesionalidad y tecnología. El branding es sutil pero consistente, reforzando su imagen en el sector.",
-        "PCPartPicker": "La interfaz usa colores básicos (azul, blanco, negro) de forma consistente. El branding es funcional, centrado en la herramienta más que en una estética llamativa."
+        "conclusion": "La identidad de marca podría reforzarse con una paleta de colores más consistente que refleje mejor su propuesta de valor, creando una impresión más cohesionada y memorable.",
+        "Newegg": "Newegg emplea una paleta de colores corporativos. Su combinación de azul y blanco se asocia fuertemente con la tecnología, transmitiendo una imagen de fiabilidad y modernidad en el mercado de PC.",
+        "Amazon": "Amazon se distingue por su distintivo esquema de colores. El negro, naranja y blanco son inmediatamente reconocibles, proyectando una imagen de marca global que es confiable y de fácil acceso.",
+        "Micro Center": "Micro Center utiliza un esquema de color vibrante en su diseño. La combinación de rojo y negro crea una identidad de marca enérgica, atrayendo a entusiastas de la tecnología con su estilo audaz.",
+        "PCity": "PCity utiliza un esquema de colores azul y blanco, que es común en tecnología y transmite limpieza. La identidad de marca es funcional, pero podría desarrollarse para ser más distintiva y memorable."
     },
     {
         "criterion_or_website": "Visual Elements",
-        "conclusion": "",
-        "PcComponentes": "Destaca por imágenes de producto de alta resolución y vídeos descriptivos. Los iconos son intuitivos y complementan la información textual, mejorando la experiencia de compra.",
-        "Amazon": "Abundantes imágenes de productos y vistas de 360 grados. Los elementos visuales son informativos y funcionales, aunque el diseño general puede parecer menos moderno.",
-        "Newegg": "Ofrece imágenes de productos detalladas y galerías interactivas. Los elementos gráficos son limpios y contribuyen a una presentación profesional del hardware.",
-        "PCPartPicker": "Los elementos visuales son principalmente imágenes de productos, esquemas y gráficos para compatibilidad. Son funcionales, pero la estética es secundaria a la claridad informativa."
+        "conclusion": "Considerar la inclusión de elementos gráficos más dinámicos y el uso de iconos informativos para mejorar la interacción visual, aportando mayor riqueza sin sobrecargar el diseño.",
+        "Newegg": "Newegg muestra imágenes de productos de alta calidad y diseños consistentes. La disposición de los elementos visuales es ordenada y profesional, mejorando la experiencia de compra y la presentación de los artículos.",
+        "Amazon": "Amazon gestiona una vasta cantidad de elementos visuales con gran eficacia. Desde imágenes de productos hasta banners promocionales, todo está optimizado para cargar rápidamente y ser visualmente atractivo.",
+        "Micro Center": "Micro Center incorpora elementos visuales dinámicos y organizados. Sus banners y gráficos promocionales son efectivos para destacar ofertas, manteniendo una estética limpia que facilita la exploración de productos.",
+        "PCity": "PCity presenta imágenes de productos claras y bien enmarcadas sobre un fondo blanco, lo que contribuye a una apariencia limpia. Se observa una consistencia en el tamaño de las miniaturas, pero faltan elementos gráficos más dinámicos o iconos informativos."
     },
     {
         "criterion_or_website": "Navigation & UX",
-        "conclusion": "",
-        "PcComponentes": "Navegación intuitiva con menús desplegables claros y un buscador eficiente. La experiencia de usuario es fluida, facilitando la búsqueda y compra de componentes.",
-        "Amazon": "La navegación es amplia y familiar, aunque a veces saturada. La UX se enfoca en la eficiencia del proceso de compra, con un flujo bien establecido y conocido.",
-        "Newegg": "Presenta una navegación lógica y estructurada, con categorías bien definidas. La UX está diseñada para exploradores de tecnología, con filtros avanzados y fácil acceso a comparativas.",
-        "PCPartPicker": "Navegación clara y orientada a la función, facilitando la búsqueda y compatibilidad de componentes. La UX es altamente funcional, ideal para construir PCs paso a paso."
+        "conclusion": "Se podría optimizar la navegación añadiendo filtros más específicos y una categorización más profunda para facilitar la búsqueda de productos, mejorando la experiencia del usuario y la eficiencia.",
+        "Newegg": "Newegg ofrece una navegación estructurada y lógica. Sus menús desplegables y filtros avanzados permiten a los usuarios encontrar productos específicos con facilidad, proporcionando una experiencia de usuario eficiente.",
+        "Amazon": "Amazon es un referente en navegación, con menús intuitivos y una barra de búsqueda potente. La experiencia del usuario es fluida, permitiendo una exploración y compra de productos sin esfuerzo y altamente eficiente.",
+        "Micro Center": "Micro Center proporciona una navegación clara y categorizada. Sus opciones de filtro y búsqueda permiten una exploración eficiente del inventario, mejorando la usabilidad para compradores de tecnología.",
+        "PCity": "PCity ofrece una navegación sencilla con enlaces en el encabezado que son fáciles de entender. La barra de búsqueda es prominente. Sin embargo, se podrían añadir más opciones de filtrado o categorización para una mejor experiencia."
     },
     {
         "criterion_or_website": "Organization & Structure",
-        "conclusion": "",
-        "PcComponentes": "Contenido bien jerarquizado y organizado por categorías y subcategorías claras. La estructura facilita la exploración y búsqueda de productos específicos.",
-        "Amazon": "Organización de contenido vasta y compleja, pero con una estructura de categorías coherente. Permite una buena visibilidad de productos, a pesar de la enorme oferta.",
-        "Newegg": "Estructura lógica y bien definida, optimizada para el hardware. Las fichas de producto son detalladas, y las guías de compra están bien integradas.",
-        "PCPartPicker": "La estructura se centra en la compatibilidad de componentes, con listas y filtros. Es muy organizada para su propósito específico de montaje de PCs."
+        "conclusion": "Se sugiere una estructura de contenido más jerárquica con categorías y subcategorías más detalladas, lo que permitiría una exploración más profunda y organizada de la oferta de productos.",
+        "Newegg": "Newegg organiza su contenido de manera lógica y coherente. Las categorías de productos están bien definidas, facilitando que los usuarios exploren y encuentren rápidamente lo que buscan en un catálogo extenso.",
+        "Amazon": "Amazon presenta una estructura de contenido ejemplar. La organización por categorías, recomendaciones y la clara disposición de la información del producto facilitan una interacción intuitiva y eficiente para el usuario.",
+        "Micro Center": "Micro Center mantiene una organización clara y estructurada. Las secciones de productos y las páginas de categorías están bien definidas, lo que ayuda a los usuarios a navegar sin problemas a través de su amplio inventario.",
+        "PCity": "PCity presenta una estructura organizada con una sección destacada para 'Componentes populares'. El diseño es limpio y los elementos principales están bien posicionados, pero una mayor profundidad en la categorización sería beneficiosa."
     },
     {
         "criterion_or_website": "Accessibility",
-        "conclusion": "",
-        "PcComponentes": "Cumple con estándares básicos de accesibilidad, aunque siempre hay margen de mejora. Se percibe un esfuerzo por hacer el sitio usable para diversos usuarios.",
-        "Amazon": "Invierte en accesibilidad para un público global. Presenta opciones para personalizar la experiencia, buscando ser inclusivo para usuarios con diversas necesidades.",
-        "Newegg": "Se esfuerza en ofrecer un sitio accesible, con etiquetas Alt en imágenes y buen contraste. Apunta a la inclusión, aunque no es su característica principal.",
-        "PCPartPicker": "La accesibilidad básica está presente en su diseño funcional y textual. Sin embargo, podría beneficiarse de una auditoría WCAG para optimizar la experiencia inclusiva."
+        "conclusion": "Podría explorar la implementación de funciones de accesibilidad avanzadas, como etiquetas alt para imágenes y navegación por teclado, para asegurar una experiencia inclusiva para todos los usuarios.",
+        "Newegg": "Newegg se esfuerza por una buena accesibilidad, usando alto contraste en su texto y un diseño responsive. Se enfoca en garantizar que la información sea legible para una amplia gama de usuarios, mejorando la inclusión.",
+        "Amazon": "Amazon es un líder en accesibilidad, con características como descripciones de imágenes y navegación por teclado. Se aseguran de que su plataforma sea utilizable por personas con diversas necesidades, promoviendo la inclusión.",
+        "Micro Center": "Micro Center tiene un diseño con buen contraste y tamaños de fuente legibles. La accesibilidad general parece pensada, aunque se podría profundizar en características para usuarios con necesidades especiales.",
+        "PCity": "PCity muestra un buen contraste entre el texto y el fondo, lo cual es positivo para la legibilidad. Los tamaños de fuente son adecuados. Sin embargo, no se observa evidencia de características avanzadas de accesibilidad."
     },
     {
         "criterion_or_website": "Functionality",
-        "conclusion": "",
-        "PcComponentes": "Ofrece filtros avanzados, comparadores de productos y un configurador de PC muy completo. Estas funcionalidades mejoran significativamente la decisión de compra.",
-        "Amazon": "Funcionalidades robustas, incluyendo el carrito, la lista de deseos y el seguimiento de pedidos. Su proceso de compra es altamente eficiente y consolidado.",
-        "Newegg": "Dispone de herramientas como configuradores de PC, filtros exhaustivos y listas de compatibilidad. Su funcionalidad es clave para usuarios expertos en hardware.",
-        "PCPartPicker": "Su funcionalidad principal es la verificación de compatibilidad de componentes, filtros potentes y guías de montaje. Es esencialmente una herramienta interactiva."
+        "conclusion": "Sería beneficioso integrar funcionalidades avanzadas como filtros de búsqueda más potentes, herramientas de comparación de productos y un sistema de reseñas para enriquecer la experiencia del usuario.",
+        "Newegg": "Newegg ofrece una funcionalidad robusta, incluyendo búsqueda avanzada, filtrado detallado y comparación de productos. Estas herramientas son esenciales para una experiencia de compra eficiente y satisfactoria en línea.",
+        "Amazon": "Amazon es sinónimo de funcionalidad integral, desde la búsqueda de productos hasta el proceso de compra. Ofrece características avanzadas como seguimiento de pedidos y reseñas de usuarios, enriqueciendo la experiencia.",
+        "Micro Center": "Micro Center proporciona funcionalidades sólidas, como filtros de búsqueda detallados y una interfaz de carrito de compras intuitiva. Estas herramientas mejoran la capacidad del usuario para encontrar y adquirir productos.",
+        "PCity": "PCity parece ofrecer las funcionalidades básicas esperadas, como una barra de búsqueda y visualización de productos. Sin embargo, la imagen no permite evaluar características avanzadas como filtros detallados o una herramienta de comparación de productos."
     },
     {
         "criterion_or_website": "Interactivity",
-        "conclusion": "",
-        "PcComponentes": "Incorpora chats en vivo, opiniones de usuarios, y opciones de personalización en configuradores. Fomenta la participación y la toma de decisiones informada.",
-        "Amazon": "Alta interactividad a través de reseñas, preguntas y respuestas, y recomendaciones personalizadas. Fomenta un ecosistema de compra y comunidad activo.",
-        "Newegg": "Ofrece foros de discusión, comentarios detallados de productos y guías interactivas. Mantiene a los usuarios comprometidos y explorando su catálogo técnico.",
-        "PCPartPicker": "La interactividad se centra en la selección de componentes y la visualización de compatibilidades. Podría añadir más elementos sociales o de gamificación para engagement."
+        "conclusion": "Se sugiere incorporar elementos interactivos como valoraciones y comentarios de usuarios, además de herramientas configurables, para fomentar una mayor participación y generar confianza en la plataforma.",
+        "Newegg": "Newegg fomenta la interactividad a través de reseñas de productos, preguntas y respuestas, y configuradores de PC. Estas características permiten a los usuarios participar activamente, mejorando la toma de decisiones de compra.",
+        "Amazon": "Amazon potencia la interactividad con un sistema de valoraciones, preguntas y respuestas, y recomendaciones personalizadas. Esto crea una comunidad activa y mejora la relevancia del contenido para cada usuario.",
+        "Micro Center": "Micro Center permite la interacción a través de las valoraciones de productos y las secciones de preguntas. Esta interactividad contribuye a la confianza del cliente, ofreciendo una perspectiva comunitaria valiosa.",
+        "PCity": "PCity, por lo que se ve en la imagen, tiene una interactividad limitada a los elementos de navegación. No se observan características como reseñas de usuarios o herramientas de configuración de productos, lo cual es una oportunidad de mejora."
     },
     {
         "criterion_or_website": "SEO",
-        "conclusion": "",
-        "PcComponentes": "Goza de una excelente visibilidad en buscadores, con una estrategia SEO bien definida y un contenido optimizado para el mercado de PC en español.",
-        "Amazon": "Domina el SEO por su autoridad de dominio y la vasta cantidad de contenido. Su visibilidad es inigualable en un amplio espectro de búsquedas de productos.",
-        "Newegg": "Presenta un SEO sólido, especialmente para búsquedas de hardware específico. Su contenido técnico y la estructura del sitio favorecen un buen posicionamiento.",
-        "PCPartPicker": "Su SEO es bueno para búsquedas específicas de compatibilidad y construcción de PCs. La optimización de palabras clave podría enfocarse en guías y tutoriales para mejorar aún más."
+        "conclusion": "Para mejorar la visibilidad orgánica, se recomienda optimizar la estructura de las URL, implementar meta descripciones y títulos atractivos, y asegurar que el contenido esté enriquecido con palabras clave relevantes.",
+        "Newegg": "Newegg optimiza su sitio para SEO, utilizando descripciones detalladas, palabras clave relevantes y una estructura de URL amigable. Esto asegura una alta visibilidad en los motores de búsqueda, atrayendo a más usuarios.",
+        "Amazon": "Amazon tiene una estrategia de SEO robusta, capitalizando su autoridad de dominio y optimizando las páginas de productos. Esto garantiza que sus vastos listados sean fácilmente descubiertos por los usuarios que buscan productos específicos.",
+        "Micro Center": "Micro Center utiliza descripciones de productos optimizadas y categorías claras para SEO. Esto les permite clasificar bien para términos de búsqueda relevantes, atrayendo tráfico orgánico interesado en hardware.",
+        "PCity": "Aunque no se puede evaluar directamente desde la imagen, un buen SEO es crucial. La estructura de URL y las descripciones de los productos serían puntos clave de optimización para mejorar la visibilidad orgánica."
     },
     {
-        "criterion_or_website": "Performance/Loading Speed",
-        "conclusion": "",
-        "PcComponentes": "Mantiene una velocidad de carga rápida y un rendimiento optimizado. Esto asegura una experiencia de navegación fluida y satisfactoria para el usuario.",
-        "Amazon": "A pesar de su enorme complejidad, Amazon carga relativamente rápido. Su rendimiento está altamente optimizado para manejar un volumen masivo de tráfico y productos.",
-        "Newegg": "Ofrece una buena velocidad de carga y un rendimiento web estable. La optimización de imágenes y scripts contribuye a una experiencia ágil.",
-        "PCPartPicker": "La velocidad de carga es eficiente, dado el volumen de datos de compatibilidad que maneja. La optimización continua de recursos es clave para mantener la fluidez."
+        "criterion_or_website": "Performance & Loading Speed",
+        "conclusion": "Asegurar que el sitio web cargue rápidamente es primordial; se debería optimizar imágenes, usar caché y minificar recursos para una experiencia fluida, especialmente en dispositivos móviles.",
+        "Newegg": "Newegg optimiza continuamente su rendimiento. Sus páginas cargan rápidamente, incluso con gran cantidad de contenido, lo que es crucial para retener a los usuarios y mejorar la experiencia de compra en línea.",
+        "Amazon": "Amazon invierte fuertemente en la velocidad de carga de su sitio. Esto garantiza una experiencia de usuario fluida, reduciendo la tasa de rebote y mejorando la satisfacción general del cliente, incluso con contenido masivo.",
+        "Micro Center": "Micro Center tiene un rendimiento decente, con tiempos de carga de página aceptables. Mantener una velocidad de carga rápida es vital para la satisfacción del usuario y las clasificaciones de los motores de búsqueda.",
+        "PCity": "Sin datos de prueba, la velocidad de carga no es visible. Sin embargo, un diseño limpio y pocas animaciones pueden contribuir a un rendimiento rápido, fundamental para la retención de usuarios y el SEO."
     },
     {
-        "criterion_or_website": "+Final Conclusion",
-        "conclusion": "El sitio web analizado posee una base sólida en su estructura y funcionalidades esenciales, ofreciendo una experiencia adecuada para el usuario. Sin embargo, para capitalizar su potencial, se sugiere optimizar la jerarquía visual y la interactividad. Mejorar el rendimiento de carga e implementar una estrategia SEO más robusta también potenciarían su visibilidad y engagement. Se recomienda explorar nuevas funcionalidades para enriquecer la oferta y destacarse en el competitivo mercado.",
-        "PcComponentes": "",
-        "Amazon": "",
-        "Newegg": "",
-        "PCPartPicker": ""
+        "criterion_or_website": "Final Conclusion",
+        "conclusion": "En general, el sitio presenta un diseño limpio y una navegación intuitiva, lo que son puntos fuertes. Las principales oportunidades de mejora residen en enriquecer la interactividad y la funcionalidad avanzada, así como en profundizar la estructura del contenido para ofrecer una experiencia más completa y distintiva a los usuarios.",
+        "Newegg": "Newegg es un referente en e-commerce de hardware. Su sólida interfaz, extenso catálogo y servicio al cliente lo posicionan como una opción preferente para entusiastas y profesionales de la tecnología, destacando en todos los criterios.",
+        "Amazon": "Amazon es un gigante del comercio electrónico. Su escala, conveniencia y experiencia de usuario optimizada, respaldadas por un robusto sistema logístico, lo convierten en una plataforma dominante y globalmente accesible para cualquier compra.",
+        "Micro Center": "Micro Center sobresale en la venta minorista de componentes. Su combinación de presencia en línea y tiendas físicas, junto con un enfoque en el servicio experto, ofrece una experiencia de compra completa y especializada.",
+        "PCity": "PCity presenta una base prometedora con un diseño limpio y navegación directa. Sus elementos visuales son claros, ofreciendo una experiencia básica pero funcional para el usuario. La usabilidad es notable, aunque sin lujos. Se enfoca en la simplicidad."
     }
 ]
