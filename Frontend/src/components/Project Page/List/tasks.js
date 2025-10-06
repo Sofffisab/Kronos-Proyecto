@@ -1,4 +1,4 @@
-const tasks = [
+const tasksFile = [
     {
       text: "Implement login system",
       type: "proceso",
@@ -41,4 +41,4 @@ const tasks = [
     }
   ];
   
-export default tasks
+export default tasksFile

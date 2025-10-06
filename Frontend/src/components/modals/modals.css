@@ -24,7 +24,7 @@
   gap: 1vh;
   box-sizing: border-box;
 }
-.submitBtn {
+.baseSubmit {
   background-color: var(--secondaryColor);
   padding: 3%;
   width: 80%;
@@ -32,18 +32,39 @@
   border-radius: 15px;
   transition: var(--easeTransition);
 }
-.submitBtn:hover {
+.baseSubmit:hover {
   background-color: var(--tertiaryColor);
 }
-.triggerDisabledBox {
-  height: fit-content;
-  width: fit-content;
-}
 .inputModal select,
-input {
+.inputModal input {
   padding: 3%;
   width: 100%;
   border-radius: 5px;
   border: solid black 2px;
   font-family: var(--font);
+}
+
+.baseModalBody {
+  font-family: var(--font);
+  background-color: var(--mainColor);
+  box-sizing: border-box;
+  border-radius: 25px;
+  min-width: 25%;
+  min-height: 50%;
+  height: fit-content;
+  width: fit-content;
+  padding: 2%;
+  display: flex;
+  flex-direction: column;
+justify-content: center;
+align-items: center;
+gap: 5vh;
+}
+.kbModal {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+height: 100%;
+gap: 2vh;
 }
