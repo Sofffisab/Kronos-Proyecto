@@ -51,6 +51,9 @@
     align-items: center;
     justify-content: center;
 }
+.tarea p {
+    opacity: 100%;
+}
 .riesgo {
     background-color: #CD8E8E;
 }
