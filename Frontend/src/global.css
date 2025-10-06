@@ -22,3 +22,6 @@
   .material-symbols-outlined {
     user-select: none;
   }
+  body {
+    overflow-x: hidden;
+  }
