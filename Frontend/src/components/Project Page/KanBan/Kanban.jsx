@@ -1,19 +1,18 @@
 import Categorias from "./categorias";
-import tasksFile from "../List/tasks";
 import Tarea from "./Tarea";
 import { useState } from "react";
-import DisabledBg from "../../modals/DisabledBg";
 import KanbanModal from "../../modals/KanBanModal";
 export default function kanban() {
 
-    const [tasks, setTasks] = useState(tasksFile)
+    const [tasks, setTasks] = useState([])
 
-    const mappedTasks ={
+    const mappedTasks = tasks?{
+        
         rTasks: tasks.filter((task) => task.type=='riesgo').map((task)=> <Tarea key={task.id}type={task.type} text={task.text}/>),
         aTasks: tasks.filter((task) => task.type=='atrasada').map((task)=> <Tarea key={task.id} type={task.type} text={task.text}/>),
         pTasks: tasks.filter((task) => task.type=='proceso').map((task)=> <Tarea key={task.id} type={task.type} text={task.text}/>),
         tTasks: tasks.filter((task) => task.type=='terminado').map((task)=> <Tarea key={task.id} type={task.type} text={task.text}/>)
-    }
+    } : {}
     const [modal, toggleModal] = useState(false)
 
     const submit = ()=> {
@@ -28,7 +27,7 @@ export default function kanban() {
 
     return(
         <>
-        {modal && <KanbanModal submit={submit}submitbgOnClick={()=> toggleModal(false)}/>}
+        {modal && <KanbanModal submit={submit} bgOnClick={()=> toggleModal(false)}/>}
         <Categorias 
         rTasks={mappedTasks.rTasks}
         OnClick={()=>toggleModal(true)}
