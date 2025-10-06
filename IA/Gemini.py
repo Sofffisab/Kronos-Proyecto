@@ -1,5 +1,4 @@
 # pip install -r lib.txt --no-warn-script-location
-from dotenv import load_dotenv
 import os
 import json
 from google import genai
@@ -16,14 +15,9 @@ import json
 import time
 import random
 
-load_dotenv()
-
+#client = genai.Client(api_key="AIzaSyAkiW5YQ7ONHn8i4qadg0KTzXRPRfy3r3E")
 #nueva api xq nos quedamos sin tokens
-API_KEYvieja = os.getenv("API_KEYvieja")
-api_key = os.getenv("API_KEYnueva")
-
-client = genai.Client(api_key=api_key)
-
+client = genai.Client(api_key="AIzaSyCXUdPHjrG_z0lIM0lyEIKlgnYvihzRvYE")
 
 #modelo de la tabla
 class WebsiteValue(BaseModel):
