@@ -1,372 +1,399 @@
-body{
-    margin: 0%;
-    padding: 0%;
+body {
+    margin: 0;
+    padding: 0;
     height: 100vh;
     width: 100vw;
     overflow-x: hidden;
-    font-family: 'Inter', sans-serif; /* Consistent font */
-    background-color: #f0f2f5; /* Light background for the page */
+    font-family: 'Inter', sans-serif; /* Consistent font for body */
+    background-color: #F5F7FA; /* Light grey background for the whole page */
 }
 
-.inicio{
+.inicio {
     width: 100%;
-    height: 100%;
+    min-height: 100%; /* Use min-height to allow content to expand */
+    display: flex;
+    flex-direction: column;
 }
 
-header{
-    height: 70px; /* Adjusted height to be more compact */
+header {
+    height: 70px; /* Reduced header height */
     width: 100%;
-    background-color: #2D8CFF; /* Blue color from image */
+    background-color: #2196F3; /* Blue header as in image */
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px; /* Add some horizontal padding */
-    box-sizing: border-box; /* Include padding in width/height */
+    padding: 0 20px;
+    box-sizing: border-box; /* Include padding in element's total width and height */
+}
+
+.header-logo {
+    height: 40px; /* Adjust logo size */
+    margin-right: 20px;
+}
+
+.buscador {
+    flex-grow: 1; /* Allows search bar to take available space */
+    display: flex;
+    align-items: center;
+    position: relative; /* For positioning search icon */
+    max-width: 600px; /* Max width for search bar */
+    margin: 0 20px; /* Center search bar roughly */
+}
+
+.busc {
+    height: 40px;
+    width: 100%;
+    border-radius: 20px; /* More rounded search bar */
+    border: none; /* No border for the search input */
+    padding: 0 15px;
+    padding-right: 40px; /* Space for the search icon */
+    font-size: 1rem;
+    background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white */
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    color: #333;
+}
+
+.busc::placeholder {
+    color: #999;
+}
+
+.busc:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5); /* Focus effect */
+}
+
+.search-icon {
+    position: absolute;
+    right: 15px;
+    color: #666;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.busqs {
+    display: none; /* Keep hidden, functionality handled by script */
+}
+
+.header-nav-icons {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Space between icons */
+}
+
+.nav-icon-btn {
+    background: none;
+    border: none;
+    color: white; /* White icons */
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s ease;
+}
+
+.nav-icon-btn:hover {
+    color: #E0E0E0; /* Lighter color on hover */
+}
+
+.nav-icon-btn .material-symbols-outlined {
+    font-size: 28px; /* Larger icons */
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
+.main-content {
+    padding: 30px 50px;
+    background-color: #F5F7FA; /* Light grey for the main content area */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main-title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 2.8rem;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.filter-bar {
+    width: 100%;
+    max-width: 1200px; /* Limit width of filter bar */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    padding: 15px 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+}
+
+.filter-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.filter-btn {
+    background-color: #E0E0E0;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: #333;
+    transition: background-color 0.2s ease;
+}
+
+.filter-btn:hover {
+    background-color: #D0D0D0;
+}
+
+.filter-btn .material-symbols-outlined {
+    font-size: 20px;
+    margin-right: 5px;
+}
+
+.filter-count {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #555;
+}
+
+.search-sort-bar {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 300px; /* Adjust width as needed */
+}
+
+.search-results-input {
+    height: 35px;
+    width: 100%;
+    border-radius: 18px;
+    border: 1px solid #D9D9D9;
+    padding: 0 15px;
+    padding-right: 40px; /* Space for the search icon */
+    font-size: 0.9rem;
+    font-family: 'Inter', sans-serif;
+    color: #333;
+}
+
+.search-results-input::placeholder {
+    color: #A6A6A6;
+}
+
+.search-results-input:focus {
+    outline: none;
+    border-color: #2196F3;
+}
+
+.search-icon-results {
+    position: absolute;
+    right: 15px;
+    color: #777;
+    font-size: 20px;
+}
+
+
+.componentesPopu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid with min 280px cards */
+    gap: 25px;
+    width: 100%;
+    max-width: 1200px; /* Align with filter bar width */
+    justify-content: center;
+}
+
+.product-card {
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden; /* For badge positioning */
+}
+
+.product-card .badge {
+    position: absolute;
+    top: 0px; /* Adjusted to be more visible on the card */
+    left: -5px; /* Slightly off-center to the left as in image */
+    background-color: #2196F3; /* Blue badge */
+    color: white;
+    padding: 5px 15px;
+    border-radius: 0 0 8px 0; /* Rounded bottom-left, top-right as in image */
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    transform: rotate(-5deg); /* Slight rotation to match image */
+    transform-origin: top left;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-header img{ /* Logo styling */
-    height: 40px; /* Adjust logo size */
-    width: auto;
-}
 
-.buscador{
-    display: flex;
-    align-items: center;
-    flex-grow: 1; /* Allows it to take available space */
-    max-width: 600px; /* Limit width */
-    margin: 0 40px; /* Center with margin */
-    position: relative; /* Make parent relative for absolute positioning of busqs */
-}
-
-.busc{
-    height: 40px; /* Adjusted height */
-    width: 100%;
-    border-radius: 8px 0 0 8px; /* Rounded only on left */
-    border: none; /* No border for input */
-    padding: 0 15px;
-    font-size: 1rem;
-    background-color: white;
-    font-family: 'Crimson Text', serif;
-    font-weight: 400; /* Lighter weight for placeholder */
-    color: #333;
-}
-
-.busc::placeholder{
-    color: #A6A6A6;
-    padding-left: 0;
-}
-
-.busc:focus{
-    outline: none;
-    box-shadow: 0 0 0 2px #FFD700; /* Yellow outline on focus */
-}
-
-.search-button{
-    height: 40px;
-    width: 60px; /* Fixed width for button */
-    background-color: #FFD700; /* Yellow color from image */
-    border: none;
-    border-radius: 0 8px 8px 0; /* Rounded only on right */
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.2s ease;
-}
-
-.search-button:hover{
-    background-color: #FFC400; /* Darker yellow on hover */
-}
-
-.search-button .material-symbols-outlined{
-    font-size: 24px;
-    color: #333;
-}
-
-.busqs{ /* This div for search suggestions below the input */
-    width: 100%; /* Take full width of parent .buscador */
-    background-color: white;
-    border-radius: 0 0 10px 10px;
-    font-family: 'Crimson Text', serif;
-    font-weight: 500;
-    position: absolute;
-    top: 100%; /* Position directly below the search input/button combo */
-    left: 0;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-    z-index: 100;
-    display: none; /* Hidden by default; controlled by JS */
-}
-
-.busqs div {
-    padding: 10px;
-    cursor: pointer;
-    border-bottom: 1px solid #e9e9e9;
-    background-color: transparent;
-    transition: background-color 0.2s ease;
-}
-
-.busqs div:last-child {
-    border-bottom: none;
-    border-radius: 0 0 10px 10px;
-}
-
-.busqs div:hover {
-    background-color: #f0f0f0;
-}
-
-
-nav{
-    display: flex;
-    align-items: center;
-    gap: 15px; /* Spacing between icon buttons */
-}
-
-.nav-icon{
-    background-color: transparent;
-    border: none;
-    color: white; /* Icons in header are white in image */
-    cursor: pointer;
-    padding: 5px;
-    transition: color 0.2s ease;
-}
-
-.nav-icon:hover{
-    color: #FFD700; /* Yellow on hover */
-}
-
-.nav-icon .material-symbols-outlined{
-    font-size: 28px; /* Adjust icon size */
-}
-
-/* Hide original text buttons as they are replaced by nav-icon buttons */
-.armar, .comparar, .info {
-    display: none;
-}
-/* The .log button now uses the .nav-icon styling */
-
-
-.hero-section{ /* Renamed from 'section' for clarity */
-    height: 350px; /* Adjusted height */
-    width: 100%;
-    background-color: #FFFFFF; /* White background from image */
-    background-image: none; /* Remove background image */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 20px 0;
-    box-sizing: border-box;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Subtle shadow */
-    margin-bottom: 40px;
-}
-
-.hero-section h1{
-    font-family: 'Inter', sans-serif;
-    font-weight: 800; /* Bolder */
-    font-size: 3.5rem; /* Adjusted font size */
-    color: #333;
-    display: flex;
-    align-items: center;
-    margin-top: 0;
-    margin-bottom: 10px;
-    line-height: 1.2;
-}
-
-.hero-section h1 .pcity{
-    height: 60px; /* Adjust logo size within H1 */
-    margin-left: 15px; /* Space between "Bienvenido a" and logo */
-}
-
-.hero-section h2{
-    font-family: 'Inter', sans-serif;
-    font-weight: 500; /* Regular weight */
-    font-size: 1.8rem; /* Adjusted font size */
-    color: #666;
-    margin-top: 0;
-    margin-bottom: 30px;
-    line-height: 1.4;
-}
-
-.hero-button{
-    background-color: #FFD700; /* Yellow button */
-    color: #333; /* Dark text */
-    border: none;
-    border-radius: 8px;
-    padding: 15px 30px;
-    font-size: 1.2rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-}
-
-.hero-button:hover{
-    background-color: #FFC400; /* Darker yellow on hover */
-    transform: translateY(-2px);
-}
-
-
-.product-section {
-    padding: 40px 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.product-filters{
-    display: flex;
-    flex-direction: column; /* Stack title and tabs */
-    align-items: center; /* Center them */
-    margin-bottom: 30px;
-}
-
-.product-filters h3{ /* "Productos Populares" title */
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
-    font-size: 2rem;
-    color: #333;
-    margin-bottom: 20px;
-}
-
-.filter-tabs{
-    display: flex;
-    gap: 10px; /* Space between tabs */
-    margin-bottom: 20px;
-    border-bottom: 2px solid #EEE; /* Underline for tabs area */
-    padding-bottom: 10px;
-    justify-content: center; /* Center the tabs */
-    flex-wrap: wrap; /* Allow tabs to wrap on smaller screens */
-}
-
-.tab-button{
-    background-color: transparent;
-    border: none;
-    padding: 10px 15px;
-    font-family: 'Inter', sans-serif;
-    font-size: 1rem;
-    font-weight: 500;
-    color: #666;
-    cursor: pointer;
-    position: relative;
-    transition: color 0.2s ease;
-}
-
-.tab-button:hover{
-    color: #333;
-}
-
-.tab-button.active{
-    color: #2D8CFF; /* Active tab color (blue) */
-    font-weight: 700;
-}
-
-.tab-button.active::after { /* Active tab underline */
-    content: '';
-    position: absolute;
-    bottom: -12px; /* Position below the text, relative to padding-bottom of filter-tabs */
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background-color: #2D8CFF; /* Blue underline */
-    border-radius: 2px;
-}
-
-.componentesPopu{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center; /* Center cards */
-    gap: 20px; /* Increased gap for better spacing */
-    padding: 20px;
-}
-
-.product-card{ /* Styling for individual product cards */
-    background-color: white;
-    border: 1px solid #E0E0E0;
-    border-radius: 8px;
-    padding: 20px;
-    width: 250px; /* Fixed width for cards */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.product-card:hover{
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-}
-
-.product-card img{
+.product-card img {
     max-width: 100%;
-    height: 150px; /* Fixed height for product image consistency */
+    height: auto;
+    max-height: 150px;
     object-fit: contain;
     margin-bottom: 15px;
 }
 
-.product-card .product-description{
-    font-family: 'Crimson Text', serif;
-    font-size: 1rem;
-    color: #555;
-    margin-bottom: 15px;
-    height: 45px; /* Limit height for description */
-    overflow: hidden; /* Hide overflow */
-    text-overflow: ellipsis; /* Add ellipsis */
-    line-height: 1.5;
-}
-
-.product-card .product-button{
-    background-color: #FFD700; /* Yellow button */
-    color: #333;
-    border: none;
-    border-radius: 6px;
-    padding: 10px 20px;
-    font-size: 0.9rem;
+.product-card h3 {
+    font-family: 'Inter', sans-serif;
     font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
+    font-size: 1.3rem;
+    color: #333;
+    margin: 10px 0;
 }
 
-.product-card .product-button:hover{
-    background-color: #FFC400;
-    transform: translateY(-2px);
+.product-card p {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.4;
+    margin-bottom: 15px;
 }
 
+.product-card .price {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: #2196F3; /* Blue price */
+}
 
-/* Chat Bubble */
-.chat-bubble{
+.product-card .price span {
+    font-size: 1rem;
+    vertical-align: super;
+}
+
+/* Existing styles for login/register modals (if they are still needed, they were not part of the image context) */
+.sesion, .login {
     position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background-color: #2D8CFF; /* Blue from header */
-    color: white;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 30px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    cursor: pointer;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     z-index: 1000;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sesion.non, .login.non {
+    display: none;
+}
+
+.titulo h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.titulo .pcity {
+    height: 50px;
+    vertical-align: middle;
+}
+
+.cruz {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.cruz img {
+    width: 20px;
+    height: 20px;
+}
+
+.texto input {
+    display: block;
+    width: 250px;
+    padding: 10px;
+    margin: 15px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.ojoClose, .ojo {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    right: 50px; /* Adjust positioning */
+    transform: translateY(10px);
+}
+
+.error {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+.iniciar, .registrar, .crear {
+    background-color: #2196F3;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 20px;
     transition: background-color 0.2s ease;
 }
 
-.chat-bubble:hover{
-    background-color: #1a6ac7;
+.iniciar:hover, .registrar:hover, .crear:hover {
+    background-color: #1976D2;
 }
 
-.chat-bubble .material-symbols-outlined{
-    font-size: 30px;
+.crearCuenta {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #555;
 }
 
-/* Original styles for sesion, login, errores, botones, etc. (kept for existing functionality) */
-/* The following styles are from the original CSS and are not modified */
-/* They are included here for completeness of the style.css file */
-/* (omitted for brevity in this response as they were not directly changed for UI matching) */
+.crearCuenta button {
+    margin-left: 5px;
+    padding: 5px 10px;
+    background-color: transparent;
+    color: #2196F3;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+}
 
-/* The rest of the original CSS for .sesion, .login, .non, .titulo, .cruz, .texto, .error,
-   .iniciar, .crearCuenta, .cuenta, .crear, .registrar, .ojoClose, .ojo, material-symbols-outlined
-   should be appended here if it's a full replacement. For this response, only new/modified parts are shown. */
+/* Original section styles, now repurposed or removed */
+section h1 { /* This rule is now for .main-title */
+    display: none; /* Hide original h1 */
+}
+
+section h2 { /* This rule is not used in new layout */
+    display: none;
+}
+
+p { /* General paragraph styling, could be more specific */
+    margin: 0;
+    padding: 0;
+}

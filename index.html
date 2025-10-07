@@ -21,7 +21,7 @@
         <main id="mainSesion" class="sesion non">
             <div class="titulo">
                 <h1>Bienvenido a</h1>
-                <p><img class="pcity" src="../../recursos/img/logo2.png" alt="Pcity Logo"></p>
+                <p><img class="pcity" src="../../recursos/img/logo2.png" alt="Logo PCity"></p>
             </div>
             <button class="cruz" id="cruzSesion"><img src="../../recursos/img/cruzBoton.png" alt="Cerrar"></button>
             <div class="texto" id="login">
@@ -46,7 +46,7 @@
         <main id="mainRegistrar" class="login non">
             <div class="titulo">
                 <h1>Bienvenido a</h1>
-                <p><img class="pcity" src="../../recursos/img/logo2.png" alt="Pcity Logo"></p>
+                <p><img class="pcity" src="../../recursos/img/logo2.png" alt="Logo PCity"></p>
             </div>
             <button class="cruz" id="cruzRegistrar"><img  src="../../recursos/img/cruzBoton.png" alt="Cerrar"></button>
             <div class="texto" id="login">
@@ -69,76 +69,93 @@
 
         <div class="inicio">
             <header>
-                <img src="../../recursos/img/logo.png" alt="Logo de la marca">
+                <img class="header-logo" src="../../recursos/img/logo.png" alt="PCity Logo">
                 <div class="buscador">
-                    <input type="text" class="busc" id="input1" placeholder="Buscar productos...">
-                    <button class="search-button" aria-label="Buscar"><span class="material-symbols-outlined">search</span></button>
+                    <input type="text" class="busc" id="input1" placeholder="Buscar">
+                    <span class="material-symbols-outlined search-icon">search</span>
                     <div class="busqs" id="busq1"></div>
                 </div>
-                <nav>
-                    <button class="nav-icon" onclick="location.href='../informacion/index.html'" aria-label="Información"><span class="material-symbols-outlined">language</span></button>
-                    <button class="nav-icon" onclick="location.href='../armar-pc/index.html'" aria-label="Carrito de compras"><span class="material-symbols-outlined">shopping_cart</span></button>
-                    <button class="log nav-icon" id="persona" onclick="location.href='../comparacion/index.html'" aria-label="Perfil de usuario"><span class="material-symbols-outlined">person</span></button>
+                <nav class="header-nav-icons">
+                    <button class="nav-icon-btn"><span class="material-symbols-outlined">shopping_cart</span></button>
+                    <button class="nav-icon-btn" id="persona"><span class="material-symbols-outlined">person</span></button>
+                    <button class="nav-icon-btn"><span class="material-symbols-outlined">menu</span></button>
                 </nav>
             </header>
 
-            <section class="hero-section">
-                <h1>Bienvenido a <img class="pcity" src="../../recursos/img/pcity.png" alt="Pcity Logo"></h1>
-                <h2>Arma, compara y aprende</h2>
-                <button class="hero-button">Descubre nuestros productos</button>
-            </section>
-
-            <div class="product-section">
-                <div class="product-filters">
-                    <h3>Productos Populares</h3>
-                    <div class="filter-tabs">
-                        <button class="tab-button active">Filtro</button>
-                        <button class="tab-button">Tipo</button>
-                        <button class="tab-button">Marca</button>
-                        <button class="tab-button">Oferta</button>
-                        <button class="tab-button">Opiniones</button>
-                        <button class="tab-button">Tabla</button>
+            <section class="main-content">
+                <h1 class="main-title">Aprendí, Armá y Compará</h1>
+                <div class="filter-bar">
+                    <div class="filter-actions">
+                        <button class="filter-btn"><span class="material-symbols-outlined">shopping_cart</span></button>
+                        <button class="filter-btn"><span class="material-symbols-outlined">filter_list</span></button>
+                        <span class="filter-count">123</span>
+                    </div>
+                    <div class="search-sort-bar">
+                        <input type="text" placeholder="Buscar en resultados..." class="search-results-input">
+                        <span class="material-symbols-outlined search-icon-results">search</span>
                     </div>
                 </div>
+
                 <div class="componentesPopu">
-                    <!-- Product cards will be dynamically loaded here by script.js -->
-                    <!-- Placeholder for a product card to test styling -->
+                    <!-- Product Cards - placeholders based on image -->
                     <div class="product-card">
-                        <img src="https://via.placeholder.com/150" alt="Imagen del producto">
-                        <p class="product-description">Descripción de un producto de ejemplo</p>
-                        <button class="product-button">Ver Detalles</button>
+                        <span class="badge">MAS POPULAR</span>
+                        <img src="https://via.placeholder.com/150x100?text=Product+Image" alt="Product 1">
+                        <h3>Título del Producto 1</h3>
+                        <p>Descripción corta del producto. Algunas características importantes.</p>
+                        <p class="price"><span>$</span>123.45</p>
                     </div>
                     <div class="product-card">
-                        <img src="https://via.placeholder.com/150" alt="Imagen del producto">
-                        <p class="product-description">Descripción de un producto de ejemplo</p>
-                        <button class="product-button">Ver Detalles</button>
+                        <span class="badge">MAS POPULAR</span>
+                        <img src="https://via.placeholder.com/150x100?text=Product+Image" alt="Product 2">
+                        <h3>Título del Producto 2</h3>
+                        <p>Descripción corta del producto. Algunas características importantes.</p>
+                        <p class="price"><span>$</span>99.99</p>
                     </div>
                     <div class="product-card">
-                        <img src="https://via.placeholder.com/150" alt="Imagen del producto">
-                        <p class="product-description">Descripción de un producto de ejemplo</p>
-                        <button class="product-button">Ver Detalles</button>
+                        <span class="badge">OFERTA</span>
+                        <img src="https://via.placeholder.com/150x100?text=Product+Image" alt="Product 3">
+                        <h3>Título del Producto 3</h3>
+                        <p>Descripción corta del producto. Algunas características importantes.</p>
+                        <p class="price"><span>$</span>250.00</p>
                     </div>
                     <div class="product-card">
-                        <img src="https://via.placeholder.com/150" alt="Imagen del producto">
-                        <p class="product-description">Descripción de un producto de ejemplo</p>
-                        <button class="product-button">Ver Detalles</button>
+                        <span class="badge">NUEVO</span>
+                        <img src="https://via.placeholder.com/150x100?text=Product+Image" alt="Product 4">
+                        <h3>Título del Producto 4</h3>
+                        <p>Descripción corta del producto. Algunas características importantes.</p>
+                        <p class="price"><span>$</span>75.20</p>
                     </div>
                     <div class="product-card">
-                        <img src="https://via.placeholder.com/150" alt="Imagen del producto">
-                        <p class="product-description">Descripción de un producto de ejemplo</p>
-                        <button class="product-button">Ver Detalles</button>
+                        <span class="badge">MAS POPULAR</span>
+                        <img src="https://via.placeholder.com/150x100?text=Product+Image" alt="Product 5">
+                        <h3>Título del Producto 5</h3>
+                        <p>Descripción corta del producto. Algunas características importantes.</p>
+                        <p class="price"><span>$</span>300.00</p>
                     </div>
                     <div class="product-card">
-                        <img src="https://via.placeholder.com/150" alt="Imagen del producto">
-                        <p class="product-description">Descripción de un producto de ejemplo</p>
-                        <button class="product-button">Ver Detalles</button>
+                        <span class="badge">OFERTA</span>
+                        <img src="https://via.placeholder.com/150x100?text=Product+Image" alt="Product 6">
+                        <h3>Título del Producto 6</h3>
+                        <p>Descripción corta del producto. Algunas características importantes.</p>
+                        <p class="price"><span>$</span>150.00</p>
+                    </div>
+                    <div class="product-card">
+                        <span class="badge">NUEVO</span>
+                        <img src="https://via.placeholder.com/150x100?text=Product+Image" alt="Product 7">
+                        <h3>Título del Producto 7</h3>
+                        <p>Descripción corta del producto. Algunas características importantes.</p>
+                        <p class="price"><span>$</span>50.00</p>
+                    </div>
+                    <div class="product-card">
+                        <span class="badge">MAS POPULAR</span>
+                        <img src="https://via.placeholder.com/150x100?text=Product+Image" alt="Product 8">
+                        <h3>Título del Producto 8</h3>
+                        <p>Descripción corta del producto. Algunas características importantes.</p>
+                        <p class="price"><span>$</span>400.00</p>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="chat-bubble">
-            <span class="material-symbols-outlined">chat</span>
+            </section>
         </div>
     </body>
 </html>

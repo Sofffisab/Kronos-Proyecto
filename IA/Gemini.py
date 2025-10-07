@@ -102,55 +102,6 @@ codigo_json = [
     </head>
     <body>
 
-        <main id="mainSesion" class="sesion non">
-            <div class="titulo">
-                <h1>Bienvenido a</h1> 
-                <p><img class="pcity" src="../../recursos/img/logo2.png"></p>
-            </div>
-            <button class="cruz" id="cruzSesion"><img src="../../recursos/img/cruzBoton.png"></button>
-            <div class="texto" id="login">
-                <input id="nombreS" type="text" placeholder="Nombre">
-                <input id="contraS" type="password" placeholder="Contraseña">
-
-                <button id="ojoCloseS" class="ojoClose" ><span class="material-symbols-outlined">visibility_off</span></button>
-                <button id="ojoS" class="ojo non"><span class="material-symbols-outlined">visibility</span></button>
-
-                <p class="non error" id="errorS">Usuario o contraseña incorrecta</p> 
-            </div>
-        
-        
-            <button id="iniciar" class="iniciar">Iniciar sesión</button>
-                
-            <div class="crearCuenta">
-                <p class="cuenta">¿No tienes una cuenta?</p> 
-                <button id="crear" class="crear">Crea una cuenta</button>
-            </div>
-        </main>
-
-        <main id="mainRegistrar" class="login non">
-            <div class="titulo">
-                <h1>Bienvenido a</h1> 
-                <p><img class="pcity" src="../../recursos/img/logo2.png"></p>
-            </div>
-            <button class="cruz" id="cruzRegistrar"><img  src="../../recursos/img/cruzBoton.png"></button>
-            <div class="texto" id="login">
-                <input id="nombreR" type="text" placeholder="Nombre">
-                <input id="contraR" type="password" placeholder="Contraseña">
-
-                <button id="ojoCloseR" class="ojoClose" ><span class="material-symbols-outlined">visibility_off</span></button>
-                <button id="ojoR" class="ojo non"><span class="material-symbols-outlined">visibility</span></button>
-
-                <p class="non error" id="errorR">Error al crear cuenta</p> 
-            </div>
-        
-            <button class="registrar" id="registrar">Registrarse</button>
-                
-            <div class="crearCuenta">
-                <p class="cuenta">¿Ya tienes una cuenta?</p> 
-                <button id="iniciarSesion" class="crear">Inicia sesión</button>
-            </div>
-        </main>
-
         <div class="inicio">
             <header>
                 <img src="../../recursos/img/logo.png">
@@ -315,12 +266,143 @@ section h2{
     justify-content: space-evenly;
     gap:10px;
 }
-
-/* Resto del CSS completo (sesion, login, errores, botones, etc.) se mantiene literal de tu código original */
 """
     }
 ]
 
+#crear img buscando en internet
+def createImgSearching(prompt, img_path=None):
+    #para conseguir los tamaños de la img del input y respetarlos
+    if img_path and os.path.exists(img_path):
+        with Image.open(img_path) as img:
+            inserted_img = img.tobytes()  # si querés pasar los bytes
+            width, height = img.size
+
+
+    contents = [
+    types.Part.from_text(text=f"""
+        Crea una imagen realista del sitio web mostrado en la imagen adjunta, incorporando las mejoras indicadas en la conclusión:
+        - Ajustar colores y tipografía para mejor legibilidad.
+        - Reorganizar botones importantes para navegación más intuitiva.
+        - Añadir iconos y elementos visuales que mejoren la experiencia.
+        - Mantener el estilo general del sitio original.
+        - Mantener el mismo tamaño y proporción que la imagen original: ancho={width}px, alto={height}px.
+        Tema: {prompt}
+    """)
+]
+
+# Si hay imagen, la agregamos como un Part aparte
+    if img_path and os.path.exists(img_path):
+        with open(img_path, "rb") as f:
+            img_bytes = f.read()
+        contents.append(types.Part.from_bytes(data=img_bytes, mime_type="image/jpeg"))
+
+
+    response = retry_request(
+        client.models.generate_content,
+        model="gemini-2.5-flash",
+        contents=contents,
+        config=types.GenerateContentConfig(
+            tools=[grounding_tool],
+            temperature=0.3,
+            top_p=0.9,
+            top_k=40 
+        )
+    )
+    print("Response de img hecho")
+
+    prompt_img = response.text
+
+    # Generar img final
+    response_img = retry_request(
+        client.models.generate_content,
+        model="gemini-2.0-flash-preview-image-generation",
+        contents=[{"role": "user", "parts": [{"text": prompt_img}]}],
+        config=types.GenerateContentConfig(
+            response_modalities=["TEXT", "IMAGE"],
+            temperature=0.3,
+            top_p=0.9,
+            top_k=40 
+        )
+    )
+
+    if response_img.candidates and response_img.candidates[0].content:
+        for part in response_img.candidates[0].content.parts:
+            if part.text is not None:
+                print("img lista ñeri")
+            elif part.inline_data is not None:
+                image = Image.open(BytesIO(part.inline_data.data))
+                image.save("gemini-image.png", overwrite=True)
+                image.show()
+    else:
+        print("No se generó ninguna imagen para este prompt.")
+
+
+
+language_map = {
+    "index.html": "html",
+    "style.css": "css",
+}
+
+
+#CREAR CODIGO ARREGLADO
+def createTxt(img_generated_path, conclusions_json, codigo_json, language_map):
+    """
+    img_generated_path: ruta a la imagen generada
+    conclusions_json: JSON con conclusiones/sugerencias
+    codigo_json: lista de dicts con "name" y "content"
+    language_map: dict que indica lenguaje de cada archivo, ej:
+                  {"index.html": "html", "style.css": "css", "script.js": "javascript"}
+    """
+
+    codigo_blocks = []
+    for c in codigo_json:
+        # Cada c debe tener al menos "name" y "content"
+        name = c.get("name", "archivo")
+        content = c.get("content", "")
+        lang = language_map.get(name, "text")  # usar lenguaje definido por usuario, si no "text"
+        codigo_blocks.append(f"🔧 Archivo: {name}\n```{lang}\n{content}\n```")
+
+    codigo_str = "\n\n".join(codigo_blocks)
+
+    prompt = f"""
+Vas a recibir: (A) código del sitio SIN cambios aplicados, (B) img de la página CON los cambios aplicados, (C) JSON DE conclusiones de las mejoras y cambios realizados para la img.
+Mejora el código para que la UI coincida con la imagen y las sugerencias.
+Devuelve SOLO BLOQUES DE CÓDIGO Markdown con encabezado '🔧 Archivo: <nombre>' y triple backticks con lenguaje indicado.
+
+--- REFERENCIAS ---
+Código actual:
+{codigo_str}
+
+Conclusiones / sugerencias:
+{json.dumps(conclusions_json, indent=2, ensure_ascii=False)}
+"""
+
+    # Preparar contents para el modelo
+    contents = [types.Part.from_text(text=prompt)]
+    if img_generated_path and os.path.exists(img_generated_path):
+        with open(img_generated_path, "rb") as f:
+            img_bytes = f.read()
+        contents.append(types.Part.from_bytes(data=img_bytes, mime_type="image/jpeg"))
+
+    # Llamada al modelo
+    response = retry_request(
+        client.models.generate_content,
+        model="gemini-2.5-flash",
+        contents=contents,
+        config=types.GenerateContentConfig(tools=[grounding_tool])
+    )
+
+    output_text = response.text if hasattr(response, "text") else str(response)
+
+    # Parse simple de bloques
+    pattern = r"🔧 Archivo:\s*(.*?)\n```([\w+-]+)\n(.*?)```"
+    matches = re.findall(pattern, output_text, re.DOTALL)
+    parsed = []
+    for filename, lang, code in matches:
+        parsed.append({"name": filename.strip(), "lang": lang.strip(), "content": code.rstrip()})
+
+    return {"markdown": output_text, "files": parsed}
 
 
 #crear tabla e img buscando en internet
@@ -424,138 +506,7 @@ def createJson(prompt, img_path="image.jpg"):
     print("Markdown generado:\n", resultado_txt["markdown"])
 
 
-language_map = {
-    "index.html": "html",
-    "style.css": "css",
-}
 
-#CREAR CODIGO ARREGLADO
-def createTxt(img_generated_path, conclusions_json, codigo_json, language_map):
-    """
-    img_generated_path: ruta a la imagen generada
-    conclusions_json: JSON con conclusiones/sugerencias
-    codigo_json: lista de dicts con "name" y "content"
-    language_map: dict que indica lenguaje de cada archivo, ej:
-                  {"index.html": "html", "style.css": "css", "script.js": "javascript"}
-    """
-
-    codigo_blocks = []
-    for c in codigo_json:
-        # Cada c debe tener al menos "name" y "content"
-        name = c.get("name", "archivo")
-        content = c.get("content", "")
-        lang = language_map.get(name, "text")  # usar lenguaje definido por usuario, si no "text"
-        codigo_blocks.append(f"🔧 Archivo: {name}\n```{lang}\n{content}\n```")
-
-    codigo_str = "\n\n".join(codigo_blocks)
-
-    prompt = f"""
-Vas a recibir: (A) código del sitio, (B) img de la página, (C) JSON de conclusiones de las mejoras realizadas para la img.
-Mejora el código para que la UI coincida con la imagen y las sugerencias.
-Devuelve SOLO BLOQUES DE CÓDIGO Markdown con encabezado '🔧 Archivo: <nombre>' y triple backticks con lenguaje indicado.
-
---- REFERENCIAS ---
-Código actual:
-{codigo_str}
-
-Conclusiones / sugerencias:
-{json.dumps(conclusions_json, indent=2, ensure_ascii=False)}
-"""
-
-    # Preparar contents para el modelo
-    contents = [types.Part.from_text(text=prompt)]
-    if img_generated_path and os.path.exists(img_generated_path):
-        with open(img_generated_path, "rb") as f:
-            img_bytes = f.read()
-        contents.append(types.Part.from_bytes(data=img_bytes, mime_type="image/jpeg"))
-
-    # Llamada al modelo
-    response = retry_request(
-        client.models.generate_content,
-        model="gemini-2.5-flash",
-        contents=contents,
-        config=types.GenerateContentConfig(tools=[grounding_tool])
-    )
-
-    output_text = response.text if hasattr(response, "text") else str(response)
-
-    # Parse simple de bloques
-    pattern = r"🔧 Archivo:\s*(.*?)\n```([\w+-]+)\n(.*?)```"
-    matches = re.findall(pattern, output_text, re.DOTALL)
-    parsed = []
-    for filename, lang, code in matches:
-        parsed.append({"name": filename.strip(), "lang": lang.strip(), "content": code.rstrip()})
-
-    return {"markdown": output_text, "files": parsed}
-
-
-#crear img buscando en internet
-def createImgSearching(prompt, img_path=None):
-
-    #para conseguir los tamaños de la img del input y respetarlos
-    if img_path and os.path.exists(img_path):
-        with Image.open(img_path) as img:
-            inserted_img = img.tobytes()  # si querés pasar los bytes
-            width, height = img.size
-
-
-    contents = [
-    types.Part.from_text(text=f"""
-        Crea una imagen realista del sitio web mostrado en la imagen adjunta, incorporando las mejoras indicadas en la conclusión:
-        - Ajustar colores y tipografía para mejor legibilidad.
-        - Reorganizar botones importantes para navegación más intuitiva.
-        - Añadir iconos y elementos visuales que mejoren la experiencia.
-        - Mantener el estilo general del sitio original.
-        - Mantener el mismo tamaño y proporción que la imagen original: ancho={width}px, alto={height}px.
-        Tema: {prompt}
-    """)
-]
-
-# Si hay imagen, la agregamos como un Part aparte
-    if img_path and os.path.exists(img_path):
-        with open(img_path, "rb") as f:
-            img_bytes = f.read()
-        contents.append(types.Part.from_bytes(data=img_bytes, mime_type="image/jpeg"))
-
-
-    response = retry_request(
-        client.models.generate_content,
-        model="gemini-2.5-flash",
-        contents=contents,
-        config=types.GenerateContentConfig(
-            tools=[grounding_tool],
-            temperature=0.3,
-            top_p=0.9,
-            top_k=40 
-        )
-    )
-    print("Response de img hecho")
-
-    prompt_img = response.text
-
-    # Generar img final
-    response_img = retry_request(
-        client.models.generate_content,
-        model="gemini-2.0-flash-preview-image-generation",
-        contents=[{"role": "user", "parts": [{"text": prompt_img}]}],
-        config=types.GenerateContentConfig(
-            response_modalities=["TEXT", "IMAGE"],
-            temperature=0.3,
-            top_p=0.9,
-            top_k=40 
-        )
-    )
-
-    if response_img.candidates and response_img.candidates[0].content:
-        for part in response_img.candidates[0].content.parts:
-            if part.text is not None:
-                print("img lista ñeri")
-            elif part.inline_data is not None:
-                image = Image.open(BytesIO(part.inline_data.data))
-                image.save("gemini-image.png", overwrite=True)
-                image.show()
-    else:
-        print("No se generó ninguna imagen para este prompt.")
 
 
 theme = 'PC MARKET'
