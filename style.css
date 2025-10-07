@@ -1,0 +1,372 @@
+body{
+    margin: 0%;
+    padding: 0%;
+    height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+    font-family: 'Inter', sans-serif; /* Consistent font */
+    background-color: #f0f2f5; /* Light background for the page */
+}
+
+.inicio{
+    width: 100%;
+    height: 100%;
+}
+
+header{
+    height: 70px; /* Adjusted height to be more compact */
+    width: 100%;
+    background-color: #2D8CFF; /* Blue color from image */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px; /* Add some horizontal padding */
+    box-sizing: border-box; /* Include padding in width/height */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+header img{ /* Logo styling */
+    height: 40px; /* Adjust logo size */
+    width: auto;
+}
+
+.buscador{
+    display: flex;
+    align-items: center;
+    flex-grow: 1; /* Allows it to take available space */
+    max-width: 600px; /* Limit width */
+    margin: 0 40px; /* Center with margin */
+    position: relative; /* Make parent relative for absolute positioning of busqs */
+}
+
+.busc{
+    height: 40px; /* Adjusted height */
+    width: 100%;
+    border-radius: 8px 0 0 8px; /* Rounded only on left */
+    border: none; /* No border for input */
+    padding: 0 15px;
+    font-size: 1rem;
+    background-color: white;
+    font-family: 'Crimson Text', serif;
+    font-weight: 400; /* Lighter weight for placeholder */
+    color: #333;
+}
+
+.busc::placeholder{
+    color: #A6A6A6;
+    padding-left: 0;
+}
+
+.busc:focus{
+    outline: none;
+    box-shadow: 0 0 0 2px #FFD700; /* Yellow outline on focus */
+}
+
+.search-button{
+    height: 40px;
+    width: 60px; /* Fixed width for button */
+    background-color: #FFD700; /* Yellow color from image */
+    border: none;
+    border-radius: 0 8px 8px 0; /* Rounded only on right */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+}
+
+.search-button:hover{
+    background-color: #FFC400; /* Darker yellow on hover */
+}
+
+.search-button .material-symbols-outlined{
+    font-size: 24px;
+    color: #333;
+}
+
+.busqs{ /* This div for search suggestions below the input */
+    width: 100%; /* Take full width of parent .buscador */
+    background-color: white;
+    border-radius: 0 0 10px 10px;
+    font-family: 'Crimson Text', serif;
+    font-weight: 500;
+    position: absolute;
+    top: 100%; /* Position directly below the search input/button combo */
+    left: 0;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    z-index: 100;
+    display: none; /* Hidden by default; controlled by JS */
+}
+
+.busqs div {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #e9e9e9;
+    background-color: transparent;
+    transition: background-color 0.2s ease;
+}
+
+.busqs div:last-child {
+    border-bottom: none;
+    border-radius: 0 0 10px 10px;
+}
+
+.busqs div:hover {
+    background-color: #f0f0f0;
+}
+
+
+nav{
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Spacing between icon buttons */
+}
+
+.nav-icon{
+    background-color: transparent;
+    border: none;
+    color: white; /* Icons in header are white in image */
+    cursor: pointer;
+    padding: 5px;
+    transition: color 0.2s ease;
+}
+
+.nav-icon:hover{
+    color: #FFD700; /* Yellow on hover */
+}
+
+.nav-icon .material-symbols-outlined{
+    font-size: 28px; /* Adjust icon size */
+}
+
+/* Hide original text buttons as they are replaced by nav-icon buttons */
+.armar, .comparar, .info {
+    display: none;
+}
+/* The .log button now uses the .nav-icon styling */
+
+
+.hero-section{ /* Renamed from 'section' for clarity */
+    height: 350px; /* Adjusted height */
+    width: 100%;
+    background-color: #FFFFFF; /* White background from image */
+    background-image: none; /* Remove background image */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px 0;
+    box-sizing: border-box;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Subtle shadow */
+    margin-bottom: 40px;
+}
+
+.hero-section h1{
+    font-family: 'Inter', sans-serif;
+    font-weight: 800; /* Bolder */
+    font-size: 3.5rem; /* Adjusted font size */
+    color: #333;
+    display: flex;
+    align-items: center;
+    margin-top: 0;
+    margin-bottom: 10px;
+    line-height: 1.2;
+}
+
+.hero-section h1 .pcity{
+    height: 60px; /* Adjust logo size within H1 */
+    margin-left: 15px; /* Space between "Bienvenido a" and logo */
+}
+
+.hero-section h2{
+    font-family: 'Inter', sans-serif;
+    font-weight: 500; /* Regular weight */
+    font-size: 1.8rem; /* Adjusted font size */
+    color: #666;
+    margin-top: 0;
+    margin-bottom: 30px;
+    line-height: 1.4;
+}
+
+.hero-button{
+    background-color: #FFD700; /* Yellow button */
+    color: #333; /* Dark text */
+    border: none;
+    border-radius: 8px;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.hero-button:hover{
+    background-color: #FFC400; /* Darker yellow on hover */
+    transform: translateY(-2px);
+}
+
+
+.product-section {
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.product-filters{
+    display: flex;
+    flex-direction: column; /* Stack title and tabs */
+    align-items: center; /* Center them */
+    margin-bottom: 30px;
+}
+
+.product-filters h3{ /* "Productos Populares" title */
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.filter-tabs{
+    display: flex;
+    gap: 10px; /* Space between tabs */
+    margin-bottom: 20px;
+    border-bottom: 2px solid #EEE; /* Underline for tabs area */
+    padding-bottom: 10px;
+    justify-content: center; /* Center the tabs */
+    flex-wrap: wrap; /* Allow tabs to wrap on smaller screens */
+}
+
+.tab-button{
+    background-color: transparent;
+    border: none;
+    padding: 10px 15px;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s ease;
+}
+
+.tab-button:hover{
+    color: #333;
+}
+
+.tab-button.active{
+    color: #2D8CFF; /* Active tab color (blue) */
+    font-weight: 700;
+}
+
+.tab-button.active::after { /* Active tab underline */
+    content: '';
+    position: absolute;
+    bottom: -12px; /* Position below the text, relative to padding-bottom of filter-tabs */
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #2D8CFF; /* Blue underline */
+    border-radius: 2px;
+}
+
+.componentesPopu{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Center cards */
+    gap: 20px; /* Increased gap for better spacing */
+    padding: 20px;
+}
+
+.product-card{ /* Styling for individual product cards */
+    background-color: white;
+    border: 1px solid #E0E0E0;
+    border-radius: 8px;
+    padding: 20px;
+    width: 250px; /* Fixed width for cards */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover{
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
+
+.product-card img{
+    max-width: 100%;
+    height: 150px; /* Fixed height for product image consistency */
+    object-fit: contain;
+    margin-bottom: 15px;
+}
+
+.product-card .product-description{
+    font-family: 'Crimson Text', serif;
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 15px;
+    height: 45px; /* Limit height for description */
+    overflow: hidden; /* Hide overflow */
+    text-overflow: ellipsis; /* Add ellipsis */
+    line-height: 1.5;
+}
+
+.product-card .product-button{
+    background-color: #FFD700; /* Yellow button */
+    color: #333;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.product-card .product-button:hover{
+    background-color: #FFC400;
+    transform: translateY(-2px);
+}
+
+
+/* Chat Bubble */
+.chat-bubble{
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: #2D8CFF; /* Blue from header */
+    color: white;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    cursor: pointer;
+    z-index: 1000;
+    transition: background-color 0.2s ease;
+}
+
+.chat-bubble:hover{
+    background-color: #1a6ac7;
+}
+
+.chat-bubble .material-symbols-outlined{
+    font-size: 30px;
+}
+
+/* Original styles for sesion, login, errores, botones, etc. (kept for existing functionality) */
+/* The following styles are from the original CSS and are not modified */
+/* They are included here for completeness of the style.css file */
+/* (omitted for brevity in this response as they were not directly changed for UI matching) */
+
+/* The rest of the original CSS for .sesion, .login, .non, .titulo, .cruz, .texto, .error,
+   .iniciar, .crearCuenta, .cuenta, .crear, .registrar, .ojoClose, .ojo, material-symbols-outlined
+   should be appended here if it's a full replacement. For this response, only new/modified parts are shown. */

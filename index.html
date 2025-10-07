@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Inicio</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
+        <script src="../../socket.js"></script>
+        <script type="module" src="script.js" defer></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    </head>
+    <body>
+
+        <main id="mainSesion" class="sesion non">
+            <div class="titulo">
+                <h1>Bienvenido a</h1>
+                <p><img class="pcity" src="../../recursos/img/logo2.png" alt="Pcity Logo"></p>
+            </div>
+            <button class="cruz" id="cruzSesion"><img src="../../recursos/img/cruzBoton.png" alt="Cerrar"></button>
+            <div class="texto" id="login">
+                <input id="nombreS" type="text" placeholder="Nombre">
+                <input id="contraS" type="password" placeholder="Contraseña">
+
+                <button id="ojoCloseS" class="ojoClose" ><span class="material-symbols-outlined">visibility_off</span></button>
+                <button id="ojoS" class="ojo non"><span class="material-symbols-outlined">visibility</span></button>
+
+                <p class="non error" id="errorS">Usuario o contraseña incorrecta</p>
+            </div>
+
+
+            <button id="iniciar" class="iniciar">Iniciar sesión</button>
+
+            <div class="crearCuenta">
+                <p class="cuenta">¿No tienes una cuenta?</p>
+                <button id="crear" class="crear">Crea una cuenta</button>
+            </div>
+        </main>
+
+        <main id="mainRegistrar" class="login non">
+            <div class="titulo">
+                <h1>Bienvenido a</h1>
+                <p><img class="pcity" src="../../recursos/img/logo2.png" alt="Pcity Logo"></p>
+            </div>
+            <button class="cruz" id="cruzRegistrar"><img  src="../../recursos/img/cruzBoton.png" alt="Cerrar"></button>
+            <div class="texto" id="login">
+                <input id="nombreR" type="text" placeholder="Nombre">
+                <input id="contraR" type="password" placeholder="Contraseña">
+
+                <button id="ojoCloseR" class="ojoClose" ><span class="material-symbols-outlined">visibility_off</span></button>
+                <button id="ojoR" class="ojo non"><span class="material-symbols-outlined">visibility</span></button>
+
+                <p class="non error" id="errorR">Error al crear cuenta</p>
+            </div>
+
+            <button class="registrar" id="registrar">Registrarse</button>
+
+            <div class="crearCuenta">
+                <p class="cuenta">¿Ya tienes una cuenta?</p>
+                <button id="iniciarSesion" class="crear">Inicia sesión</button>
+            </div>
+        </main>
+
+        <div class="inicio">
+            <header>
+                <img src="../../recursos/img/logo.png" alt="Logo de la marca">
+                <div class="buscador">
+                    <input type="text" class="busc" id="input1" placeholder="Buscar productos...">
+                    <button class="search-button" aria-label="Buscar"><span class="material-symbols-outlined">search</span></button>
+                    <div class="busqs" id="busq1"></div>
+                </div>
+                <nav>
+                    <button class="nav-icon" onclick="location.href='../informacion/index.html'" aria-label="Información"><span class="material-symbols-outlined">language</span></button>
+                    <button class="nav-icon" onclick="location.href='../armar-pc/index.html'" aria-label="Carrito de compras"><span class="material-symbols-outlined">shopping_cart</span></button>
+                    <button class="log nav-icon" id="persona" onclick="location.href='../comparacion/index.html'" aria-label="Perfil de usuario"><span class="material-symbols-outlined">person</span></button>
+                </nav>
+            </header>
+
+            <section class="hero-section">
+                <h1>Bienvenido a <img class="pcity" src="../../recursos/img/pcity.png" alt="Pcity Logo"></h1>
+                <h2>Arma, compara y aprende</h2>
+                <button class="hero-button">Descubre nuestros productos</button>
+            </section>
+
+            <div class="product-section">
+                <div class="product-filters">
+                    <h3>Productos Populares</h3>
+                    <div class="filter-tabs">
+                        <button class="tab-button active">Filtro</button>
+                        <button class="tab-button">Tipo</button>
+                        <button class="tab-button">Marca</button>
+                        <button class="tab-button">Oferta</button>
+                        <button class="tab-button">Opiniones</button>
+                        <button class="tab-button">Tabla</button>
+                    </div>
+                </div>
+                <div class="componentesPopu">
+                    <!-- Product cards will be dynamically loaded here by script.js -->
+                    <!-- Placeholder for a product card to test styling -->
+                    <div class="product-card">
+                        <img src="https://via.placeholder.com/150" alt="Imagen del producto">
+                        <p class="product-description">Descripción de un producto de ejemplo</p>
+                        <button class="product-button">Ver Detalles</button>
+                    </div>
+                    <div class="product-card">
+                        <img src="https://via.placeholder.com/150" alt="Imagen del producto">
+                        <p class="product-description">Descripción de un producto de ejemplo</p>
+                        <button class="product-button">Ver Detalles</button>
+                    </div>
+                    <div class="product-card">
+                        <img src="https://via.placeholder.com/150" alt="Imagen del producto">
+                        <p class="product-description">Descripción de un producto de ejemplo</p>
+                        <button class="product-button">Ver Detalles</button>
+                    </div>
+                    <div class="product-card">
+                        <img src="https://via.placeholder.com/150" alt="Imagen del producto">
+                        <p class="product-description">Descripción de un producto de ejemplo</p>
+                        <button class="product-button">Ver Detalles</button>
+                    </div>
+                    <div class="product-card">
+                        <img src="https://via.placeholder.com/150" alt="Imagen del producto">
+                        <p class="product-description">Descripción de un producto de ejemplo</p>
+                        <button class="product-button">Ver Detalles</button>
+                    </div>
+                    <div class="product-card">
+                        <img src="https://via.placeholder.com/150" alt="Imagen del producto">
+                        <p class="product-description">Descripción de un producto de ejemplo</p>
+                        <button class="product-button">Ver Detalles</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-bubble">
+            <span class="material-symbols-outlined">chat</span>
+        </div>
+    </body>
+</html>
