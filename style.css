@@ -1,0 +1,399 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+    font-family: 'Inter', sans-serif; /* Consistent font for body */
+    background-color: #F5F7FA; /* Light grey background for the whole page */
+}
+
+.inicio {
+    width: 100%;
+    min-height: 100%; /* Use min-height to allow content to expand */
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    height: 70px; /* Reduced header height */
+    width: 100%;
+    background-color: #2196F3; /* Blue header as in image */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    box-sizing: border-box; /* Include padding in element's total width and height */
+}
+
+.header-logo {
+    height: 40px; /* Adjust logo size */
+    margin-right: 20px;
+}
+
+.buscador {
+    flex-grow: 1; /* Allows search bar to take available space */
+    display: flex;
+    align-items: center;
+    position: relative; /* For positioning search icon */
+    max-width: 600px; /* Max width for search bar */
+    margin: 0 20px; /* Center search bar roughly */
+}
+
+.busc {
+    height: 40px;
+    width: 100%;
+    border-radius: 20px; /* More rounded search bar */
+    border: none; /* No border for the search input */
+    padding: 0 15px;
+    padding-right: 40px; /* Space for the search icon */
+    font-size: 1rem;
+    background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white */
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    color: #333;
+}
+
+.busc::placeholder {
+    color: #999;
+}
+
+.busc:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5); /* Focus effect */
+}
+
+.search-icon {
+    position: absolute;
+    right: 15px;
+    color: #666;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.busqs {
+    display: none; /* Keep hidden, functionality handled by script */
+}
+
+.header-nav-icons {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Space between icons */
+}
+
+.nav-icon-btn {
+    background: none;
+    border: none;
+    color: white; /* White icons */
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s ease;
+}
+
+.nav-icon-btn:hover {
+    color: #E0E0E0; /* Lighter color on hover */
+}
+
+.nav-icon-btn .material-symbols-outlined {
+    font-size: 28px; /* Larger icons */
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
+.main-content {
+    padding: 30px 50px;
+    background-color: #F5F7FA; /* Light grey for the main content area */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main-title {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 2.8rem;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.filter-bar {
+    width: 100%;
+    max-width: 1200px; /* Limit width of filter bar */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    padding: 15px 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+}
+
+.filter-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.filter-btn {
+    background-color: #E0E0E0;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: #333;
+    transition: background-color 0.2s ease;
+}
+
+.filter-btn:hover {
+    background-color: #D0D0D0;
+}
+
+.filter-btn .material-symbols-outlined {
+    font-size: 20px;
+    margin-right: 5px;
+}
+
+.filter-count {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #555;
+}
+
+.search-sort-bar {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 300px; /* Adjust width as needed */
+}
+
+.search-results-input {
+    height: 35px;
+    width: 100%;
+    border-radius: 18px;
+    border: 1px solid #D9D9D9;
+    padding: 0 15px;
+    padding-right: 40px; /* Space for the search icon */
+    font-size: 0.9rem;
+    font-family: 'Inter', sans-serif;
+    color: #333;
+}
+
+.search-results-input::placeholder {
+    color: #A6A6A6;
+}
+
+.search-results-input:focus {
+    outline: none;
+    border-color: #2196F3;
+}
+
+.search-icon-results {
+    position: absolute;
+    right: 15px;
+    color: #777;
+    font-size: 20px;
+}
+
+
+.componentesPopu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid with min 280px cards */
+    gap: 25px;
+    width: 100%;
+    max-width: 1200px; /* Align with filter bar width */
+    justify-content: center;
+}
+
+.product-card {
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden; /* For badge positioning */
+}
+
+.product-card .badge {
+    position: absolute;
+    top: 0px; /* Adjusted to be more visible on the card */
+    left: -5px; /* Slightly off-center to the left as in image */
+    background-color: #2196F3; /* Blue badge */
+    color: white;
+    padding: 5px 15px;
+    border-radius: 0 0 8px 0; /* Rounded bottom-left, top-right as in image */
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    transform: rotate(-5deg); /* Slight rotation to match image */
+    transform-origin: top left;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+
+.product-card img {
+    max-width: 100%;
+    height: auto;
+    max-height: 150px;
+    object-fit: contain;
+    margin-bottom: 15px;
+}
+
+.product-card h3 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 1.3rem;
+    color: #333;
+    margin: 10px 0;
+}
+
+.product-card p {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.4;
+    margin-bottom: 15px;
+}
+
+.product-card .price {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: #2196F3; /* Blue price */
+}
+
+.product-card .price span {
+    font-size: 1rem;
+    vertical-align: super;
+}
+
+/* Existing styles for login/register modals (if they are still needed, they were not part of the image context) */
+.sesion, .login {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    z-index: 1000;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sesion.non, .login.non {
+    display: none;
+}
+
+.titulo h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.titulo .pcity {
+    height: 50px;
+    vertical-align: middle;
+}
+
+.cruz {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.cruz img {
+    width: 20px;
+    height: 20px;
+}
+
+.texto input {
+    display: block;
+    width: 250px;
+    padding: 10px;
+    margin: 15px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.ojoClose, .ojo {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    right: 50px; /* Adjust positioning */
+    transform: translateY(10px);
+}
+
+.error {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+.iniciar, .registrar, .crear {
+    background-color: #2196F3;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 20px;
+    transition: background-color 0.2s ease;
+}
+
+.iniciar:hover, .registrar:hover, .crear:hover {
+    background-color: #1976D2;
+}
+
+.crearCuenta {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.crearCuenta button {
+    margin-left: 5px;
+    padding: 5px 10px;
+    background-color: transparent;
+    color: #2196F3;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+/* Original section styles, now repurposed or removed */
+section h1 { /* This rule is now for .main-title */
+    display: none; /* Hide original h1 */
+}
+
+section h2 { /* This rule is not used in new layout */
+    display: none;
+}
+
+p { /* General paragraph styling, could be more specific */
+    margin: 0;
+    padding: 0;
+}

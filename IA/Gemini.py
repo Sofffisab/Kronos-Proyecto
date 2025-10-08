@@ -1,5 +1,6 @@
-# pip install -r lib.txt --no-warn-script-location.
+# pip install -r lib.txt --no-warn-script-location
 import os
+import re
 import json
 from google import genai
 from google.genai import types
@@ -22,7 +23,6 @@ client = genai.Client(api_key="AIzaSyCXUdPHjrG_z0lIM0lyEIKlgnYvihzRvYE")
 #modelo de la tabla
 class WebsiteValue(BaseModel):
     name: str
-    description: str
 
 class TableRow(BaseModel):
     criterion_or_website: str
@@ -57,17 +57,352 @@ def retry_request(func, *args, **kwargs):
                 raise
 
 
-#crear texto
-def createTxt(prompt):
+
+#crear img
+def createImg(prompt):
+    response = retry_request(
+        client.models.generate_content,
+        model="gemini-2.0-flash-preview-image-generation",
+        contents=[
+            {"role": "user", "parts": [{"text": prompt}]}
+        ],
+        config=types.GenerateContentConfig(
+        response_modalities=['TEXT', 'IMAGE']
+        )
+    )
+    for part in response.candidates[0].content.parts:
+        if part.text is not None:
+            print(part.text)
+        elif part.inline_data is not None:
+            image = Image.open(BytesIO((part.inline_data.data)))
+            image.save('gemini-image.png', overwrite= True)
+            image.show()
+
+codigo_json = [
+    {
+        "name": "index.html",
+        "content": """
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Inicio</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
+        <script src="../../socket.js"></script>
+        <script type="module" src="script.js" defer></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    </head>
+    <body>
+
+        <div class="inicio">
+            <header>
+                <img src="../../recursos/img/logo.png">
+                <div class="buscador">
+                    <input type="text" class="busc" id="input1" placeholder="Buscar">
+                    <div class="busqs" id="busq1"></div>
+                </div>
+                <nav>
+                    <button class="info" onclick="location.href='../informacion/index.html'">Información</button>
+                    <button class="armar" onclick="location.href='../armar-pc/index.html'">Arma tu PC</button>
+                    <button class="comparar" onclick="location.href='../comparacion/index.html'">Comparar</button>
+                    <button class="log" id="persona"><img src="../../recursos/img/personita.png"></button>
+                </nav>
+            </header>
+        
+            <section>
+                <h1>Bienvenido a <img class="pcity" src="../../recursos/img/pcity.png"></h1>
+                <h2>Armá, compará y aprendé</h2>
+            </section>
+        
+            <p>Componentes populares</p>
+            <div class="componentesPopu">
+            </div>
+        </div>
+    </body>
+</html>
+"""
+    },
+    {
+        "name": "style.css",
+        "content": """
+body{
+    margin: 0%;
+    padding: 0%;
+    height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+}
+
+.inicio{
+    width: 100%;
+    height: 100%;
+}
+
+header{
+    height: 15%;
+    width: 100%;
+    background-color: #101E35;
+    z-index: -1;
+    margin-top: 0%;
+    display: flex;
+    justify-content: space-between;
+}
+
+nav{
+    width: 45%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.armar,.comparar,.info,.log{
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 600;
+    font-size: 1.5rem;
+    background-color: transparent;
+    border: none;
+    color: #A6A6A6;
+    margin-right: 3%;
+    transition: 0,3s ease;
+}
+
+.busc{
+    height: 45px;
+    width: 100%;
+    border-radius: 12px;
+    margin-top: 3%;
+    border: solid;
+    border-color: #103263;
+    border-width: 3px;
+    font-size: larger;
+    background-color: white;
+    font-family: 'crimson text';
+    font-weight: 500;
+}
+
+.busc::placeholder{
+    color: #D9D9D9;
+    background-image: url(../../recursos/img/lupa.buscador.png);
+    background-size: 20px;
+    background-repeat: no-repeat;
+    background-position: left 2px center;
+    padding-left: 27px;
+}
+
+.busc:focus{
+    outline: none;
+}
+
+.buscador{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    left: 12%;
+}
+
+.busqs{
+    width: 557px;
+    background-color: white;
+    border-radius: 0 0 10px 10px;
+    font-family: 'crimson text', serif;
+    font-weight: 500;
+    position: relative;
+}
+
+.busqs div {
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #e9e9e9;
+    background-color: transparent;
+    transition: background-color 0.2s ease;
+}
+
+.busqs div:hover {
+    background-color: #f0f0f0;
+}
+
+section{
+    height: 35%;
+    width: 100%;
+    background-image: url(../../recursos/img/fondo.png);
+    background-color: #103263;
+    background-size: cover;
+    margin-top: 0%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+section h1{
+    font-family: 'inter';
+    font-weight: bolder;
+    font-size: 5rem;
+    margin-top: -1%;
+    margin-left: 16%;
+    width: 60%;
+    display: flex;
+}
+
+section h2{
+    font-family: 'inter';
+    margin-top: -5%;
+    font-size: 2.5rem;
+    font-style: bold;
+}
+
+.componentesPopu{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap:10px;
+}
+"""
+    }
+]
+
+#crear img buscando en internet
+def createImgSearching(prompt, img_path=None):
+    #para conseguir los tamaños de la img del input y respetarlos
+    if img_path and os.path.exists(img_path):
+        with Image.open(img_path) as img:
+            inserted_img = img.tobytes()  # si querés pasar los bytes
+            width, height = img.size
+
+
+    contents = [
+    types.Part.from_text(text=f"""
+        Crea una imagen realista del sitio web mostrado en la imagen adjunta, incorporando las mejoras indicadas en la conclusión:
+        - Ajustar colores y tipografía para mejor legibilidad.
+        - Reorganizar botones importantes para navegación más intuitiva.
+        - Añadir iconos y elementos visuales que mejoren la experiencia.
+        - Mantener el estilo general del sitio original.
+        - Mantener el mismo tamaño y proporción que la imagen original: ancho={width}px, alto={height}px.
+        Tema: {prompt}
+    """)
+]
+
+# Si hay imagen, la agregamos como un Part aparte
+    if img_path and os.path.exists(img_path):
+        with open(img_path, "rb") as f:
+            img_bytes = f.read()
+        contents.append(types.Part.from_bytes(data=img_bytes, mime_type="image/jpeg"))
+
+
     response = retry_request(
         client.models.generate_content,
         model="gemini-2.5-flash",
-        contents=prompt,
-        config = types.GenerateContentConfig(
-            tools=[grounding_tool]
+        contents=contents,
+        config=types.GenerateContentConfig(
+            tools=[grounding_tool],
+            temperature=0.3,
+            top_p=0.9,
+            top_k=40 
         )
     )
-    print(response.text)
+    print("Response de img hecho")
+
+    prompt_img = response.text
+
+    # Generar img final
+    response_img = retry_request(
+        client.models.generate_content,
+        model="gemini-2.0-flash-preview-image-generation",
+        contents=[{"role": "user", "parts": [{"text": prompt_img}]}],
+        config=types.GenerateContentConfig(
+            response_modalities=["TEXT", "IMAGE"],
+            temperature=0.3,
+            top_p=0.9,
+            top_k=40 
+        )
+    )
+
+    if response_img.candidates and response_img.candidates[0].content:
+        for part in response_img.candidates[0].content.parts:
+            if part.text is not None:
+                print("img lista ñeri")
+            elif part.inline_data is not None:
+                image = Image.open(BytesIO(part.inline_data.data))
+                image.save("gemini-image.png", overwrite=True)
+                image.show()
+    else:
+        print("No se generó ninguna imagen para este prompt.")
+
+
+
+language_map = {
+    "index.html": "html",
+    "style.css": "css",
+}
+
+
+#CREAR CODIGO ARREGLADO
+def createTxt(img_generated_path, conclusions_json, codigo_json, language_map):
+    """
+    img_generated_path: ruta a la imagen generada
+    conclusions_json: JSON con conclusiones/sugerencias
+    codigo_json: lista de dicts con "name" y "content"
+    language_map: dict que indica lenguaje de cada archivo, ej:
+                  {"index.html": "html", "style.css": "css", "script.js": "javascript"}
+    """
+
+    codigo_blocks = []
+    for c in codigo_json:
+        # Cada c debe tener al menos "name" y "content"
+        name = c.get("name", "archivo")
+        content = c.get("content", "")
+        lang = language_map.get(name, "text")  # usar lenguaje definido por usuario, si no "text"
+        codigo_blocks.append(f"🔧 Archivo: {name}\n```{lang}\n{content}\n```")
+
+    codigo_str = "\n\n".join(codigo_blocks)
+
+    prompt = f"""
+Vas a recibir: (A) código del sitio SIN cambios aplicados, (B) img de la página CON los cambios aplicados, (C) JSON DE conclusiones de las mejoras y cambios realizados para la img.
+Mejora el código para que la UI coincida con la imagen y las sugerencias.
+Devuelve SOLO BLOQUES DE CÓDIGO Markdown con encabezado '🔧 Archivo: <nombre>' y triple backticks con lenguaje indicado.
+
+--- REFERENCIAS ---
+Código actual:
+{codigo_str}
+
+Conclusiones / sugerencias:
+{json.dumps(conclusions_json, indent=2, ensure_ascii=False)}
+"""
+
+    # Preparar contents para el modelo
+    contents = [types.Part.from_text(text=prompt)]
+    if img_generated_path and os.path.exists(img_generated_path):
+        with open(img_generated_path, "rb") as f:
+            img_bytes = f.read()
+        contents.append(types.Part.from_bytes(data=img_bytes, mime_type="image/jpeg"))
+
+    # Llamada al modelo
+    response = retry_request(
+        client.models.generate_content,
+        model="gemini-2.5-flash",
+        contents=contents,
+        config=types.GenerateContentConfig(tools=[grounding_tool])
+    )
+
+    output_text = response.text if hasattr(response, "text") else str(response)
+
+    # Parse simple de bloques
+    pattern = r"🔧 Archivo:\s*(.*?)\n```([\w+-]+)\n(.*?)```"
+    matches = re.findall(pattern, output_text, re.DOTALL)
+    parsed = []
+    for filename, lang, code in matches:
+        parsed.append({"name": filename.strip(), "lang": lang.strip(), "content": code.rstrip()})
+
+    return {"markdown": output_text, "files": parsed}
 
 
 #crear tabla e img buscando en internet
@@ -86,8 +421,12 @@ def createJson(prompt, img_path="image.jpg"):
 
     prompt_board = response.text
 
-    with open(img_path, "rb") as f:
-        inserted_img = f.read()
+    if os.path.exists(img_path):
+        with open(img_path, "rb") as f:
+            inserted_img = f.read()
+    else:
+        print(f"⚠️ Imagen no encontrada: {img_path}")
+        return
 
 #hacer tablita
     response = retry_request(
@@ -112,10 +451,12 @@ def createJson(prompt, img_path="image.jpg"):
     for row in response.parsed.table_data:
         row_dict = row.model_dump()
         websites_raw = row_dict.get("websites", [])
-        websites_dict = {w["name"]: w["description"] for w in websites_raw}
+        websites_dict = {w["name"]: "" for w in websites_raw}
         row_dict.pop("websites", None)
         row_dict.update(websites_dict)
         rows.append(row_dict)
+
+
         
 
     df = pd.DataFrame(rows)
@@ -155,105 +496,34 @@ def createJson(prompt, img_path="image.jpg"):
     if img_path and os.path.exists(img_path):
         createImgSearching(prompt=conclusion, img_path=img_path)
 
-
-#crear img
-def createImg(prompt):
-    response = retry_request(
-        client.models.generate_content,
-        model="gemini-2.0-flash-preview-image-generation",
-        contents=[
-            {"role": "user", "parts": [{"text": prompt}]}
-        ],
-        config=types.GenerateContentConfig(
-        response_modalities=['TEXT', 'IMAGE']
-        )
+    conclusion_text = " ".join(df["conclusion"].dropna().tolist())
+    resultado_txt = createTxt(
+        img_generated_path="gemini-image.png",
+        conclusions_json=rows,
+        codigo_json=codigo_json,
+        language_map=language_map
     )
-    for part in response.candidates[0].content.parts:
-        if part.text is not None:
-            print(part.text)
-        elif part.inline_data is not None:
-            image = Image.open(BytesIO((part.inline_data.data)))
-            image.save('gemini-image.png', overwrite= True)
-            image.show()
-
-#crear img buscando en internet (con texto + img opcional)
-def createImgSearching(prompt, img_path=None):
-
-    #para conseguir los tamaños de la img del input y respetarlos
-    if img_path and os.path.exists(img_path):
-        with Image.open(img_path) as img:
-            inserted_img = img.tobytes()  # si querés pasar los bytes
-            width, height = img.size
+    print("Markdown generado:\n", resultado_txt["markdown"])
 
 
-    contents = [
-        {"role": "user", "parts": [{"text": (f"""
-            Crea una imagen realista del sitio web mostrado en la imagen adjunta, incorporando las mejoras indicadas en la conclusión:
-           - Ajustar colores y tipografía para mejor legibilidad.
-           - Reorganizar botones importantes para navegación más intuitiva.
-           - Añadir iconos y elementos visuales que mejoren la experiencia.
-           - Mantener el estilo general del sitio original.
-           No inventes nuevos elementos, solo mejora lo que ya existe. La imagen debe mostrar claramente los cambios sugeridos.Mantener el mismo tamaño y proporción que la imagen original: ancho={width}px, alto={height}px.
-            Tema: {prompt}
-            """
-        )}]}
-    ]
 
-# si viene img, se añade al contents (input)
-    if img_path and os.path.exists(img_path):
-        with open(img_path, "rb") as f:
-            inserted_img = f.read()
-        contents[0]["parts"].append(
-            types.Part.from_bytes(data=inserted_img, mime_type="image/jpeg")
-        )
-
-    response = retry_request(
-        client.models.generate_content,
-        model="gemini-2.5-flash",
-        contents=contents,
-        config=types.GenerateContentConfig(
-            tools=[grounding_tool]
-        )
-    )
-    print("Response de img hecho")
-
-    prompt_img = response.text
-
-    # Generar img final
-    response_img = retry_request(
-        client.models.generate_content,
-        model="gemini-2.0-flash-preview-image-generation",
-        contents=[{"role": "user", "parts": [{"text": prompt_img}]}],
-        config=types.GenerateContentConfig(
-            response_modalities=["TEXT", "IMAGE"],
-            temperature=0.2,
-            top_p=0.9,
-            top_k=40 
-        )
-    )
-
-    if response_img.candidates and response_img.candidates[0].content:
-        for part in response_img.candidates[0].content.parts:
-            if part.text is not None:
-                print(part.text)
-            elif part.inline_data is not None:
-                image = Image.open(BytesIO(part.inline_data.data))
-                image.save("gemini-image.png", overwrite=True)
-                image.show()
-    else:
-        print("No se generó ninguna imagen para este prompt.")
 
 
 theme = 'PC MARKET'
 
 createJson(f"""
-Generate a comparison table with the following exact columns: 
-Website, Typography & Readability, Colors & Branding, Visual Elements, Navigation & UX, Organization & Structure, Accessibility, Functionality, Interactivity and SEO (Search Engine Optimization). 
-The table must include rows for the 3 most popular websites related to the topic {theme}, plus the website shown in the provided image. There should be exactly 11 rows in total (one per topic/criterion + conclusion). 
-Each row must have 5 cells (4 websites + 1 Conclusion). Each cell must contain a descriptive sentence of 20 - 30 words. 
-In the Conclusion column (shown as the last one), write specific improvement suggestions only for the last website (the one from the image) comparing it to the other 3 websites. Do NOT compare it directly, but identify things what could be improved remarkking also the good things. Avoid mentioning the names of any websites in the improvement suggestions. 
-Output must be structured, consistent, and in JSON schema format. 
-On the top of each website column, also provide a very brief description of each website.
+The JSON returned must be an array of 11 rows (objects).  
+Each row has these keys in this order:  
+"criterion", "(NamePage1)", "(NamePage2)", "(NamePage3)", "(NamePage4)", "Conclusion".
+Websites 1 to 3 have to be the most famous about {theme}, and the 4th is the one of the img insterted.
+Rules:  
+- Criteria order: Typography & Readability, Colors & Branding, Visual Elements, Navigation & UX, Organization & Structure, Accessibility, Functionality, Interactivity, SEO, +1 extra criterion you choose, +Final Conclusion row (only fill "Conclusion").  
+- Website1–Website3: each = short intro phrase + one descriptive sentence of 20–30 words.Do not mention the Website in each cell.  
+- Website4: same, but refers to the website from the provided image.  
+- "Conclusion": only Website4 improvements, implicit comparison, highlight strengths + suggestions, never mention website names.  
+
+Output must be strictly consistent, 6 keys per row, no extra text.
+
 """)
 
 #createTxt("como son los diseños de las páginas web de mercado libre, pedido ya y amazon? hazme una descripción teniendo en cuenta: Sitio Web, Tipografía, Colores, Formal o informal, Personajes-iconos-emblemas, Accesibilidad, Capacidad de navegación, Organización (botones importantes), Funciones extras, Tutoriales o instrucciones")
