@@ -1,5 +1,4 @@
-import prismaPkg from '@prisma/client';
-const { PrismaClient } = prismaPkg;
+import { PrismaClient } from '@prisma/client';
 import { default as express } from 'express';
 import dotenv from 'dotenv';
 import expressWs from 'express-ws';
@@ -20,7 +19,10 @@ const JWT_SECRET = process.env.JWT_SECRET || 'contrasenia-jeje';
 const prisma = new PrismaClient();
 const app = express();
 expressWs(app); 
-const wss = app.getWss();
+
+// 2. Envuelve tu app con expressWs y guarda el resultado.
+const wsInstance = expressWs(app);
+const wss = wsInstance.getWss(); // wss ahora es tu servidor de WebSockets.
 
 const { login, signup } = setupsesiones(JWT_SECRET);
 const { authentication } = setupautenticacion(JWT_SECRET);
@@ -31,6 +33,8 @@ const router = setuprouter({ login, signup, authentication, getevents, permision
 
 app.use(express.json());
 app.use(router);
+
+console.log(wss)
 
 setupwebsocketserver(wss, JWT_SECRET, prisma);
 

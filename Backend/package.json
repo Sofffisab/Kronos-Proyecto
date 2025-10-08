@@ -1,5 +1,21 @@
 {
   "dependencies": {
-    "@prisma/client": "^6.16.1"
-  }
+    "@prisma/client": "^6.16.1",
+    "argon2": "^0.44.0",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "express-ws": "^0.2.6",
+    "googleapis": "^36.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "prisma": "^6.14.0",
+    "ws": "^8.18.3"
+  },
+  "name": "kronos-proyecto",
+  "version": "1.0.0",
+  "description": "Proyecto TIC 4° año 2025",
+  "main": "index.js",
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
