@@ -5,7 +5,7 @@ import KanbanModal from "../../modals/KanBanModal";
 export default function kanban() {
 
     const [tasks, setTasks] = useState([])
-
+    const [type, setType] = useState('')
     const mappedTasks = tasks?{
         
         rTasks: tasks.filter((task) => task.type=='riesgo').map((task)=> <Tarea key={task.id}type={task.type} text={task.text}/>),
@@ -14,7 +14,10 @@ export default function kanban() {
         tTasks: tasks.filter((task) => task.type=='terminado').map((task)=> <Tarea key={task.id} type={task.type} text={task.text}/>)
     } : {}
     const [modal, toggleModal] = useState(false)
-
+    const openModal = (type) => {
+        toggleModal(true);
+        setType(type)
+    }
     const submit = ()=> {
         const task ={
         text: document.getElementById('name').value,
@@ -27,10 +30,10 @@ export default function kanban() {
 
     return(
         <>
-        {modal && <KanbanModal submit={submit} bgOnClick={()=> toggleModal(false)}/>}
+        {modal && <KanbanModal value={type}submit={submit} bgOnClick={()=> toggleModal(false)}/>}
         <Categorias 
         rTasks={mappedTasks.rTasks}
-        OnClick={()=>toggleModal(true)}
+        OnClick={ openModal}
         aTasks={mappedTasks.aTasks}
     pTasks={mappedTasks.pTasks}
     tTasks={mappedTasks.tTasks}/>

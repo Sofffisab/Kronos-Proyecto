@@ -11,10 +11,10 @@ export default function Categorias(props) {
             <div id='last'>Terminada</div>
             </div>
             <div className='bottom'>
-                <div id='riesgo' onClick={props.OnClick}>{props.rTasks }</div>
-                <div id='atrasada'  onClick={props.OnClick}>{props.aTasks}</div>
-                <div id='proceso'  onClick={props.OnClick}>{props.pTasks}</div>
-                <div id='terminada' onClick={props.OnClick}>{props.tTasks}</div>
+                <div id='riesgo' onClick={()=>props.OnClick('riesgo')}>{props.rTasks }</div>
+                <div id='atrasada'  onClick={()=>props.OnClick('atrasada')}>{props.aTasks}</div>
+                <div id='proceso'  onClick={()=>props.OnClick('proceso')}>{props.pTasks}</div>
+                <div id='terminada' onClick={()=>props.OnClick('terminado')}>{props.tTasks}</div>
             </div>
         </div>
 

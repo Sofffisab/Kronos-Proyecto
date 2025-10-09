@@ -1,6 +1,7 @@
 .table {
   display: block;
-  height: 100%;
+  height: auto;
+  min-height: 100%;
 }
 .top {
     display: grid;
@@ -25,8 +26,8 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr;
-    height: fit-content;
     min-height: 100%;
+   
 }
 .bottom div {
     border-right: 1px solid var(--fontContrast);
@@ -34,9 +35,10 @@
     border-bottom: 1px solid var(--fontContrast);
     display: flex;
     flex-direction: column;
-    gap: 2%;
+    gap: 2vh;
     justify-content: flex-start;
     align-items: center;
+    
 }
 #terminada {
     border-right: none ;
@@ -45,14 +47,20 @@
     box-sizing: border-box;
     border: none !important;
     width: 100%;
-    height: 15%;
+    height: auto;
+    min-height: 10vh;
     border-bottom-right-radius: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    white-space: normal;
 }
 .tarea p {
     opacity: 100%;
+    word-break: break-all;
+    overflow-wrap: break-word;
 }
 .riesgo {
     background-color: #CD8E8E;

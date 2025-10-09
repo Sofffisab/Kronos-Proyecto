@@ -3,10 +3,10 @@ import { Link } from "react-router"
 export default function SimpleButton(props) {
 
 if(props.link) {
-    return(<Link className={props.class} to={props.link}><span className='material-symbols-outlined'>{props.icon}</span><button onClick={props.onClick} disabled={props.disabled} 
+    return(<Link className={props.class} to={props.link}><span className='material-symbols-outlined'>{props.icon}</span><button  disabled={props.disabled} 
     >{props.text}</button></Link>)
 }
-return(<div className={props.class} ><span className='material-symbols-outlined'>{props.icon}</span><button onClick={props.onClick} disabled={props.disabled} 
+return(<div onClick={props.onClick} className={props.class} ><span className='material-symbols-outlined'>{props.icon}</span><button  disabled={props.disabled} 
 >{props.text}</button></div>)
 
 }

@@ -12,7 +12,7 @@ return(
         <label>Nombre</label>
          <input id="name" />
          <label>Responsable</label>
-         <select id="type">
+         <select id="type"  defaultValue={props.value}>
           <option value="riesgo">En riesgo</option>
           <option value="atrasada">Atrasada</option>
           <option value="proceso">En proceso</option>
