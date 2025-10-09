@@ -82,191 +82,191 @@ codigo_json = [
     {
         "name": "index.html",
         "content": """
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Inicio</title>
-        <link rel="stylesheet" href="style.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
-        <script src="../../socket.js"></script>
-        <script type="module" src="script.js" defer></script>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    </head>
-    <body>
+        <!DOCTYPE html>
+        <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Inicio</title>
+                <link rel="stylesheet" href="style.css">
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
+                <script src="../../socket.js"></script>
+                <script type="module" src="script.js" defer></script>
+                <link rel="preconnect" href="https://fonts.googleapis.com">
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+                <link rel="preconnect" href="https://fonts.googleapis.com">
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
+                <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+            </head>
+            <body>
 
-        <div class="inicio">
-            <header>
-                <img src="../../recursos/img/logo.png">
-                <div class="buscador">
-                    <input type="text" class="busc" id="input1" placeholder="Buscar">
-                    <div class="busqs" id="busq1"></div>
+                <div class="inicio">
+                    <header>
+                        <img src="../../recursos/img/logo.png">
+                        <div class="buscador">
+                            <input type="text" class="busc" id="input1" placeholder="Buscar">
+                            <div class="busqs" id="busq1"></div>
+                        </div>
+                        <nav>
+                            <button class="info" onclick="location.href='../informacion/index.html'">Información</button>
+                            <button class="armar" onclick="location.href='../armar-pc/index.html'">Arma tu PC</button>
+                            <button class="comparar" onclick="location.href='../comparacion/index.html'">Comparar</button>
+                            <button class="log" id="persona"><img src="../../recursos/img/personita.png"></button>
+                        </nav>
+                    </header>
+                
+                    <section>
+                        <h1>Bienvenido a <img class="pcity" src="../../recursos/img/pcity.png"></h1>
+                        <h2>Armá, compará y aprendé</h2>
+                    </section>
+                
+                    <p>Componentes populares</p>
+                    <div class="componentesPopu">
+                    </div>
                 </div>
-                <nav>
-                    <button class="info" onclick="location.href='../informacion/index.html'">Información</button>
-                    <button class="armar" onclick="location.href='../armar-pc/index.html'">Arma tu PC</button>
-                    <button class="comparar" onclick="location.href='../comparacion/index.html'">Comparar</button>
-                    <button class="log" id="persona"><img src="../../recursos/img/personita.png"></button>
-                </nav>
-            </header>
-        
-            <section>
-                <h1>Bienvenido a <img class="pcity" src="../../recursos/img/pcity.png"></h1>
-                <h2>Armá, compará y aprendé</h2>
-            </section>
-        
-            <p>Componentes populares</p>
-            <div class="componentesPopu">
-            </div>
-        </div>
-    </body>
-</html>
-"""
-    },
-    {
-        "name": "style.css",
-        "content": """
-body{
-    margin: 0%;
-    padding: 0%;
-    height: 100vh;
-    width: 100vw;
-    overflow-x: hidden;
-}
+            </body>
+        </html>
+        """
+            },
+            {
+                "name": "style.css",
+                "content": """
+        body{
+            margin: 0%;
+            padding: 0%;
+            height: 100vh;
+            width: 100vw;
+            overflow-x: hidden;
+        }
 
-.inicio{
-    width: 100%;
-    height: 100%;
-}
+        .inicio{
+            width: 100%;
+            height: 100%;
+        }
 
-header{
-    height: 15%;
-    width: 100%;
-    background-color: #101E35;
-    z-index: -1;
-    margin-top: 0%;
-    display: flex;
-    justify-content: space-between;
-}
+        header{
+            height: 15%;
+            width: 100%;
+            background-color: #101E35;
+            z-index: -1;
+            margin-top: 0%;
+            display: flex;
+            justify-content: space-between;
+        }
 
-nav{
-    width: 45%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
+        nav{
+            width: 45%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
 
-.armar,.comparar,.info,.log{
-    font-family: "Inter", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 600;
-    font-size: 1.5rem;
-    background-color: transparent;
-    border: none;
-    color: #A6A6A6;
-    margin-right: 3%;
-    transition: 0,3s ease;
-}
+        .armar,.comparar,.info,.log{
+            font-family: "Inter", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: 600;
+            font-size: 1.5rem;
+            background-color: transparent;
+            border: none;
+            color: #A6A6A6;
+            margin-right: 3%;
+            transition: 0,3s ease;
+        }
 
-.busc{
-    height: 45px;
-    width: 100%;
-    border-radius: 12px;
-    margin-top: 3%;
-    border: solid;
-    border-color: #103263;
-    border-width: 3px;
-    font-size: larger;
-    background-color: white;
-    font-family: 'crimson text';
-    font-weight: 500;
-}
+        .busc{
+            height: 45px;
+            width: 100%;
+            border-radius: 12px;
+            margin-top: 3%;
+            border: solid;
+            border-color: #103263;
+            border-width: 3px;
+            font-size: larger;
+            background-color: white;
+            font-family: 'crimson text';
+            font-weight: 500;
+        }
 
-.busc::placeholder{
-    color: #D9D9D9;
-    background-image: url(../../recursos/img/lupa.buscador.png);
-    background-size: 20px;
-    background-repeat: no-repeat;
-    background-position: left 2px center;
-    padding-left: 27px;
-}
+        .busc::placeholder{
+            color: #D9D9D9;
+            background-image: url(../../recursos/img/lupa.buscador.png);
+            background-size: 20px;
+            background-repeat: no-repeat;
+            background-position: left 2px center;
+            padding-left: 27px;
+        }
 
-.busc:focus{
-    outline: none;
-}
+        .busc:focus{
+            outline: none;
+        }
 
-.buscador{
-    display: flex;
-    flex-direction: column;
-    position: absolute;
-    left: 12%;
-}
+        .buscador{
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            left: 12%;
+        }
 
-.busqs{
-    width: 557px;
-    background-color: white;
-    border-radius: 0 0 10px 10px;
-    font-family: 'crimson text', serif;
-    font-weight: 500;
-    position: relative;
-}
+        .busqs{
+            width: 557px;
+            background-color: white;
+            border-radius: 0 0 10px 10px;
+            font-family: 'crimson text', serif;
+            font-weight: 500;
+            position: relative;
+        }
 
-.busqs div {
-    padding: 10px;
-    cursor: pointer;
-    border-bottom: 1px solid #e9e9e9;
-    background-color: transparent;
-    transition: background-color 0.2s ease;
-}
+        .busqs div {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #e9e9e9;
+            background-color: transparent;
+            transition: background-color 0.2s ease;
+        }
 
-.busqs div:hover {
-    background-color: #f0f0f0;
-}
+        .busqs div:hover {
+            background-color: #f0f0f0;
+        }
 
-section{
-    height: 35%;
-    width: 100%;
-    background-image: url(../../recursos/img/fondo.png);
-    background-color: #103263;
-    background-size: cover;
-    margin-top: 0%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
+        section{
+            height: 35%;
+            width: 100%;
+            background-image: url(../../recursos/img/fondo.png);
+            background-color: #103263;
+            background-size: cover;
+            margin-top: 0%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
 
-section h1{
-    font-family: 'inter';
-    font-weight: bolder;
-    font-size: 5rem;
-    margin-top: -1%;
-    margin-left: 16%;
-    width: 60%;
-    display: flex;
-}
+        section h1{
+            font-family: 'inter';
+            font-weight: bolder;
+            font-size: 5rem;
+            margin-top: -1%;
+            margin-left: 16%;
+            width: 60%;
+            display: flex;
+        }
 
-section h2{
-    font-family: 'inter';
-    margin-top: -5%;
-    font-size: 2.5rem;
-    font-style: bold;
-}
+        section h2{
+            font-family: 'inter';
+            margin-top: -5%;
+            font-size: 2.5rem;
+            font-style: bold;
+        }
 
-.componentesPopu{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    gap:10px;
-}
-"""
+        .componentesPopu{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+            gap:10px;
+        }
+    """
     }
 ]
 
@@ -291,7 +291,7 @@ def createImgSearching(prompt, img_path=None):
     """)
 ]
 
-# Si hay imagen, la agregamos como un Part aparte
+# Si hay imagen se agrega
     if img_path and os.path.exists(img_path):
         with open(img_path, "rb") as f:
             img_bytes = f.read()
@@ -334,6 +334,7 @@ def createImgSearching(prompt, img_path=None):
                 image = Image.open(BytesIO(part.inline_data.data))
                 image.save("gemini-image.png", overwrite=True)
                 image.show()
+                return(image)
     else:
         print("No se generó ninguna imagen para este prompt.")
 
@@ -367,7 +368,7 @@ def createTxt(img_generated_path, conclusions_json, codigo_json, language_map):
 
     prompt = f"""
 Vas a recibir: (A) código del sitio SIN cambios aplicados, (B) img de la página CON los cambios aplicados, (C) JSON DE conclusiones de las mejoras y cambios realizados para la img.
-Mejora el código para que la UI coincida con la imagen y las sugerencias.
+Mejora el código para que la UI coincida exactamente con la imagen y las sugerencias planteadas.
 Devuelve SOLO BLOQUES DE CÓDIGO Markdown con encabezado '🔧 Archivo: <nombre>' y triple backticks con lenguaje indicado.
 
 --- REFERENCIAS ---
@@ -396,7 +397,7 @@ Conclusiones / sugerencias:
     output_text = response.text if hasattr(response, "text") else str(response)
 
     # Parse simple de bloques
-    pattern = r"🔧 Archivo:\s*(.*?)\n```([\w+-]+)\n(.*?)```"
+    pattern = r"Archivo:\s*(.*?)\n```([\w+-]+)\n(.*?)```"
     matches = re.findall(pattern, output_text, re.DOTALL)
     parsed = []
     for filename, lang, code in matches:
@@ -425,7 +426,7 @@ def createJson(prompt, img_path="image.jpg"):
         with open(img_path, "rb") as f:
             inserted_img = f.read()
     else:
-        print(f"⚠️ Imagen no encontrada: {img_path}")
+        print(f"Imagen no encontrada: {img_path}")
         return
 
 #hacer tablita
@@ -495,10 +496,11 @@ def createJson(prompt, img_path="image.jpg"):
 
     if img_path and os.path.exists(img_path):
         createImgSearching(prompt=conclusion, img_path=img_path)
+        imagen = image
 
     conclusion_text = " ".join(df["conclusion"].dropna().tolist())
     resultado_txt = createTxt(
-        img_generated_path="gemini-image.png",
+        img_generated_path=image,
         conclusions_json=rows,
         codigo_json=codigo_json,
         language_map=language_map

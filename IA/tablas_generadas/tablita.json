@@ -1,87 +1,90 @@
 [
     {
         "criterion_or_website": "Typography & Readability",
-        "conclusion": "Analiza la legibilidad del sitio de la imagen, la jerarquía visual del texto y la claridad de las fuentes. Sugiere mejoras para diferenciar el contenido y mejorar la experiencia de lectura.",
+        "conclusion": null,
         "Tom's Hardware": "",
         "AnandTech": "",
         "PCMag": "",
-        "Sitio Web de la Imagen": ""
+        "https://www.pcity.com": ""
     },
     {
         "criterion_or_website": "Colors & Branding",
-        "conclusion": "Evalúa el esquema de colores del sitio de la imagen, la coherencia de la marca y el uso general de la paleta. Ofrece ideas para reforzar su identidad visual y atractivo.",
+        "conclusion": null,
         "Tom's Hardware": "",
         "AnandTech": "",
         "PCMag": "",
-        "Sitio Web de la Imagen": ""
+        "https://www.pcity.com": ""
     },
     {
         "criterion_or_website": "Visual Elements",
-        "conclusion": "Describe la calidad y relevancia de las imágenes y videos en el sitio de la imagen, así como su impacto visual. Proporciona sugerencias para una integración más efectiva y atractiva.",
+        "conclusion": null,
         "Tom's Hardware": "",
         "AnandTech": "",
         "PCMag": "",
-        "Sitio Web de la Imagen": ""
+        "https://www.pcity.com": ""
     },
     {
         "criterion_or_website": "Navigation & UX",
-        "conclusion": "Comenta sobre la facilidad de uso del sitio de la imagen, la lógica de su navegación y la experiencia general del usuario. Sugiere cómo optimizar la interacción y los flujos de tareas.",
+        "conclusion": null,
         "Tom's Hardware": "",
         "AnandTech": "",
         "PCMag": "",
-        "Sitio Web de la Imagen": ""
+        "https://www.pcity.com": ""
     },
     {
         "criterion_or_website": "Organization & Structure",
-        "conclusion": "Analiza cómo está estructurado el contenido en el sitio de la imagen, la coherencia de las secciones y la agrupación de información. Ofrece ideas para mejorar la claridad y accesibilidad de su arquitectura.",
+        "conclusion": null,
         "Tom's Hardware": "",
         "AnandTech": "",
         "PCMag": "",
-        "Sitio Web de la Imagen": ""
+        "https://www.pcity.com": ""
     },
     {
         "criterion_or_website": "Accessibility",
-        "conclusion": "Evalúa las características de accesibilidad del sitio de la imagen para usuarios con diversas necesidades. Propone mejoras para asegurar que el contenido sea utilizable para todos los públicos.",
+        "conclusion": null,
         "Tom's Hardware": "",
         "AnandTech": "",
         "PCMag": "",
-        "Sitio Web de la Imagen": ""
+        "https://www.pcity.com": ""
     },
     {
         "criterion_or_website": "Functionality",
-        "conclusion": "Describe la operatividad de las funciones del sitio de la imagen, la fiabilidad de sus herramientas y la ausencia de errores. Sugiere cómo optimizar el rendimiento y la estabilidad general.",
+        "conclusion": null,
         "Tom's Hardware": "",
         "AnandTech": "",
         "PCMag": "",
-        "Sitio Web de la Imagen": ""
+        "https://www.pcity.com": ""
     },
     {
         "criterion_or_website": "Interactivity",
-        "conclusion": "Comenta la presencia y efectividad de elementos interactivos en el sitio de la imagen, y cómo fomentan la participación del usuario. Proporciona ideas para aumentar el compromiso y la experiencia dinámica.",
+        "conclusion": null,
         "Tom's Hardware": "",
         "AnandTech": "",
         "PCMag": "",
-        "Sitio Web de la Imagen": ""
+        "https://www.pcity.com": ""
     },
     {
         "criterion_or_website": "SEO",
-        "conclusion": "Analiza las características de SEO observables en el sitio de la imagen, como la presencia de palabras clave y estructura de URLs. Sugiere estrategias para mejorar su visibilidad en buscadores.",
+        "conclusion": null,
         "Tom's Hardware": "",
         "AnandTech": "",
         "PCMag": "",
-        "Sitio Web de la Imagen": ""
+        "https://www.pcity.com": ""
     },
     {
-        "criterion_or_website": "Content Quality & Depth",
-        "conclusion": "Evalúa la riqueza y exhaustividad del contenido del sitio de la imagen, la credibilidad de la información y su valor añadido. Ofrece recomendaciones para enriquecer la oferta informativa y su autoridad.",
+        "criterion_or_website": "Content Quality",
+        "conclusion": null,
         "Tom's Hardware": "",
         "AnandTech": "",
         "PCMag": "",
-        "Sitio Web de la Imagen": ""
+        "https://www.pcity.com": ""
     },
     {
-        "criterion_or_website": "Final Conclusion",
-        "conclusion": "El sitio web analizado de la imagen destaca por su robusta presentación de información técnica y una interfaz de usuario limpia. Se sugiere fortalecer la interactividad con herramientas personalizadas y optimizar aún más la accesibilidad para una audiencia más amplia. Las mejoras en la navegación móvil y la velocidad de carga de ciertos elementos visuales también podrían realzar significativamente la experiencia general del usuario.",
-        "": ""
+        "criterion_or_website": "Final Conclusion row",
+        "conclusion": null,
+        "Tom's Hardware": "",
+        "AnandTech": "",
+        "PCMag": "",
+        "https://www.pcity.com": ""
     }
 ]
