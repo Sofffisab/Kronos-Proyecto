@@ -17,7 +17,6 @@ params.id? <>
 <NavBarWSearch menuFunc={() => setSbStatus(!sbStatus)}/>
 <SideBar style={style}/>
 <PageContent SbOpen={sbStatus}/>
-<img id='IaBtn'src='../../../public/IaBtn.svg'/>
 </> : <ErrorPage/>
 )
 }

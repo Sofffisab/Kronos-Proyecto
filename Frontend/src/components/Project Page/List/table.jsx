@@ -6,7 +6,7 @@ export default function Table(props) {
   const style = toggleTasks ? "tasks" : "tasksCollapsed";
 
   return (
-    <div className="table">
+    <div className="listTable">
       <div>
         <span
           onClick={() => setToggleTasks(!toggleTasks)}

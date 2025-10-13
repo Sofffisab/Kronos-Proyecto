@@ -77,7 +77,7 @@ font-size: var(--mediumSize);
     border-right: none;
 }
 
-.table {
+.listTable {
     font-family: var(--font);
     width: 100%;
     

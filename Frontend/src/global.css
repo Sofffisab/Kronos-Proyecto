@@ -25,3 +25,9 @@
   body {
     overflow-x: hidden;
   }
+  input::placeholder {
+    user-select: none;
+    opacity: 50%;
+    font: var(--font);
+    font-style: italic;
+  }
