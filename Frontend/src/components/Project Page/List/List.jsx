@@ -1,4 +1,4 @@
-import "./list.css";
+
 import InputModal from "../../modals/InputModal";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -36,13 +36,14 @@ export default function List(props) {
       state: state,
       priority: pri,
       date: date,
-      id: name,
+      id: Math.random(),
     };
     setTasks((prev) => [...prev, obj]);
     toggleModal(false);
   };
-
-  const mappedTasks = tasks.map((task) => (
+const mapTasks = (taskState)=>{
+  
+  return tasks.filter((task)=>task.state==taskState).map((task) => (
     <Task
       name={task.name}
       icon={task.icon}
@@ -51,7 +52,7 @@ export default function List(props) {
       state={task.state}
       key={task.id}
     />
-  ));
+  ))}
   return (
     <>
       {modal && (
@@ -62,17 +63,17 @@ export default function List(props) {
       <Table
         onClick={() => toggleModal(true)}
         name="Tareas iniciadas"
-        tasks={mappedTasks}
+        tasks={mapTasks('iniciada')}
       />
       <Table
         onClick={() => toggleModal(true)}
         name="Tareas pendientes"
-        tasks={mappedTasks}
+        tasks={mapTasks('pendiente')}
       />
       <Table
         onClick={() => toggleModal(true)}
         name="Tareas finalizadas"
-        tasks={mappedTasks}
+        tasks={mapTasks('realizada')}
       />
     </>
   );

@@ -1,28 +1,28 @@
 import SimpleButton from "../../SimpleButton";
-
+import style from './list.module.css'
 export default function Bar(props) {
   return (
-    <div className="bar">
+    <div className={style["bar"]}>
       <SimpleButton
         text="Agregar tarea"
-        class="agregarBtn"
+        class={style["agregarBtn"]}
         icon="add"
         onClick={props.onClick}
       />
-      <div id="filterBox">
+      <div className={style["filterBox"]}>
         <SimpleButton
           text="Ordenar"
-          class="ordenarBtn"
+          class={style["ordenarBtn"]}
           icon="swap_vert"
           onclick={props.sort}
         />
         <SimpleButton
           text="Filtrar"
-          class="ordenarBtn"
+          class={style["ordenarBtn"]}
           icon="filter_list"
           onclick={props.filter}
         />
-        <SimpleButton class="ordenarBtn" icon="search" onclick={props.search} />
+        <SimpleButton class={style["ordenarBtn"]} icon="search" onclick={props.search} />
       </div>
     </div>
   );

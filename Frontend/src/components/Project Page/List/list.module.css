@@ -37,7 +37,7 @@
     align-items: center;
     justify-content: center;
 }
-#filterBox {
+.filterBox {
 gap: 7%;
 width: 25%;
 display: flex;
@@ -46,7 +46,7 @@ align-items: center;
 flex-direction: row;
 
 }
-#filterBox button {
+.filterBox button {
     font-family: var(--font);
 font-size: var(--mediumSize);
 }
@@ -73,7 +73,7 @@ font-size: var(--mediumSize);
     border-left: none;
 }
 
-#end {
+.end {
     border-right: none;
 }
 

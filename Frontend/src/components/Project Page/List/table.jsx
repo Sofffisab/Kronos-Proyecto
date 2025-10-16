@@ -1,12 +1,12 @@
 import { useState } from "react";
 import Separator from "../../Separator";
-
+import styles from './list.module.css'
 export default function Table(props) {
-  const [toggleTasks, setToggleTasks] = useState(false);
+  const [toggleTasks, setToggleTasks] = useState(true);
   const style = toggleTasks ? "tasks" : "tasksCollapsed";
 
   return (
-    <div className="listTable">
+    <div className={styles["listTable"]}>
       <div>
         <span
           onClick={() => setToggleTasks(!toggleTasks)}
@@ -16,9 +16,9 @@ export default function Table(props) {
         </span>
         {props.name}
       </div>
-      <div className={style}>{props.tasks}</div>
+      <div className={styles[style]}>{props.tasks}</div>
       <Separator />
-      <p onClick={props.onClick}>Agregar tarea...</p>
+      <p onClick={()=>props.onClick()}>Agregar tarea...</p>
     </div>
   );
 }

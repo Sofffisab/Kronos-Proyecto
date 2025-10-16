@@ -20,7 +20,7 @@
     font-size: var(--headerSize);
    
 }
-#last {
+.last {
     border-right: none ;
    
 }
