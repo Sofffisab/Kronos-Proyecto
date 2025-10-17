@@ -13,9 +13,9 @@ const setuparchivos = () => {
                 return res.status(400).json({ error: "missing data" });
             }
 
-            const archivo = await prisma.archivos.findUnique({ 
-                where: { 
-                    nombrearchivo: nombrearchivo 
+            const archivo = await prisma.archivos.findUnique({
+                where: {
+                    nombrearchivo: nombrearchivo
                 },
                 include: {
                     proyecto: {
@@ -33,14 +33,15 @@ const setuparchivos = () => {
             }
 
             const isowner = archivo.id_persona === personaId;
-            const isProjectMember = archivo.proyecto?.personas_tiene.length > 0;
+            const isprojectmember = archivo.proyecto?.personas_tiene.length > 0;
+
 
             if (!isowner && !isprojectmember) {
                 return res.status(403).json({ error: "No permission to view this file" });
             }
 
             res.status(200).json({ message: "file found", file: archivo});
-            
+           
         } catch (error) {
             console.error("Error finding file:", error);
             res.status(500).json({ error: "Internal Server Error" });
@@ -72,7 +73,7 @@ const setuparchivos = () => {
                     nombrearchivo: nombrearchivo,
                     archivo: archivo,
                     id_persona: personaId,
-                    //id_proyecto: parseInt(proyectoId, 10);
+                    id_proyecto: parseInt(proyectoId, 10),
                 },
             });
 
@@ -84,7 +85,7 @@ const setuparchivos = () => {
             }
             console.error("Error uploading file:", error);
             res.status(500).json({ error: "Internal Server Error" });
-        }; 
+        };
     };
 
     return {seefile, uploadfile};

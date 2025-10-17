@@ -3,6 +3,7 @@ import { default as express } from 'express';
 import dotenv from 'dotenv';
 import expressWs from 'express-ws';
 
+
 import setuprouter from './rutas.js';
 import setupsesiones from './sesiones/sesiones.js';
 import setupcalendario from './calendario/calendario.js';
@@ -13,16 +14,19 @@ import setupchat from './chats/chat.js';
 // import setupprojects from './proyectos/proyectos.js';
 // import setuppersonalize from './personalizaciones/personalizaciones.js';
 
+
 dotenv.config();
+
 
 const JWT_SECRET = process.env.JWT_SECRET || 'contrasenia-jeje';
 const prisma = new PrismaClient();
 const app = express();
-expressWs(app); 
+//expressWs(app);
 
-// 2. Envuelve tu app con expressWs y guarda el resultado.
+
 const wsInstance = expressWs(app);
-const wss = wsInstance.getWss(); // wss ahora es tu servidor de WebSockets.
+//const wss = wsInstance.getWss();
+
 
 const { login, signup } = setupsesiones(JWT_SECRET);
 const { authentication } = setupautenticacion(JWT_SECRET);
@@ -31,16 +35,32 @@ const { seefile, uploadfile } = setuparchivos();
 const { createchat, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers } = setupchat(prisma);
 const router = setuprouter({ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers });
 
+
 app.use(express.json());
 app.use(router);
 
-console.log(wss)
 
-setupwebsocketserver(wss, JWT_SECRET, prisma);
+//console.log(wss)
+
+
+setupwebsocketserver(app, JWT_SECRET, prisma, wsInstance);
+
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    console.log(`WebSocket server available at ws://localhost:${PORT}/chat`)
 });
+server.on("error", (err) => {
+    if (err.code === "EADDRINUSE") {
+      console.error(`Port ${PORT} is already in use. Please:`)
+      console.error(`1. Kill the existing process, or`)
+      console.error(`2. Set a different PORT in your .env file`)
+      process.exit(1)
+    } else {
+      console.error("Server error:", err)
+    }
+ });
+
 
 export default app;

@@ -1,8 +1,9 @@
 import { WebSocket } from 'ws';
 import jwt from 'jsonwebtoken';
 
-function setupwebsocketserver(wss, JWT_SECRET, prisma) {
-  wss.on('connection', async (ws, req) => {
+
+function setupwebsocketserver(app, JWT_SECRET, prisma, wsInstance) {
+  app.ws('/chat', async (ws, req) => {
     console.log('someone joined the chat');
 
     const token = req.headers['sec-websocket-protocol'];
@@ -43,10 +44,10 @@ function setupwebsocketserver(wss, JWT_SECRET, prisma) {
 
             const mensajesguardados = await prisma.mensajes.create({
               data: {
-                id_chat: parseInt(chatId, 10),
+                id_chat: Number.parseInt(chatId, 10),
                 id_persona: personaId,
                 mensaje: mensaje,
-                estado: 'sent', 
+                estado: 'sent',
               },
             });
 
@@ -56,11 +57,13 @@ function setupwebsocketserver(wss, JWT_SECRET, prisma) {
             };
 
             const chatMembers = await prisma.tiene_pc.findMany({
-              where: { id_chat: parseInt(chatId, 10) },
+              where: { id_chat: Number.parseInt(chatId, 10) },
               select: { id_persona: true }
             });
-            const memberIds = chatMembers.map(member => member.id_persona);
+            const memberIds = chatMembers.map((member) => member.id_persona);
 
+
+            const wss = wsInstance.getWss()
             wss.clients.forEach(client => {
               if (client.readyState === WebSocket.OPEN && memberIds.includes(client.personaId)) {
                 client.send(JSON.stringify(messageWithSender));

@@ -1,8 +1,29 @@
 import pkg from 'express';
 const { Router } = pkg;
 
+
 const setuprouter = ({ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers}) => {
     const router = Router();
+
+
+    router.get("/", (req, res) => {
+        res.json({
+            message: "Backend server is running",
+            status: "OK",
+            endpoints: {
+                auth: ["POST /users/login", "POST /users/signup", "GET /auth/google", "GET /auth/google/callback"],
+                calendar: [
+                "GET /api/calendar/events", "POST /api/calendar/events", "DELETE /api/calendar/events/:eventId", "PUT /api/calendar/events/:eventId",
+                ],
+                files: ["GET /api/files/:nombrearchivo", "POST /api/files/projects/:proyectoId"],
+                chat: [
+                "POST /projects/:proyectoId/chat/create", "GET /chat/:chatId/messages", "PUT /messages/:messageId/read", "GET /chats", "GET /chat/:chatId/members",
+                ],
+                websocket: "ws://localhost:3000/chat",
+            },
+        })
+    })
+
 
     router.post("/users/login", login);
     router.post("/users/signup", signup);
@@ -20,7 +41,9 @@ const setuprouter = ({ login, signup, authentication, getevents, permision, redi
     router.get("/chats", authentication, getchatperperson);
     router.get("/chat/:chatId/members", authentication, getchatmembers);
 
+
     return router;
 };
+
 
 export default setuprouter;
