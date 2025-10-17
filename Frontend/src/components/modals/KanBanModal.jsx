@@ -1,6 +1,6 @@
 import BaseModal from "./BaseModal";
 import DisabledBg from "./DisabledBg";
-
+import style from './modals.module.css'
 export default function KanbanModal(props) {
 
 return(
@@ -8,7 +8,7 @@ return(
     modal={
         <BaseModal buttonTxt='Crear' title='Crear tarea' submit={props.submit}
                     inputs={
-     <div className='kbModal'>
+     <div className={style['kbModal']}>
         <label>Nombre</label>
          <input id="name" />
          <label>Responsable</label>

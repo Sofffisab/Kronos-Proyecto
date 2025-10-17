@@ -1,13 +1,13 @@
 import DisabledBg from "./DisabledBg";
 import "./modals.css";
-import SimpleButton from "../SimpleButton";
+import style from './modals.module.css'
 import BaseModal from "./BaseModal";
 export default function InputModal(props) {
   return (
     <DisabledBg
       onClick={props.bgOnClick}
       modal={
-      <BaseModal title='Crear un item' inputs={<div  className='inputModal'> <label>Nombre</label>
+      <BaseModal title='Crear un item' inputs={<div  className={style['inputModal']}> <label>Nombre</label>
         <input id="name" />
         <label>Responsable</label>
         <select id="person">
