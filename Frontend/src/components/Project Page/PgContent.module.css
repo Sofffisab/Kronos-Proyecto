@@ -23,15 +23,15 @@
     justify-content: flex-start;
     align-items: center;
   }
-  #topMenuContentTitle {
+  .topMenuContentTitle {
   gap: 60%
   }
-  #topMenuPgContentList {
+  .topMenuPgContentList {
   gap: 1%;
   font-family: var(--font);
   
   }
-  #topMenuPgContentList p {
+  .topMenuPgContentList p {
   cursor: pointer;
   padding: 1%;
   margin-bottom: .25%;
@@ -39,9 +39,13 @@
   width: 15%;
   text-align: center;
   }
-  #topMenuPgContentList p:hover {
+  .topMenuPgContentList p:hover {
   background-color: var(--secondaryColor);
   
+  }
+  .proyectosTitle {
+    font-size: var(--smallerHeaderSize);
+    font-family: var(--font);
   }
   .compartirBtn {
     align-items: center;
@@ -58,18 +62,19 @@
     font-size: var(--mediumSize);
   }
   
-#IaBtn {
+.IaBtn {
   position: fixed;
   cursor: pointer;
   right: 1%;
   z-index: 100;
-  opacity: 50%;
+  opacity: 0.5;
   bottom: 1%;
+  height: 18%;
+  width: auto;
   transition: var(--easeTransition);
-  transform: rotateY(180deg);
+  
 }
-#IaBtn:hover {
-opacity: 100%;
-transform: scale(1.1);
-transform: rotateY(0deg);
+.IaBtn:hover {
+opacity: 1;
+transform: rotateY(180deg);
 }

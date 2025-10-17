@@ -6,15 +6,15 @@ export default function(props) {
     let messageObj = []
     if(props.messages) messageObj = props.messages
 
-    const messages =  messageObj.map((msg)=> (
+    const mapMsg =(messageObj)=> {if(messageObj.length>0)  { return(messageObj.map((msg)=> (
         <div key={msg.key}className={msg.own? `${style.normalMsg} ${style.rightMsg}` : `${style.normalMsg} ${style.rightMsg}`}>
             <Bubble own={msg.own} text={msg.text}/>
         </div>
-    ))
+    )))}else  return <p className={style.noMsg}>No new messages...</p>}
 
     return(
         <div className={style.chatLayout}>
-            {messages}
+            {mapMsg(messageObj)}
         </div>
 
     )

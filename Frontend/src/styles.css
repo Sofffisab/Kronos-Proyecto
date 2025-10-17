@@ -478,6 +478,7 @@ button {
   font-family: var(--font);
   background-color: var(--secondaryColor);
   width: 22.5%;
+  min-width: 14rem;
   height: calc(100vh - 12.5vh);
   box-sizing: border-box;
   color: var(--fontContrast);
@@ -540,10 +541,7 @@ button {
   border-top: inset 0.1rem black !important;
 }
 
-.proyectosTitle {
-  font-size: var(--smallerHeaderSize);
-  font-family: var(--font);
-}
+
 
 .titleSbContainer {
   display: flex;
