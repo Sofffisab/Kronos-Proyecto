@@ -1,5 +1,4 @@
 import DisabledBg from "./DisabledBg";
-import "./modals.css";
 import style from './modals.module.css'
 import BaseModal from "./BaseModal";
 export default function InputModal(props) {

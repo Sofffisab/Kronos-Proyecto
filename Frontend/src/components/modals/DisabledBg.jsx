@@ -1,4 +1,4 @@
-import "./modals.css";
+
 import style from './modals.module.css'
 export default function DisabledBg(props) {
   return (
