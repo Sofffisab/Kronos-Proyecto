@@ -85,11 +85,28 @@ model proyecto {
   id        Int      @id @default(autoincrement())
   nombre     String   
   limite     String
+  descripcion String?
+  fechaInicio DateTime @default(now())
+  fechaFin DateTime?
+  creadorId Int
 
   archivos        archivos[]
   tareas          tareas[]
   personas_tiene  tiene[]
   chats           chat[]
+  invitaciones    invitaciones[]
+}
+
+model invitaciones {
+  id        Int      @id @default(autoincrement())
+  id_proyecto Int
+  mail      String
+  codigo    String   @unique
+  estado    String
+  fechaEnvio DateTime @default(now())
+  fechaExpiracion DateTime
+
+  proyecto  proyecto @relation(fields: [id_proyecto], references: [id])
 }
 
 model chat {
