@@ -289,9 +289,9 @@ def createImgSearching(prompt, img_path=None):
         - Mantener el mismo tamaño y proporción que la imagen original: ancho={width}px, alto={height}px.
         Tema: {prompt}
     """)
-]
+ ]
 
-# Si hay imagen se agrega
+ # Si hay imagen se agrega
     if img_path and os.path.exists(img_path):
         with open(img_path, "rb") as f:
             img_bytes = f.read()
@@ -367,9 +367,9 @@ def createTxt(img_generated_path, conclusions_json, codigo_json, language_map):
     codigo_str = "\n\n".join(codigo_blocks)
 
     prompt = f"""
-Vas a recibir: (A) código del sitio SIN cambios aplicados, (B) img de la página CON los cambios aplicados, (C) JSON DE conclusiones de las mejoras y cambios realizados para la img.
-Mejora el código para que la UI coincida exactamente con la imagen y las sugerencias planteadas.
-Devuelve SOLO BLOQUES DE CÓDIGO Markdown con encabezado '🔧 Archivo: <nombre>' y triple backticks con lenguaje indicado.
+ Vas a recibir: (A) código del sitio SIN cambios aplicados, (B) img de la página CON los cambios aplicados, (C) JSON DE conclusiones de las mejoras y cambios realizados para la img.
+ Mejora el código para que la UI coincida exactamente con la imagen y las sugerencias planteadas.
+ Devuelve SOLO BLOQUES DE CÓDIGO Markdown con encabezado '🔧 Archivo: <nombre>' y triple backticks con lenguaje indicado.
 
 --- REFERENCIAS ---
 Código actual:
@@ -396,7 +396,7 @@ Conclusiones / sugerencias:
 
     output_text = response.text if hasattr(response, "text") else str(response)
 
-    # Parse simple de bloques
+    # Parse bloques
     pattern = r"Archivo:\s*(.*?)\n```([\w+-]+)\n(.*?)```"
     matches = re.findall(pattern, output_text, re.DOTALL)
     parsed = []
@@ -429,7 +429,7 @@ def createJson(prompt, img_path="image.jpg"):
         print(f"Imagen no encontrada: {img_path}")
         return
 
-#hacer tablita
+ #hacer tablita
     response = retry_request(
         client.models.generate_content,
         model="gemini-2.5-flash",
@@ -447,7 +447,7 @@ def createJson(prompt, img_path="image.jpg"):
     )
 
 
-#ajustar los datos a las filas y columnas
+ #ajustar los datos a las filas y columnas
     rows = []
     for row in response.parsed.table_data:
         row_dict = row.model_dump()
@@ -515,12 +515,12 @@ theme = 'PC MARKET'
 
 createJson(f"""
 The JSON returned must be an array of 11 rows (objects).  
-Each row has these keys in this order:  
+Each row has in this order:  
 "criterion", "(NamePage1)", "(NamePage2)", "(NamePage3)", "(NamePage4)", "Conclusion".
 Websites 1 to 3 have to be the most famous about {theme}, and the 4th is the one of the img insterted.
 Rules:  
 - Criteria order: Typography & Readability, Colors & Branding, Visual Elements, Navigation & UX, Organization & Structure, Accessibility, Functionality, Interactivity, SEO, +1 extra criterion you choose, +Final Conclusion row (only fill "Conclusion").  
-- Website1–Website3: each = short intro phrase + one descriptive sentence of 20–30 words.Do not mention the Website in each cell.  
+- Website1–Website3: each = short intro phrase + one descriptive sentence of 10–20 words.Do not mention the Website in each cell.  
 - Website4: same, but refers to the website from the provided image.  
 - "Conclusion": only Website4 improvements, implicit comparison, highlight strengths + suggestions, never mention website names.  
 
