@@ -17,7 +17,7 @@ minLengthMsg: "la contraseña debe contar con 7 caracteres como minimo"},
 ]
 return(
     <>
-    <NavBar class='emptyNav'logo='../../public/logo.svg' titleLink='/' titleText="Kronos"/>
+    <NavBar/>
 <div className='loginPage'>
     <FancyTitle class='loginTitle'text='Bienvenido a KRONOS' subTitle='Para comenzar, iniciar sesion'/>
     
