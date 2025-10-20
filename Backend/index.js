@@ -11,40 +11,27 @@ import setupautenticacion from './autenticacion.js';
 import setuparchivos from './archivos/archivos.js';
 import setupwebsocketserver from './chats/websocket.js';
 import setupchat from './chats/chat.js';
-// import setupprojects from './proyectos/proyectos.js';
-// import setuppersonalize from './personalizaciones/personalizaciones.js';
-
+import setupprojectos from './proyectos/proyectos.js';
 
 dotenv.config();
-
 
 const JWT_SECRET = process.env.JWT_SECRET || 'contrasenia-jeje';
 const prisma = new PrismaClient();
 const app = express();
-//expressWs(app);
-
-
 const wsInstance = expressWs(app);
-//const wss = wsInstance.getWss();
-
 
 const { login, signup } = setupsesiones(JWT_SECRET);
 const { authentication } = setupautenticacion(JWT_SECRET);
 const { authorization, getatoken, lookfortoken, permision, getevents, redirectwithgoogle, createevents, deleteevents, updateevents } = setupcalendario();
 const { seefile, uploadfile } = setuparchivos();
 const { createchat, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers } = setupchat(prisma);
-const router = setuprouter({ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers });
-
+const { createproject, getprojects, getproject, updateproject, invitetoproject, joinproject } = setupproyectos()
+const router = setuprouter({ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, joinproject,});
 
 app.use(express.json());
 app.use(router);
 
-
-//console.log(wss)
-
-
 setupwebsocketserver(app, JWT_SECRET, prisma, wsInstance);
-
 
 const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => {

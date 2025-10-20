@@ -2,7 +2,7 @@ import pkg from 'express';
 const { Router } = pkg;
 
 
-const setuprouter = ({ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers}) => {
+const setuprouter = ({ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, joinproject,}) => {
     const router = Router();
 
 
@@ -18,6 +18,8 @@ const setuprouter = ({ login, signup, authentication, getevents, permision, redi
                 files: ["GET /api/files/:nombrearchivo", "POST /api/files/projects/:proyectoId"],
                 chat: [
                 "POST /projects/:proyectoId/chat/create", "GET /chat/:chatId/messages", "PUT /messages/:messageId/read", "GET /chats", "GET /chat/:chatId/members",
+                ],
+                projects: ["POST /api/projects", "GET /api/projects", "GET /api/projects/:proyectoId", "PUT /api/projects/:proyectoId", "POST /api/projects/:proyectoId/invite", "POST /api/projects/join",
                 ],
                 websocket: "ws://localhost:3000/chat",
             },
@@ -40,6 +42,12 @@ const setuprouter = ({ login, signup, authentication, getevents, permision, redi
     router.put("/messages/:messageId/read", authentication, updatemessagestatus);
     router.get("/chats", authentication, getchatperperson);
     router.get("/chat/:chatId/members", authentication, getchatmembers);
+    router.post("/api/projects", authentication, createproject)
+    router.get("/api/projects", authentication, getprojects)
+    router.get("/api/projects/:proyectoId", authentication, getproject)
+    router.put("/api/projects/:proyectoId", authentication, updateproject)
+    router.post("/api/projects/:proyectoId/invite", authentication, invitetoproject)
+    router.post("/api/projects/join", authentication, joinproject)
 
 
     return router;

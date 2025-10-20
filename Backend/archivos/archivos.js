@@ -54,19 +54,10 @@ const setuparchivos = () => {
         const { proyectoId } = req.params;
 
         try {
-            //if (!formato || !archivo || !nombrearchivo || !proyectoId) {
             if (!formato || !archivo || !nombrearchivo) {
                 return res.status(400).json({error: "missing data"});
             }
-/*
-            const isMember = await prisma.tiene.findFirst({
-                where: { id_persona: personaId, id_proyecto: parseInt(proyectoId, 10) }
-            });
 
-            if (!isMember) {
-                return res.status(403).json({ error: "No permission to upload file to this project" });
-            }
-*/
             await prisma.archivos.create({
                 data: {
                     formato: formato,

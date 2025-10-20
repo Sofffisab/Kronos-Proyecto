@@ -556,3 +556,24 @@ button {
 .titleSbContainer span {
   cursor: pointer;
 }
+
+.navBar {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 11.5%;
+  background-color: var(--mainColor);
+  font-family: var(--font);
+  padding-left: 8%;
+}
+.navBar p {  
+  color: var(--fontContrast);
+  font-size: var(--headerSize);
+}
+.createPage {
+  height: 100%;
+  width: 100%;
+  margin-top: 6%;
+}
