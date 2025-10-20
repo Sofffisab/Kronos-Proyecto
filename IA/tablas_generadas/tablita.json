@@ -1,0 +1,90 @@
+[
+  {
+    "criterion": "Branding y posicionamiento",
+    "Website1": "Newegg: e-commerce de tecnología y PC parts con foco en ofertas y variedad.",
+    "Website2": "PCMag: medio editorial de reviews, guías y noticias tech con alta autoridad.",
+    "Website3": "Tom's Hardware: portal para entusiastas con comparativas, guías y builds.",
+    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
+    "Conclusion": "Define una propuesta de valor clara (precio, variedad, asesoría); crea un logotipo legible; añade un tagline visible en el hero que diferencie a PC Market."
+  },
+  {
+    "criterion": "Estructura de navegación",
+    "Website1": "Mega menú amplio por categorías, acceso rápido a ofertas y marcas.",
+    "Website2": "Navegación por tipos de contenido (reviews, best picks, news).",
+    "Website3": "Menús por componentes, guías y foros; enfoque temático.",
+    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
+    "Conclusion": "Limita el menú a 5–7 categorías principales; integra barra de búsqueda prominente; usa header pegajoso con accesos a cuenta y carrito."
+  },
+  {
+    "criterion": "Hero y propuesta de valor",
+    "Website1": "Hero con promociones destacadas y ofertas temporales.",
+    "Website2": "Destaca artículos y rankings en portada.",
+    "Website3": "Destaca guías y comparativas recientes en el hero.",
+    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
+    "Conclusion": "Usa hero estático con USP clara y un CTA principal; evita carruseles; muestra beneficios (envío, garantía, devoluciones) en una franja bajo el hero."
+  },
+  {
+    "criterion": "Buscador y filtrado",
+    "Website1": "Buscador con autocompletar y filtros facetados profundos.",
+    "Website2": "Búsqueda por productos y artículos con etiquetas.",
+    "Website3": "Búsqueda por temas y componentes; filtros básicos.",
+    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
+    "Conclusion": "Implementa autocompletar con sugerencias y categorías; filtros por marca, precio, uso y compatibilidad; chips de filtros removibles."
+  },
+  {
+    "criterion": "Jerarquía visual y escaneabilidad",
+    "Website1": "Tarjetas de producto con precio y badges; denso en información.",
+    "Website2": "Tipografía clara y listados con puntuaciones visibles.",
+    "Website3": "Diseños con tablas y listados técnicos; mucha data.",
+    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
+    "Conclusion": "Usa 2–3 tamaños tipográficos, suficiente espacio en blanco y un grid consistente; prioriza precio, rating y CTA en tarjetas."
+  },
+  {
+    "criterion": "CTAs y flujo de compra",
+    "Website1": "CTAs Add to Cart visibles; checkout conocido y rápido.",
+    "Website2": "CTAs editoriales (Leer reseña, Mejores); enlaces afiliados.",
+    "Website3": "CTAs a guías y recomendaciones; menos transaccional.",
+    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
+    "Conclusion": "CTA principal contrastado y persistente; mini-carrito accesible; reduce pasos del checkout y permite guest checkout."
+  },
+  {
+    "criterion": "Contenido editorial y guías",
+    "Website1": "Hubs de recomendaciones y ofertas; contenido de apoyo.",
+    "Website2": "Comparativas y reviews extensas y actualizadas.",
+    "Website3": "Guías de compra y builds detalladas con benchmarks.",
+    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
+    "Conclusion": "Integra blog/guías enlazadas desde categorías; módulos de Top picks en listados; estructura de clúster SEO por uso (gaming, oficina, creator)."
+  },
+  {
+    "criterion": "Señales de confianza",
+    "Website1": "Ratings, reviews verificadas, garantías y marcas reconocidas.",
+    "Website2": "Autoridad editorial y sellos de Editors’ Choice.",
+    "Website3": "Reputación de comunidad y foros activos.",
+    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
+    "Conclusion": "Muestra reseñas verificadas, políticas claras y sellos de pago seguro; destaca soporte y devoluciones; usa microcopy sobre stock y tiempos."
+  },
+  {
+    "criterion": "Rendimiento y carga percibida",
+    "Website1": "Contenido pesado con lazy load y muchos módulos.",
+    "Website2": "Optimización aceptable con presencia de anuncios.",
+    "Website3": "Páginas largas con tablas; rendimiento moderado.",
+    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
+    "Conclusion": "Optimiza imágenes (WebP/AVIF), lazy load y fuentes; minimiza scripts de terceros; apunta a buenas Core Web Vitals."
+  },
+  {
+    "criterion": "Responsividad móvil",
+    "Website1": "Interfaz tipo app; filtros deslizables; puede saturar.",
+    "Website2": "Lectura cómoda y menús simplificados.",
+    "Website3": "Scroll largo con tablas adaptadas.",
+    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
+    "Conclusion": "Menú inferior en móvil, filtros colapsables y CTA sticky; zonas táctiles amplias y navegación con pulgar."
+  },
+  {
+    "criterion": "Accesibilidad y SEO on-page",
+    "Website1": "Breadcrumbs y schema de producto; contraste variable.",
+    "Website2": "Schema de artículo y headings claros; buenas breadcrumbs.",
+    "Website3": "Headings adecuados; alt y tablas a veces irregulares.",
+    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
+    "Conclusion": "Incluye alt text, contraste AA, estados de foco y accesos por teclado; schema Product/FAQ; URLs limpias y meta títulos orientados a intención."
+  }
+]

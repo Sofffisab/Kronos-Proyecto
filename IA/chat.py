@@ -129,57 +129,64 @@ def create_image_from_prompt_and_reference(prompt: str, reference_img_path: Opti
         )
     return create_image(final_prompt, out_path=out_path, size=size)
 
-def generate_table_with_web_search(topic: str, image_path: Optional[str] = None, websites_count: int = 3) -> Dict:
+def generate_table_with_web_search(topic: str, websites_count: int = 3) -> Dict:
     query = f"top websites about {topic}"
     print(f"[generate_table] Buscando: {query}")
-    results = web_search(query, num=10)
+    
+    # Obtener resultados
+    results = web_search(query, num=websites_count)
     top_sites = results[:websites_count]
-    sites_text = ""
+    
+    # Construir texto resumido de cada sitio (truncado)
+    sites_text = []
     for i, s in enumerate(top_sites, 1):
-        sites_text += f"Website{i} - Title: {s.get('title')}\nLink: {s.get('link')}\nSnippet: {s.get('snippet')}\n\n"
-    if image_path and os.path.exists(image_path):
-        sites_text += "Website4: (user uploaded image design) — see attached image.\n"
-
-    system = (
-        "Eres un asistente que compara diseños web y genera un JSON estricto. Debes devolver SOLO el JSON."
-    )
+        snippet = s.get("snippet") or ""
+        snippet = snippet.replace("\n", " ").strip()[:150] + ("..." if len(snippet) > 150 else "")
+        title = (s.get("title") or "")[:60]
+        sites_text.append({
+            "title": title,
+            "link": s.get("link"),
+            "snippet": snippet
+        })
+    
+    # Prompt mínimo para JSON
+    system = "Eres un asistente que compara diseños web y genera un JSON estricto. Devuelve SOLO JSON."
     user_prompt = (
-        f"Topic: {topic}\nTop sites found (for context):\n{sites_text}\n\n"
-        "Produce a JSON array of 11 objects. Each object MUST have EXACTLY these keys (in this order): "
+        f"Topic: {topic}\n"
+        f"Top websites resumidos: {json.dumps(sites_text, ensure_ascii=False)}\n"
+        "Produce un JSON array de 11 objetos con las claves exactas: "
         "\"criterion\", \"Website1\", \"Website2\", \"Website3\", \"Website4\", \"Conclusion\".\n"
-        "Rules:\n"
-        "- Criteria order: Typography & Readability, Colors & Branding, Visual Elements, Navigation & UX, "
-        "Organization & Structure, Accessibility, Functionality, Interactivity, SEO, +1 extra criterion YOU choose, +Final Conclusion row (only fill 'Conclusion').\n"
-        "- Website1-Website3 cells: short intro phrase + one descriptive sentence of 10-20 words (do not mention the website name in the cell).\n"
-        "- Website4: same but referring to the provided image (the uploaded website).\n"
-        "- 'Conclusion' must contain improvements only for Website4, implicit comparisons, highlight strengths + suggestions; never mention website names.\n"
-        "Output MUST be valid JSON and nothing else."
+        "Website1-3: breve descripción de cada sitio.\n"
+        "Website4: referencia a la futura imagen final (no se incluye imagen aquí).\n"
+        "Conclusion: sugerencias de mejora solo para Website4.\n"
+        "Devuelve SOLO JSON, sin texto adicional ni explicaciones."
     )
-
+    
     def call_chat():
         return client.chat.completions.create(
             model=TEXT_MODEL,
-            messages=[
-                {"role": "system", "content": system},
-                {"role": "user", "content": user_prompt}
-            ],
-            temperature=0.2,
-            max_tokens=2500
+            messages=[{"role": "system", "content": system},
+                      {"role": "user", "content": user_prompt}],
+            max_completion_tokens=4000
         )
-
+    
     print("[generate_table] Solicitando a modelo la tabla JSON...")
     resp = retry_request(call_chat)
+    
     try:
         content = resp.choices[0].message["content"]
     except Exception:
         content = getattr(resp.choices[0].message, "content", None) or str(resp)
-
+    
+    # Limpiar saltos de línea en strings para parsear JSON
+    content_clean = re.sub(r'\n', ' ', content)
+    
     try:
-        rows = json.loads(content)
+        rows = json.loads(content_clean)
         if not isinstance(rows, list):
             raise ValueError("No es una lista JSON.")
     except Exception:
-        m = re.search(r"(\[.*\])", content, re.DOTALL)
+        m = re.search(r"(\[.*\])", content_clean, re.DOTALL)
         if m:
             try:
                 rows = json.loads(m.group(1))
@@ -187,22 +194,22 @@ def generate_table_with_web_search(topic: str, image_path: Optional[str] = None,
                 raise RuntimeError("No pude parsear JSON devuelto por el modelo.") from e
         else:
             raise RuntimeError("Respuesta del modelo no contiene JSON válido.")
-
+    
     df = pd.DataFrame(rows)
     if "Conclusion" in df.columns:
         cols = [c for c in df.columns if c != "Conclusion"] + ["Conclusion"]
         df = df[cols]
-
+    
     json_path = os.path.join(SAVE_DIR, "tablita.json")
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(rows, f, ensure_ascii=False, indent=2)
     xlsx_path = os.path.join(SAVE_DIR, "tablita.xlsx")
     df.to_excel(xlsx_path, index=False)
-
+    
     conclusion_text = " ".join([r.get("Conclusion", "") for r in rows if r.get("Conclusion")])
     if not conclusion_text.strip():
         conclusion_text = "Mejorar navegación y accesibilidad visual; ajustar tipografía y contraste."
-
+    
     return {"rows": rows, "dataframe": df, "json_path": json_path, "xlsx_path": xlsx_path, "conclusion_text": conclusion_text}
 
 def create_txt(img_generated_path: str, conclusions_json: List[Dict], codigo_json: List[Dict], language_map: Dict[str, str]) -> Dict:
@@ -229,7 +236,6 @@ def create_txt(img_generated_path: str, conclusions_json: List[Dict], codigo_jso
                 {"role": "system", "content": "Eres un asistente que transforma código front-end para que coincida con un diseño dado."},
                 {"role": "user", "content": prompt}
             ],
-            temperature=0.05,
             max_tokens=4000
         )
     resp = retry_request(call_chat)
@@ -244,20 +250,30 @@ def create_txt(img_generated_path: str, conclusions_json: List[Dict], codigo_jso
     return {"markdown": output_text, "files": parsed}
 
 def process_user_website(topic: str, uploaded_image_path: Optional[str], codigo_json: List[Dict], language_map: Dict[str, str]) -> Dict:
-    table_result = generate_table_with_web_search(topic=topic, image_path=uploaded_image_path)
+    # Generar tabla JSON solo con los 3 sitios principales
+    table_result = generate_table_with_web_search(topic=topic, websites_count=3)
     conclusions_rows = table_result["rows"]
     conclusion_text = table_result["conclusion_text"]
     print("[process] Tabla creada. Conclusión:", conclusion_text[:200])
 
+    # Generar imagen final usando la conclusión y la imagen subida (base64 se maneja internamente)
     generated_img_path = os.path.join(SAVE_DIR, "final_design.png")
-    create_image_from_prompt_and_reference(prompt=conclusion_text, reference_img_path=uploaded_image_path or None,
-                                          out_path=generated_img_path, size="1024x1024")
+    create_image_from_prompt_and_reference(
+        prompt=conclusion_text,
+        reference_img_path=uploaded_image_path if uploaded_image_path and os.path.exists(uploaded_image_path) else None,
+        out_path=generated_img_path,
+        size="1024x1024"
+    )
 
-    resultado = create_txt(img_generated_path=generated_img_path,
-                           conclusions_json=conclusions_rows,
-                           codigo_json=codigo_json,
-                           lenguaje_map=language_map)  # nota: cambiaré variable abajo
+    # Generar código ajustado según la imagen y las conclusiones
+    resultado = create_txt(
+        img_generated_path=generated_img_path,
+        conclusions_json=conclusions_rows,
+        codigo_json=codigo_json,
+        language_map=language_map
+    )
 
+    # Guardar resultados
     out_bundle = {
         "table_json": table_result["json_path"],
         "table_xlsx": table_result["xlsx_path"],
@@ -276,6 +292,7 @@ def process_user_website(topic: str, uploaded_image_path: Optional[str], codigo_
 
     print("[process] Flujo completado.")
     return out_bundle
+
 
 if __name__ == "__main__":
     codigo_json = [
