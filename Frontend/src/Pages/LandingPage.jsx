@@ -1,6 +1,6 @@
 import FancyTitle from "../components/FancyTitle"
 import ImageGallery from "../components/ImageGallery"
-import Navbar from "../components/NavBar"
+import OldNavbar from "../components/OldNavBar.jsx"
 import SimpleButton from "../components/SimpleButton"
 import Footer from "../components/Footer"
 import LoadingScreen from "../components/LoadingScreen"
@@ -29,7 +29,7 @@ const images= [{src:'../../public/coconut.jpg', row: 20, id: 1},
   return (
     <>
  { loading && <LoadingScreen/> }
-    <Navbar 
+    <OldNavbar 
      button1Link='/login' button1Text='Iniciar sesion' button2Link='/register' button2Text='Comenzar'
     titleLink='/' 
     />

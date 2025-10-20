@@ -1,0 +1,15 @@
+.form {
+padding: 2%;
+width: 100%;
+}
+.submitBtn {
+background-color: var(--tertiaryColor);
+border-radius: 13px;
+width: fit-content;
+padding: 1%;
+}
+.submitBtn button {
+font-size: var(--mediumHeaderSize);
+font-family: var(--font);
+color:var(--mainColor);
+}
