@@ -15,10 +15,14 @@ from tabulate import tabulate
 import json
 import time
 import random
+from openai import OpenAI
 
-#client = genai.Client(api_key="AIzaSyAkiW5YQ7ONHn8i4qadg0KTzXRPRfy3r3E")
+client = genai.Client(api_key="AIzaSyAkiW5YQ7ONHn8i4qadg0KTzXRPRfy3r3E")
 #nueva api xq nos quedamos sin tokens
-client = genai.Client(api_key="AIzaSyCXUdPHjrG_z0lIM0lyEIKlgnYvihzRvYE")
+#client = genai.Client(api_key="AIzaSyCXUdPHjrG_z0lIM0lyEIKlgnYvihzRvYE")
+
+#la de OpenAI
+clientChat = OpenAI(api_key="[]")
 
 #modelo de la tabla
 class WebsiteValue(BaseModel):
@@ -298,20 +302,15 @@ def createImgSearching(prompt, img_path=None):
         contents.append(types.Part.from_bytes(data=img_bytes, mime_type="image/jpeg"))
 
 
-    response = retry_request(
-        client.models.generate_content,
-        model="gemini-2.5-flash",
-        contents=contents,
-        config=types.GenerateContentConfig(
-            tools=[grounding_tool],
-            temperature=0.3,
-            top_p=0.9,
-            top_k=40 
-        )
+    response = clientChat.responses.create(
+        model="gpt-5",
+        tools=[{"type": "web_search"}],
+        input=contents
     )
+
     print("Response de img hecho")
 
-    prompt_img = response.text
+    prompt_img = response.output_text
 
     # Generar img final
     response_img = retry_request(
@@ -387,14 +386,14 @@ Conclusiones / sugerencias:
         contents.append(types.Part.from_bytes(data=img_bytes, mime_type="image/jpeg"))
 
     # Llamada al modelo
-    response = retry_request(
-        client.models.generate_content,
-        model="gemini-2.5-flash",
-        contents=contents,
-        config=types.GenerateContentConfig(tools=[grounding_tool])
+    response = clientChat.responses.create(
+        model="gpt-5",
+        tools=[{"type": "web_search"}],
+        input=contents
     )
+    print(response.output_text)
 
-    output_text = response.text if hasattr(response, "text") else str(response)
+    output_text = response.output_text
 
     # Parse bloques
     pattern = r"Archivo:\s*(.*?)\n```([\w+-]+)\n(.*?)```"
