@@ -12,10 +12,11 @@ export default function CreateProjectPage() {
     const [type, setType] = useState(null)
     const [ title, setTitle] = useState('¿Que estan preparando actualmente con tu equipo?')
     const nextStep = ()=> {
-        loadFormData();
+        const verify = loadFormData();
+        if(!verify) return;
         const next = step+1
         setStep(next)
-        if(next==2) {setTitle('¿Que tareas necesitas realizar en Plan para reducir '+formData.nombre)
+        if(next==2) {setTitle('¿Que tareas necesitas realizar en '+input+'?')
         }
 
         else if(next==3)setTitle('¿Que forma de organización es la mejor para tu proyecto?¡Luego podes cambiarla!')
@@ -23,28 +24,31 @@ export default function CreateProjectPage() {
         else if(next==4) postForm()
     }
     const loadFormData = ()=> {
-        if(input.trim() !== ''){ 
+        if(input.trim() == '' && step==1) return false; 
+        if(rawTasks.length==0 && step==2) return false; 
+        if(type== null && step==3) return false; 
         if(step==1) { 
             setNombre(input) 
             setInput('')}
 
         if(step == 2){
         
-          if(tasks.length==0)  setTasks[rawTasks]
+          if(tasks.length==0)  setTasks(rawTasks)
         }
+
 
              
         
-
-    }}
-    const rawTasks = []
+        return true;
+    }
+    const [rawTasks,setRawTasks] = useState([])
     const addTasks = ()=> {
-        rawTasks.push(input);
+        setRawTasks([...rawTasks, input]);
         setInput('')
     }
 
     return( <div className='createPage'>
         <Navbar/>
-        <CreateProjectForm addTask={addTasks}input={input}title={title}step={step} nextStep={nextStep} setInput={setInput}/>
+        <CreateProjectForm type={type}setType={setType} addTask={addTasks}input={input}title={title}step={step} nextStep={nextStep} setInput={setInput}/>
         </div>)
 }

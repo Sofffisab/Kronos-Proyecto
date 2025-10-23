@@ -1,6 +1,12 @@
 .form {
 padding: 2%;
 width: 100%;
+height: auto;
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+justify-content: center;
+gap: 3rem;
 }
 .submitBtn {
 background-color: var(--tertiaryColor);
@@ -12,4 +18,51 @@ padding: 1%;
 font-size: var(--mediumHeaderSize);
 font-family: var(--font);
 color:var(--mainColor);
+}
+.input {
+    border-radius: 5px;
+    border: solid var(--secondaryColor) 2px;
+    padding: .7%;
+    width: 30%;
+}
+.mainTitle {
+    font-family: var(--font);
+    font-size: var(--biggerHeaderSize);
+    width: 30%;
+    margin: 0px;
+    max-height: 20rem;
+    transition: var(--easeTransition);
+
+}
+.hidden {
+    max-height: 0px;
+    opacity: 0;
+
+}
+.title {
+    font-family: var(--font);
+    font-size: var(--headerSize);
+    width: 20%;
+}
+
+.focused {
+    background-color: var(--secondaryColor);
+}
+.selectBtn button {
+font-family: var(--font);
+font-size: var(--mediumHeaderSize);
+}
+.selectBtn {
+    border-radius: 5px;
+    border: solid var(--secondaryColor) 2px;
+    padding: .7%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.selectBtnBox {
+    display: flex;
+    gap: 1%;
+    width: 20%;
+    flex-wrap: wrap;
 }

@@ -34,3 +34,6 @@
     font: var(--font);
     font-style: italic;
   }
+  input:focus {
+    outline: none;
+  }
