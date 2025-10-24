@@ -69,7 +69,7 @@ const setupcalendario = () => {
   const permision = async (req, res) => {
     const code = req.query.code;
     if (!code) {
-      return res.status(400).send('No authorization code provided');
+      return res.status(400).json('No authorization code provided');
     }
 
     const personaId = req.personaId; 
@@ -93,7 +93,7 @@ const setupcalendario = () => {
       });
 
       if (!persona || !persona.googleRefreshToken) {
-        return res.status(401).send('User not linked to a Google account');
+        return res.status(401).json('User not linked to a Google account');
       }
       const calendar = await lookfortoken(persona.googleRefreshToken);
       const events = await calendar.events.list({
@@ -121,7 +121,7 @@ const setupcalendario = () => {
       const personaId = req.personaId;
       const eventdetails = req.body;
 
-      if (!eventdetails) {
+      if (!eventdetails || Object.keys(eventdetails).length === 0) {
         return res.status(400).json({ error: 'No event details provided'});
       }
 
@@ -162,7 +162,7 @@ const setupcalendario = () => {
       });
 
       if (!persona || !persona.googleRefreshToken) {
-        return res.status(401).send('User not linked to a Google account');
+        return res.status(401).json('User not linked to a Google account');
       }
 
       const calendar = await lookfortoken(persona.googleRefreshToken);
@@ -171,7 +171,7 @@ const setupcalendario = () => {
         eventId: eventId,
       });
 
-      res.status(204).send();
+      res.status(204).json();
     } catch (error) {
       console.error('Failed to delete event:', error);
       res.status(500).json({ error: 'Failed to delete event' });
@@ -190,7 +190,7 @@ const setupcalendario = () => {
       });
 
       if (!persona || !persona.googleRefreshToken) {
-        return res.status(401).send('User not linked to a Google account');
+        return res.status(401).json('User not linked to a Google account');
       }
 
       const calendar = await lookfortoken(persona.googleRefreshToken);
@@ -204,7 +204,7 @@ const setupcalendario = () => {
 
     } catch (error) {
       console.error('Failed to update event:', error);
-      res.status(500).send('Failed to update event');
+      res.status(500).json({error:'Failed to update event'});
     }
   };
 

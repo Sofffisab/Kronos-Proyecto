@@ -84,7 +84,7 @@ const setupchat = () => {
 
             const messages = await prisma.mensajes.findMany({
                 where: {
-                    id_chat: parseInt(chatId)
+                    id_chat: parseInt(chatId, 10)
                 },
                 orderBy: {
                     id: 'asc'

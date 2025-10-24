@@ -25,55 +25,56 @@ function setupwebsocketserver(app, JWT_SECRET, prisma, wsInstance) {
     }
 
     ws.on('message', async (message) => {
+
+      try {
         const { chatId, mensaje } = JSON.parse(message.toString());
         console.log(`we got a message for chat ${chatId} from person ${personaId}:`, mensaje);
 
-        try {
-            const hasAccess = await prisma.tiene_pc.findFirst({
-                where: {
-                    id_persona: personaId,
-                    id_chat: parseInt(chatId, 10)
-                }
-            });
-
-            if (!hasAccess) {
-                console.log('User not authorized to send messages to this chat');
-                ws.send(JSON.stringify({ error: 'You are not a member of this chat' }));
-                return;
-            }
-
-            const mensajesguardados = await prisma.mensajes.create({
-              data: {
-                id_chat: Number.parseInt(chatId, 10),
+        const hasAccess = await prisma.tiene_pc.findFirst({
+            where: {
                 id_persona: personaId,
-                mensaje: mensaje,
-                estado: 'sent',
-              },
-            });
+                id_chat: parseInt(chatId, 10)
+            }
+        });
 
-            const messageWithSender = {
-              ...mensajesguardados,
-              personaId: personaId,
-            };
-
-            const chatMembers = await prisma.tiene_pc.findMany({
-              where: { id_chat: Number.parseInt(chatId, 10) },
-              select: { id_persona: true }
-            });
-            const memberIds = chatMembers.map((member) => member.id_persona);
-
-
-            const wss = wsInstance.getWss()
-            wss.clients.forEach(client => {
-              if (client.readyState === WebSocket.OPEN && memberIds.includes(client.personaId)) {
-                client.send(JSON.stringify(messageWithSender));
-              }
-            });
-
-        } catch (error) {
-            console.error("Error saving message to database or broadcasting:", error);
+        if (!hasAccess) {
+          console.log('User not authorized to send messages to this chat');
+          ws.send(JSON.stringify({ error: 'You are not a member of this chat' }));
+          return;
         }
-    });
+
+        const mensajesguardados = await prisma.mensajes.create({
+          where:{
+            id_chat: Number.parseInt(chatId, 10),
+            id_persona: personaId,
+            mensaje: mensaje,
+            estado: 'sent',
+          },
+        });
+
+        const messageWithSender = {
+          ...mensajesguardados,
+          personaId: personaId,
+        };
+
+        const chatMembers = await prisma.tiene_pc.findMany({
+          where: { id_chat: Number.parseInt(chatId, 10) },
+          select: { id_persona: true }
+        });
+        const memberIds = chatMembers.map((member) => member.id_persona);
+
+
+        const wss = wsInstance.getWss()
+        wss.clients.forEach(client => {
+          if (client.readyState === WebSocket.OPEN && memberIds.includes(client.personaId)) {
+            client.send(JSON.stringify(messageWithSender));
+          }
+        });
+      } catch (error) {
+        console.error("Error saving message to database or broadcasting:", error);
+      }
+
+      });
 
     ws.on('close', () => {
         console.log('someone left the chat');
