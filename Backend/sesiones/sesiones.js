@@ -54,7 +54,7 @@ const setupsesiones = (JWT_SECRET) => {
         try {
 
             if (!usuario || !nombre || !mail || !contraseniaPrior) {
-                return res.status(400).json(error, "All fields are required");
+                return res.status(400).json({error: "All fields are required"});
             }
 
             const contrasenia = await argon2.hash(contraseniaPrior);

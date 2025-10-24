@@ -24,7 +24,7 @@ const { login, signup } = setupsesiones(JWT_SECRET);
 const { authentication } = setupautenticacion(JWT_SECRET);
 const { authorization, getatoken, lookfortoken, permision, getevents, redirectwithgoogle, createevents, deleteevents, updateevents } = setupcalendario();
 const { seefile, uploadfile } = setuparchivos();
-const { createchat, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers } = setupchat(prisma);
+const { createchat, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers } = setupchat();
 const { createproject, getprojects, getproject, updateproject, invitetoproject, joinproject } = setupproyectos()
 const router = setuprouter({ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, joinproject,});
 

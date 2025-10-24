@@ -29,7 +29,7 @@ model persona {
 model archivos {
   formato  String
   archivo   Bytes
-  nombrearchivo   String
+  nombrearchivo   String @unique
   id    Int     @id @default(autoincrement())
   id_persona  Int
   id_proyecto   Int
@@ -95,6 +95,7 @@ model proyecto {
   personas_tiene  tiene[]
   chats           chat[]
   invitaciones    invitaciones[]
+  chats_tiene_rc  tiene_rc[]
 }
 
 model invitaciones {
@@ -117,6 +118,7 @@ model chat {
   proyecto      proyecto @relation(fields: [id_proyecto], references: [id])
   mensajes      mensajes[]
   personas_tiene  tiene_pc[]
+  tiene_rc      tiene_rc[]
 }
 
 model tiene_pc {
@@ -126,6 +128,15 @@ model tiene_pc {
   
   persona    persona  @relation(fields: [id_persona], references: [id])
   chat       chat     @relation(fields: [id_chat], references: [id])
+}
+
+model tiene_rc {
+  id          Int      @id @default(autoincrement())
+  id_proyecto Int
+  id_chat     Int
+  
+  proyecto    proyecto @relation(fields: [id_proyecto], references: [id])
+  chat        chat     @relation(fields: [id_chat], references: [id])
 }
 
 //

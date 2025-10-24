@@ -58,6 +58,17 @@ const setuparchivos = () => {
                 return res.status(400).json({error: "missing data"});
             }
 
+            const ismember = await prisma.tiene.findFirst({
+                where: {
+                    id_persona: personaId,
+                    id_proyecto: parseInt(proyectoId, 10)
+                }
+            });
+
+            if (!ismember) {
+                return res.status(403).json({ error: "u don't have permission to upload files here" });
+            }
+
             await prisma.archivos.create({
                 data: {
                     formato: formato,
