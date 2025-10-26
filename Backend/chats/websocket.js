@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 
 
 function setupwebsocketserver(app, JWT_SECRET, prisma, wsInstance) {
+  
   app.ws('/chat', async (ws, req) => {
     console.log('someone joined the chat');
 
@@ -22,7 +23,7 @@ function setupwebsocketserver(app, JWT_SECRET, prisma, wsInstance) {
         console.log('Invalid token, closing connection', error);
         ws.close(1008, 'Invalid token');
         return;
-    }
+    };
 
     ws.on('message', async (message) => {
 
@@ -41,10 +42,10 @@ function setupwebsocketserver(app, JWT_SECRET, prisma, wsInstance) {
           console.log('User not authorized to send messages to this chat');
           ws.send(JSON.stringify({ error: 'You are not a member of this chat' }));
           return;
-        }
+        };
 
         const mensajesguardados = await prisma.mensajes.create({
-          where:{
+          data:{
             id_chat: Number.parseInt(chatId, 10),
             id_persona: personaId,
             mensaje: mensaje,
@@ -64,15 +65,15 @@ function setupwebsocketserver(app, JWT_SECRET, prisma, wsInstance) {
         const memberIds = chatMembers.map((member) => member.id_persona);
 
 
-        const wss = wsInstance.getWss()
+        const wss = wsInstance.getWss();
         wss.clients.forEach(client => {
           if (client.readyState === WebSocket.OPEN && memberIds.includes(client.personaId)) {
             client.send(JSON.stringify(messageWithSender));
-          }
+          };
         });
       } catch (error) {
         console.error("Error saving message to database or broadcasting:", error);
-      }
+      };
 
       });
 
@@ -82,6 +83,6 @@ function setupwebsocketserver(app, JWT_SECRET, prisma, wsInstance) {
 
     console.log('the chat backend is ready');
   });
-}
+};
 
 export default setupwebsocketserver;

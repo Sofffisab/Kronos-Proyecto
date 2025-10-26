@@ -11,7 +11,7 @@ const setupchat = () => {
 
         if (!nombre || !proyectoId || !personaId) {
             return res.status(400).json({ error: "Missing required fields" });
-        }
+        };
 
         try {
             const ismember = await prisma.tiene.findFirst({
@@ -23,7 +23,7 @@ const setupchat = () => {
 
             if (!ismember) {
                 return res.status(403).json({ error: "You don't have permission to create a chat in this project" });
-            }
+            };
 
             const newchat = await prisma.chat.create({
                 data: {
@@ -59,7 +59,7 @@ const setupchat = () => {
         } catch (error) {
             console.error("Error creating chat:", error);
             res.status(500).json({ error: "Internal Server Error" });
-        }
+        };
     };
 
     const getchatmessages = async (req, res) => {
@@ -68,7 +68,7 @@ const setupchat = () => {
 
         if (!chatId || !personaId) {
             return res.status(400).json({ error: "Missing required fields" });
-        }
+        };
 
         try {
             const hasaccess = await prisma.tiene_pc.findFirst({
@@ -80,7 +80,7 @@ const setupchat = () => {
 
             if (!hasaccess) {
                 return res.status(403).json({ error: "You don't have access to this chat" });
-            }
+            };
 
             const messages = await prisma.mensajes.findMany({
                 where: {
@@ -96,7 +96,7 @@ const setupchat = () => {
         } catch (error) {
             console.error("Error getting messages:", error);
             res.status(500).json({ error: "Internal Server Error" });
-        }
+        };
     };
 
     const updatemessagestatus = async (req, res) => {
@@ -106,7 +106,7 @@ const setupchat = () => {
         
         if (!messageId || !estado) {
             return res.status(400).json({ error: "Missing required fields" });
-        }
+        };
 
         try {
             const message = await prisma.mensajes.findUnique({
@@ -117,7 +117,7 @@ const setupchat = () => {
 
             if (!message) {
                 return res.status(404).json({ error: "Message not found" });
-            }
+            };
 
             const hasaccess = await prisma.tiene_pc.findFirst({
                 where: {
@@ -128,7 +128,7 @@ const setupchat = () => {
 
             if (!hasaccess) {
                 return res.status(403).json({ error: "You don't have permission to update this message" });
-            }
+            };
 
             const updatedmessage = await prisma.mensajes.update({
                 where: {
@@ -143,7 +143,7 @@ const setupchat = () => {
         } catch (error) {
             console.error("Error updating message status:", error);
             res.status(500).json({ error: "Internal Server Error" });
-        }
+        };
     };
 
     const getchatperperson = async (req, res) => {
@@ -172,7 +172,7 @@ const setupchat = () => {
         } catch (error) {
             console.error("Error getting person chats:", error);
             res.status(500).json({ error: "Internal Server Error" });
-        }
+        };
     };
 
     const getchatmembers = async (req, res) => {
@@ -181,7 +181,7 @@ const setupchat = () => {
 
         if (!chatId) {
             return res.status(400).json({ error: "no chat available found" });
-        }
+        };
 
         try {
             const hasAccess = await prisma.tiene_pc.findFirst({
@@ -193,7 +193,7 @@ const setupchat = () => {
 
             if (!hasAccess) {
                 return res.status(403).json({ error: "You don't have access to this chat" });
-            }
+            };
 
             const members = await prisma.tiene_pc.findMany({
                 where: {
@@ -214,7 +214,7 @@ const setupchat = () => {
         } catch (error) {
             console.error("Error getting chat members:", error);
             res.status(500).json({ error: "Internal Server Error" });
-        }
+        };
     };
 
     return { createchat, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers };

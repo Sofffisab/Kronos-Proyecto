@@ -59,6 +59,7 @@ model tareas {
   id_proyecto   Int
   id_persona    Int
   limite      String
+  eventId   String?
 
   proyecto      proyecto @relation(fields: [id_proyecto], references: [id])
   persona       persona  @relation(fields: [id_persona], references: [id])
@@ -139,7 +140,6 @@ model tiene_rc {
   chat        chat     @relation(fields: [id_chat], references: [id])
 }
 
-//
 model leido {
   id Int @id @default(autoincrement())
   id_mensaje Int

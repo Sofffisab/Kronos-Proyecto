@@ -18,16 +18,16 @@ const setupsesiones = (JWT_SECRET) => {
                 persona = await prisma.persona.findUnique({ 
                     where: { usuario: usuarioI } 
                 });
-            }
+            };
 
             if (!persona || !contraseniaP) {
             return res.status(401).json({ error: "Wrong data" });
-            }
+            };
 
             const contraseniaI = await argon2.verify(persona.contrasenia, contraseniaP);
             if (!contraseniaI) {
                 return res.status(401).json({ error: "Wrong data" });
-            }
+            };
 
             const token = jwt.sign({ 
                 personaId: persona.id, 
@@ -44,9 +44,9 @@ const setupsesiones = (JWT_SECRET) => {
         } catch (error) {
             console.error("unsuccessful login", error);
             res.status(500).json({ error: "Internal Server Error" });
-        }
+        };
         
-    }
+    };
 
     const signup = async (req, res) => {
         const {usuario, nombre, mail, contraseniaPrior} = req.body;
@@ -55,7 +55,7 @@ const setupsesiones = (JWT_SECRET) => {
 
             if (!usuario || !nombre || !mail || !contraseniaPrior) {
                 return res.status(400).json({error: "All fields are required"});
-            }
+            };
 
             const contrasenia = await argon2.hash(contraseniaPrior);
 
