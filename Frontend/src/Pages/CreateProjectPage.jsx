@@ -44,14 +44,30 @@ export default function CreateProjectPage() {
     }
     const [rawTasks,setRawTasks] = useState([])
     const addTasks = ()=> {
+        
+         const today = new Date();
+         const year = today.getFullYear();
+        const month = today.getMonth();
+        const day = Math.floor(Math.random() * 28) + 1; 
+
+        const startDate = new Date(year, month, day);
+        const states= ['iniciada', 'pendiente','realizada']
+        const types= ['riesgo', 'atrasada', 'proceso','terminado']
         if(input=='' || input==null) return;
-        setRawTasks([...rawTasks, input]);
+        setRawTasks([...rawTasks, {name:input, 
+            allDay: true,
+            title: input,
+            text: input,
+            state:states[Math.floor(Math.random()*3)],
+            type:types[Math.floor(Math.random()*4)],
+            start: startDate.toISOString().split('T')[0],
+        }]);
         setInput('')
     }
 
     return( <div className='createPage'>
         <Navbar/>
         <CreateProjectForm type={type}setType={setType} addTask={addTasks}input={input}title={title}step={step} nextStep={nextStep} setInput={setInput}/>
-        <Window tasks={tasks? tasks : rawTasks}name={nombre? nombre : input}/>
+        <Window type={type}tasks={tasks? tasks : rawTasks}name={nombre? nombre : input}/>
         </div>)
 }

@@ -19,7 +19,7 @@ return(
      onChange={(event)=>props.setInput(event.target.value)} value={props.input}  onKeyDown={props.step == 2? (e) => e.key === "Enter" && props.addTask() : undefined}/>
         )}{props.step == 3 && (
 <div className={style.selectBtnBox}>
-<SimpleButton class={`${style.selectBtn} ${props.type== 'eq'  && style.focused}`} text='Tablero' onClick={()=>props.setType('eq')} icon='equalizer'/>
+<SimpleButton class={`${style.selectBtn} ${props.type== 'tab'  && style.focused}`} text='Tablero' onClick={()=>props.setType('tab')} icon='equalizer'/>
 <SimpleButton class={`${style.selectBtn} ${props.type==  'list' && style.focused}`} text='Lista' onClick={()=>props.setType('list')} icon='list'/>
 <SimpleButton class={`${style.selectBtn} ${props.type==  'cal' && style.focused}`} text='Calendario' onClick={()=>props.setType('cal')} icon='calendar_today'/>
 </div>

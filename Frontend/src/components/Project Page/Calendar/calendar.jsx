@@ -7,7 +7,7 @@ import { useState } from 'react'
 import EventModal from '../../modals/eventModal'
 export default function Calendar(props) {
     const [date, setDate]= useState()
-    const [tasks, setTasks] = useState([]);
+    const [tasks, setTasks] = useState(props.tasks? props.tasks :[]);
     const [modal, toggleModal] = useState(false)
     const [eModal, toggleEModal] = useState(false)
     const [modalData, setModalData ]= useState({})
@@ -51,9 +51,9 @@ export default function Calendar(props) {
             center: '',
             end: 'prevYear prev today next nextYear' 
           }}
-          selectable={true}
-          dateClick={(info)=>addTask(info)}
-          select={(info)=> addTask(info)}
+          selectable={props.seelectable && true}
+          dateClick={props.selectable && ((info)=>addTask(info))}
+          select={props.selectable &&((info)=> addTask(info))}
           events={tasks}
           eventClick={(info)=> triggerEModal(info)}
        />

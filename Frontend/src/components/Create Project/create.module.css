@@ -45,7 +45,8 @@ color:var(--mainColor);
 .title {
     font-family: var(--font);
     font-size: var(--headerSize);
-    width: 100%;
+    width: 30rem;
+    word-wrap: break-word;
 }
 
 
@@ -108,7 +109,8 @@ font-size: var(--mediumHeaderSize);
     height: 25%;
     display: flex;
     align-items: center;
-    padding: 3%;
+    padding: 2.5%;
+    box-sizing: border-box;
 }
 .windowTitle div {
     width: 100%;
@@ -131,8 +133,8 @@ font-size: var(--mediumHeaderSize);
 }
 .tasks {
     width: 100%;
-    height: 100%;
-    overflow: hidden;
+    height: 70%;
+    overflow: auto;
 }
 .task {
     font-family: var(--font);
@@ -142,4 +144,8 @@ font-size: var(--mediumHeaderSize);
     display: flex;
     align-items: center;
     gap: 1%
+}
+.listDiv {
+overflow-y: auto
+
 }

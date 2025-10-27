@@ -2,13 +2,14 @@
 import InputModal from "../../modals/InputModal";
 import { useEffect } from "react";
 import { useState } from "react";
+import style from './list.module.css'
 import Category from "./Category";
 import Bar from "./Bar.jsx";
 import Table from "./table";
 import Task from "./Task";
 export default function List(props) {
   const [modal, toggleModal] = useState(false);
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState(props.tasks? props.tasks : []);
 
   useEffect(() => {
     if (modal) {
@@ -58,20 +59,20 @@ const mapTasks = (taskState)=>{
       {modal && (
         <InputModal submit={submitModal} bgOnClick={() => toggleModal(false)} />
       )}
-      <Bar onClick={() => toggleModal(true)} />
+      {props.selectable && <Bar onClick={() => toggleModal(true)} />}
       <Category />
       <Table
-        onClick={() => toggleModal(true)}
+        onClick={props.selectable && (() => toggleModal(true))}
         name="Tareas iniciadas"
         tasks={mapTasks('iniciada')}
       />
       <Table
-        onClick={() => toggleModal(true)}
+        onClick={props.selectable && (() => toggleModal(true))}
         name="Tareas pendientes"
         tasks={mapTasks('pendiente')}
       />
       <Table
-        onClick={() => toggleModal(true)}
+        onClick={props.selectable && (() => toggleModal(true))}
         name="Tareas finalizadas"
         tasks={mapTasks('realizada')}
       />
