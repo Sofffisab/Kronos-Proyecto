@@ -1,8 +1,7 @@
 import pkg from 'express';
 const { Router } = pkg;
 
-
-const setuprouter = ({ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, joinproject,}) => {
+const setuprouter = ({ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, joinproject, createtarea, gettareas, updatetarea, deletetarea, getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones }) => {
     const router = Router();
 
 
@@ -12,19 +11,16 @@ const setuprouter = ({ login, signup, authentication, getevents, permision, redi
             status: "OK",
             endpoints: {
                 auth: ["POST /users/login", "POST /users/signup", "GET /auth/google", "GET /auth/google/callback"],
-                calendar: [
-                "GET /api/calendar/events", "POST /api/calendar/events", "DELETE /api/calendar/events/:eventId", "PUT /api/calendar/events/:eventId",
-                ],
+                calendar: ["GET /api/calendar/events", "POST /api/calendar/events", "DELETE /api/calendar/events/:eventId", "PUT /api/calendar/events/:eventId"],
                 files: ["GET /api/files/:nombrearchivo", "POST /api/files/projects/:proyectoId"],
-                chat: [
-                "POST /projects/:proyectoId/chat/create", "GET /chat/:chatId/messages", "PUT /messages/:messageId/read", "GET /chats", "GET /chat/:chatId/members",
-                ],
-                projects: ["POST /api/projects", "GET /api/projects", "GET /api/projects/:proyectoId", "PUT /api/projects/:proyectoId", "POST /api/projects/:proyectoId/invite", "POST /api/projects/join",
-                ],
+                chat: [ "POST /projects/:proyectoId/chat/create", "GET /chat/:chatId/messages", "PUT /messages/:messageId/read", "GET /chats", "GET /chat/:chatId/members"],
+                projects: ["POST /api/projects", "GET /api/projects", "GET /api/projects/:proyectoId", "PUT /api/projects/:proyectoId", "POS/api/projects/:proyectoId/invite", "POST /api/projects/join"],
+                tasks: ["POST /api/projects/:proyectoId/tasks", "GET /api/projects/:proyectoId/tasks", "PUT /api/tasks/:tareaId", "DELETE /api/tasks/:tareaId"],
+                customizations: ["GET /api/customizations", "PUT /api/customizations", "DELETE /api/customizations"],
                 websocket: "ws://localhost:3000/chat",
             },
-        })
-    })
+        });
+    });
 
 
     router.post("/users/login", login);
@@ -42,12 +38,19 @@ const setuprouter = ({ login, signup, authentication, getevents, permision, redi
     router.put("/messages/:messageId/read", authentication, updatemessagestatus);
     router.get("/chats", authentication, getchatperperson);
     router.get("/chat/:chatId/members", authentication, getchatmembers);
-    router.post("/api/projects", authentication, createproject)
-    router.get("/api/projects", authentication, getprojects)
-    router.get("/api/projects/:proyectoId", authentication, getproject)
-    router.put("/api/projects/:proyectoId", authentication, updateproject)
-    router.post("/api/projects/:proyectoId/invite", authentication, invitetoproject)
-    router.post("/api/projects/join", authentication, joinproject)
+    router.post("/api/projects", authentication, createproject);
+    router.get("/api/projects", authentication, getprojects);
+    router.get("/api/projects/:proyectoId", authentication, getproject);
+    router.put("/api/projects/:proyectoId", authentication, updateproject);
+    router.post("/api/projects/:proyectoId/invite", authentication, invitetoproject);
+    router.post("/api/projects/join", authentication, joinproject);
+    router.post("/api/projects/:proyectoId/tasks", authentication, createtarea);
+    router.get("/api/projects/:proyectoId/tasks", authentication, gettareas);
+    router.put("/api/tasks/:tareaId", authentication, updatetarea);
+    router.delete("/api/tasks/:tareaId", authentication, deletetarea);
+    router.get("/api/customizations", authentication, getpersonalizaciones);
+    router.put("/api/customizations", authentication, updatepersonalizaciones);
+    router.delete("/api/customizations", authentication, deletepersonalizaciones);
 
 
     return router;

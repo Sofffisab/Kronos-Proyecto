@@ -1,10 +1,9 @@
-import prismaPkg from '@prisma/client';
-const { PrismaClient } = prismaPkg;
+import { prisma } from '../prisma/prisma.js';
 import pkg from 'googleapis'; 
 const { google } = pkg;
 import dotenv from 'dotenv';
 dotenv.config();
-const prisma = new PrismaClient();
+
 
 
 const oAuth2Client = new google.auth.OAuth2(
@@ -48,19 +47,24 @@ const setupcalendario = () => {
       } catch (error) {
           console.error('Error taking tokens', error);
           throw error;
-      }
+      };
   };
 
   const lookfortoken = async (tokenrenewed) => {
     if (!tokenrenewed) {
     console.error("No refresh token provided for calendar access.");
     throw new Error("No token provided");
-    }
+    };
     
     oAuth2Client.setCredentials({
       refresh_token: tokenrenewed,
     });
-    await oAuth2Client.getAccessToken();
+  
+    const { token } = await oAuth2Client.getAccessToken();
+      if (!token) {
+      throw new Error("Failed to get access token");
+    }
+
 
     const calendar = google.calendar({ version: 'v3', auth: oAuth2Client });
     return calendar;
@@ -70,7 +74,7 @@ const setupcalendario = () => {
     const code = req.query.code;
     if (!code) {
       return res.status(400).json('No authorization code provided');
-    }
+    };
 
     const personaId = req.personaId; 
     
@@ -80,7 +84,7 @@ const setupcalendario = () => {
     } catch (error) {
       console.error('Authorization failed:', error);
       res.status(500).json({ error: 'Authorization failed.' });
-    } 
+    };
 
   };
 
@@ -94,7 +98,8 @@ const setupcalendario = () => {
 
       if (!persona || !persona.googleRefreshToken) {
         return res.status(401).json('User not linked to a Google account');
-      }
+      };
+
       const calendar = await lookfortoken(persona.googleRefreshToken);
       const events = await calendar.events.list({
         calendarId: 'primary',
@@ -108,7 +113,7 @@ const setupcalendario = () => {
     } catch (error) {
       console.error('Failed to get events:', error);
       res.status(500).json({ error: 'Failed to get events'});
-    }
+    };
   };
 
   const redirectwithgoogle = async (req, res) => {
@@ -123,7 +128,7 @@ const setupcalendario = () => {
 
       if (!eventdetails || Object.keys(eventdetails).length === 0) {
         return res.status(400).json({ error: 'No event details provided'});
-      }
+      };
 
       const persona = await prisma.persona.findUnique({
         where: { 
@@ -136,7 +141,7 @@ const setupcalendario = () => {
 
       if (!persona || !persona.googleRefreshToken) {
         return res.status(401).json({ error: 'User not linked to a Google account' });
-      }
+      };
 
       const calendar = await lookfortoken(persona.googleRefreshToken);
       const res_event = await calendar.events.insert({
@@ -148,7 +153,7 @@ const setupcalendario = () => {
     } catch (error) {
       console.error('Failed to create event:', error);
       res.status(500).json({ error: 'Failed to create event' });
-    }
+    };
   };
 
   const deleteevents = async (req, res) => {
@@ -163,7 +168,7 @@ const setupcalendario = () => {
 
       if (!persona || !persona.googleRefreshToken) {
         return res.status(401).json('User not linked to a Google account');
-      }
+      };
 
       const calendar = await lookfortoken(persona.googleRefreshToken);
       await calendar.events.delete({
@@ -175,7 +180,7 @@ const setupcalendario = () => {
     } catch (error) {
       console.error('Failed to delete event:', error);
       res.status(500).json({ error: 'Failed to delete event' });
-    }
+    };
   };
 
   const updateevents = async (req, res) => {
@@ -191,7 +196,7 @@ const setupcalendario = () => {
 
       if (!persona || !persona.googleRefreshToken) {
         return res.status(401).json('User not linked to a Google account');
-      }
+      };
 
       const calendar = await lookfortoken(persona.googleRefreshToken);
       const updatedEvent = await calendar.events.update({
@@ -205,7 +210,7 @@ const setupcalendario = () => {
     } catch (error) {
       console.error('Failed to update event:', error);
       res.status(500).json({error:'Failed to update event'});
-    }
+    };
   };
 
   return {
@@ -217,7 +222,7 @@ const setupcalendario = () => {
     redirectwithgoogle,
     createevents,
     deleteevents,
-    updateevents
+    updateevents,
   };
 };
 
