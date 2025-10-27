@@ -277,82 +277,59 @@ codigo_json = [
 
 #crear img buscando en internet
 def createImgSearching(prompt, img_path=None):
+
     #para conseguir los tamaños de la img del input y respetarlos
     if img_path and os.path.exists(img_path):
         with Image.open(img_path) as img:
-            inserted_img = img.tobytes()  # si querés pasar los bytes
+            inserted_img = img.tobytes()
             width, height = img.size
 
-    promptpsss = f"""Crea una imagen realista del sitio web mostrado en la imagen adjunta, incorporando las mejoras indicadas en la conclusión:
-             - Ajustar colores y tipografía para mejor legibilidad.
-            - Reorganizar botones importantes para navegación más intuitiva.
-            - Añadir iconos y elementos visuales que mejoren la experiencia.
-            - Mantener el estilo general del sitio original.
-            - Mantener el mismo tamaño y proporción que la imagen original: ancho={width}px, alto={height}px.
-            Tema: {prompt}
-            """
+
     
+    prompt_img_inicial = f"""
+    Crea una imagen realista del sitio web mostrado en la imagen adjunta, incorporando las mejoras indicadas en la conclusión:
+    - Ajustar colores y tipografía para mejor legibilidad.
+    - Reorganizar botones importantes para navegación más intuitiva.
+    - Añadir iconos y elementos visuales que mejoren la experiencia.
+    - Mantener el estilo general del sitio original.
+    - Mantener el mismo tamaño y proporción que la imagen original: ancho={width}px, alto={height}px.
+    Tema: {prompt}"""
 
-    response = retry_request(
-        client.models.generate_content,
-        model="gemini-2.0-flash-preview-image-generation",
-        contents=[
-            {"role": "user", "parts": [{"text": promptpsss}]}
-        ],
-        config=types.GenerateContentConfig(
-        response_modalities=['TEXT', 'IMAGE']
-        )
-    )
-
-
-    response = client.models.generate_images(
-    model='imagen-4.0-generate-001',
-    prompt= [f"""Crea una imagen realista del sitio web mostrado en la imagen adjunta, incorporando las mejoras indicadas en la conclusión:
-             - Ajustar colores y tipografía para mejor legibilidad.
-            - Reorganizar botones importantes para navegación más intuitiva.
-            - Añadir iconos y elementos visuales que mejoren la experiencia.
-            - Mantener el estilo general del sitio original.
-            - Mantener el mismo tamaño y proporción que la imagen original: ancho={width}px, alto={height}px.
-            Tema: {prompt}"""
-        ]
-    )
+    prompt_search = f"""
+    Analiza el sitio web mostrado en la imagen adjunta y describe mejoras visuales posibles.
+    Considera tipografía, colores, distribución de botones, experiencia de usuario y coherencia visual.
+    Devuelve una breve descripción textual del estilo ideal para rediseñarlo.
+    Tema o contexto: {prompt}"""
 
     contents = [
-    types.Part.from_text(
-        text=f"""
-        Crea una imagen realista del sitio web mostrado en la imagen adjunta, incorporando las mejoras indicadas en la conclusión:
-        - Ajustar colores y tipografía para mejor legibilidad.
-        - Reorganizar botones importantes para navegación más intuitiva.
-        - Añadir iconos y elementos visuales que mejoren la experiencia.
-        - Mantener el estilo general del sitio original.
-        - Mantener el mismo tamaño y proporción que la imagen original: ancho={width}px, alto={height}px.
-        Tema: {prompt}""",
-        role="user"
-        )
- ]
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": prompt_search}
+        ]
+        }
+    ]
 
- # Si hay imagen se agrega
+ # Verifica que haya imagen y se agrega
     if img_path and os.path.exists(img_path):
         with open(img_path, "rb") as f:
             img_bytes = f.read()
         contents.append(types.Part.from_bytes(data=img_bytes, mime_type="image/jpeg"))
 
-
+ # Busca info en internet
     response = clientChat.responses.create(
         model="gpt-5",
         tools=[{"type": "web_search"}],
         input=contents
     )
-
     print("Response de img hecho")
-
-    prompt_img = response.output_text
+    prompt_img_final = response.output_text
 
     # Generar img final
     response_img = retry_request(
         client.models.generate_content,
         model="gemini-2.0-flash-preview-image-generation",
-        contents=[{"role": "user", "parts": [{"text": prompt_img}]}],
+        contents=[{"role": "user", "parts": [{"text": prompt_img_final}]}],
         config=types.GenerateContentConfig(
             response_modalities=["TEXT", "IMAGE"],
             temperature=0.3,
@@ -443,12 +420,23 @@ Conclusiones / sugerencias:
 
 #crear tabla e img buscando en internet
 def createJson(prompt, img_path="image.jpg"):
+
+    contents_buscar_paginas = [
+         {
+            "role": "user",
+            "parts": [
+                types.Part.from_text(text=(
+                    "Crea un prompt en base a tu función de búsqueda en internet para poder conseguir información acerca del siguiente prompt y dárselo a otra IA generadora de tablas: "
+                    + prompt
+                    ))
+            ]
+        }
+    ]
+    
     response = retry_request(
         client.models.generate_content,
         model="gemini-2.5-flash",
-        contents=(
-            "Crea un prompt en base a tu función de busqueda en internet para poder conseguir información acerca del siguiente prompt y darselo a otra IA generadora de tablas " + prompt
-        ),
+        contents=contents_buscar_paginas,
         config = types.GenerateContentConfig(
             tools=[grounding_tool]
         )
@@ -464,17 +452,24 @@ def createJson(prompt, img_path="image.jpg"):
         print(f"Imagen no encontrada: {img_path}")
         return
 
+
+
+    contents_tabla = [
+        {
+            "role":"user",
+            "parts": [
+                types.Part.from_text(text=prompt_board),
+                types.Part.from_bytes(data=inserted_img, mime_type="image/jpeg")
+            ]
+        }
+    ]
+
+
  #hacer tablita
     response = retry_request(
         client.models.generate_content,
         model="gemini-2.5-flash",
-        contents=[
-            prompt_board,
-            types.Part.from_bytes(
-                data=inserted_img,
-                mime_type='image/jpeg'
-            )
-        ],
+        contents=contents_tabla,
         config={
             "response_mime_type": "application/json",
             "response_schema": TableData
