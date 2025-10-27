@@ -1,10 +1,9 @@
-import prismaPkg from '@prisma/client';
-const { PrismaClient } = prismaPkg;
+import { prisma } from '../prisma/prisma.js';
 import pkg from 'googleapis'; 
 const { google } = pkg;
 import dotenv from 'dotenv';
 dotenv.config();
-const prisma = new PrismaClient();
+
 
 
 const oAuth2Client = new google.auth.OAuth2(
@@ -33,7 +32,7 @@ const setupcalendario = () => {
           if (!tokens.refresh_token) {
           console.error('No refresh token received');
           throw new Error('No refresh token provided by Google.');
-          };
+          }
       
           await prisma.persona.update({ 
               where: { 
@@ -60,7 +59,12 @@ const setupcalendario = () => {
     oAuth2Client.setCredentials({
       refresh_token: tokenrenewed,
     });
-    await oAuth2Client.getAccessToken();
+  
+    const { token } = await oAuth2Client.getAccessToken();
+      if (!token) {
+      throw new Error("Failed to get access token");
+    }
+
 
     const calendar = google.calendar({ version: 'v3', auth: oAuth2Client });
     return calendar;

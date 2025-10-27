@@ -58,7 +58,7 @@ model tareas {
   id    Int    @id @default(autoincrement())
   id_proyecto   Int
   id_persona    Int
-  limite      String
+  limite      DateTime
   eventId   String?
 
   proyecto      proyecto @relation(fields: [id_proyecto], references: [id])
@@ -80,12 +80,13 @@ model tiene {
 
   persona       persona  @relation(fields: [id_persona], references: [id])
   proyecto      proyecto @relation(fields: [id_proyecto], references: [id])
+  @@unique([id_persona, id_proyecto])
 }
 
 model proyecto {
   id        Int      @id @default(autoincrement())
   nombre     String   
-  limite     String
+  limite     DateTime
   descripcion String?
   fechaInicio DateTime @default(now())
   fechaFin DateTime?
@@ -129,6 +130,7 @@ model tiene_pc {
   
   persona    persona  @relation(fields: [id_persona], references: [id])
   chat       chat     @relation(fields: [id_chat], references: [id])
+  @@unique([id_persona, id_chat])
 }
 
 model tiene_rc {

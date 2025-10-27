@@ -1,6 +1,4 @@
-import prismaPkg from '@prisma/client';
-const { PrismaClient } = prismaPkg;
-const prisma = new PrismaClient();
+import { prisma } from '../prisma/prisma.js';
 
 const setupchat = () => {
 

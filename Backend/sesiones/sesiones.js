@@ -1,7 +1,7 @@
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '../prisma/prisma.js';
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
-const prisma = new PrismaClient();
+
 
 const setupsesiones = (JWT_SECRET) => {
 

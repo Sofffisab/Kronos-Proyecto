@@ -1,6 +1,4 @@
-import pkg from "@prisma/client";
-const { PrismaClient } = pkg;
-const prisma = new PrismaClient();
+import { prisma } from '../prisma/prisma.js';
 import setupcalendario from "../calendario/calendario.js";
 
 const setuptareas = () => {

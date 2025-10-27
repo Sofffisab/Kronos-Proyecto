@@ -1,14 +1,19 @@
-import pkg from "@prisma/client";
-const { PrismaClient } = pkg;
-const prisma = new PrismaClient();
+import { prisma } from '../prisma/prisma.js';
 
+import { z } from 'zod';
 import setupmail from "../mail/mail.js";
 const { sendinvitationmail } = setupmail();
 
 const setupproyectos = () => {
 
+  const createProjectSchema = z.object({
+    nombre: z.string().min(1).max(100),
+    limite: z.string().datetime(),
+    descripcion: z.string().max(500).optional(),
+  });
+
   const createproject = async (req, res) => {
-    const { nombre, limite, descripcion } = req.body;
+    const { nombre, limite, descripcion } = createProjectSchema.parse(req.body);
     const personaId = req.personaId;
 
     try {
@@ -34,8 +39,12 @@ const setupproyectos = () => {
 
       res.status(201).json({ message: "project created successfully", project: newproject });
     } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: error.errors });
+      }
       console.error("Error creating project:", error);
       res.status(500).json({ error: "Internal Server Error" });
+      throw error;
     };
   };
 
