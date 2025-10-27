@@ -1,6 +1,7 @@
 import CreateProjectForm from "../components/Create Project/CreateProjectForm.jsx";
 import { useState } from "react"
 import Navbar from "../components/NavBar.jsx";
+import Window from "../components/Create Project/Window.jsx";
 
 export default function CreateProjectPage() {
 
@@ -43,6 +44,7 @@ export default function CreateProjectPage() {
     }
     const [rawTasks,setRawTasks] = useState([])
     const addTasks = ()=> {
+        if(input=='' || input==null) return;
         setRawTasks([...rawTasks, input]);
         setInput('')
     }
@@ -50,5 +52,6 @@ export default function CreateProjectPage() {
     return( <div className='createPage'>
         <Navbar/>
         <CreateProjectForm type={type}setType={setType} addTask={addTasks}input={input}title={title}step={step} nextStep={nextStep} setInput={setInput}/>
+        <Window tasks={tasks? tasks : rawTasks}name={nombre? nombre : input}/>
         </div>)
 }

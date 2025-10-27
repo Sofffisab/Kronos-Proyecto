@@ -1,6 +1,8 @@
 .form {
-padding: 2%;
-width: 100%;
+padding: 4%;
+padding-left: 8%;
+width: 90%;
+box-sizing: border-box;
 height: auto;
 display: flex;
 flex-direction: column;
@@ -22,13 +24,14 @@ color:var(--mainColor);
 .input {
     border-radius: 5px;
     border: solid var(--secondaryColor) 2px;
-    padding: .7%;
-    width: 30%;
+    padding: 1.7%;
+    box-sizing: border-box;
+    width: 100%;
 }
 .mainTitle {
     font-family: var(--font);
     font-size: var(--biggerHeaderSize);
-    width: 30%;
+    width: 100%;
     margin: 0px;
     max-height: 20rem;
     transition: var(--easeTransition);
@@ -42,27 +45,101 @@ color:var(--mainColor);
 .title {
     font-family: var(--font);
     font-size: var(--headerSize);
-    width: 20%;
+    width: 100%;
 }
 
-.focused {
-    background-color: var(--secondaryColor);
-}
+
 .selectBtn button {
 font-family: var(--font);
 font-size: var(--mediumHeaderSize);
 }
 .selectBtn {
-    border-radius: 5px;
+    border-radius: 3px;
+    
     border: solid var(--secondaryColor) 2px;
-    padding: .7%;
+    padding: 1%;
     display: flex;
     justify-content: flex-start;
     align-items: center;
 }
+.focused {
+    background-color: #92ADC6;
+    border-color: #386A98;
+}
 .selectBtnBox {
     display: flex;
     gap: 1%;
-    width: 20%;
+    width: 60%;
     flex-wrap: wrap;
+}
+.bar {
+    width: 100%;
+    height: 1.2rem;
+    background-color: var(--secondaryColor);
+    border-radius: 50px;
+}
+.innerBar {
+    height: 100%;
+    background-color: #8BCEA1;
+    border-radius: 50px;
+    transition: var(--easeTransition);
+}
+
+.window {
+    width:100%;
+    box-shadow: var(--dfBoxShadow);
+}
+.topBar {
+    width: 100%;
+    height: 5%;
+    background-color: var(--secondaryColor);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    box-sizing: border-box ;
+}
+.topBar div {
+    display: flex;
+    align-items: center;
+}
+.windowTitle {
+    font-family: var(--font);
+    font-size: calc(var(--biggerHeaderSize)*0.8);
+    height: 25%;
+    display: flex;
+    align-items: center;
+    padding: 3%;
+}
+.windowTitle div {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 1%;
+}
+.windowTitle p {
+    white-space: nowrap;
+    max-width: 34rem;
+    text-overflow: ellipsis;      
+    overflow: hidden;
+  
+   
+}
+.listIcon {
+    background-color: #8AC3ED;
+    border-radius: 5px;
+    font-size: calc(var(--biggerHeaderSize)*1.7);
+}
+.tasks {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.task {
+    font-family: var(--font);
+    width: 100%;
+}
+.task div {
+    display: flex;
+    align-items: center;
+    gap: 1%
 }
