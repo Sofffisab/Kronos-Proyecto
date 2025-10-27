@@ -8,7 +8,8 @@ from PIL import Image
 from io import BytesIO
 from pydantic import BaseModel
 from typing import List
-import base64
+import requests
+from bs4 import BeautifulSoup
 import pandas as pd
 import datetime
 from tabulate import tabulate
@@ -62,6 +63,94 @@ def retry_request(func, *args, **kwargs):
                 raise
 
 
+#Extrae el texto limpio de una URL
+def extract_text_from_url(url: str) -> str:
+    try:
+        r = requests.get(url, timeout=10)
+        r.raise_for_status()
+        soup = BeautifulSoup(r.text, "html.parser")
+        # Sacar scripts, estilos y texto basura
+        for tag in soup(["script", "style"]):
+            tag.decompose()
+        text = " ".join(soup.stripped_strings)
+        return text[:8000]  # límite para evitar respuestas largas
+    except Exception as e:
+        return f"Error leyendo {url}: {e}"
+
+
+#Usa Gemini para buscar URLs relevantes al tema
+def web_search_with_gemini(client, topic: str) -> list:
+
+    response = retry_request(
+        client.models.generate_content,
+        model="gemini-2.5-flash",
+        contents=(
+           f"Buscá las 5 páginas web más útiles y famosas sobre {topic}, devolveme solo las URLs."
+        ),
+        config = types.GenerateContentConfig(
+            tools=[grounding_tool]
+        )
+    )
+
+
+    text = response.text
+    urls = [u.strip() for u in text.split() if u.startswith("http")]
+    return urls[:5]
+
+#Busca y recopila textos de las páginas más relevantes
+def gather_sources_for_topic(client, topic: str) -> list:
+    urls = web_search_with_gemini(client, topic)
+    sources = []
+    for u in urls:
+        text = extract_text_from_url(u)
+        sources.append({"url": u, "text": text})
+    return sources
+
+
+#Crea una tabla comparativa (JSON) con los datos recolectados
+def ask_openai_to_create_table(topic: str, sources: list) -> dict:
+    client = OpenAI()
+    prompt = f"""
+    Analizá la información de estas páginas sobre {topic} y generá una tabla comparativa en formato JSON.
+    Cada entrada debe incluir: nombre del sitio, principales características, ventajas, desventajas y valoración general.
+    Fuentes:
+    {json.dumps(sources[:3], ensure_ascii=False)[:6000]}
+    """
+
+    response = client.chat.completions.create(
+        model="gpt-5",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.4,
+    )
+
+    content = response.choices[0].message.content
+    try:
+        return json.loads(content)
+    except:
+        return {"error": "No se pudo convertir a JSON", "raw": content}
+
+#Flujo completo: búsqueda web → tabla JSON → imagen generada → código actualizado
+def run_pipeline(topic: str, user_image_path: str, user_site_html_or_text: str):
+    print(f"🔍 Buscando información sobre: {topic}")
+    gemini_sources = gather_sources_for_topic(client, topic)
+    print(f"✅ Se recopilaron {len(gemini_sources)} fuentes.")
+
+    print("📊 Generando tabla comparativa con OpenAI...")
+    table_data = ask_openai_to_create_table(topic, gemini_sources)
+    print("✅ Tabla creada correctamente.")
+
+    print("🎨 Creando imagen mejorada del sitio...")
+    image_path = createImgSearching(user_image_path, topic)
+
+    print("💻 Reescribiendo el código HTML/CSS...")
+    new_code = createTxt(user_site_html_or_text, image_path, topic)
+
+    print("✅ Pipeline completado con éxito.")
+    return {
+        "table": table_data,
+        "image": image_path,
+        "code": new_code
+    }
 
 #crear img
 def createImg(prompt):
@@ -283,52 +372,17 @@ def createImgSearching(prompt, img_path=None):
             inserted_img = img.tobytes()  # si querés pasar los bytes
             width, height = img.size
 
-    promptpsss = f"""Crea una imagen realista del sitio web mostrado en la imagen adjunta, incorporando las mejoras indicadas en la conclusión:
-             - Ajustar colores y tipografía para mejor legibilidad.
-            - Reorganizar botones importantes para navegación más intuitiva.
-            - Añadir iconos y elementos visuales que mejoren la experiencia.
-            - Mantener el estilo general del sitio original.
-            - Mantener el mismo tamaño y proporción que la imagen original: ancho={width}px, alto={height}px.
-            Tema: {prompt}
-            """
-    
-
-    response = retry_request(
-        client.models.generate_content,
-        model="gemini-2.0-flash-preview-image-generation",
-        contents=[
-            {"role": "user", "parts": [{"text": promptpsss}]}
-        ],
-        config=types.GenerateContentConfig(
-        response_modalities=['TEXT', 'IMAGE']
-        )
-    )
-
-
-    response = client.models.generate_images(
-    model='imagen-4.0-generate-001',
-    prompt= [f"""Crea una imagen realista del sitio web mostrado en la imagen adjunta, incorporando las mejoras indicadas en la conclusión:
-             - Ajustar colores y tipografía para mejor legibilidad.
-            - Reorganizar botones importantes para navegación más intuitiva.
-            - Añadir iconos y elementos visuales que mejoren la experiencia.
-            - Mantener el estilo general del sitio original.
-            - Mantener el mismo tamaño y proporción que la imagen original: ancho={width}px, alto={height}px.
-            Tema: {prompt}"""
-        ]
-    )
 
     contents = [
-    types.Part.from_text(
-        text=f"""
+    types.Part.from_text(text=f"""
         Crea una imagen realista del sitio web mostrado en la imagen adjunta, incorporando las mejoras indicadas en la conclusión:
         - Ajustar colores y tipografía para mejor legibilidad.
         - Reorganizar botones importantes para navegación más intuitiva.
         - Añadir iconos y elementos visuales que mejoren la experiencia.
         - Mantener el estilo general del sitio original.
         - Mantener el mismo tamaño y proporción que la imagen original: ancho={width}px, alto={height}px.
-        Tema: {prompt}""",
-        role="user"
-        )
+        Tema: {prompt}
+    """)
  ]
 
  # Si hay imagen se agrega
@@ -442,7 +496,7 @@ Conclusiones / sugerencias:
 
 
 #crear tabla e img buscando en internet
-def createJson(prompt, img_path="image.jpg"):
+#def createJson(prompt, img_path="image.jpg"):
     response = retry_request(
         client.models.generate_content,
         model="gemini-2.5-flash",
@@ -548,17 +602,23 @@ def createJson(prompt, img_path="image.jpg"):
 
 theme = 'PC MARKET'
 
-createJson(f"""
-The JSON returned must be an array of 11 rows (objects).  
-Each row has in this order:  
-"criterion", "(NamePage1)", "(NamePage2)", "(NamePage3)", "(NamePage4)", "Conclusion".
-Websites 1 to 3 have to be the most famous about {theme}, and the 4th is the one of the img insterted.
-Rules:  
-- Criteria order: Typography & Readability, Colors & Branding, Visual Elements, Navigation & UX, Organization & Structure, Accessibility, Functionality, Interactivity, SEO, +1 extra criterion you choose, +Final Conclusion row (only fill "Conclusion").  
-- Website1–Website3: each = short intro phrase + one descriptive sentence of 10–20 words.Do not mention the Website in each cell.  
-- Website4: same, but refers to the website from the provided image.  
-- "Conclusion": only Website4 improvements, implicit comparison, highlight strengths + suggestions, never mention website names.  
+if __name__ == "__main__":
+    result = run_pipeline(
+        topic="PC MARKET",
+        user_image_path="image.jpg",
+        user_site_html_or_text="<html><body><h1>Mi sitio</h1></body></html>"
+    )
 
-Output must be strictly consistent, 6 keys per row, no extra text.
 
-""")
+#createJson(f"""
+#The JSON returned must be an array of 11 rows (objects).  
+#Each row has in this order:  
+#"criterion", "(NamePage1)", "(NamePage2)", "(NamePage3)", "(NamePage4)", "Conclusion".
+#Websites 1 to 3 have to be the most famous about {theme}, and the 4th is the one of the img insterted.
+#Rules:  
+#- Criteria order: Typography & Readability, Colors & Branding, Visual Elements, Navigation & UX, Organization & Structure, Accessibility, Functionality, Interactivity, SEO, +1 extra criterion you choose, +Final Conclusion row (only fill "Conclusion").  
+#- Website1–Website3: each = short intro phrase + one descriptive sentence of 10–20 words.Do not mention the Website in each cell.  
+#- Website4: same, but refers to the website from the provided image.  
+#- "Conclusion": only Website4 improvements, implicit comparison, highlight strengths + suggestions, never mention website names.  
+#Output must be strictly consistent, 6 keys per row, no extra text.
+#""")

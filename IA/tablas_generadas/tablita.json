@@ -1,90 +1,86 @@
 [
-  {
-    "criterion": "Branding y posicionamiento",
-    "Website1": "Newegg: e-commerce de tecnología y PC parts con foco en ofertas y variedad.",
-    "Website2": "PCMag: medio editorial de reviews, guías y noticias tech con alta autoridad.",
-    "Website3": "Tom's Hardware: portal para entusiastas con comparativas, guías y builds.",
-    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
-    "Conclusion": "Define una propuesta de valor clara (precio, variedad, asesoría); crea un logotipo legible; añade un tagline visible en el hero que diferencie a PC Market."
-  },
-  {
-    "criterion": "Estructura de navegación",
-    "Website1": "Mega menú amplio por categorías, acceso rápido a ofertas y marcas.",
-    "Website2": "Navegación por tipos de contenido (reviews, best picks, news).",
-    "Website3": "Menús por componentes, guías y foros; enfoque temático.",
-    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
-    "Conclusion": "Limita el menú a 5–7 categorías principales; integra barra de búsqueda prominente; usa header pegajoso con accesos a cuenta y carrito."
-  },
-  {
-    "criterion": "Hero y propuesta de valor",
-    "Website1": "Hero con promociones destacadas y ofertas temporales.",
-    "Website2": "Destaca artículos y rankings en portada.",
-    "Website3": "Destaca guías y comparativas recientes en el hero.",
-    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
-    "Conclusion": "Usa hero estático con USP clara y un CTA principal; evita carruseles; muestra beneficios (envío, garantía, devoluciones) en una franja bajo el hero."
-  },
-  {
-    "criterion": "Buscador y filtrado",
-    "Website1": "Buscador con autocompletar y filtros facetados profundos.",
-    "Website2": "Búsqueda por productos y artículos con etiquetas.",
-    "Website3": "Búsqueda por temas y componentes; filtros básicos.",
-    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
-    "Conclusion": "Implementa autocompletar con sugerencias y categorías; filtros por marca, precio, uso y compatibilidad; chips de filtros removibles."
-  },
-  {
-    "criterion": "Jerarquía visual y escaneabilidad",
-    "Website1": "Tarjetas de producto con precio y badges; denso en información.",
-    "Website2": "Tipografía clara y listados con puntuaciones visibles.",
-    "Website3": "Diseños con tablas y listados técnicos; mucha data.",
-    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
-    "Conclusion": "Usa 2–3 tamaños tipográficos, suficiente espacio en blanco y un grid consistente; prioriza precio, rating y CTA en tarjetas."
-  },
-  {
-    "criterion": "CTAs y flujo de compra",
-    "Website1": "CTAs Add to Cart visibles; checkout conocido y rápido.",
-    "Website2": "CTAs editoriales (Leer reseña, Mejores); enlaces afiliados.",
-    "Website3": "CTAs a guías y recomendaciones; menos transaccional.",
-    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
-    "Conclusion": "CTA principal contrastado y persistente; mini-carrito accesible; reduce pasos del checkout y permite guest checkout."
-  },
-  {
-    "criterion": "Contenido editorial y guías",
-    "Website1": "Hubs de recomendaciones y ofertas; contenido de apoyo.",
-    "Website2": "Comparativas y reviews extensas y actualizadas.",
-    "Website3": "Guías de compra y builds detalladas con benchmarks.",
-    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
-    "Conclusion": "Integra blog/guías enlazadas desde categorías; módulos de Top picks en listados; estructura de clúster SEO por uso (gaming, oficina, creator)."
-  },
-  {
-    "criterion": "Señales de confianza",
-    "Website1": "Ratings, reviews verificadas, garantías y marcas reconocidas.",
-    "Website2": "Autoridad editorial y sellos de Editors’ Choice.",
-    "Website3": "Reputación de comunidad y foros activos.",
-    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
-    "Conclusion": "Muestra reseñas verificadas, políticas claras y sellos de pago seguro; destaca soporte y devoluciones; usa microcopy sobre stock y tiempos."
-  },
-  {
-    "criterion": "Rendimiento y carga percibida",
-    "Website1": "Contenido pesado con lazy load y muchos módulos.",
-    "Website2": "Optimización aceptable con presencia de anuncios.",
-    "Website3": "Páginas largas con tablas; rendimiento moderado.",
-    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
-    "Conclusion": "Optimiza imágenes (WebP/AVIF), lazy load y fuentes; minimiza scripts de terceros; apunta a buenas Core Web Vitals."
-  },
-  {
-    "criterion": "Responsividad móvil",
-    "Website1": "Interfaz tipo app; filtros deslizables; puede saturar.",
-    "Website2": "Lectura cómoda y menús simplificados.",
-    "Website3": "Scroll largo con tablas adaptadas.",
-    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
-    "Conclusion": "Menú inferior en móvil, filtros colapsables y CTA sticky; zonas táctiles amplias y navegación con pulgar."
-  },
-  {
-    "criterion": "Accesibilidad y SEO on-page",
-    "Website1": "Breadcrumbs y schema de producto; contraste variable.",
-    "Website2": "Schema de artículo y headings claros; buenas breadcrumbs.",
-    "Website3": "Headings adecuados; alt y tablas a veces irregulares.",
-    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
-    "Conclusion": "Incluye alt text, contraste AA, estados de foco y accesos por teclado; schema Product/FAQ; URLs limpias y meta títulos orientados a intención."
-  }
+    {
+        "criterion_or_website": "Typography & Readability",
+        "conclusion": "El diseño tipográfico es moderno y legible, sin embargo, se podría mejorar el contraste en ciertas áreas para asegurar una accesibilidad óptima para todos los usuarios.",
+        "Un diseño profesional facilita la lectura. Utiliza fuentes claras que optimizan la comprensión de artículos técnicos extensos.": "",
+        "Presenta una interfaz de texto concisa. Su tipografía es muy funcional y legible para la presentación detallada de componentes.": "",
+        "Ofrece un diseño comercial estándar. El texto es directo, optimizado para la rápida navegación y compra de productos.": "",
+        "Demuestra una elección de fuentes contemporánea. El tamaño del texto es apropiado para una lectura cómoda y rápida de nombres de productos.": ""
+    },
+    {
+        "criterion_or_website": "Colors & Branding",
+        "conclusion": "La elección de colores es limpia y funcional. Podría beneficiarse de la introducción de una paleta de acento secundaria para reforzar la identidad y guiar la atención del usuario.",
+        "Emplea una paleta de colores típicamente tecnológica. Su marca se establece a través de tonos serios y una estética informativa robusta.": "",
+        "Utiliza un esquema de color minimalista. La interfaz sobria ayuda a destacar la información crítica de los componentes de PC.": "",
+        "Presenta colores corporativos reconocibles. El uso estratégico de estos tonos guía al usuario a través de la experiencia de compra.": "",
+        "Muestra una paleta de colores básica y funcional. El azul brillante del encabezado contrasta eficazmente con el fondo blanco general.": ""
+    },
+    {
+        "criterion_or_website": "Visual Elements",
+        "conclusion": "Los elementos visuales son concisos y bien organizados, especialmente las imágenes de productos. La integración de ilustraciones o íconos más distintivos podría enriquecer la experiencia sin sobrecargar.",
+        "Incorpora gráficos complejos y fotos de alta calidad. Los elementos visuales complementan el análisis técnico y las comparativas de productos.": "",
+        "Se enfoca en imágenes de productos y tablas de datos. La simplicidad visual prioriza la funcionalidad sobre la estética elaborada.": "",
+        "Exhibe imágenes de productos en alta resolución y banners promocionales. Los elementos gráficos son clave para la experiencia de venta minorista.": "",
+        "Presenta imágenes de productos claras y uniformes. Los iconos son sencillos y el diseño general es minimalista, facilitando el escaneo visual.": ""
+    },
+    {
+        "criterion_or_website": "Navigation & UX",
+        "conclusion": "La navegación es directa y fácil de entender, lo cual es un punto fuerte. Para mejorar, se podría considerar una barra de navegación fija o más opciones de filtrado en las categorías de productos.",
+        "Ofrece una navegación extensa y jerárquica. La experiencia de usuario está diseñada para explorar artículos y reseñas en profundidad.": "",
+        "Su navegación es altamente funcional y orientada a tareas. La interfaz guía al usuario en la construcción y comparación de PCs de manera lógica.": "",
+        "La navegación es típica de un gran minorista en línea. Los menús y filtros facilitan la búsqueda y descubrimiento de productos específicos.": "",
+        "Dispone de una navegación simple e intuitiva. Los enlaces clave en el encabezado y la barra de búsqueda son fácilmente identificables para el usuario.": ""
+    },
+    {
+        "criterion_or_website": "Organization & Structure",
+        "conclusion": "La organización del contenido es lógica y fácil de seguir. Una mejora podría ser la adición de subcategorías más detalladas o filtros avanzados para productos.",
+        "Está organizado como una revista en línea. Los artículos se categorizan lógicamente, facilitando el acceso a información detallada y comparativas.": "",
+        "Posee una estructura de base de datos. Los componentes se organizan sistemáticamente, permitiendo comparaciones exhaustivas y la creación de listas de construcción.": "",
+        "Sigue una estructura de comercio electrónico estándar. Los productos se organizan por categorías y se presentan claramente en cuadrículas y listas.": "",
+        "La estructura es clara y jerárquica. El contenido se organiza en secciones bien definidas, con una prominente exhibición de componentes populares.": ""
+    },
+    {
+        "criterion_or_website": "Accessibility",
+        "conclusion": "Los elementos de contraste y el tamaño de la fuente son adecuados, lo cual es positivo. Se recomienda verificar la compatibilidad con lectores de pantalla y la navegación por teclado para una accesibilidad completa.",
+        "Generalmente sigue buenas prácticas de accesibilidad. El contenido es adaptable para diferentes dispositivos y usuarios con diversas necesidades.": "",
+        "Prioriza la accesibilidad para su interfaz de datos. La información se presenta de forma clara y accesible para un amplio público técnico.": "",
+        "Aplica estándares de accesibilidad para comercio electrónico. Se esfuerza por hacer su plataforma usable para la mayor cantidad de clientes posible.": "",
+        "Demuestra un buen contraste de colores y texto legible. El diseño simple favorece una experiencia de usuario potencialmente inclusiva para muchos.": ""
+    },
+    {
+        "criterion_or_website": "Functionality",
+        "conclusion": "Las funciones básicas son claras y operativas. Expandir las capacidades de 'Arma tu PC' y 'Comparar' con herramientas interactivas podría distinguirlo significativamente.",
+        "Ofrece funcionalidad de búsqueda, comentarios y filtros de artículos. Su plataforma es rica en herramientas para la investigación tecnológica.": "",
+        "Su funcionalidad central es la compatibilidad de piezas. Permite a los usuarios construir y validar configuraciones de PC de manera eficiente.": "",
+        "Proporciona una funcionalidad completa de comercio electrónico. Incluye carrito de compras, seguimiento de pedidos, y opciones de pago diversas.": "",
+        "Presenta funciones básicas como búsqueda y navegación por categorías. Los enlaces 'Arma tu PC' y 'Comparar' sugieren funcionalidades avanzadas futuras.": ""
+    },
+    {
+        "criterion_or_website": "Interactivity",
+        "conclusion": "La interfaz es limpia, pero la interactividad actual es limitada. La incorporación de elementos como filtros dinámicos o valoraciones de usuarios podría enriquecer notablemente la experiencia.",
+        "Fomenta la interacción a través de foros y comentarios. Los usuarios pueden participar en discusiones y compartir conocimientos técnicos.": "",
+        "Promueve la interacción con listas de construcción compartidas. Permite a los usuarios votar, comentar y refinar configuraciones de PC.": "",
+        "La interactividad se centra en reseñas de usuarios y Q&A. Los clientes pueden calificar productos y obtener respuestas a sus preguntas.": "",
+        "La interactividad visible es básica, con elementos como la barra de búsqueda. Los productos presentados probablemente son interactivos al hacer clic.": ""
+    },
+    {
+        "criterion_or_website": "SEO",
+        "conclusion": "La estructura del sitio es favorable para el SEO básico. Implementar etiquetas alt en imágenes, descripciones meta enriquecidas y un sitemap XML robusto potenciaría su posicionamiento.",
+        "Tiene una fuerte presencia SEO debido a su contenido. Sus artículos se posicionan bien para búsquedas relacionadas con hardware.": "",
+        "Optimizado para SEO en la búsqueda de componentes. La estructura de datos facilita el rastreo y la indexación de productos específicos.": "",
+        "Muy fuerte en SEO para productos de comercio electrónico. La optimización ayuda a los usuarios a encontrar productos directamente a través de motores de búsqueda.": "",
+        "La estructura de encabezados y el contenido de texto visible son adecuados. Una optimización más profunda de metadatos y enlaces internos podría impulsar su visibilidad.": ""
+    },
+    {
+        "criterion_or_website": "Performance & Loading Speed",
+        "conclusion": "El diseño ligero es una ventaja para la velocidad de carga. Continuar optimizando imágenes, minimizar scripts y aprovechar el almacenamiento en caché mejorará aún más el rendimiento.",
+        "Puede ser algo pesado debido a la publicidad. A pesar de esto, se esfuerza por mantener una buena velocidad de carga para sus artículos.": "",
+        "Generalmente ofrece una experiencia de carga rápida. La eficiencia en la presentación de datos contribuye a un rendimiento ágil.": "",
+        "Se esfuerza por una carga rápida pese a su complejidad. Optimiza imágenes y scripts para una experiencia de compra fluida.": "",
+        "El diseño es limpio y minimalista. Esto sugiere una base para una carga de página rápida, esencial para la retención del usuario.": ""
+    },
+    {
+        "criterion_or_website": "Final Conclusion",
+        "conclusion": "El sitio muestra una base sólida con un diseño limpio y una navegación intuitiva. Destaca por su claridad y enfoque directo en los componentes. Para evolucionar, podría integrar más interactividad, opciones de personalización, herramientas de construcción de PC más robustas y una estrategia SEO ampliada para competir eficazmente con los líderes del mercado."
+    }
 ]
