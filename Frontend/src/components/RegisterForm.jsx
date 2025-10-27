@@ -10,6 +10,7 @@ export default function RegisterForm(props) {
         register,
         handleSubmit,
         setValue,
+        setError,
         formState: { errors },
         reset,
       } = useForm();
@@ -25,9 +26,18 @@ export default function RegisterForm(props) {
         {setStep(2); 
          setEmail(data.email)}
         else {
-      console.log(data);
-      props.onSubmit && await props.onSubmit(data.email, data.pfp, data.nombre, data.password)
-      reset(); navigate('/')}} 
+          console.log(data);
+          try{
+      
+      const result = props.onSubmit && await props.onSubmit(data.nombre, data.email, data.password, data.pfp)
+      console.log(result)
+      localStorage.setItem("token",result.token); // hacer dsp con cookies 🍪🍪
+       navigate('/')}
+      catch(e){
+        setError("password",{type: "500", message:e.message})
+
+      }}} 
+
 
       
       const [passwordVisibility, setPasswordVisibility] = useState(false)
