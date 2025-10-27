@@ -7,6 +7,7 @@ from google.genai import types
 from PIL import Image
 from io import BytesIO
 from pydantic import BaseModel
+from PIL import Image
 from typing import List
 import base64
 import pandas as pd
@@ -305,7 +306,7 @@ def createImgSearching(prompt, img_path=None):
         {
             "role": "user",
             "content": [
-                {"type": "text", "text": prompt_search}
+                {"type": "input_text", "text": prompt_search}
         ]
         }
     ]
@@ -314,7 +315,12 @@ def createImgSearching(prompt, img_path=None):
     if img_path and os.path.exists(img_path):
         with open(img_path, "rb") as f:
             img_bytes = f.read()
-        contents.append(types.Part.from_bytes(data=img_bytes, mime_type="image/jpeg"))
+        #se transforma la img en un objeto
+        img_b64 = base64.b64encode(img_bytes).decode("utf-8")
+        contents[0]["content"].append({
+            "type":"input_image",
+            "image_url":f"data:image/jpeg;base64,{img_b64}"
+        })
 
  # Busca info en internet
     response = clientChat.responses.create(
@@ -331,10 +337,7 @@ def createImgSearching(prompt, img_path=None):
         model="gemini-2.0-flash-preview-image-generation",
         contents=[{"role": "user", "parts": [{"text": prompt_img_final}]}],
         config=types.GenerateContentConfig(
-            response_modalities=["TEXT", "IMAGE"],
-            temperature=0.3,
-            top_p=0.9,
-            top_k=40 
+            response_modalities=["TEXT", "IMAGE"]
         )
     )
 
@@ -379,24 +382,43 @@ def createTxt(img_generated_path, conclusions_json, codigo_json, language_map):
     codigo_str = "\n\n".join(codigo_blocks)
 
     prompt = f"""
- Vas a recibir: (A) código del sitio SIN cambios aplicados, (B) img de la página CON los cambios aplicados, (C) JSON DE conclusiones de las mejoras y cambios realizados para la img.
- Mejora el código para que la UI coincida exactamente con la imagen y las sugerencias planteadas.
- Devuelve SOLO BLOQUES DE CÓDIGO Markdown con encabezado '🔧 Archivo: <nombre>' y triple backticks con lenguaje indicado.
+    Vas a recibir: (A) código del sitio SIN cambios aplicados, (B) img de la página CON los cambios aplicados, (C) JSON DE conclusiones de las mejoras y cambios realizados para la img.
+    Mejora el código para que la UI coincida exactamente con la imagen y las sugerencias planteadas.
+    Devuelve SOLO BLOQUES DE CÓDIGO Markdown con encabezado '🔧 Archivo: <nombre>' y triple backticks con lenguaje indicado.
 
---- REFERENCIAS ---
-Código actual:
-{codigo_str}
+    --- REFERENCIAS ---
+    Código actual:
+    {codigo_str}
 
-Conclusiones / sugerencias:
-{json.dumps(conclusions_json, indent=2, ensure_ascii=False)}
-"""
+    Conclusiones / sugerencias:
+    {json.dumps(conclusions_json, indent=2, ensure_ascii=False)}
+    """
 
-    # Preparar contents para el modelo
-    contents = [types.Part.from_text(text=prompt)]
-    if img_generated_path and os.path.exists(img_generated_path):
-        with open(img_generated_path, "rb") as f:
-            img_bytes = f.read()
-        contents.append(types.Part.from_bytes(data=img_bytes, mime_type="image/jpeg"))
+
+    # Preparar contents para el prompt
+    if img_generated_path:
+        if isinstance(img_generated_path, Image.Image):
+            # Convertir a bytes y luego a base64
+            buffered = BytesIO()
+            img_generated_path.save(buffered, format="PNG")
+            img_bytes = buffered.getvalue()
+            img_b64 = base64.b64encode(img_bytes).decode("utf-8")
+
+            contents[0]["content"].append({
+                "type":"input_image",
+                "image_url":f"data:image/jpeg;base64,{img_b64}"
+            })
+
+
+        elif isinstance(img_generated_path, str) and os.path.exists(img_generated_path):
+            # Caso que venga una ruta de archivo
+            with open(img_generated_path, "rb") as f:
+                img_bytes = f.read()
+            img_b64 = base64.b64encode(img_bytes).decode("utf-8")
+            contents[0]["content"].append({
+                "type": "input_image",
+                "image_url": f"data:image/png;base64,{img_b64}"
+            })
 
     # Llamada al modelo
     response = clientChat.responses.create(
@@ -525,16 +547,12 @@ def createJson(prompt, img_path="image.jpg"):
         conclusion = "No hubo sugerencias claras, pero mejora la navegación y la accesibilidad visual."
 
     if img_path and os.path.exists(img_path):
-        createImgSearching(prompt=conclusion, img_path=img_path)
-        imagen = image
+        imagen = createImgSearching(conclusion,img_path)
 
     conclusion_text = " ".join(df["conclusion"].dropna().tolist())
-    resultado_txt = createTxt(
-        img_generated_path=image,
-        conclusions_json=rows,
-        codigo_json=codigo_json,
-        language_map=language_map
-    )
+
+    resultado_txt = createTxt(imagen,rows,codigo_json,language_map)
+
     print("Markdown generado:\n", resultado_txt["markdown"])
 
 
