@@ -11,7 +11,7 @@ const setuprouter = ({ login, signup, authentication, getevents, permision, redi
             status: "OK",
             endpoints: {
                 auth: ["POST /users/login", "POST /users/signup", "GET /auth/google", "GET /auth/google/callback"],
-                calendar: [ "GET /api/calendar/events", "POST /api/calendar/events", "DELETE /api/calendar/events/:eventId", "PUT /api/calendar/events/:eventId"],
+                calendar: ["GET /api/calendar/events", "POST /api/calendar/events", "DELETE /api/calendar/events/:eventId", "PUT /api/calendar/events/:eventId"],
                 files: ["GET /api/files/:nombrearchivo", "POST /api/files/projects/:proyectoId"],
                 chat: [ "POST /projects/:proyectoId/chat/create", "GET /chat/:chatId/messages", "PUT /messages/:messageId/read", "GET /chats", "GET /chat/:chatId/members"],
                 projects: ["POST /api/projects", "GET /api/projects", "GET /api/projects/:proyectoId", "PUT /api/projects/:proyectoId", "POS/api/projects/:proyectoId/invite", "POST /api/projects/join"],
