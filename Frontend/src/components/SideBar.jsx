@@ -24,7 +24,7 @@ return(
 <Separator/>
 <div className='titleSbContainer'>
 <FancyTitle class='proyectosTitle' text='Proyectos'/>
-<span className='material-symbols-outlined' >add</span>
+<SimpleButton icon='add' link='/create' class='teamBtn'/>
 </div>
 <ul className='proyectos'>
     {projects}
@@ -32,7 +32,7 @@ return(
 
 <div className='titleSbContainer'>
 <FancyTitle class='proyectosTitle' text='Equipos'/>
-<span className='material-symbols-outlined' id='addTeamBtn'>add</span>
+<SimpleButton icon='add'class='teamBtn'/>
 </div>
 <ul className='equipos'>
 {teams}
