@@ -12,11 +12,12 @@ import Recover from "./Pages/Recover.jsx";
 import CreateProjectPage from './Pages/CreateProjectPage.jsx'
 import './global.css'
 const router = createBrowserRouter([
-  { path: "/", element:<TokenAuth><LandingPage /> </TokenAuth> },
+  { path: "/", element:<TokenAuth> <LandingPage /> </TokenAuth> },
   { path: "*", element: <ErrorPage /> },
   { path: "/login", element: <Login /> },
   { path: "/Register", element: <Register /> },
-  { path: '/project/', element: <ProjectPage/>},
+  { path: '/project/:id', element: <ProjectPage/>},
+  { path: '/project', element: <ProjectPage/>},
   { path: '/recover', element: <Recover /> },
   { path: '/create', element: <CreateProjectPage/>}
   

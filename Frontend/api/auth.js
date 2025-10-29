@@ -37,11 +37,12 @@ return responseData;
 
    export const verifyToken = async (token) => {{
 
-       const response = await fetch('https://localhost:3000/api/projects', {
+       const response = await fetch('http://localhost:3000/api/projects', {
            method: 'GET',
            headers: {'Content-Type': 'application/json',
                     'authorization':`bearer ${token}`}
        })
+       
        if(!response.ok) return false
        else return true
    }}
