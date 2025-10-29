@@ -1,90 +1,86 @@
 [
     {
         "criterion_or_website": "Typography & Readability",
-        "conclusion": "",
-        "Newegg - Emplea una tipografía clara y moderna para los listados de productos. Facilita la lectura de especificaciones detalladas.": "",
-        "Amazon - Utiliza fuentes limpias y tamaños ajustables para diversos contenidos. Mantiene una alta legibilidad en descripciones y reseñas.": "",
-        "Micro Center - Presenta textos con una fuente sans-serif estándar que asegura la claridad. La información de los productos es fácil de escanear y comprender.": "",
-        "B&H Photo Video - Se observan fuentes nítidas y consistentes en todo el portal. La lectura de las fichas técnicas resulta cómoda y fluida.": ""
+        "conclusion": "null",
+        "Utiliza una tipografía sans-serif moderna y limpia. Los tamaños de texto y el espaciado aseguran una lectura cómoda en todo el contenido.": "",
+        "Emplea una fuente sans-serif clara para una legibilidad constante en contenido diverso. La jerarquía textual facilita el escaneo rápido de información.": "",
+        "Presenta una tipografía sans-serif contemporánea con buen contraste. La elección general de fuentes facilita la lectura de especificaciones y navegación.": "",
+        "Muestra una fuente sans-serif directa, ofreciendo legibilidad básica. Los tamaños de texto son adecuados para títulos, pero pequeños para detalles de productos.": ""
     },
     {
         "criterion_or_website": "Colors & Branding",
-        "conclusion": "",
-        "Newegg - La marca se distingue por una paleta de colores vibrantes con acentos rojos y azules. Refleja una imagen de tecnología y dinamismo.": "",
-        "Amazon - La identidad visual se basa en tonos azules y blancos, que transmiten confianza y seriedad. El logo es reconocido globalmente por su simplicidad.": "",
-        "Micro Center - Una combinación de colores sobrios y detalles en verde esmeralda define su estética. El diseño general es profesional y enfocado al hardware.": "",
-        "B&H Photo Video - La marca emplea una paleta de colores azul y blanco, con toques de naranja para llamadas a la acción. El branding proyecta una imagen de fiabilidad y experiencia.": ""
+        "conclusion": "null",
+        "Usa una distintiva combinación de colores negro, rojo y blanco. Esta paleta crea una imagen profesional y tecnológica, mejorando el atractivo visual.": "",
+        "Definido por un icónico acento naranja sobre una interfaz blanca y azul. La paleta simple refuerza una identidad de marca amigable y confiable.": "",
+        "Presenta un esquema reconocible de azul y blanco con toques. Esta combinación establece una apariencia limpia y profesional, alineada con su enfoque tecnológico.": "",
+        "Aprovecha una simple combinación de colores azul y blanco. Esta paleta mínima establece una base visual limpia, pero carece de elementos de marca únicos.": ""
     },
     {
         "criterion_or_website": "Visual Elements",
-        "conclusion": "",
-        "Newegg - Se caracteriza por imágenes de alta resolución de productos desde múltiples ángulos. Los videos y configuradores 3D enriquecen la experiencia visual.": "",
-        "Amazon - Presenta una gran variedad de imágenes de producto, a menudo con zooms detallados. Las infografías y comparativas son frecuentes en sus páginas.": "",
-        "Micro Center - Destaca por las fotografías de calidad profesional de componentes y sistemas. Los gráficos ilustrativos ayudan a comprender características técnicas.": "",
-        "B&H Photo Video - Ofrece fotografías de producto impecables y claras, acompañadas de miniaturas bien organizadas. Los elementos gráficos son limpios y funcionales, aunque no abundan los videos.": ""
+        "conclusion": "null",
+        "Muestra imágenes de productos de alta calidad y gráficos detallados. Integra videos y contenido generado por usuarios, enriqueciendo la experiencia visual.": "",
+        "Posee una amplia imaginería de productos, a menudo con múltiples ángulos. Los iconos son funcionales, apoyando eficazmente el viaje del usuario.": "",
+        "Presenta fotos nítidas de productos y gráficos informativos claros. Los elementos visuales se centran en el detalle del producto, ayudando en las decisiones de compra.": "",
+        "Muestra imágenes de productos pequeñas pero claras en una cuadrícula. Los elementos visuales son mínimos, enfocándose solo en la exhibición del producto.": ""
     },
     {
         "criterion_or_website": "Navigation & UX",
-        "conclusion": "",
-        "Newegg - Dispone de menús de categorías detallados y un potente motor de búsqueda con filtros avanzados. La experiencia del usuario es eficiente para encontrar productos específicos.": "",
-        "Amazon - La navegación es intuitiva gracias a un diseño familiar y una barra de búsqueda prominente. El proceso de compra está optimizado para la sencillez.": "",
-        "Micro Center - Ofrece un sistema de navegación claro con categorías bien definidas y filtros eficaces. La experiencia de usuario es directa y centrada en la búsqueda de hardware.": "",
-        "B&H Photo Video - La navegación es lógica y estructurada, con un menú principal bien organizado y una búsqueda efectiva. Los usuarios pueden encontrar rápidamente lo que buscan sin confusión.": ""
+        "conclusion": "null",
+        "Ofrece una navegación intuitiva por categorías y filtros avanzados. La experiencia del usuario está optimizada para el descubrimiento de componentes.": "",
+        "Proporciona capacidades de búsqueda robustas y recomendaciones personalizadas. Su navegación refinada permite explorar sin esfuerzo un vasto catálogo.": "",
+        "Presenta un menú bien estructurado y opciones de filtrado eficaces. La experiencia de usuario del sitio facilita búsquedas rápidas y procesos de pago fluidos.": "",
+        "Muestra una barra de navegación superior sencilla con secciones clave. La experiencia de usuario parece directa, adecuada para acceso rápido a funciones.": ""
     },
     {
         "criterion_or_website": "Organization & Structure",
-        "conclusion": "",
-        "Newegg - El contenido está organizado de manera lógica con secciones claras para productos, guías y ofertas. La arquitectura de la información es profunda pero accesible.": "",
-        "Amazon - La estructura del contenido es amplia, categorizando millones de productos de forma eficaz. Las páginas de producto están bien segmentadas con toda la información relevante.": "",
-        "Micro Center - Presenta una estructura de sitio bien definida, separando claramente productos, servicios y recursos. La jerarquía de la información es fácil de seguir.": "",
-        "B&H Photo Video - La disposición de los elementos es ordenada y coherente, con categorías de producto claramente definidas y submenús intuitivos. La información se presenta de forma concisa y bien distribuida.": ""
+        "conclusion": "null",
+        "Adopta un diseño clásico de comercio electrónico con categorías de productos claras. El contenido está lógicamente agrupado, facilitando la navegación eficiente.": "",
+        "Emplea una estructura de contenido altamente modular y personalizada. Su organización prioriza eficientemente la información relevante y los listados de productos.": "",
+        "Utiliza un diseño estándar basado en cuadrícula para productos y categorías. La arquitectura del sitio es lógica, asegurando un flujo de información coherente.": "",
+        "Sigue un flujo de contenido simple y lineal del encabezado a la cuadrícula. La estructura es básica y clara, priorizando el acceso directo a componentes populares.": ""
     },
     {
         "criterion_or_website": "Accessibility",
-        "conclusion": "",
-        "Newegg - Se esfuerza por ofrecer opciones de accesibilidad, como compatibilidad con lectores de pantalla. Permite a un público amplio interactuar con el contenido.": "",
-        "Amazon - Incorpora características de accesibilidad como descripciones de imágenes y navegación por teclado. Se mantiene un compromiso para ser inclusivo con todos los usuarios.": "",
-        "Micro Center - Considera la accesibilidad básica en su diseño web. Busca garantizar que la información esencial sea accesible para la mayoría de los usuarios.": "",
-        "B&H Photo Video - El diseño web cumple con estándares básicos de accesibilidad, aunque hay margen para mejoras en contraste y navegación asistida. La experiencia para usuarios con necesidades especiales es funcional.": ""
+        "conclusion": "null",
+        "Implementa características de accesibilidad estándar para navegación y contenido. El sitio busca una experiencia útil para una amplia gama de usuarios.": "",
+        "Generalmente se adhiere a las pautas de accesibilidad web, con navegación por teclado. Se esfuerza por ser inclusivo para usuarios con diversas capacidades.": "",
+        "Muestra esfuerzos en accesibilidad, incluyendo buen contraste de color. El sitio está diseñado para ser utilizable por diversas audiencias.": "",
+        "Presenta un buen contraste de color en el encabezado principal y el texto. Se requiere más análisis para confirmar la navegación completa con teclado y compatibilidad.": ""
     },
     {
         "criterion_or_website": "Functionality",
-        "conclusion": "",
-        "Newegg - Proporciona herramientas robustas como creadores de PC personalizados y comparadores de productos. La funcionalidad del carrito de compras es fluida y segura.": "",
-        "Amazon - Ofrece una funcionalidad completa que incluye seguimiento de pedidos, listas de deseos y múltiples opciones de pago. La plataforma soporta un vasto ecosistema de servicios.": "",
-        "Micro Center - Incluye funciones clave como constructores de PC, filtros de búsqueda avanzados y soporte en línea. La experiencia de compra es directa y sin complicaciones.": "",
-        "B&H Photo Video - Las características funcionales son sólidas, con un carrito de compras eficiente y un sistema de gestión de cuentas completo. La búsqueda por filtros funciona de manera fiable y rápida.": ""
+        "conclusion": "null",
+        "Ofrece búsqueda robusta, filtros de productos detallados y procesos de pago seguros. Las funciones clave operan de manera confiable, apoyando una experiencia de compra fluida.": "",
+        "Proporciona búsqueda avanzada, pedidos con un clic y gestión integral de cuentas. Sus funcionalidades están altamente optimizadas para velocidad y comodidad del usuario.": "",
+        "Ofrece búsqueda eficaz, filtrado por varios atributos y un embudo de compra fluido. Las funcionalidades principales funcionan eficientemente para un viaje satisfactorio.": "",
+        "Parece incluir una barra de búsqueda básica y herramientas implícitas 'Arma tu PC'. Las funcionalidades principales están presentes, pero su robustez necesita evaluación.": ""
     },
     {
         "criterion_or_website": "Interactivity",
-        "conclusion": "",
-        "Newegg - Fomenta la interacción a través de reseñas de usuarios, foros y soporte en vivo. Los elementos interactivos mejoran la toma de decisiones del comprador.": "",
-        "Amazon - Permite la interacción mediante reseñas de productos, preguntas y respuestas, y recomendaciones personalizadas. Fomenta una comunidad activa de compradores.": "",
-        "Micro Center - Ofrece algunas características interactivas como reseñas de clientes y un chat de soporte. Busca facilitar la comunicación y resolución de dudas.": "",
-        "B&H Photo Video - La interacción se centra en las reseñas de productos, el soporte al cliente y las opciones de personalización de cuenta. Podría beneficiarse de más elementos dinámicos.": ""
+        "conclusion": "null",
+        "Integra reseñas de usuarios, secciones de preguntas y respuestas y foros comunitarios. El sitio fomenta una interacción significativa en torno a la información del producto.": "",
+        "Presenta extensas reseñas de clientes, calificaciones y recomendaciones personalizadas. Sus elementos interactivos fomentan la participación del usuario y decisiones informadas.": "",
+        "Incluye reseñas de usuarios, preguntas sobre productos y un chat de servicio al cliente. Las características interactivas apoyan la toma de decisiones del usuario.": "",
+        "Muestra tarjetas de productos clicables y un campo de entrada de búsqueda. Más allá de esto, elementos interactivos específicos no son evidentes.": ""
     },
     {
         "criterion_or_website": "SEO",
-        "conclusion": "",
-        "Newegg - Está optimizado para motores de búsqueda con una buena estructura de URLs y contenido relevante. Ocupa posiciones destacadas para términos relacionados con componentes de PC.": "",
-        "Amazon - Posee una estrategia de SEO robusta, capitalizando su autoridad de dominio para clasificar alto en diversas búsquedas. Su contenido está bien indexado.": "",
-        "Micro Center - Mantiene una presencia sólida en los resultados de búsqueda para términos de hardware. La optimización SEO permite que los usuarios encuentren fácilmente sus productos.": "",
-        "B&H Photo Video - La optimización para motores de búsqueda es efectiva, con una buena indexación de productos y metadatos relevantes. Se clasifica bien para términos específicos de fotografía y video.": ""
+        "conclusion": "null",
+        "Implementa prácticas SEO sólidas con contenido rico en palabras clave y sitemap. El sitio se posiciona bien para búsquedas específicas de componentes de PC.": "",
+        "Se beneficia de un vasto contenido y alta autoridad de dominio. Su estrategia SEO es integral, asegurando una visibilidad amplia en todas las categorías.": "",
+        "Aplica estrategias SEO dirigidas para páginas de productos y categorías. El sitio optimiza para palabras clave relevantes, mejorando la presencia en búsquedas.": "",
+        "Presenta títulos claros y una estructura simple, bases para un buen SEO. Se recomienda optimización para palabras clave, meta descripciones y móvil.": ""
     },
     {
-        "criterion_or_website": "Rendimiento y Velocidad de Carga",
-        "conclusion": "",
-        "Newegg - Exhibe una velocidad de carga rápida, optimizando la experiencia del usuario. La eficiencia en la entrega de contenido es un pilar fundamental.": "",
-        "Amazon - Muestra tiempos de carga generalmente eficientes, a pesar de la gran cantidad de contenido. Las imágenes y scripts están bien optimizados.": "",
-        "Micro Center - Ofrece un buen rendimiento y velocidad de carga para la mayoría de sus páginas. La experiencia es fluida para los usuarios al navegar por el inventario.": "",
-        "B&H Photo Video - La plataforma carga de manera consistente y rápida en la mayoría de los dispositivos, garantizando una experiencia de usuario fluida. Los recursos están bien optimizados para la entrega veloz del contenido.": ""
+        "criterion_or_website": "Performance",
+        "conclusion": "null",
+        "Generalmente ofrece buenas velocidades de carga y respuestas eficientes del servidor. El sitio busca una experiencia fluida en todos los dispositivos.": "",
+        "Logra un rendimiento excelente con activos altamente optimizados y CDN. Sus páginas se cargan muy rápido, proporcionando una experiencia de usuario perfecta.": "",
+        "Muestra buenos tiempos de carga de página, utilizando almacenamiento en caché. El sitio funciona de manera fiable, garantizando una interfaz de usuario receptiva.": "",
+        "Presenta un diseño simple, sugiriendo tiempos de carga inicial potencialmente rápidos. La optimización de imágenes y el caché podrían mejorar su velocidad.": ""
     },
     {
-        "criterion_or_website": "Final Conclusion",
-        "conclusion": "El sitio web analizado destaca por su navegación intuitiva y la alta calidad de sus imágenes de producto, facilitando una experiencia de usuario clara y funcional. Sin embargo, podría mejorar en la integración de más elementos interactivos y en la ampliación de sus características de accesibilidad para un público más diverso. Potenciar el uso de videos explicativos y comparativas directas con la competencia fortalecería su propuesta de valor.",
-        "Newegg - ": "",
-        "Amazon - ": "",
-        "Micro Center - ": "",
-        "B&H Photo Video - ": ""
+        "criterion_or_website": "Conclusion",
+        "conclusion": "Este sitio web muestra una base sólida con una interfaz limpia y una navegación directa. Para mejorar, se podría enriquecer la experiencia visual con imágenes de mayor tamaño y contenido multimedia, similar a las prácticas de líderes del sector. La interactividad para los usuarios, como las secciones de preguntas y respuestas o las reseñas detalladas, potenciaría la comunidad y la confianza. Además, una revisión de la accesibilidad y la implementación de funcionalidades avanzadas en las herramientas de 'Arma tu PC' y 'Comparar' elevarían la propuesta de valor. La optimización SEO, incluyendo meta descripciones y un blog con contenido relevante, atraería más tráfico orgánico. Finalmente, asegurar una velocidad de carga consistentemente rápida en todos los dispositivos garantizaría una experiencia de usuario superior."
     }
 ]

@@ -286,30 +286,11 @@ def createImgSearching(prompt, img_path=None):
             width, height = img.size
 
 
-    
-    prompt_img_inicial = f"""
-    Crea una imagen realista del sitio web mostrado en la imagen adjunta, incorporando las mejoras indicadas en la conclusión:
-    - Ajustar colores y tipografía para mejor legibilidad.
-    - Reorganizar botones importantes para navegación más intuitiva.
-    - Añadir iconos y elementos visuales que mejoren la experiencia.
-    - Mantener el estilo general del sitio original.
-    - Mantener el mismo tamaño y proporción que la imagen original: ancho={width}px, alto={height}px.
-    Tema: {prompt}"""
-
     prompt_search = f"""
     Analiza el sitio web mostrado en la imagen adjunta y describe mejoras visuales posibles.
     Considera tipografía, colores, distribución de botones, experiencia de usuario y coherencia visual.
     Devuelve una breve descripción textual del estilo ideal para rediseñarlo.
     Tema o contexto: {prompt}"""
-
-    contents = [
-        {
-            "role": "user",
-            "content": [
-                {"type": "input_text", "text": prompt_search}
-        ]
-        }
-    ]
 
  # Verifica que haya imagen y se agrega
     if img_path and os.path.exists(img_path):
@@ -317,25 +298,39 @@ def createImgSearching(prompt, img_path=None):
             img_bytes = f.read()
         #se transforma la img en un objeto
         img_b64 = base64.b64encode(img_bytes).decode("utf-8")
-        contents[0]["content"].append({
-            "type":"input_image",
-            "image_url":f"data:image/jpeg;base64,{img_b64}"
-        })
 
  # Busca info en internet
     response = clientChat.responses.create(
         model="gpt-5",
         tools=[{"type": "web_search"}],
-        input=contents
+        input=prompt_search
     )
     print("Response de img hecho")
-    prompt_img_final = response.output_text
+
+    prompt_img_inicial = f"""
+    Crea una nueva imagen del sitio web mostrado en la imagen adjunta, incorporando las mejoras indicadas en la conclusión:
+    - Ajustar paleta de colores y tipografía para mejor legibilidad.
+    - Reorganizar botones importantes para navegación más intuitiva.
+    - Añadir iconos y elementos visuales que mejoren la experiencia.
+    - Mantener el estilo general del sitio original.
+    - Mantener el mismo tamaño y proporción que la imagen original: ancho={width}px, alto={height}px.
+    - Cualquier cambio que sea positivo
+    """
+
+    prompt_img_final = prompt_img_inicial + response.output_text
+
 
     # Generar img final
     response_img = retry_request(
         client.models.generate_content,
         model="gemini-2.0-flash-preview-image-generation",
-        contents=[{"role": "user", "parts": [{"text": prompt_img_final}]}],
+        contents=[
+            types.Part.from_text(text=prompt_search),
+            types.Part.from_data(
+                mime_type="image/jpeg",
+                data=base64.b64decode(img_b64)
+            )
+        ],
         config=types.GenerateContentConfig(
             response_modalities=["TEXT", "IMAGE"]
         )
@@ -381,19 +376,6 @@ def createTxt(img_generated_path, conclusions_json, codigo_json, language_map):
 
     codigo_str = "\n\n".join(codigo_blocks)
 
-    prompt = f"""
-    Vas a recibir: (A) código del sitio SIN cambios aplicados, (B) img de la página CON los cambios aplicados, (C) JSON DE conclusiones de las mejoras y cambios realizados para la img.
-    Mejora el código para que la UI coincida exactamente con la imagen y las sugerencias planteadas.
-    Devuelve SOLO BLOQUES DE CÓDIGO Markdown con encabezado '🔧 Archivo: <nombre>' y triple backticks con lenguaje indicado.
-
-    --- REFERENCIAS ---
-    Código actual:
-    {codigo_str}
-
-    Conclusiones / sugerencias:
-    {json.dumps(conclusions_json, indent=2, ensure_ascii=False)}
-    """
-
 
     # Preparar contents para el prompt
     if img_generated_path:
@@ -404,27 +386,40 @@ def createTxt(img_generated_path, conclusions_json, codigo_json, language_map):
             img_bytes = buffered.getvalue()
             img_b64 = base64.b64encode(img_bytes).decode("utf-8")
 
-            contents[0]["content"].append({
-                "type":"input_image",
-                "image_url":f"data:image/jpeg;base64,{img_b64}"
-            })
-
-
         elif isinstance(img_generated_path, str) and os.path.exists(img_generated_path):
             # Caso que venga una ruta de archivo
             with open(img_generated_path, "rb") as f:
                 img_bytes = f.read()
             img_b64 = base64.b64encode(img_bytes).decode("utf-8")
-            contents[0]["content"].append({
-                "type": "input_image",
-                "image_url": f"data:image/png;base64,{img_b64}"
-            })
+
+    prompt = f"""
+    Vas a recibir: (A) código del sitio SIN cambios aplicados, (B) img de la página CON los cambios aplicados, (C) JSON DE conclusiones de las mejoras y cambios realizados para la img.
+    Mejora el código para que la UI coincida exactamente con la imagen y las sugerencias planteadas.
+    Devuelve SOLO BLOQUES DE CÓDIGO Markdown con encabezado '🔧 Archivo: <nombre>' y triple backticks con lenguaje indicado.
+    Código actual:
+    {codigo_str}
+    Conclusiones / sugerencias:
+    {json.dumps(conclusions_json, indent=2, ensure_ascii=False)}
+    """
 
     # Llamada al modelo
     response = clientChat.responses.create(
         model="gpt-5",
         tools=[{"type": "web_search"}],
-        input=contents
+        input= [
+            {
+                "role": "user",
+                "content": [
+                    {"text": prompt},
+                    {
+                        "inline_data": {
+                            "mime_type": "image/jpeg",
+                            "data": img_b64
+                        }
+                    }
+                ]
+            }
+        ]
     )
     print(response.output_text)
 
@@ -465,7 +460,7 @@ def createJson(prompt, img_path="image.jpg"):
     )
     print("Response de tabla hecho")
 
-    prompt_board = response.text
+    prompt_board = response.text + prompt
 
     if os.path.exists(img_path):
         with open(img_path, "rb") as f:
