@@ -11,6 +11,9 @@ export default function List(props) {
   const [modal, toggleModal] = useState(false);
   const [tasks, setTasks] = useState(props.tasks? props.tasks : []);
 
+  const miembros = props.project.personas_tiene.map((persona)=>(
+    {nombre: persona.persona.nombre, id: persona.id}))
+
   useEffect(() => {
     if (modal) {
       document.body.style.overflow = "hidden";
@@ -39,6 +42,8 @@ export default function List(props) {
       date: date,
       id: Math.random(),
     };
+
+    if(!name || !date || !person || !pri || !state) return;
     setTasks((prev) => [...prev, obj]);
     toggleModal(false);
   };
@@ -57,7 +62,7 @@ const mapTasks = (taskState)=>{
   return (
     <>
       {modal && (
-        <InputModal submit={submitModal} bgOnClick={() => toggleModal(false)} />
+        <InputModal members={miembros}submit={submitModal} bgOnClick={() => toggleModal(false)} />
       )}
       {props.selectable && <Bar onClick={() => toggleModal(true)} />}
       <Category />

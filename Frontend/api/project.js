@@ -1,3 +1,5 @@
+
+
 export const postProject = async (nombre,limite,token)=>{
 
     const response = await fetch('http://localhost:3000/api/projects', {
@@ -35,8 +37,10 @@ export const postTasks = async (id, nombre, limite, token) => {
 
 }
 
-export const getProjects = async (token)=> {
-    const response = await fetch('http://localhost:3000/api/projects', {
+export const getProjects = async (token, id)=> {
+    let projectId;
+    if(id) projectId = '/'+id
+    const response = await fetch(`http://localhost:3000/api/projects${projectId || ''}`, {
         method: 'GET',
         headers: {'Content-Type': 'application/json',
                  'authorization':`bearer ${token}`}
@@ -48,7 +52,7 @@ export const getProjects = async (token)=> {
 }
 
 export const getTasks = async (token, id) => {
-    const response = await fetch(`http://localhost:8000/api/projects/${id}/tasks`,{
+    const response = await fetch(`http://localhost:3000/api/projects/${id}/tasks`,{
         method: 'GET',
         headers: {'Content-Type': 'application/json',
             'authorization': `bearer ${token}`
@@ -58,6 +62,24 @@ const responseData = await response.json()
 if(!response.ok) throw new Error(responseData.error || `error ${responseData.status}`)
     return(responseData )
 }
+
+export const postTask = async (nombre, limite, token, id, responsable) => {
+
+    const result = await fetch(`https://localhost:3000/api/projects/${id}/tasks`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json',
+                    'authorization': `bearer ${token}`},
+        body: JSON.stringify({
+            nombre: nombre,
+            limite: limite,
+            id_persona_responsable: responsable,
+        })
+    })
+    const resultData = await response.json()
+    if(!response.ok) throw new Error(responseData.error || `error ${responseData.status}`)
+    return(responseData)
+}
+
 export const stringToColor = (str)=> {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {

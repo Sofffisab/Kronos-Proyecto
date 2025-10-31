@@ -2,6 +2,9 @@ import DisabledBg from "./DisabledBg";
 import style from './modals.module.css'
 import BaseModal from "./BaseModal";
 export default function InputModal(props) {
+  const personas = props.members.map((p)=>(
+    <option key={p.id} value={p.id}>{p.nombre}</option>
+  ))
   return (
     <DisabledBg
       onClick={props.bgOnClick}
@@ -10,9 +13,7 @@ export default function InputModal(props) {
         <input id="name" />
         <label>Responsable</label>
         <select id="person">
-          <option value="bege">Bege</option>
-          <option value="pipa">pipa</option>
-          <option value="mathias">mathias</option>
+          {personas}
         </select>
         <label>Limite</label>
         <input id="date" type="date" />

@@ -4,9 +4,10 @@ import Navbar from "../components/NavBar.jsx";
 import Window from "../components/Create Project/Window.jsx";
 import { postProject, postTasks } from "../../api/project.js";
 import { useNavigate } from "react-router";
-
+import LoadingScreen from '../components/LoadingScreen.jsx'
 export default function CreateProjectPage() {
     const navigate = useNavigate()
+    const [loading, setLoading] = useState(false)
     const [input, setInput] = useState('')
     const [ step, setStep] = useState(1)
     const [nombre, setNombre ] = useState('');
@@ -45,16 +46,19 @@ export default function CreateProjectPage() {
     }
     const createProject = async ()=> {
         try {
+            setLoading(true)
           const project = await postProject(nombre, '2025-11-30', localStorage.getItem('token'))
           console.log(project)
            for (const task of tasks) {
             await postTasks(project.project.id, task.name, '2025-11-30', localStorage.getItem('token'))
             
            }
+           
            navigate(`../project/${project.project.id}`)
         }
         catch(e) {
             console.log(e)
+            navigate('/create')
         }
     }
     const [rawTasks,setRawTasks] = useState([])
@@ -79,7 +83,7 @@ export default function CreateProjectPage() {
         }]);
         setInput('')
     }
-
+if(loading) return(<LoadingScreen/>)
     return( <div className='createPage'>
         <Navbar/>
         <CreateProjectForm type={type}setType={setType} addTask={addTasks}input={input}title={title}step={step} nextStep={nextStep} setInput={setInput}/>

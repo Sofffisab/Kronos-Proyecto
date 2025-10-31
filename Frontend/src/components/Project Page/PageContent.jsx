@@ -13,7 +13,7 @@ const [selected, setSelected] = useState(1)
 
 return (<div className={style['PgContent']} style={props.SbOpen?{marginLeft: '0px', width: '100%'} : {}}>
 <SelectBar setSelected={setSelected} selected={selected} SbOpen={props.SbOpen}/>
-{selected==1? <Calendar selectable={true}/> : selected==2?<List selectable={true}/> : selected==3? <Kanban selectable={true}/> : selected==4? <Messages/> : null}
+{selected==1? <Calendar selectable={true}/> : selected==2?<List project={props.project}selectable={true}/> : selected==3? <Kanban selectable={true}/> : selected==4? <Messages/> : null}
 <img className={style['IaBtn']}src='../../../public/IaBtn.svg'/>
 </div>
 )
