@@ -16,11 +16,13 @@ const SCOPES = ['https://www.googleapis.com/auth/calendar.events'];
 
 const setupcalendario = () => {
 
-  const authorization = () => {
+  const authorization = (personaId) => {
+    const state = Buffer.from(JSON.stringify({ personaId })).toString('base64');
     const url = oAuth2Client.generateAuthUrl({
       access_type: 'offline',
       scope: SCOPES,
       prompt: 'consent',
+      state: state,
     });
     return url;
   };
@@ -72,13 +74,18 @@ const setupcalendario = () => {
 
   const permision = async (req, res) => {
     const code = req.query.code;
+    const state = req.query.state;
+
     if (!code) {
       return res.status(400).json('No authorization code provided');
     };
 
-    const personaId = req.personaId; 
+    if (!state) {
+      return res.status(400).json({ error: 'No state provided' });
+    }
     
     try {
+      const { personaId } = JSON.parse(Buffer.from(state, 'base64').toString());
       await getatoken(code, personaId);
       res.json({ message: 'Authorization successful' });
     } catch (error) {
@@ -117,7 +124,8 @@ const setupcalendario = () => {
   };
 
   const redirectwithgoogle = async (req, res) => {
-    const url = authorization();
+    const personaId = req.personaId;
+    const url = authorization(personaId);
     res.redirect(url);
   };
  

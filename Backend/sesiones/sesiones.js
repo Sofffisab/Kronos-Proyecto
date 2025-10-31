@@ -49,7 +49,10 @@ const setupsesiones = (JWT_SECRET) => {
     };
 
     const signup = async (req, res) => {
+        console.log('[DEBUG] Inside signup function');
+        console.log('[DEBUG] Request body:', req.body);
         const {usuario, nombre, mail, contraseniaPrior} = req.body;
+        console.log('[DEBUG] Destructured values:', { usuario, nombre, mail, contraseniaPrior });
 
         try {
 
@@ -79,14 +82,21 @@ const setupsesiones = (JWT_SECRET) => {
             res.status(201).json({ message: "user created successfully", token: token });
 
         } catch (error){
+            console.log('[DEBUG] Error in signup:', error);
+            
             if (error.code === 'P2002') {
-                return res.status(409).json({ error: "User already exists" });
+                return res.status(409).json({ 
+                error: 'El email ya está registrado' 
+                });
             }
             console.error("error signing up", error);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ 
+                error: "Internal Server Error",
+                details: error.message 
+            });
         };
-    };
-
+    }
+    
     return {login, signup};
 };
 
