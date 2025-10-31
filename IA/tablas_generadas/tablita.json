@@ -1,86 +1,86 @@
 [
     {
         "criterion_or_website": "Typography & Readability",
-        "conclusion": "null",
-        "Utiliza una tipografía sans-serif moderna y limpia. Los tamaños de texto y el espaciado aseguran una lectura cómoda en todo el contenido.": "",
-        "Emplea una fuente sans-serif clara para una legibilidad constante en contenido diverso. La jerarquía textual facilita el escaneo rápido de información.": "",
-        "Presenta una tipografía sans-serif contemporánea con buen contraste. La elección general de fuentes facilita la lectura de especificaciones y navegación.": "",
-        "Muestra una fuente sans-serif directa, ofreciendo legibilidad básica. Los tamaños de texto son adecuados para títulos, pero pequeños para detalles de productos.": ""
+        "conclusion": "",
+        "Presenta tipografías claras y tamaños óptimos, facilitando la lectura en diversos dispositivos.": "",
+        "Utiliza fuentes modernas que mejoran la estética, aunque interlineado optimizable en móvil.": "",
+        "Combina fuentes funcionales con toques distintivos, manteniendo excelente legibilidad en todos los textos.": "",
+        "Utiliza tipografías claras y simples, con buena jerarquía para títulos y descripciones de productos.": ""
     },
     {
         "criterion_or_website": "Colors & Branding",
-        "conclusion": "null",
-        "Usa una distintiva combinación de colores negro, rojo y blanco. Esta paleta crea una imagen profesional y tecnológica, mejorando el atractivo visual.": "",
-        "Definido por un icónico acento naranja sobre una interfaz blanca y azul. La paleta simple refuerza una identidad de marca amigable y confiable.": "",
-        "Presenta un esquema reconocible de azul y blanco con toques. Esta combinación establece una apariencia limpia y profesional, alineada con su enfoque tecnológico.": "",
-        "Aprovecha una simple combinación de colores azul y blanco. Esta paleta mínima establece una base visual limpia, pero carece de elementos de marca únicos.": ""
+        "conclusion": "",
+        "Paleta de colores profesional y consistente, refuerza la identidad de marca de forma sutil y efectiva.": "",
+        "Usa colores vibrantes para destacar promociones, manteniendo equilibrio con tonos corporativos.": "",
+        "El esquema de color es coherente con su imagen de marca, empleando contrastes adecuados.": "",
+        "Predomina un esquema azul y blanco, estableciendo una marca funcional y directa.": ""
     },
     {
         "criterion_or_website": "Visual Elements",
-        "conclusion": "null",
-        "Muestra imágenes de productos de alta calidad y gráficos detallados. Integra videos y contenido generado por usuarios, enriqueciendo la experiencia visual.": "",
-        "Posee una amplia imaginería de productos, a menudo con múltiples ángulos. Los iconos son funcionales, apoyando eficazmente el viaje del usuario.": "",
-        "Presenta fotos nítidas de productos y gráficos informativos claros. Los elementos visuales se centran en el detalle del producto, ayudando en las decisiones de compra.": "",
-        "Muestra imágenes de productos pequeñas pero claras en una cuadrícula. Los elementos visuales son mínimos, enfocándose solo en la exhibición del producto.": ""
+        "conclusion": "",
+        "Incorpora imágenes de alta calidad y gráficos descriptivos que enriquecen la información del contenido.": "",
+        "Depende de imágenes impactantes y vídeos cortos para comunicar, equilibrando espacios en blanco.": "",
+        "Sus elementos visuales son estéticos y funcionales, apoyando navegación y destacando ofertas.": "",
+        "Muestra imágenes de productos bien organizadas en cuadrícula, con tamaños uniformes y fondos limpios.": ""
     },
     {
         "criterion_or_website": "Navigation & UX",
-        "conclusion": "null",
-        "Ofrece una navegación intuitiva por categorías y filtros avanzados. La experiencia del usuario está optimizada para el descubrimiento de componentes.": "",
-        "Proporciona capacidades de búsqueda robustas y recomendaciones personalizadas. Su navegación refinada permite explorar sin esfuerzo un vasto catálogo.": "",
-        "Presenta un menú bien estructurado y opciones de filtrado eficaces. La experiencia de usuario del sitio facilita búsquedas rápidas y procesos de pago fluidos.": "",
-        "Muestra una barra de navegación superior sencilla con secciones clave. La experiencia de usuario parece directa, adecuada para acceso rápido a funciones.": ""
+        "conclusion": "",
+        "Ofrece navegación intuitiva y menús claros, permitiendo a usuarios encontrar información rápidamente.": "",
+        "La experiencia de usuario es fluida con navegación lógica y fácil acceso a categorías principales.": "",
+        "Presenta navegación sencilla y eficiente, con un diseño que prioriza la comodidad del usuario.": "",
+        "La navegación superior es concisa y evidente, permitiendo acceso rápido a secciones clave.": ""
     },
     {
         "criterion_or_website": "Organization & Structure",
-        "conclusion": "null",
-        "Adopta un diseño clásico de comercio electrónico con categorías de productos claras. El contenido está lógicamente agrupado, facilitando la navegación eficiente.": "",
-        "Emplea una estructura de contenido altamente modular y personalizada. Su organización prioriza eficientemente la información relevante y los listados de productos.": "",
-        "Utiliza un diseño estándar basado en cuadrícula para productos y categorías. La arquitectura del sitio es lógica, asegurando un flujo de información coherente.": "",
-        "Sigue un flujo de contenido simple y lineal del encabezado a la cuadrícula. La estructura es básica y clara, priorizando el acceso directo a componentes populares.": ""
+        "conclusion": "",
+        "La información está organizada jerárquicamente, facilitando comprensión y rastreo por buscadores.": "",
+        "Su estructura de contenido es clara y coherente, con categorías definidas que mejoran usabilidad.": "",
+        "Contenido bien estructurado y etiquetado, facilitando lectura e indexación SEO.": "",
+        "Contenido estructurado con títulos grandes que guían al usuario y secciones claras de productos.": ""
     },
     {
         "criterion_or_website": "Accessibility",
-        "conclusion": "null",
-        "Implementa características de accesibilidad estándar para navegación y contenido. El sitio busca una experiencia útil para una amplia gama de usuarios.": "",
-        "Generalmente se adhiere a las pautas de accesibilidad web, con navegación por teclado. Se esfuerza por ser inclusivo para usuarios con diversas capacidades.": "",
-        "Muestra esfuerzos en accesibilidad, incluyendo buen contraste de color. El sitio está diseñado para ser utilizable por diversas audiencias.": "",
-        "Presenta un buen contraste de color en el encabezado principal y el texto. Se requiere más análisis para confirmar la navegación completa con teclado y compatibilidad.": ""
+        "conclusion": "",
+        "Cumple estándares básicos de accesibilidad, ofreciendo una experiencia usable para la mayoría de usuarios.": "",
+        "Ha implementado mejoras de accesibilidad como contrastes adecuados y navegación con teclado.": "",
+        "Diseñado pensando en accesibilidad, con alternativas textuales para imágenes y subtítulos en vídeos.": "",
+        "Contrastes de color en el encabezado son buenos; el texto del buscador sutil podría mejorarse.": ""
     },
     {
         "criterion_or_website": "Functionality",
-        "conclusion": "null",
-        "Ofrece búsqueda robusta, filtros de productos detallados y procesos de pago seguros. Las funciones clave operan de manera confiable, apoyando una experiencia de compra fluida.": "",
-        "Proporciona búsqueda avanzada, pedidos con un clic y gestión integral de cuentas. Sus funcionalidades están altamente optimizadas para velocidad y comodidad del usuario.": "",
-        "Ofrece búsqueda eficaz, filtrado por varios atributos y un embudo de compra fluido. Las funcionalidades principales funcionan eficientemente para un viaje satisfactorio.": "",
-        "Parece incluir una barra de búsqueda básica y herramientas implícitas 'Arma tu PC'. Las funcionalidades principales están presentes, pero su robustez necesita evaluación.": ""
+        "conclusion": "",
+        "Presenta robusta funcionalidad, con herramientas interactivas y búsqueda eficiente de productos.": "",
+        "Ofrece las funciones esperadas de un portal de tecnología, respondiendo rápidamente a las acciones.": "",
+        "Su funcionalidad es impecable, con características avanzadas que mejoran la interacción del usuario.": "",
+        "Ofrece funcionalidades esenciales como búsqueda y navegación principal, facilitando exploración de componentes.": ""
     },
     {
         "criterion_or_website": "Interactivity",
-        "conclusion": "null",
-        "Integra reseñas de usuarios, secciones de preguntas y respuestas y foros comunitarios. El sitio fomenta una interacción significativa en torno a la información del producto.": "",
-        "Presenta extensas reseñas de clientes, calificaciones y recomendaciones personalizadas. Sus elementos interactivos fomentan la participación del usuario y decisiones informadas.": "",
-        "Incluye reseñas de usuarios, preguntas sobre productos y un chat de servicio al cliente. Las características interactivas apoyan la toma de decisiones del usuario.": "",
-        "Muestra tarjetas de productos clicables y un campo de entrada de búsqueda. Más allá de esto, elementos interactivos específicos no son evidentes.": ""
+        "conclusion": "",
+        "Incluye elementos interactivos como filtros avanzados y comparadores de productos para el usuario.": "",
+        "La interactividad se manifiesta en comentarios, valoraciones y un foro activo de discusión.": "",
+        "Ofrece experiencia altamente interactiva con encuestas, configuradores y herramientas de personalización.": "",
+        "La interactividad básica se observa en la barra de búsqueda y enlaces, enfocada en selección de productos.": ""
     },
     {
         "criterion_or_website": "SEO",
-        "conclusion": "null",
-        "Implementa prácticas SEO sólidas con contenido rico en palabras clave y sitemap. El sitio se posiciona bien para búsquedas específicas de componentes de PC.": "",
-        "Se beneficia de un vasto contenido y alta autoridad de dominio. Su estrategia SEO es integral, asegurando una visibilidad amplia en todas las categorías.": "",
-        "Aplica estrategias SEO dirigidas para páginas de productos y categorías. El sitio optimiza para palabras clave relevantes, mejorando la presencia en búsquedas.": "",
-        "Presenta títulos claros y una estructura simple, bases para un buen SEO. Se recomienda optimización para palabras clave, meta descripciones y móvil.": ""
+        "conclusion": "",
+        "Optimizado para SEO con contenido relevante y estructura amigable, logrando buen posicionamiento.": "",
+        "Implementa prácticas SEO sólidas, desde investigación de palabras clave hasta velocidad de carga móvil.": "",
+        "Estrategia SEO efectiva con buen uso de enlaces internos y externos, mejorando visibilidad orgánica.": "",
+        "Aunque no visible, su estructura con títulos como \"Componentes populares\" sugiere orientación SEO básica.": ""
     },
     {
-        "criterion_or_website": "Performance",
-        "conclusion": "null",
-        "Generalmente ofrece buenas velocidades de carga y respuestas eficientes del servidor. El sitio busca una experiencia fluida en todos los dispositivos.": "",
-        "Logra un rendimiento excelente con activos altamente optimizados y CDN. Sus páginas se cargan muy rápido, proporcionando una experiencia de usuario perfecta.": "",
-        "Muestra buenos tiempos de carga de página, utilizando almacenamiento en caché. El sitio funciona de manera fiable, garantizando una interfaz de usuario receptiva.": "",
-        "Presenta un diseño simple, sugiriendo tiempos de carga inicial potencialmente rápidos. La optimización de imágenes y el caché podrían mejorar su velocidad.": ""
+        "criterion_or_website": "Coherencia y Consistencia",
+        "conclusion": "",
+        "Mantiene diseño visual y experiencia de usuario consistentes en todas sus secciones y dispositivos.": "",
+        "Asegura coherencia en elementos de marca, desde tipografía hasta tono de voz del contenido.": "",
+        "La consistencia en el diseño y la interacción crea experiencia predecible y de confianza.": "",
+        "Mantiene diseño visual unificado en la página visible, con elementos repetitivos y predecibles.": ""
     },
     {
-        "criterion_or_website": "Conclusion",
-        "conclusion": "Este sitio web muestra una base sólida con una interfaz limpia y una navegación directa. Para mejorar, se podría enriquecer la experiencia visual con imágenes de mayor tamaño y contenido multimedia, similar a las prácticas de líderes del sector. La interactividad para los usuarios, como las secciones de preguntas y respuestas o las reseñas detalladas, potenciaría la comunidad y la confianza. Además, una revisión de la accesibilidad y la implementación de funcionalidades avanzadas en las herramientas de 'Arma tu PC' y 'Comparar' elevarían la propuesta de valor. La optimización SEO, incluyendo meta descripciones y un blog con contenido relevante, atraería más tráfico orgánico. Finalmente, asegurar una velocidad de carga consistentemente rápida en todos los dispositivos garantizaría una experiencia de usuario superior."
+        "criterion_or_website": "Final Conclusion",
+        "conclusion": "Este sitio muestra una base sólida con una interfaz limpia y navegación intuitiva, destacando claridad y organización. Para mejorar, podría enriquecer la interactividad con filtros avanzados y expandir la información de accesibilidad."
     }
 ]
