@@ -1,0 +1,209 @@
+/* Base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --blue: #1592ff;           /* barra superior (según imagen) */
+  --blue-press: #0f7fe0;
+  --text: #0b0b0b;
+  --muted: #9aa4b2;
+  --surface: #ffffff;
+  --shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  --radius: 12px;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  color: var(--text);
+  background: var(--surface);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Header */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--blue);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 24px;
+}
+
+.brand__img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Search */
+.search {
+  display: grid;
+  justify-items: center;
+}
+
+.search__input {
+  width: min(560px, 92vw);
+  height: 44px;
+  border-radius: var(--radius);
+  border: 2px solid rgba(0, 0, 0, 0.12);
+  background: #fff url("../../recursos/img/lupa.buscador.png") 12px center / 20px 20px no-repeat;
+  padding: 0 14px 0 40px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text);
+  box-shadow: var(--shadow);
+}
+
+.search__input::placeholder {
+  color: #bfc6cf;
+}
+
+.search__input:focus {
+  outline: 3px solid rgba(255, 255, 255, 0.65);
+  outline-offset: 2px;
+  border-color: #dbe2ea;
+}
+
+/* Suggestions dropdown aligned to input width */
+.search__suggestions {
+  width: min(560px, 92vw);
+  background: #fff;
+  border-radius: 0 0 var(--radius) var(--radius);
+  box-shadow: var(--shadow);
+  margin-top: 6px;
+  display: none;             /* script.js puede alternar a block */
+  overflow: hidden;
+}
+
+.search__suggestions div {
+  padding: 10px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid #eef1f4;
+  transition: background-color 0.15s ease;
+}
+
+.search__suggestions div:hover,
+.search__suggestions div[aria-selected="true"] {
+  background: #f6f8fa;
+}
+
+/* Nav con estilo subrayado como en la imagen */
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.nav__link {
+  font-weight: 700;
+  font-size: 18px;
+  color: #000;                /* texto oscuro sobre barra azul (según captura) */
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.nav__link:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+
+.nav__link:hover {
+  color: #111;
+  text-decoration-thickness: 2px;
+}
+
+/* Hero */
+.hero {
+  padding: 36px 20px 8px;
+  background: #fff;          /* la sección principal se ve blanca en la imagen */
+  display: flex;
+  justify-content: center;
+}
+
+.hero__title {
+  margin: 0.4rem 0 0;
+  font-size: clamp(28px, 5.5vw, 48px);
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Sección componentes */
+.section {
+  max-width: 1200px;
+  margin: 6px auto 40px;
+  padding: 0 20px;
+}
+
+.section__title {
+  margin: 8px 0 18px;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+/* Grid de componentes (contenedor dinámico) */
+.componentesPopu {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+/* Botón de usuario flotante en el lateral derecho, como en la captura */
+.floating-user {
+  position: fixed;
+  right: 14px;
+  top: 140px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: #f1f5f9;
+  box-shadow: var(--shadow);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.floating-user img {
+  width: 24px;
+  height: 24px;
+}
+
+.floating-user:active {
+  transform: translateY(1px);
+}
+
+/* Utilidades de accesibilidad y ajustes responsivos */
+@media (max-width: 760px) {
+  .header-inner {
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+      "brand nav"
+      "search search";
+    row-gap: 10px;
+  }
+  .brand { grid-area: brand; }
+  .main-nav { grid-area: nav; justify-content: flex-end; gap: 18px; }
+  .search { grid-area: search; }
+}
