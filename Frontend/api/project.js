@@ -34,3 +34,44 @@ export const postTasks = async (id, nombre, limite, token) => {
         return(responseData)
 
 }
+
+export const getProjects = async (token)=> {
+    const response = await fetch('http://localhost:3000/api/projects', {
+        method: 'GET',
+        headers: {'Content-Type': 'application/json',
+                 'authorization':`bearer ${token}`}
+    })
+    
+    const responseData = await response.json()
+    if(!response.ok) throw new Error(responseData.errorr || 'error '+responseData.status)
+    return(responseData)
+}
+
+export const getTasks = async (token, id) => {
+    const response = await fetch(`http://localhost:8000/api/projects/${id}/tasks`,{
+        method: 'GET',
+        headers: {'Content-Type': 'application/json',
+            'authorization': `bearer ${token}`
+        }
+})
+const responseData = await response.json()
+if(!response.ok) throw new Error(responseData.error || `error ${responseData.status}`)
+    return(responseData )
+}
+export const stringToColor = (str)=> {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+  
+    let color = "#";
+    for (let i = 0; i < 3; i++) {
+      const value = (hash >> (i * 8)) & 0xff;
+      color += ("00" + value.toString(16)).slice(-2);
+    }
+  
+    return color;
+  }
+  
+  

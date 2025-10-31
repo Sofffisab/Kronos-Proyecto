@@ -592,3 +592,14 @@ button {
   justify-content: center;
   font-family: var(--font);
 }
+.project div{
+  color: var(--fontContrast);
+  display: flex;
+  gap: 5%;
+  align-items: center
+}
+.projectColorBox {
+  height: 2rem;
+  width: 2rem;
+  border-radius: 10px;
+}
