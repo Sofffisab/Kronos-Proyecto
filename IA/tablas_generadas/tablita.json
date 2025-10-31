@@ -1,90 +1,86 @@
 [
-  {
-    "criterion": "Branding y posicionamiento",
-    "Website1": "Newegg: e-commerce de tecnología y PC parts con foco en ofertas y variedad.",
-    "Website2": "PCMag: medio editorial de reviews, guías y noticias tech con alta autoridad.",
-    "Website3": "Tom's Hardware: portal para entusiastas con comparativas, guías y builds.",
-    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
-    "Conclusion": "Define una propuesta de valor clara (precio, variedad, asesoría); crea un logotipo legible; añade un tagline visible en el hero que diferencie a PC Market."
-  },
-  {
-    "criterion": "Estructura de navegación",
-    "Website1": "Mega menú amplio por categorías, acceso rápido a ofertas y marcas.",
-    "Website2": "Navegación por tipos de contenido (reviews, best picks, news).",
-    "Website3": "Menús por componentes, guías y foros; enfoque temático.",
-    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
-    "Conclusion": "Limita el menú a 5–7 categorías principales; integra barra de búsqueda prominente; usa header pegajoso con accesos a cuenta y carrito."
-  },
-  {
-    "criterion": "Hero y propuesta de valor",
-    "Website1": "Hero con promociones destacadas y ofertas temporales.",
-    "Website2": "Destaca artículos y rankings en portada.",
-    "Website3": "Destaca guías y comparativas recientes en el hero.",
-    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
-    "Conclusion": "Usa hero estático con USP clara y un CTA principal; evita carruseles; muestra beneficios (envío, garantía, devoluciones) en una franja bajo el hero."
-  },
-  {
-    "criterion": "Buscador y filtrado",
-    "Website1": "Buscador con autocompletar y filtros facetados profundos.",
-    "Website2": "Búsqueda por productos y artículos con etiquetas.",
-    "Website3": "Búsqueda por temas y componentes; filtros básicos.",
-    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
-    "Conclusion": "Implementa autocompletar con sugerencias y categorías; filtros por marca, precio, uso y compatibilidad; chips de filtros removibles."
-  },
-  {
-    "criterion": "Jerarquía visual y escaneabilidad",
-    "Website1": "Tarjetas de producto con precio y badges; denso en información.",
-    "Website2": "Tipografía clara y listados con puntuaciones visibles.",
-    "Website3": "Diseños con tablas y listados técnicos; mucha data.",
-    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
-    "Conclusion": "Usa 2–3 tamaños tipográficos, suficiente espacio en blanco y un grid consistente; prioriza precio, rating y CTA en tarjetas."
-  },
-  {
-    "criterion": "CTAs y flujo de compra",
-    "Website1": "CTAs Add to Cart visibles; checkout conocido y rápido.",
-    "Website2": "CTAs editoriales (Leer reseña, Mejores); enlaces afiliados.",
-    "Website3": "CTAs a guías y recomendaciones; menos transaccional.",
-    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
-    "Conclusion": "CTA principal contrastado y persistente; mini-carrito accesible; reduce pasos del checkout y permite guest checkout."
-  },
-  {
-    "criterion": "Contenido editorial y guías",
-    "Website1": "Hubs de recomendaciones y ofertas; contenido de apoyo.",
-    "Website2": "Comparativas y reviews extensas y actualizadas.",
-    "Website3": "Guías de compra y builds detalladas con benchmarks.",
-    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
-    "Conclusion": "Integra blog/guías enlazadas desde categorías; módulos de Top picks en listados; estructura de clúster SEO por uso (gaming, oficina, creator)."
-  },
-  {
-    "criterion": "Señales de confianza",
-    "Website1": "Ratings, reviews verificadas, garantías y marcas reconocidas.",
-    "Website2": "Autoridad editorial y sellos de Editors’ Choice.",
-    "Website3": "Reputación de comunidad y foros activos.",
-    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
-    "Conclusion": "Muestra reseñas verificadas, políticas claras y sellos de pago seguro; destaca soporte y devoluciones; usa microcopy sobre stock y tiempos."
-  },
-  {
-    "criterion": "Rendimiento y carga percibida",
-    "Website1": "Contenido pesado con lazy load y muchos módulos.",
-    "Website2": "Optimización aceptable con presencia de anuncios.",
-    "Website3": "Páginas largas con tablas; rendimiento moderado.",
-    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
-    "Conclusion": "Optimiza imágenes (WebP/AVIF), lazy load y fuentes; minimiza scripts de terceros; apunta a buenas Core Web Vitals."
-  },
-  {
-    "criterion": "Responsividad móvil",
-    "Website1": "Interfaz tipo app; filtros deslizables; puede saturar.",
-    "Website2": "Lectura cómoda y menús simplificados.",
-    "Website3": "Scroll largo con tablas adaptadas.",
-    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
-    "Conclusion": "Menú inferior en móvil, filtros colapsables y CTA sticky; zonas táctiles amplias y navegación con pulgar."
-  },
-  {
-    "criterion": "Accesibilidad y SEO on-page",
-    "Website1": "Breadcrumbs y schema de producto; contraste variable.",
-    "Website2": "Schema de artículo y headings claros; buenas breadcrumbs.",
-    "Website3": "Headings adecuados; alt y tablas a veces irregulares.",
-    "Website4": "Referencia a la futura imagen final del sitio “PC Market”.",
-    "Conclusion": "Incluye alt text, contraste AA, estados de foco y accesos por teclado; schema Product/FAQ; URLs limpias y meta títulos orientados a intención."
-  }
+    {
+        "criterion_or_website": "Typography & Readability",
+        "conclusion": "",
+        "Presenta tipografías claras y tamaños óptimos, facilitando la lectura en diversos dispositivos.": "",
+        "Utiliza fuentes modernas que mejoran la estética, aunque interlineado optimizable en móvil.": "",
+        "Combina fuentes funcionales con toques distintivos, manteniendo excelente legibilidad en todos los textos.": "",
+        "Utiliza tipografías claras y simples, con buena jerarquía para títulos y descripciones de productos.": ""
+    },
+    {
+        "criterion_or_website": "Colors & Branding",
+        "conclusion": "",
+        "Paleta de colores profesional y consistente, refuerza la identidad de marca de forma sutil y efectiva.": "",
+        "Usa colores vibrantes para destacar promociones, manteniendo equilibrio con tonos corporativos.": "",
+        "El esquema de color es coherente con su imagen de marca, empleando contrastes adecuados.": "",
+        "Predomina un esquema azul y blanco, estableciendo una marca funcional y directa.": ""
+    },
+    {
+        "criterion_or_website": "Visual Elements",
+        "conclusion": "",
+        "Incorpora imágenes de alta calidad y gráficos descriptivos que enriquecen la información del contenido.": "",
+        "Depende de imágenes impactantes y vídeos cortos para comunicar, equilibrando espacios en blanco.": "",
+        "Sus elementos visuales son estéticos y funcionales, apoyando navegación y destacando ofertas.": "",
+        "Muestra imágenes de productos bien organizadas en cuadrícula, con tamaños uniformes y fondos limpios.": ""
+    },
+    {
+        "criterion_or_website": "Navigation & UX",
+        "conclusion": "",
+        "Ofrece navegación intuitiva y menús claros, permitiendo a usuarios encontrar información rápidamente.": "",
+        "La experiencia de usuario es fluida con navegación lógica y fácil acceso a categorías principales.": "",
+        "Presenta navegación sencilla y eficiente, con un diseño que prioriza la comodidad del usuario.": "",
+        "La navegación superior es concisa y evidente, permitiendo acceso rápido a secciones clave.": ""
+    },
+    {
+        "criterion_or_website": "Organization & Structure",
+        "conclusion": "",
+        "La información está organizada jerárquicamente, facilitando comprensión y rastreo por buscadores.": "",
+        "Su estructura de contenido es clara y coherente, con categorías definidas que mejoran usabilidad.": "",
+        "Contenido bien estructurado y etiquetado, facilitando lectura e indexación SEO.": "",
+        "Contenido estructurado con títulos grandes que guían al usuario y secciones claras de productos.": ""
+    },
+    {
+        "criterion_or_website": "Accessibility",
+        "conclusion": "",
+        "Cumple estándares básicos de accesibilidad, ofreciendo una experiencia usable para la mayoría de usuarios.": "",
+        "Ha implementado mejoras de accesibilidad como contrastes adecuados y navegación con teclado.": "",
+        "Diseñado pensando en accesibilidad, con alternativas textuales para imágenes y subtítulos en vídeos.": "",
+        "Contrastes de color en el encabezado son buenos; el texto del buscador sutil podría mejorarse.": ""
+    },
+    {
+        "criterion_or_website": "Functionality",
+        "conclusion": "",
+        "Presenta robusta funcionalidad, con herramientas interactivas y búsqueda eficiente de productos.": "",
+        "Ofrece las funciones esperadas de un portal de tecnología, respondiendo rápidamente a las acciones.": "",
+        "Su funcionalidad es impecable, con características avanzadas que mejoran la interacción del usuario.": "",
+        "Ofrece funcionalidades esenciales como búsqueda y navegación principal, facilitando exploración de componentes.": ""
+    },
+    {
+        "criterion_or_website": "Interactivity",
+        "conclusion": "",
+        "Incluye elementos interactivos como filtros avanzados y comparadores de productos para el usuario.": "",
+        "La interactividad se manifiesta en comentarios, valoraciones y un foro activo de discusión.": "",
+        "Ofrece experiencia altamente interactiva con encuestas, configuradores y herramientas de personalización.": "",
+        "La interactividad básica se observa en la barra de búsqueda y enlaces, enfocada en selección de productos.": ""
+    },
+    {
+        "criterion_or_website": "SEO",
+        "conclusion": "",
+        "Optimizado para SEO con contenido relevante y estructura amigable, logrando buen posicionamiento.": "",
+        "Implementa prácticas SEO sólidas, desde investigación de palabras clave hasta velocidad de carga móvil.": "",
+        "Estrategia SEO efectiva con buen uso de enlaces internos y externos, mejorando visibilidad orgánica.": "",
+        "Aunque no visible, su estructura con títulos como \"Componentes populares\" sugiere orientación SEO básica.": ""
+    },
+    {
+        "criterion_or_website": "Coherencia y Consistencia",
+        "conclusion": "",
+        "Mantiene diseño visual y experiencia de usuario consistentes en todas sus secciones y dispositivos.": "",
+        "Asegura coherencia en elementos de marca, desde tipografía hasta tono de voz del contenido.": "",
+        "La consistencia en el diseño y la interacción crea experiencia predecible y de confianza.": "",
+        "Mantiene diseño visual unificado en la página visible, con elementos repetitivos y predecibles.": ""
+    },
+    {
+        "criterion_or_website": "Final Conclusion",
+        "conclusion": "Este sitio muestra una base sólida con una interfaz limpia y navegación intuitiva, destacando claridad y organización. Para mejorar, podría enriquecer la interactividad con filtros avanzados y expandir la información de accesibilidad."
+    }
 ]

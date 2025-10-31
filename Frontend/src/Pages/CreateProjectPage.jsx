@@ -1,10 +1,12 @@
 import CreateProjectForm from "../components/Create Project/CreateProjectForm.jsx";
 import { useState } from "react"
 import Navbar from "../components/NavBar.jsx";
+import Window from "../components/Create Project/Window.jsx";
+import { postProject, postTasks } from "../../api/project.js";
+import { useNavigate } from "react-router";
 
 export default function CreateProjectPage() {
-
-    const [formData, setFormData] = useState({})
+    const navigate = useNavigate()
     const [input, setInput] = useState('')
     const [ step, setStep] = useState(1)
     const [nombre, setNombre ] = useState('');
@@ -21,7 +23,7 @@ export default function CreateProjectPage() {
 
         else if(next==3)setTitle('¿Que forma de organización es la mejor para tu proyecto?¡Luego podes cambiarla!')
 
-        else if(next==4) postForm()
+        else if(next==4) createProject()
     }
     const loadFormData = ()=> {
         if(input.trim() == '' && step==1) return false; 
@@ -41,14 +43,46 @@ export default function CreateProjectPage() {
         
         return true;
     }
+    const createProject = async ()=> {
+        try {
+          const project = await postProject(nombre, '2025-11-30', localStorage.getItem('token'))
+          console.log(project)
+           for (const task of tasks) {
+            await postTasks(project.project.id, task.name, '2025-11-30', localStorage.getItem('token'))
+            
+           }
+           navigate(`../project/${project.project.id}`)
+        }
+        catch(e) {
+            console.log(e)
+        }
+    }
     const [rawTasks,setRawTasks] = useState([])
     const addTasks = ()=> {
-        setRawTasks([...rawTasks, input]);
+        
+         const today = new Date();
+         const year = today.getFullYear();
+        const month = today.getMonth();
+        const day = Math.floor(Math.random() * 28) + 1; 
+
+        const startDate = new Date(year, month, day);
+        const states= ['iniciada', 'pendiente','realizada']
+        const types= ['riesgo', 'atrasada', 'proceso','terminado']
+        if(input=='' || input==null) return;
+        setRawTasks([...rawTasks, {name:input, 
+            allDay: true,
+            title: input,
+            text: input,
+            state:states[Math.floor(Math.random()*3)],
+            type:types[Math.floor(Math.random()*4)],
+            start: startDate.toISOString().split('T')[0],
+        }]);
         setInput('')
     }
 
     return( <div className='createPage'>
         <Navbar/>
         <CreateProjectForm type={type}setType={setType} addTask={addTasks}input={input}title={title}step={step} nextStep={nextStep} setInput={setInput}/>
+        <Window type={type}tasks={tasks? tasks : rawTasks}name={nombre? nombre : input}/>
         </div>)
 }

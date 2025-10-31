@@ -4,35 +4,45 @@ export const login = async (email,pass)=> {
     const response = await fetch('http://localhost:3000/users/login', {
 method: 'POST',
 headers: { 'Content-Type': 'application/json'},
-body: JSON.stringify({mailI: email, 
-    constraseniaI: pass })
+body: JSON.stringify({mailI: email,
+    usuarioI: email, 
+    contraseniaP: pass })
 })
-if(!response.ok)  throw new Error('error'+response.status)
-const responseData = await response.json()
+const responseData = await response.json()  
+if(!response.ok)  throw new Error(responseData.error ||'error '+response.status)
+
 return responseData;
 }
 
 
 
-//   export const register = (nombre, email, pass, foto) => {
+   export const register = async (nombre, email, pass, foto) => {
 
-//     {fetch('http://localhost:3000/users/signup', {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json'},
-//         body: JSON.stringify({mailI: email, 
-//             constraseniaI: pass })
-//         })
-//         .then(response => {
-//             if(!response.ok) {
-//                 throw new Error(`HTTP error! status: ${response.status}`);
-//             }
-//             return response.json()
-//         })
-//         .then(responseData => {
-//             console.log('Success:', responseData); 
-//           })
-//           .catch(error => {
-//             console.error('Error:', error);
-//           });}
+     {
+    const response = await fetch('http://localhost:3000/users/signup', {
+         method: 'POST',
+         headers: { 'Content-Type': 'application/json'},
+         body: JSON.stringify({
+             mail: email, 
+             contraseniaPrior: pass,
+            usuario: nombre,
+            nombre: nombre, })
+         })
+         const responseData = await response.json();
+         if(!response.ok) throw new Error(responseData.error ||'error '+response.status)
+        
+         return responseData
+         
+   }}
 
-//   }
+   export const verifyToken = async (token) => {{
+
+       const response = await fetch('http://localhost:3000/api/projects', {
+           method: 'GET',
+           headers: {'Content-Type': 'application/json',
+                    'authorization':`bearer ${token}`}
+       })
+       
+       if(!response.ok) return false
+       else return true
+   }}

@@ -7,9 +7,9 @@ from google.genai import types
 from PIL import Image
 from io import BytesIO
 from pydantic import BaseModel
-from PIL import Image
 from typing import List
-import base64
+import requests
+from bs4 import BeautifulSoup
 import pandas as pd
 import datetime
 from tabulate import tabulate
@@ -17,12 +17,14 @@ import json
 import time
 import random
 from openai import OpenAI
-from dotenv import load_dotenv, dotenv_values 
 
-load_dotenv()
+#client = genai.Client(api_key="AIzaSyAkiW5YQ7ONHn8i4qadg0KTzXRPRfy3r3E")
+#nueva api xq nos quedamos sin tokens
+#client = genai.Client(api_key="AIzaSyCXUdPHjrG_z0lIM0lyEIKlgnYvihzRvYE")
+client = genai.Client(api_key="")
 
-client = genai.Client(api_key=os.getenv("GEMINI_KEY"))
-clientChat = OpenAI(api_key=os.getenv("CHAT_KEY"))
+#la de OpenAI
+clientChat = OpenAI(api_key="")
 
 #modelo de la tabla
 class WebsiteValue(BaseModel):
@@ -61,6 +63,94 @@ def retry_request(func, *args, **kwargs):
                 raise
 
 
+#Extrae el texto limpio de una URL
+def extract_text_from_url(url: str) -> str:
+    try:
+        r = requests.get(url, timeout=10)
+        r.raise_for_status()
+        soup = BeautifulSoup(r.text, "html.parser")
+        # Sacar scripts, estilos y texto basura
+        for tag in soup(["script", "style"]):
+            tag.decompose()
+        text = " ".join(soup.stripped_strings)
+        return text[:8000]  # límite para evitar respuestas largas
+    except Exception as e:
+        return f"Error leyendo {url}: {e}"
+
+
+#Usa Gemini para buscar URLs relevantes al tema
+def web_search_with_gemini(client, topic: str) -> list:
+
+    response = retry_request(
+        client.models.generate_content,
+        model="gemini-2.5-flash",
+        contents=(
+           f"Buscá las 5 páginas web más útiles y famosas sobre {topic}, devolveme solo las URLs."
+        ),
+        config = types.GenerateContentConfig(
+            tools=[grounding_tool]
+        )
+    )
+
+
+    text = response.text
+    urls = [u.strip() for u in text.split() if u.startswith("http")]
+    return urls[:5]
+
+#Busca y recopila textos de las páginas más relevantes
+def gather_sources_for_topic(client, topic: str) -> list:
+    urls = web_search_with_gemini(client, topic)
+    sources = []
+    for u in urls:
+        text = extract_text_from_url(u)
+        sources.append({"url": u, "text": text})
+    return sources
+
+
+#Crea una tabla comparativa (JSON) con los datos recolectados
+def ask_openai_to_create_table(topic: str, sources: list) -> dict:
+    client = OpenAI()
+    prompt = f"""
+    Analizá la información de estas páginas sobre {topic} y generá una tabla comparativa en formato JSON.
+    Cada entrada debe incluir: nombre del sitio, principales características, ventajas, desventajas y valoración general.
+    Fuentes:
+    {json.dumps(sources[:3], ensure_ascii=False)[:6000]}
+    """
+
+    response = client.chat.completions.create(
+        model="gpt-5",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.4,
+    )
+
+    content = response.choices[0].message.content
+    try:
+        return json.loads(content)
+    except:
+        return {"error": "No se pudo convertir a JSON", "raw": content}
+
+#Flujo completo: búsqueda web → tabla JSON → imagen generada → código actualizado
+def run_pipeline(topic: str, user_image_path: str, user_site_html_or_text: str):
+    print(f"🔍 Buscando información sobre: {topic}")
+    gemini_sources = gather_sources_for_topic(client, topic)
+    print(f"✅ Se recopilaron {len(gemini_sources)} fuentes.")
+
+    print("📊 Generando tabla comparativa con OpenAI...")
+    table_data = ask_openai_to_create_table(topic, gemini_sources)
+    print("✅ Tabla creada correctamente.")
+
+    print("🎨 Creando imagen mejorada del sitio...")
+    image_path = createImgSearching(user_image_path, topic)
+
+    print("💻 Reescribiendo el código HTML/CSS...")
+    new_code = createTxt(user_site_html_or_text, image_path, topic)
+
+    print("✅ Pipeline completado con éxito.")
+    return {
+        "table": table_data,
+        "image": image_path,
+        "code": new_code
+    }
 
 #crear img
 def createImg(prompt):
@@ -274,62 +364,54 @@ codigo_json = [
     }
 ]
 
+#crear img buscando en internet
 def createImgSearching(prompt, img_path=None):
-
     #para conseguir los tamaños de la img del input y respetarlos
     if img_path and os.path.exists(img_path):
         with Image.open(img_path) as img:
-            inserted_img = img.tobytes()
+            inserted_img = img.tobytes()  # si querés pasar los bytes
             width, height = img.size
 
 
-    prompt_search = f"""
-    Analiza el sitio web mostrado en la imagen adjunta y describe mejoras visuales posibles.
-    Considera tipografía, colores, distribución de botones, experiencia de usuario y coherencia visual.
-    Devuelve una breve descripción textual del estilo ideal para rediseñarlo.
-    Tema o contexto: {prompt}"""
+    contents = [
+    types.Part.from_text(text=f"""
+        Crea una imagen realista del sitio web mostrado en la imagen adjunta, incorporando las mejoras indicadas en la conclusión:
+        - Ajustar colores y tipografía para mejor legibilidad.
+        - Reorganizar botones importantes para navegación más intuitiva.
+        - Añadir iconos y elementos visuales que mejoren la experiencia.
+        - Mantener el estilo general del sitio original.
+        - Mantener el mismo tamaño y proporción que la imagen original: ancho={width}px, alto={height}px.
+        Tema: {prompt}
+    """)
+ ]
 
- # Verifica que haya imagen y se agrega
+ # Si hay imagen se agrega
     if img_path and os.path.exists(img_path):
         with open(img_path, "rb") as f:
             img_bytes = f.read()
-        #se transforma la img en un objeto
-        img_b64 = base64.b64encode(img_bytes).decode("utf-8")
+        contents.append(types.Part.from_bytes(data=img_bytes, mime_type="image/jpeg"))
 
- # Busca info en internet
+
     response = clientChat.responses.create(
         model="gpt-5",
         tools=[{"type": "web_search"}],
-        input=prompt_search
+        input=contents
     )
+
     print("Response de img hecho")
 
-    prompt_img_inicial = f"""
-    Crea una nueva imagen del sitio web mostrado en la imagen adjunta, incorporando las mejoras indicadas en la conclusión:
-    - Ajustar paleta de colores y tipografía para mejor legibilidad.
-    - Reorganizar botones importantes para navegación más intuitiva.
-    - Añadir iconos y elementos visuales que mejoren la experiencia.
-    - Mantener el estilo general del sitio original.
-    - Mantener el mismo tamaño y proporción que la imagen original: ancho={width}px, alto={height}px.
-    - Cualquier cambio que sea positivo
-    """
-
-    prompt_img_final = prompt_img_inicial + response.output_text
-
+    prompt_img = response.output_text
 
     # Generar img final
     response_img = retry_request(
         client.models.generate_content,
         model="gemini-2.0-flash-preview-image-generation",
-        contents=[
-            types.Part.from_text(text=prompt_search),
-            types.Part.from_data(
-                mime_type="image/jpeg",
-                data=base64.b64decode(img_b64)
-            )
-        ],
+        contents=[{"role": "user", "parts": [{"text": prompt_img}]}],
         config=types.GenerateContentConfig(
-            response_modalities=["TEXT", "IMAGE"]
+            response_modalities=["TEXT", "IMAGE"],
+            temperature=0.3,
+            top_p=0.9,
+            top_k=40 
         )
     )
 
@@ -352,110 +434,11 @@ language_map = {
     "style.css": "css",
 }
 
-#crear img buscando en internet
-#def createImgSearching(prompt, img_path=None):
-    """
-    Genera una imagen rediseñada y devuelve su base64 (string).
-    No guarda archivos, lista para mandar al backend.
-    """
-    width = height = None
-    img_b64_input = None
-
-    # Si hay imagen base
-    if img_path and os.path.exists(img_path):
-        with Image.open(img_path) as img:
-            width, height = img.size
-        with open(img_path, "rb") as f:
-            img_b64_input = base64.b64encode(f.read()).decode("utf-8")
-
-    prompt_search = f"""
-    Analiza el sitio web mostrado en la imagen adjunta y describe mejoras visuales posibles.
-    Considera tipografía, colores, distribución de botones, experiencia de usuario y coherencia visual.
-    Devuelve una breve descripción textual del estilo ideal para rediseñarlo.
-    Tema o contexto: {prompt}.
-    """
-
-    response = clientChat.responses.create(
-        model="gpt-5",
-        tools=[{"type": "web_search"}],
-        input=prompt_search
-    )
-    print("Response de img hecho")
-
-    prompt_img_final = f"""
-    Crea una nueva imagen del sitio web mostrado en la imagen adjunta, incorporando las mejoras indicadas:
-    - Ajustar paleta de colores y tipografía para mejor legibilidad.
-    - Reorganizar botones importantes para navegación más intuitiva.
-    - Añadir iconos y elementos visuales que mejoren la experiencia.
-    - Mantener el estilo general del sitio original.
-    - Mantener el mismo tamaño y proporción que la imagen original ({width}px x {height}px).
-    """ + "\nConclusión: " + response.output_text
-
-    response_img = retry_request(
-        client.models.generate_content,
-        model="gemini-2.0-flash-preview-image-generation",
-        contents=[
-            types.Part.from_text(text=prompt_img_final),
-            types.Part.from_bytes(
-                mime_type="image/jpeg",
-                data=base64.b64decode(img_b64_input)
-            ) if img_b64_input else types.Part.from_text("No se adjuntó imagen base.")
-        ],
-        config=types.GenerateContentConfig(response_modalities=["TEXT", "IMAGE"])
-    )
-
-    print("img lista ñeri")
-
-    # 🧩 Verificación de respuesta
-    if not response_img:
-        print("⚠️ response_img es None (error interno o timeout en retry_request)")
-        return None
-
-    if not hasattr(response_img, "candidates") or not response_img.candidates:
-        print("⚠️ Gemini no devolvió candidatos de imagen válidos.")
-        print(response_img)
-        return None
-
-    if not hasattr(response_img.candidates[0], "content") or response_img.candidates[0].content is None:
-        print("⚠️ Gemini devolvió contenido vacío en el candidato 0.")
-        print(response_img)
-        return None
-
-    # 🧠 Si todo está bien, seguimos con el parseo
-    img_b64 = None
-    for i, part in enumerate(response_img.candidates[0].content.parts):
-        print(f"Parte {i}: {type(part)}")
-        if hasattr(part, "inline_data"):
-            data = getattr(part.inline_data, "data", None)
-            if data:
-                if isinstance(data, bytes):
-                    img_b64 = base64.b64encode(data).decode("utf-8")
-                elif isinstance(data, str):
-                    img_b64 = data
-                break
-
-    if not img_b64:
-        print("⚠️ No se encontró imagen generada dentro del contenido.")
-        print(response_img)
-        return None
-
-        print("✅ Imagen generada y codificada en base64 correctamente.")
-        print(f"Primeros 100 caracteres del base64: {img_b64[:100]}...")
-        return img_b64
-
-
-
-
-language_map = {
-    "index.html": "html",
-    "style.css": "css",
-}
-
 
 #CREAR CODIGO ARREGLADO
-def createTxt(img_from_ai,conclusions_json, codigo_json, language_map):
+def createTxt(img_generated_path, conclusions_json, codigo_json, language_map):
     """
-    img_from_ai: ruta a la imagen generada
+    img_generated_path: ruta a la imagen generada
     conclusions_json: JSON con conclusiones/sugerencias
     codigo_json: lista de dicts con "name" y "content"
     language_map: dict que indica lenguaje de cada archivo, ej:
@@ -467,68 +450,37 @@ def createTxt(img_from_ai,conclusions_json, codigo_json, language_map):
         # Cada c debe tener al menos "name" y "content"
         name = c.get("name", "archivo")
         content = c.get("content", "")
-        lang = language_map.get(name, "text")  # usa el lenguaje definido por usuario, sino "text"
+        lang = language_map.get(name, "text")  # usar lenguaje definido por usuario, si no "text"
         codigo_blocks.append(f"🔧 Archivo: {name}\n```{lang}\n{content}\n```")
 
     codigo_str = "\n\n".join(codigo_blocks)
 
-
-    # Preparar contents para el prompt
-    img_b64 = None
-
-    if isinstance(img_from_ai, str) and len(img_from_ai) > 1000:
-    # Ya es base64 directamente
-        img_b64 = img_from_ai
-
-    # Preparar contents para el prompt
-    if img_from_ai:
-        if isinstance(img_from_ai, Image.Image):
-            buffered = BytesIO()
-            img_from_ai.save(buffered, format="PNG")
-            img_bytes = buffered.getvalue()
-            img_b64 = base64.b64encode(img_bytes).decode("utf-8")
-
-        elif isinstance(img_from_ai, str) and os.path.exists(img_from_ai):
-            with open(img_from_ai, "rb") as f:
-                img_bytes = f.read()
-            img_b64 = base64.b64encode(img_bytes).decode("utf-8")
-
-    # Si no se pudo obtener la imagen
-    if not img_b64:
-        print("No se pudo codificar la imagen, usando solo texto.")
-        img_b64 = ""  # Evita el UnboundLocalError
-
     prompt = f"""
-    Vas a recibir: (A) código del sitio SIN cambios aplicados, (B) img de la página CON los cambios aplicados, (C) JSON DE conclusiones de las mejoras y cambios realizados en la img.
-    Mejora el código para que la UI coincida exactamente con la imagen y las sugerencias planteadas.
-    Devuelve SOLO BLOQUES DE CÓDIGO Markdown con encabezado '🔧 Archivo: <nombre>' y triple backticks con lenguaje indicado.
-    Código actual:
-    {codigo_str}
-    Conclusiones / sugerencias:
-    {json.dumps(conclusions_json, indent=2, ensure_ascii=False)}
-    """
-    
-    print("✅ request armado ok")
+ Vas a recibir: (A) código del sitio SIN cambios aplicados, (B) img de la página CON los cambios aplicados, (C) JSON DE conclusiones de las mejoras y cambios realizados para la img.
+ Mejora el código para que la UI coincida exactamente con la imagen y las sugerencias planteadas.
+ Devuelve SOLO BLOQUES DE CÓDIGO Markdown con encabezado '🔧 Archivo: <nombre>' y triple backticks con lenguaje indicado.
+
+--- REFERENCIAS ---
+Código actual:
+{codigo_str}
+
+Conclusiones / sugerencias:
+{json.dumps(conclusions_json, indent=2, ensure_ascii=False)}
+"""
+
+    # Preparar contents para el modelo
+    contents = [types.Part.from_text(text=prompt)]
+    if img_generated_path and os.path.exists(img_generated_path):
+        with open(img_generated_path, "rb") as f:
+            img_bytes = f.read()
+        contents.append(types.Part.from_bytes(data=img_bytes, mime_type="image/jpeg"))
+
     # Llamada al modelo
     response = clientChat.responses.create(
         model="gpt-5",
         tools=[{"type": "web_search"}],
-        input=[
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "input_text",
-                        "text": (prompt)
-                    },
-                    {
-                        "type": "input_image", 
-                        "image_url": img_b64 if img_b64.startswith("data:image") else f"data:image/png;base64,{img_b64}"
-                    }
-                    ]
-        }]
+        input=contents
     )
-    print("✅Request de texto hecho")
     print(response.output_text)
 
     output_text = response.output_text
@@ -544,31 +496,20 @@ def createTxt(img_from_ai,conclusions_json, codigo_json, language_map):
 
 
 #crear tabla e img buscando en internet
-def createJson(prompt, img_path="image.jpg"):
-
-    contents_buscar_paginas = [
-         {
-            "role": "user",
-            "parts": [
-                types.Part.from_text(text=(
-                    "Crea un prompt en base a tu función de búsqueda en internet para poder conseguir información acerca del siguiente prompt y dárselo a otra IA generadora de tablas: "
-                    + prompt
-                    ))
-            ]
-        }
-    ]
-    
+#def createJson(prompt, img_path="image.jpg"):
     response = retry_request(
         client.models.generate_content,
         model="gemini-2.5-flash",
-        contents=contents_buscar_paginas,
+        contents=(
+            "Crea un prompt en base a tu función de busqueda en internet para poder conseguir información acerca del siguiente prompt y darselo a otra IA generadora de tablas " + prompt
+        ),
         config = types.GenerateContentConfig(
             tools=[grounding_tool]
         )
     )
     print("Response de tabla hecho")
 
-    prompt_board = response.text + prompt
+    prompt_board = response.text
 
     if os.path.exists(img_path):
         with open(img_path, "rb") as f:
@@ -577,24 +518,17 @@ def createJson(prompt, img_path="image.jpg"):
         print(f"Imagen no encontrada: {img_path}")
         return
 
-
-
-    contents_tabla = [
-        {
-            "role":"user",
-            "parts": [
-                types.Part.from_text(text=prompt_board),
-                types.Part.from_bytes(data=inserted_img, mime_type="image/jpeg")
-            ]
-        }
-    ]
-
-
  #hacer tablita
     response = retry_request(
         client.models.generate_content,
         model="gemini-2.5-flash",
-        contents=contents_tabla,
+        contents=[
+            prompt_board,
+            types.Part.from_bytes(
+                data=inserted_img,
+                mime_type='image/jpeg'
+            )
+        ],
         config={
             "response_mime_type": "application/json",
             "response_schema": TableData
@@ -650,12 +584,16 @@ def createJson(prompt, img_path="image.jpg"):
         conclusion = "No hubo sugerencias claras, pero mejora la navegación y la accesibilidad visual."
 
     if img_path and os.path.exists(img_path):
-        imagen_creada = createImgSearching(conclusion,img_path)
+        createImgSearching(prompt=conclusion, img_path=img_path)
+        imagen = image
 
     conclusion_text = " ".join(df["conclusion"].dropna().tolist())
-
-    resultado_txt = createTxt(imagen_creada,rows,codigo_json,language_map)
-
+    resultado_txt = createTxt(
+        img_generated_path=image,
+        conclusions_json=rows,
+        codigo_json=codigo_json,
+        language_map=language_map
+    )
     print("Markdown generado:\n", resultado_txt["markdown"])
 
 
@@ -664,17 +602,23 @@ def createJson(prompt, img_path="image.jpg"):
 
 theme = 'PC MARKET'
 
-createJson(f"""
-The JSON returned must be an array of 11 rows (objects).  
-Each row has in this order:  
-"criterion", "(NamePage1)", "(NamePage2)", "(NamePage3)", "(NamePage4)", "Conclusion".
-Websites 1 to 3 have to be the most famous about {theme}, and the 4th is the one of the img insterted.
-Rules:  
-- Criteria order: Typography & Readability, Colors & Branding, Visual Elements, Navigation & UX, Organization & Structure, Accessibility, Functionality, Interactivity, SEO, +1 extra criterion you choose, +Final Conclusion row (only fill "Conclusion").  
-- Website1–Website3: each = short intro phrase + one descriptive sentence of 10–20 words.Do not mention the Website in each cell.  
-- Website4: same, but refers to the website from the provided image.  
-- "Conclusion": only Website4 improvements, implicit comparison, highlight strengths + suggestions, never mention website names.  
+if __name__ == "__main__":
+    result = run_pipeline(
+        topic="PC MARKET",
+        user_image_path="image.jpg",
+        user_site_html_or_text="<html><body><h1>Mi sitio</h1></body></html>"
+    )
 
-Output must be strictly consistent, 6 keys per row, no extra text.
 
-""")
+#createJson(f"""
+#The JSON returned must be an array of 11 rows (objects).  
+#Each row has in this order:  
+#"criterion", "(NamePage1)", "(NamePage2)", "(NamePage3)", "(NamePage4)", "Conclusion".
+#Websites 1 to 3 have to be the most famous about {theme}, and the 4th is the one of the img insterted.
+#Rules:  
+#- Criteria order: Typography & Readability, Colors & Branding, Visual Elements, Navigation & UX, Organization & Structure, Accessibility, Functionality, Interactivity, SEO, +1 extra criterion you choose, +Final Conclusion row (only fill "Conclusion").  
+#- Website1–Website3: each = short intro phrase + one descriptive sentence of 10–20 words.Do not mention the Website in each cell.  
+#- Website4: same, but refers to the website from the provided image.  
+#- "Conclusion": only Website4 improvements, implicit comparison, highlight strengths + suggestions, never mention website names.  
+#Output must be strictly consistent, 6 keys per row, no extra text.
+#""")

@@ -11,7 +11,7 @@ const setupautenticacion = (JWT_SECRET) => {
 
         const token = authHeader.split(' ')[1];
         
-        try {
+        try {   
             const decoded = jwt.verify(token, JWT_SECRET);
             req.personaId = decoded.personaId;
             next();

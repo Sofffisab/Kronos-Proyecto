@@ -2,9 +2,9 @@ import Categorias from "./categorias";
 import Tarea from "./Tarea";
 import { useState } from "react";
 import KanbanModal from "../../modals/KanBanModal";
-export default function kanban() {
+export default function kanban(props) {
 
-    const [tasks, setTasks] = useState([])
+    const [tasks, setTasks] = useState(props.tasks? props.tasks : [])
     const [type, setType] = useState('')
     const mappedTasks = tasks?{
         
@@ -33,7 +33,7 @@ export default function kanban() {
         {modal && <KanbanModal value={type}submit={submit} bgOnClick={()=> toggleModal(false)}/>}
         <Categorias 
         rTasks={mappedTasks.rTasks}
-        OnClick={ openModal}
+        OnClick={props.selectable && openModal}
         aTasks={mappedTasks.aTasks}
     pTasks={mappedTasks.pTasks}
     tTasks={mappedTasks.tTasks}/>

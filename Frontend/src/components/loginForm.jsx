@@ -30,7 +30,7 @@ export default function(props) {
         try {
        const bege = await props.onSubmit(data.username, data.password)
        console.log(bege)
-          localStorage.setItem(bege.token); // hacer dsp con cookies 🍪🍪
+          localStorage.setItem("token",bege.token); // hacer dsp con cookies 🍪🍪
          navigate('/')}
          catch(e) {
            setError("password",{type: "500", message:e.message})
