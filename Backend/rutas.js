@@ -2,6 +2,11 @@ import pkg from 'express';
 const { Router } = pkg;
 
 const setuprouter = ({ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, joinproject, createtarea, gettareas, updatetarea, deletetarea, getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones }) => {
+    
+    console.log('[DEBUG] setuprouter called');
+    console.log('[DEBUG] signup function:', typeof signup);
+    console.log('[DEBUG] login function:', typeof login);
+    
     const router = Router();
 
 
@@ -22,12 +27,16 @@ const setuprouter = ({ login, signup, authentication, getevents, permision, redi
         });
     });
 
+    router.post("/users/signup", (req, res, next) => {
+        console.log('[DEBUG] Signup route hit!');
+        next();
+    }, signup);
 
     router.post("/users/login", login);
-    router.post("/users/signup", signup);
-    router.get("/auth/google/callback", authentication, permision);
+    //router.post("/users/signup", signup);
+    router.get("/auth/google/callback", permision);
     router.get("/api/calendar/events", authentication, getevents);
-    router.get('/auth/google', redirectwithgoogle);
+    router.get('/auth/google', authentication, redirectwithgoogle);
     router.post("/api/calendar/events", authentication, createevents);
     router.delete("/api/calendar/events/:eventId", authentication, deleteevents);
     router.put("/api/calendar/events/:eventId", authentication, updateevents);
@@ -52,7 +61,8 @@ const setuprouter = ({ login, signup, authentication, getevents, permision, redi
     router.put("/api/customizations", authentication, updatepersonalizaciones);
     router.delete("/api/customizations", authentication, deletepersonalizaciones);
 
-
+    console.log('[DEBUG] All routes registered. Total routes:', router.stack?.length);
+    
     return router;
 };
 

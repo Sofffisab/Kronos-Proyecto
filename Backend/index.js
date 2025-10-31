@@ -57,9 +57,13 @@ const { getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones }
 const { createproject, getprojects, getproject, updateproject, invitetoproject, joinproject } = setupproyectos()
 const router = setuprouter({ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, joinproject, createtarea, gettareas, updatetarea, deletetarea, getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones });
 
+console.log('[DEBUG] Router created:', router);
+console.log('[DEBUG] Router stack:', router.stack?.length, 'routes');
+
 setupwebsocketserver(app, JWT_SECRET, prisma, wsInstance);
 
 app.use(router);
+console.log('[DEBUG] Router mounted to app');
 
 app.use((err, req, res, next) => {
   console.error('Unhandled error:', err);
