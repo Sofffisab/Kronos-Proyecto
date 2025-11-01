@@ -7,7 +7,6 @@ from google.genai import types
 from PIL import Image
 from io import BytesIO
 from pydantic import BaseModel
-from PIL import Image
 from typing import List
 import base64
 import pandas as pd
@@ -27,6 +26,7 @@ clientChat = OpenAI(api_key=os.getenv("CHAT_KEY"))
 #modelo de la tabla
 class WebsiteValue(BaseModel):
     name: str
+    text: str
 
 class TableRow(BaseModel):
     criterion_or_website: str
@@ -79,7 +79,7 @@ def createImg(prompt):
             print(part.text)
         elif part.inline_data is not None:
             image = Image.open(BytesIO((part.inline_data.data)))
-            image.save('gemini-image.png', overwrite= True)
+            image.save('gemini-image.png')
             image.show()
 
 codigo_json = [
@@ -274,13 +274,15 @@ codigo_json = [
     }
 ]
 
-def createImgSearching(prompt, img_path=None):
+# Ejemplo de fixes integrados (parcial)
+def createImgSearching(prompt, img_path):
 
     #para conseguir los tamaños de la img del input y respetarlos
     if img_path and os.path.exists(img_path):
-        with Image.open(img_path) as img:
-            inserted_img = img.tobytes()
-            width, height = img.size
+        image = Image.open(img_path)
+
+    width = 1920
+    height = 1080
 
 
     prompt_search = f"""
@@ -318,29 +320,24 @@ def createImgSearching(prompt, img_path=None):
 
 
     # Generar img final
-    response_img = retry_request(
-        client.models.generate_content,
-        model="gemini-2.0-flash-preview-image-generation",
-        contents=[
-            types.Part.from_text(text=prompt_search),
-            types.Part.from_bytes(
-                mime_type="image/jpeg",
-                data=base64.b64decode(img_b64)
+    response_img = client.models.generate_content(
+                model="gemini-2.0-flash-preview-image-generation",
+                contents=[
+                    types.Part.from_text(text=prompt_img_final),
+                    types.Part.from_bytes(mime_type="image/png", data=img_bytes)
+                ],
+                config=types.GenerateContentConfig(response_modalities=["TEXT", "IMAGE"])
             )
-        ],
-        config=types.GenerateContentConfig(
-            response_modalities=["TEXT", "IMAGE"]
-        )
-    )
 
     for part in response_img.candidates[0].content.parts:
-        if part.text is not None:
-            print(part.text)
-        elif part.inline_data is not None:
-            image = Image.open(BytesIO((part.inline_data.data)))
-            image.save('gemini-image.png', overwrite= True)
-            image.show()
-            return(image)
+        if part.text:
+            print("Comentario del modelo:", part.text)
+        elif part.inline_data:
+            edited_img = Image.open(BytesIO(part.inline_data.data))
+            edited_img.save("imagen_editada.png")  # Guarda la imagen resultante
+            edited_img.show()
+            return(edited_img)
+
 
 
 
@@ -377,9 +374,12 @@ def createTxt(img_from_ai,conclusions_json, codigo_json, language_map):
     # Preparar contents para el prompt
     img_b64 = None
 
-    if isinstance(img_from_ai, str) and len(img_from_ai) > 1000:
-    # Ya es base64 directamente
-        img_b64 = img_from_ai
+    if isinstance(img_from_ai, str):
+        if img_from_ai.startswith("data:image"):
+            img_b64 = img_from_ai.split(",", 1)[1]
+        elif len(img_from_ai) > 1000:
+            img_b64 = img_from_ai
+
 
     # Preparar contents para el prompt
     if img_from_ai:
@@ -430,12 +430,11 @@ def createTxt(img_from_ai,conclusions_json, codigo_json, language_map):
         }]
     )
     print("✅Request de texto hecho")
-    print(response.output_text)
 
     output_text = response.output_text
 
     # Parse bloques
-    pattern = r"Archivo:\s*(.*?)\n```([\w+-]+)\n(.*?)```"
+    pattern = r"(?:🔧\s*)?Archivo:\s*(.*?)\n```([\w+\-]+)\n(.*?)```"
     matches = re.findall(pattern, output_text, re.DOTALL)
     parsed = []
     for filename, lang, code in matches:
@@ -474,6 +473,9 @@ def createJson(prompt, img_path="image.jpg"):
     if os.path.exists(img_path):
         with open(img_path, "rb") as f:
             inserted_img = f.read()
+        with Image.open(img_path) as img:
+            img_format = img.format.lower()
+            mime_type = f"image/{img_format}" if img_format != "jpg" else "image/jpeg"
     else:
         print(f"Imagen no encontrada: {img_path}")
         return
@@ -485,7 +487,7 @@ def createJson(prompt, img_path="image.jpg"):
             "role":"user",
             "parts": [
                 types.Part.from_text(text=prompt_board),
-                types.Part.from_bytes(data=inserted_img, mime_type="image/jpeg")
+                types.Part.from_bytes(data=inserted_img, mime_type=mime_type)
             ]
         }
     ]
@@ -498,29 +500,59 @@ def createJson(prompt, img_path="image.jpg"):
         contents=contents_tabla,
         config={
             "response_mime_type": "application/json",
-            "response_schema": TableData
+            "response_schema": TableData.model_json_schema()
         },
     )
 
+    # Tomamos el primer candidato
+    candidate = response.candidates[0]
+
+    # Recorremos las partes del contenido
+    for part in candidate.content.parts:
+        if part.text:
+            tabla_json_str = part.text  # Aquí tenemos el JSON como string
+            break
+
+    # Parseamos a dict
+    tabla_generada_dict = json.loads(tabla_json_str)
+
+    # Convertimos a Pydantic
+    tabla_generada = TableData.model_validate(tabla_generada_dict)
+
+    # Filtrar fila de final conclusion
+    tabla_generada.table_data = [
+        row for row in tabla_generada.table_data 
+        if row.criterion_or_website.lower() != "conclusion"
+    ]
+
+
 
  #ajustar los datos a las filas y columnas
+    all_websites = []
+    for row in tabla_generada.table_data:
+        for w in row.websites:
+            if w.name not in all_websites:
+                all_websites.append(w.name)
+
+    # 2. Construir filas por criterio
     rows = []
-    for row in response.parsed.table_data:
-        row_dict = row.model_dump()
-        websites_raw = row_dict.get("websites", [])
-        websites_dict = {w["name"]: "" for w in websites_raw}
-        row_dict.pop("websites", None)
-        row_dict.update(websites_dict)
+    for row in tabla_generada.table_data:
+        row_dict = {"criterion_or_website": row.criterion_or_website}
+        for site in all_websites:
+            text = next((w.text for w in row.websites if w.name == site), "")
+            row_dict[site] = text
+        # Solo Website4 es la “conclusion” de mejoras
+        row_dict["conclusion"] = row.conclusion or ""
         rows.append(row_dict)
 
 
-        
+    # 3. Crear DataFrame con columnas fijas
+    cols = ["criterion_or_website"] + all_websites + ["conclusion"]
+    df = pd.DataFrame(rows)[cols]
 
-    df = pd.DataFrame(rows)
-    
-    #para que vaya la columna de conclusion al final
-    cols = [col for col in df.columns if col != "conclusion"] + ["conclusion"]
-    df = df[cols]
+
+
+
 
     # Guardar JSON
     json_path = os.path.join(SAVE_DIR, "tablita.json")
@@ -550,12 +582,15 @@ def createJson(prompt, img_path="image.jpg"):
     if not conclusion.strip():
         conclusion = "No hubo sugerencias claras, pero mejora la navegación y la accesibilidad visual."
 
-    if img_path and os.path.exists(img_path):
-        imagen_creada = createImgSearching(conclusion,img_path)
+    imagen_b64 = createImgSearching(conclusion, img_path)
+    
+    resultado_txt = createTxt(
+            imagen_b64,  # se pasa el base64 directamente
+            rows,
+            codigo_json,
+            language_map
+        )
 
-    conclusion_text = " ".join(df["conclusion"].dropna().tolist())
-
-    resultado_txt = createTxt(imagen_creada,rows,codigo_json,language_map)
 
     print("Markdown generado:\n", resultado_txt["markdown"])
 
@@ -571,11 +606,13 @@ Each row has in this order:
 "criterion", "(NamePage1)", "(NamePage2)", "(NamePage3)", "(NamePage4)", "Conclusion".
 Websites 1 to 3 have to be the most famous about {theme}, and the 4th is the one of the img insterted.
 Rules:  
-- Criteria order: Typography & Readability, Colors & Branding, Visual Elements, Navigation & UX, Organization & Structure, Accessibility, Functionality, Interactivity, SEO, +1 extra criterion you choose, +Final Conclusion row (only fill "Conclusion").  
-- Website1–Website3: each = short intro phrase + one descriptive sentence of 10–20 words.Do not mention the Website in each cell.  
-- Website4: same, but refers to the website from the provided image.  
-- "Conclusion": only Website4 improvements, implicit comparison, highlight strengths + suggestions, never mention website names.  
-
+- Criteria order (rows): Typography & Readability, Colors & Branding, Visual Elements, Navigation & UX, Organization & Structure, Accessibility, Functionality, Interactivity, SEO, +1 extra criterion you choose, +Final Conclusion row (only fill "Conclusion").  
+- Website1–Website3 (columns): each = short intro phrase + one descriptive sentence of 10–20 words.Do not mention the Website in each cell.  
+- Website4 (column): same, but refers to the website from the provided image.  
+- "Conclusion" (column): only Website4 improvements, implicit comparison, highlight strengths + suggestions, never mention website names.  
+Try not to use the same words for the cells, so each creteria doesn't have the exact words. Use an extensive vocabulary
 Output must be strictly consistent, 6 keys per row, no extra text.
+
+The response must be in spanish
 
 """)

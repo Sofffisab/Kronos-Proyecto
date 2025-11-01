@@ -4,69 +4,77 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Inicio</title>
-
+    <meta name="theme-color" content="#1e88ff" />
     <link rel="stylesheet" href="style.css" />
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
-    <script src="../../socket.js"></script>
-    <script type="module" src="script.js" defer></script>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap"
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Crimson+Text:wght@400;600;700&display=swap"
       rel="stylesheet"
     />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,600,0,0"
     />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
+    <script src="../../socket.js"></script>
+    <script type="module" src="script.js" defer></script>
   </head>
   <body>
-    <header class="site-header" role="banner">
-      <div class="header-inner">
-        <a class="brand" href="../inicio/index.html" aria-label="Inicio">
-          <img src="../../recursos/img/logo.png" alt="Logo" class="brand__img" />
-        </a>
+    <div class="inicio">
+      <header class="site-header">
+        <div class="container">
+          <a class="brand" href="./" aria-label="Inicio">
+            <img src="../../recursos/img/logo.png" alt="Logo" />
+          </a>
 
-        <div class="search" role="search">
-          <input
-            type="text"
-            class="search__input"
-            id="input1"
-            placeholder="Buscar"
-            aria-label="Buscar"
-            autocomplete="off"
-          />
-          <div class="search__suggestions" id="busq1" role="listbox" aria-label="Sugerencias"></div>
+          <form class="buscador" role="search" aria-label="Buscar">
+            <span class="material-symbols-outlined search-icon" aria-hidden="true">search</span>
+            <input
+              type="search"
+              class="busc"
+              id="input1"
+              placeholder="Buscar"
+              autocomplete="off"
+              aria-autocomplete="list"
+              aria-expanded="false"
+              aria-controls="busq1"
+            />
+            <button type="submit" class="search-btn" aria-label="Buscar">
+              <span class="material-symbols-outlined">search</span>
+            </button>
+            <div class="busqs" id="busq1" role="listbox" aria-label="Sugerencias de búsqueda"></div>
+          </form>
+
+          <nav class="main-nav" aria-label="Principal">
+            <button class="nav-link info" onclick="location.href='../informacion/index.html'">Información</button>
+            <button class="nav-link armar" onclick="location.href='../armar-pc/index.html'">Armá tu PC</button>
+            <button class="nav-link comparar" onclick="location.href='../comparacion/index.html'">Comparar</button>
+            <button class="nav-link log" id="persona" aria-label="Ingresar">
+              <img src="../../recursos/img/personita.png" alt="" />
+            </button>
+          </nav>
         </div>
+      </header>
 
-        <nav class="main-nav" aria-label="Principal">
-          <a class="nav__link" href="../informacion/index.html">Información</a>
-          <a class="nav__link" href="../armar-pc/index.html">Arma tu PC</a>
-          <a class="nav__link" href="../comparacion/index.html">Comparar</a>
-        </nav>
-      </div>
-    </header>
+      <main>
+        <section class="hero">
+          <h1 class="hero-title">Aprendé, Armá y Compará</h1>
+        </section>
 
-    <main id="main" class="main">
-      <section class="hero" aria-label="Introducción">
-        <h1 class="hero__title">Aprendé, Armá y Compará</h1>
-      </section>
+        <section class="content container">
+          <h2 class="section-title">Componentes populares</h2>
 
-      <section class="section" aria-labelledby="componentes-title">
-        <h2 id="componentes-title" class="section__title">Componentes</h2>
-        <div class="componentesPopu" aria-live="polite"></div>
-      </section>
-    </main>
+          <!-- Carrusel/row de componentes (contenido dinámico) -->
+          <div class="componentesPopu" id="componentesPopu"></div>
 
-    <button
-      class="floating-user"
-      id="persona"
-      aria-label="Perfil de usuario"
-      onclick="location.href='../perfil/index.html'"
-    >
-      <img src="../../recursos/img/personita.png" alt="Usuario" />
-    </button>
+          <!-- Si tu script genera tarjetas/listas de productos grandes, heredan estilos .card-product -->
+          <div class="product-list" id="productList"></div>
+        </section>
+      </main>
+    </div>
   </body>
 </html>
