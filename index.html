@@ -2,58 +2,34 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Inicio</title>
-    <meta name="theme-color" content="#1e88ff" />
-    <link rel="stylesheet" href="style.css" />
-    <link
-      rel="preconnect"
-      href="https://fonts.googleapis.com"
-      crossorigin
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Crimson+Text:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,600,0,0"
-    />
+
+    <link rel="stylesheet" href="style.css"/>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
     <script src="../../socket.js"></script>
     <script type="module" src="script.js" defer></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,500,0,0"/>
   </head>
   <body>
     <div class="inicio">
       <header class="site-header">
         <div class="container">
-          <a class="brand" href="./" aria-label="Inicio">
-            <img src="../../recursos/img/logo.png" alt="Logo" />
-          </a>
-
-          <form class="buscador" role="search" aria-label="Buscar">
-            <span class="material-symbols-outlined search-icon" aria-hidden="true">search</span>
-            <input
-              type="search"
-              class="busc"
-              id="input1"
-              placeholder="Buscar"
-              autocomplete="off"
-              aria-autocomplete="list"
-              aria-expanded="false"
-              aria-controls="busq1"
-            />
-            <button type="submit" class="search-btn" aria-label="Buscar">
-              <span class="material-symbols-outlined">search</span>
-            </button>
-            <div class="busqs" id="busq1" role="listbox" aria-label="Sugerencias de búsqueda"></div>
-          </form>
-
+          <img src="../../recursos/img/logo.png" class="logo" alt="PCity"/>
+          <div class="buscador" aria-hidden="true">
+            <input type="text" class="busc" id="input1" placeholder="Buscar"/>
+            <div class="busqs" id="busq1"></div>
+          </div>
           <nav class="main-nav" aria-label="Principal">
-            <button class="nav-link info" onclick="location.href='../informacion/index.html'">Información</button>
-            <button class="nav-link armar" onclick="location.href='../armar-pc/index.html'">Armá tu PC</button>
-            <button class="nav-link comparar" onclick="location.href='../comparacion/index.html'">Comparar</button>
-            <button class="nav-link log" id="persona" aria-label="Ingresar">
+            <button class="nav-btn info" onclick="location.href='../informacion/index.html'">Información</button>
+            <button class="nav-btn armar" onclick="location.href='../armar-pc/index.html'">Arma tu PC</button>
+            <button class="nav-btn comparar" onclick="location.href='../comparacion/index.html'">Comparar</button>
+            <button class="nav-btn log" id="persona" aria-label="Cuenta">
               <img src="../../recursos/img/personita.png" alt="" />
             </button>
           </nav>
@@ -62,17 +38,82 @@
 
       <main>
         <section class="hero">
-          <h1 class="hero-title">Aprendé, Armá y Compará</h1>
+          <div class="container">
+            <h1 class="hero-title">Aprendé, Armá y Compará</h1>
+
+            <form class="hero-card" aria-labelledby="hero-title">
+              <div class="field">
+                <label for="comp" class="label">Componente o sistema *</label>
+                <input id="comp" name="componente" required placeholder="CPU, GPU, Mother, Storage…"/>
+              </div>
+
+              <div class="field">
+                <label for="condicion" class="label">Con qué *</label>
+                <input id="condicion" name="condicion" required placeholder="Ej: presupuesto, marca, uso (gaming, edición)…"/>
+              </div>
+
+              <div class="card-actions">
+                <div class="toggle-group">
+                  <label class="switch">
+                    <input type="checkbox" id="fast" aria-label="Resultados rápidos"/>
+                    <span class="slider" aria-hidden="true"></span>
+                  </label>
+                  <span class="switch-text">Resultados rápidos</span>
+                </div>
+
+                <div class="cta-group">
+                  <button type="button" class="btn btn-primary">
+                    <span class="material-symbols-outlined" aria-hidden="true">bolt</span>
+                    Obtener recomendaciones
+                  </button>
+                  <button type="button" class="btn btn-outline">
+                    <span class="material-symbols-outlined" aria-hidden="true">tune</span>
+                    Iniciar guía interactiva
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
         </section>
 
-        <section class="content container">
-          <h2 class="section-title">Componentes populares</h2>
+        <section class="popular">
+          <div class="container">
+            <h2 class="section-title">Componentes populares</h2>
 
-          <!-- Carrusel/row de componentes (contenido dinámico) -->
-          <div class="componentesPopu" id="componentesPopu"></div>
+            <div class="componentesPopu">
+              <article class="product-card">
+                <div class="media skeleton"></div>
+                <div class="meta">
+                  <h3 class="name">CPU Ryzen 5 5600X</h3>
+                  <p class="desc">6 núcleos • 4.6 GHz Boost</p>
+                </div>
+              </article>
 
-          <!-- Si tu script genera tarjetas/listas de productos grandes, heredan estilos .card-product -->
-          <div class="product-list" id="productList"></div>
+              <article class="product-card">
+                <div class="media skeleton"></div>
+                <div class="meta">
+                  <h3 class="name">GPU RTX 4060 Ti</h3>
+                  <p class="desc">8 GB GDDR6 • DLSS 3</p>
+                </div>
+              </article>
+
+              <article class="product-card">
+                <div class="media skeleton"></div>
+                <div class="meta">
+                  <h3 class="name">Mother B650</h3>
+                  <p class="desc">AM5 • PCIe 5.0</p>
+                </div>
+              </article>
+
+              <article class="product-card">
+                <div class="media skeleton"></div>
+                <div class="meta">
+                  <h3 class="name">SSD NVMe 1 TB</h3>
+                  <p class="desc">PCIe 4.0 • 7.3 GB/s</p>
+                </div>
+              </article>
+            </div>
+          </div>
         </section>
       </main>
     </div>

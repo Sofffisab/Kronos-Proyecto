@@ -409,7 +409,7 @@ def createTxt(img_from_ai,conclusions_json, codigo_json, language_map):
     {json.dumps(conclusions_json, indent=2, ensure_ascii=False)}
     """
     
-    print("✅ request armado ok")
+    print("✅ request de createTxt hecho")
     # Llamada al modelo
     response = clientChat.responses.create(
         model="gpt-5",
