@@ -39,36 +39,33 @@ def _image_to_b64(img_path: str) -> str:
 
 
 def createImgSearching(conclusion_text: str, img_path: str):
-    """Recibe texto (conclusión) y una imagen local: pide a Gemini que genere una versión editada.
+    """Recibe texto (conclusión) y una imagen local: pide a Gemini que genere una versión mejorada visualmente.
     Retorna la ruta de la imagen editada.
     """
+
     # Preparar prompt
-    prompt_img_inicial = f"Genera una versión mejorada visualmente de la siguiente imagen. Cambios sugeridos: {conclusion_text}\nMantén la misma resolución y proporciones."
+    prompt_img_inicial = f"Genera una versión mejorada visualmente de la siguiente interfaz. {conclusion_text}"
 
-
-    # Leemos bytes de la imagen
+    # Leer bytes de la imagen
     with open(img_path, "rb") as f:
         img_bytes = f.read()
 
-
+    # Generar imagen con Gemini
     response_img = retry_request(
         client.models.generate_content,
         model=GEMINI_IMAGE_MODEL,
         contents=[
-        types.Part.from_text(text=prompt_img_inicial),
-        types.Part.from_bytes(mime_type="image/png", data=img_bytes)
+            types.Part.from_text(text=prompt_img_inicial),
+            types.Part.from_bytes(mime_type="image/png", data=img_bytes),
         ],
-        config=types.GenerateContentConfig(response_modalities=["TEXT", "IMAGE"])
+        config=types.GenerateContentConfig(response_modalities=["TEXT", "IMAGE"]),
     )
-
 
     out_path = "imagen_editada.png"
     for part in response_img.candidates[0].content.parts:
-        if getattr(part, "inline_data", None):
-            edited_img = Image.open(BytesIO(part.inline_data.data))
-            edited_img.save(out_path)
-            print(f"Imagen editada guardada en {out_path}")
-            return out_path
-        elif getattr(part, "text", None):
-            print(part.text)
-            return None
+        if part.inline_data:
+            with open(out_path, "wb") as out:
+                out.write(part.inline_data.data)
+
+    print("✅ Imagen mejorada guardada:", out_path)
+    return out_path
