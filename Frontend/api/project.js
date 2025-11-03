@@ -1,4 +1,4 @@
-
+import {createChat} from './messages.js'
 
 export const postProject = async (nombre,limite,token)=>{
 
@@ -16,6 +16,7 @@ export const postProject = async (nombre,limite,token)=>{
     }) 
     const responseData = await response.json()
     if(!response.ok) throw new Error(responseData.error || 'error '+responseData.status)
+    await createChat(nombre, token, responseData.project.id)
         return(responseData)
 }
 export const postTasks = async (id, nombre, limite, token) => {
