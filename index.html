@@ -2,77 +2,61 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Inicio</title>
-    <meta name="theme-color" content="#1e88ff" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Inicio • Rity</title>
+    <meta name="description" content="Aprendé, armá y compará componentes de PC. Explorá información, guías y productos populares con un buscador claro y navegación simple." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,600,0,0" />
     <link rel="stylesheet" href="style.css" />
-    <link
-      rel="preconnect"
-      href="https://fonts.googleapis.com"
-      crossorigin
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Crimson+Text:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,600,0,0"
-    />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
     <script src="../../socket.js"></script>
     <script type="module" src="script.js" defer></script>
   </head>
   <body>
     <div class="inicio">
-      <header class="site-header">
-        <div class="container">
-          <a class="brand" href="./" aria-label="Inicio">
-            <img src="../../recursos/img/logo.png" alt="Logo" />
+      <header class="site-header" role="banner">
+        <div class="header-inner">
+          <a class="brand" href="../inicio/index.html" aria-label="Ir al inicio">
+            <img src="../../recursos/img/logo.png" alt="Rity, logo" class="brand-logo" />
           </a>
 
-          <form class="buscador" role="search" aria-label="Buscar">
-            <span class="material-symbols-outlined search-icon" aria-hidden="true">search</span>
-            <input
-              type="search"
-              class="busc"
-              id="input1"
-              placeholder="Buscar"
-              autocomplete="off"
-              aria-autocomplete="list"
-              aria-expanded="false"
-              aria-controls="busq1"
-            />
-            <button type="submit" class="search-btn" aria-label="Buscar">
-              <span class="material-symbols-outlined">search</span>
-            </button>
-            <div class="busqs" id="busq1" role="listbox" aria-label="Sugerencias de búsqueda"></div>
+          <form class="buscador" role="search" aria-label="Buscar componentes" autocomplete="off">
+            <label class="sr-only" for="input1">Buscar</label>
+            <input type="search" class="busc" id="input1" placeholder="Buscar" enterkeyhint="search" />
+            <div class="busqs" id="busq1" role="listbox" aria-live="polite"></div>
           </form>
 
-          <nav class="main-nav" aria-label="Principal">
-            <button class="nav-link info" onclick="location.href='../informacion/index.html'">Información</button>
-            <button class="nav-link armar" onclick="location.href='../armar-pc/index.html'">Armá tu PC</button>
-            <button class="nav-link comparar" onclick="location.href='../comparacion/index.html'">Comparar</button>
-            <button class="nav-link log" id="persona" aria-label="Ingresar">
+          <div class="header-actions">
+            <nav class="main-nav" aria-label="Principal">
+              <a class="navlink" href="../informacion/index.html">información</a>
+              <a class="navlink" href="../armar-pc/index.html">Arma tu PC</a>
+              <a class="navlink" href="../comparacion/index.html">Conocer</a>
+            </nav>
+
+            <div class="account-cta" aria-hidden="true">
+              <span class="cta-line"></span>
+              <span class="cta-line short"></span>
+            </div>
+
+            <button class="log" id="persona" aria-label="Perfil">
               <img src="../../recursos/img/personita.png" alt="" />
             </button>
-          </nav>
+          </div>
         </div>
       </header>
 
-      <main>
-        <section class="hero">
-          <h1 class="hero-title">Aprendé, Armá y Compará</h1>
+      <main id="contenido">
+        <section class="hero" aria-labelledby="hero-title">
+          <h1 id="hero-title">Aprendé, Armá y Compará</h1>
         </section>
 
-        <section class="content container">
-          <h2 class="section-title">Componentes populares</h2>
-
-          <!-- Carrusel/row de componentes (contenido dinámico) -->
-          <div class="componentesPopu" id="componentesPopu"></div>
-
-          <!-- Si tu script genera tarjetas/listas de productos grandes, heredan estilos .card-product -->
-          <div class="product-list" id="productList"></div>
+        <section class="popular" aria-labelledby="popular-title">
+          <h2 id="popular-title">Componentes populares</h2>
+          <div class="componentesPopu" role="list">
+            <!-- El script poblará esta grilla -->
+          </div>
         </section>
       </main>
     </div>

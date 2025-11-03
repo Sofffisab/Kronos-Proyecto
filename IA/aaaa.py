@@ -4,7 +4,7 @@ import re
 import json
 from google import genai
 from google.genai import types
-from PIL import Image, ImageEnhance
+from PIL import Image
 from io import BytesIO
 from pydantic import BaseModel
 from typing import List
@@ -274,65 +274,31 @@ codigo_json = [
 ]
 
 # Ejemplo de fixes integrados (parcial)
-def createImgSearching(conclusion_text, img_path, creativity):
+def createImgSearching(conclusion_text, img_path):
     """
     Genera una nueva imagen basada en img_path aplicando únicamente las mejoras de conclusion_text.
     """
-        # --- Detectar tipo de input ---
-    if isinstance(img_path, str):
-        # Es una ruta de archivo
-        if not os.path.exists(img_path):
-            print(f"❌ Imagen no encontrada: {img_path}")
-            return None
-        img = Image.open(img_path).convert("RGB")
-
-    elif isinstance(img_path, Image.Image):
-        # Es una imagen ya cargada (por ejemplo, resultado de una generación anterior)
-        img = img_path.convert("RGB")
-
-    else:
-        print("❌ Tipo de imagen no válido. Se esperaba ruta (str) o imagen PIL.")
+    if not os.path.exists(img_path):
+        print(f"Imagen no encontrada: {img_path}")
         return None
 
-
-    # Reducir resolución si es muy grande (mejor interpretación de layout)
-    target_width = 1280
-    if img.width > target_width:
-        new_height = int(target_width * img.height / img.width)
-        img = img.resize((target_width, new_height), Image.LANCZOS)
-
-    # Mejorar color y contraste (facilita detección de secciones)
-    img = ImageEnhance.Color(img).enhance(1.15)
-    img = ImageEnhance.Contrast(img).enhance(1.1)
-
-    # Guardar imagen preprocesada temporalmente
-    preprocessed_path = "preprocesada.png"
-    img.save(preprocessed_path)
-
-    with open(preprocessed_path, "rb") as f:
+    # Abrir la imagen base
+    with open(img_path, "rb") as f:
         img_bytes = f.read()
+    with Image.open(img_path) as img:
+        width, height = img.size
+        img_format = img.format.lower()
+        mime_type = f"image/{img_format}" if img_format != "jpg" else "image/jpeg"
 
-    mime_type = "image/png"
-    width, height = img.size
+    # Prompt que respeta la imagen base
+    prompt_final = f"""
+    Usa la imagen adjunta como **base** y respeta su estructura, disposición y tamaño.
+    Aplica únicamente las siguientes mejoras según la conclusión:
+    {conclusion_text}
+    NO agregues elementos fuera de las sugerencias, NO cambies la disposición.
+    Tamaño final: {width}px ancho x {height}px alto.
+    """
 
-    # Generar prompt dinámico según creatividad
-    if creativity < 0.3:
-        prompt_final = f"""
-        Mejora la legibilidad y contraste de esta imagen, manteniendo su estructura, tamaño y estilo lo más fiel posible. Debe tener width de {width} y height de {height}. Siempre haz los textos legibles y con letras, no simbolos.
-        Considera lo siguiente: {conclusion_text}
-        """
-    elif creativity < 0.7:
-        prompt_final = f"""
-        Rediseña la imagen para hacerla más atractiva y clara.
-        Conserva estructura y tamaño, pero puedes ajustar colores, tipografía y contraste. Debe tener width de {width} y height de {height}. Siempre haz los textos legibles y con letras, no simbolos.
-        Considera lo siguiente: {conclusion_text}
-        """
-    else:
-        prompt_final = f"""
-        Reimagina la imagen con creatividad, cambiando colores, estilos y layout, pero manteniendo la funcionalidad principal. Debe tener width de {width} y height de {height}. Siempre haz los textos legibles y con letras, no simbolos.
-        Considera lo siguiente: {conclusion_text}
-        """
-    
     # Generar imagen
     response_img = client.models.generate_content(
         model="gemini-2.0-flash-preview-image-generation",
@@ -350,6 +316,12 @@ def createImgSearching(conclusion_text, img_path, creativity):
             edited_img.save("imagen_editada.png")
             edited_img.show()
             return edited_img
+
+
+
+
+
+#crear img buscando en internet
 
 
 language_map = {
@@ -453,7 +425,12 @@ def createTxt(img_from_ai,conclusions_json, codigo_json, language_map):
 
 #crear tabla e img buscando en internet
 def createJson(prompt, img_path="image.jpg"):
+    """
+    Genera tabla de análisis, mejora la imagen base según las conclusiones
+    y genera código actualizado para coincidir con la imagen mejorada.
+    """
 
+    #Buscar información inicial para la tabla
     contents_buscar_paginas = [
     {
         "role": "user",
@@ -476,10 +453,11 @@ def createJson(prompt, img_path="image.jpg"):
         input=contents_buscar_paginas
     )
 
-    print("Response de tabla hecho")
+    print("✅ Response de tabla hecho")
 
     prompt_board = response.output_text + prompt
 
+    #Leer la imagen base
     if os.path.exists(img_path):
         with open(img_path, "rb") as f:
             inserted_img = f.read()
@@ -487,11 +465,10 @@ def createJson(prompt, img_path="image.jpg"):
             img_format = img.format.lower()
             mime_type = f"image/{img_format}" if img_format != "jpg" else "image/jpeg"
     else:
-        print(f"Imagen no encontrada: {img_path}")
+        print(f"❌ Imagen no encontrada: {img_path}")
         return
 
-
-
+    #Generar la tabla en JSON con Gemini
     contents_tabla = [
         {
             "role":"user",
@@ -502,107 +479,85 @@ def createJson(prompt, img_path="image.jpg"):
         }
     ]
 
-
- #hacer tablita
-    response = retry_request(
+    response_tabla = retry_request(
         client.models.generate_content,
         model="gemini-2.5-flash",
         contents=contents_tabla,
         config={
             "response_mime_type": "application/json",
             "response_schema": TableData.model_json_schema()
-        },
+        }
     )
 
-    # Tomamos el primer candidato
-    candidate = response.candidates[0]
+    candidate = response_tabla.candidates[0]
+    tabla_json_str = next((part.text for part in candidate.content.parts if part.text), None)
+    if not tabla_json_str:
+        print("❌ No se obtuvo JSON de la tabla")
+        return
 
-    # Recorremos las partes del contenido
-    for part in candidate.content.parts:
-        if part.text:
-            tabla_json_str = part.text  # Aquí tenemos el JSON como string
-            break
-
-    # Parseamos a dict
     tabla_generada_dict = json.loads(tabla_json_str)
-
-    # Convertimos a Pydantic
     tabla_generada = TableData.model_validate(tabla_generada_dict)
 
-    # Filtrar fila de final conclusion
+    # Filtrar fila de “conclusion” final
     tabla_generada.table_data = [
-        row for row in tabla_generada.table_data 
+        row for row in tabla_generada.table_data
         if row.criterion_or_website.lower() != "conclusion"
     ]
 
-
-
- #ajustar los datos a las filas y columnas
+    # Construir DataFrame
     all_websites = []
     for row in tabla_generada.table_data:
         for w in row.websites:
             if w.name not in all_websites:
                 all_websites.append(w.name)
 
-    # 2. Construir filas por criterio
     rows = []
     for row in tabla_generada.table_data:
         row_dict = {"criterion_or_website": row.criterion_or_website}
         for site in all_websites:
             text = next((w.text for w in row.websites if w.name == site), "")
             row_dict[site] = text
-        # Solo Website4 es la “conclusion” de mejoras
         row_dict["conclusion"] = row.conclusion or ""
         rows.append(row_dict)
 
-
-    # 3. Crear DataFrame con columnas fijas
     cols = ["criterion_or_website"] + all_websites + ["conclusion"]
     df = pd.DataFrame(rows)[cols]
 
-
-
-
-
-    # Guardar JSON
+    # Guardar JSON y Excel
+    os.makedirs(SAVE_DIR, exist_ok=True)
     json_path = os.path.join(SAVE_DIR, "tablita.json")
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(rows, f, ensure_ascii=False, indent=4)
-    print("JSON creado")
+    print("✅ JSON creado y guardado")
 
-    with open("tablas_generadas/tablita.json", "r", encoding="utf-8") as f:
-        data = json.load(f)
-
-    print("tabla guardada")
-
-    # Guardar Excel
     xlsx_path = os.path.join(SAVE_DIR, "tablita.xlsx")
     df.to_excel(xlsx_path, index=False)
-    print("Excel creado")
+    print("✅ Excel creado")
 
-    #por si cambiamos de lugar las filas y columnas 
-    conclusion = None
+    # Obtener conclusión completa
     if "conclusion" in df.columns:
-        conclusion = " ".join(df["conclusion"].dropna().tolist())
+        conclusion_text = " ".join(df["conclusion"].dropna().tolist())
     else:
-        conclusion = " ".join(df.iloc[-1].dropna().tolist())
+        conclusion_text = " ".join(df.iloc[-1].dropna().tolist())
 
-    print("Conclusión de tabla hecho")
+    if not conclusion_text.strip():
+        conclusion_text = "Mejora la navegación, accesibilidad visual y coherencia estética."
 
-    if not conclusion.strip():
-        conclusion = "No hubo sugerencias claras, pero mejora la navegación y la accesibilidad visual."
+    print("✅ Conclusión de tabla listo")
 
-    imagen_b64 = createImgSearching(conclusion, img_path, 0.8)
-    
+    # Generar imagen mejorada respetando la base
+    imagen_editada = createImgSearching(conclusion_text, img_path)
+
+    # Generar código actualizado
     resultado_txt = createTxt(
-            imagen_b64,
-            rows,
-            codigo_json,
-            language_map
-        )
+        imagen_editada,
+        rows,
+        codigo_json,
+        language_map
+    )
 
+    print("✅ Markdown generado:\n", resultado_txt["markdown"])
 
-    print("Markdown generado:\n", resultado_txt["markdown"])
 
 
 
@@ -621,7 +576,8 @@ Rules:
 - Website4 (column): same, but refers to the website from the provided image.  
 - "Conclusion" (column): only Website4 improvements, implicit comparison, highlight strengths + suggestions, never mention website names.  
 Try not to use the same words for the cells, so each creteria doesn't have the exact words. Use an extensive vocabulary
-Output must be strictly consistent, 6 keys per row, no extra text. And just should have 11 rows (without a "final" conclusion)
-The response must be in spanish. 
+Output must be strictly consistent, 6 keys per row, no extra text.
+
+The response must be in spanish
 
 """)

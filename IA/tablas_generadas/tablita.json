@@ -1,90 +1,101 @@
 [
     {
         "criterion_or_website": "Typography & Readability",
-        "PcComponentes.com": "Presenta fuentes sans-serif claras y legibles, garantizando una experiencia de lectura fluida para las descripciones de productos.",
-        "Hard Zone": "Utiliza una combinación de tamaños y estilos de fuente que mejoran la jerarquía visual de sus extensos artículos técnicos.",
-        "El Chapuzas Informático": "Se beneficia de una tipografía bien espaciada y contrastada, haciendo que el contenido del blog sea muy fácil de digerir.",
-        "Pity PC": "Los elementos textuales son nítidos y directos, presentando una jerarquía limpia que facilita la comprensión del contenido general.",
-        "conclusion": "Considerar la implementación de una mayor variedad de pesos y tamaños de fuente para los encabezados podría mejorar la jerarquía visual. Ajustar el color del texto para un contraste ligeramente más alto podría beneficiar a usuarios con ciertas deficiencias visuales."
+        "Sitio 1": "Una fuente sans-serif clara y moderna domina el contenido. La jerarquía visual es efectiva, facilitando la lectura de textos y títulos.",
+        "Sitio 2": "Emplea varias tipografías sans-serif con distintos pesos. Esto asegura una buena diferenciación y legibilidad en los elementos.",
+        "Sitio 3": "Utiliza una tipografía sans-serif que ofrece claridad. Los tamaños y espaciados contribuyen a una experiencia de lectura cómoda.",
+        "Sitio de la imagen": "Muestra una fuente sans-serif estándar para los textos principales. Los títulos son grandes y legibles; los nombres de productos son más pequeños.",
+        "": "",
+        "conclusion": "Considerar el uso de una jerarquía tipográfica más variada en el sitio para resaltar información clave. Mejorar el tamaño y contraste de los nombres de producto."
     },
     {
         "criterion_or_website": "Colors & Branding",
-        "PcComponentes.com": "Su paleta de colores naranja y gris transmite profesionalidad, estableciendo una identidad de marca coherente y reconocible.",
-        "Hard Zone": "El esquema oscuro con acentos brillantes es distintivo, alineándose perfectamente con su enfoque en el gaming y hardware de alto rendimiento.",
-        "El Chapuzas Informático": "Una combinación de azules y blancos domina, proyectando una imagen de seriedad y fiabilidad en su contenido técnico especializado.",
-        "Pity PC": "Predomina un azul brillante combinado con blanco, otorgando una sensación de energía y frescura. El esquema de color es sencillo y directo.",
-        "conclusion": "Aunque el azul crea una identidad fuerte, explorar tonos complementarios podría añadir sofisticación. Introducir colores de acento secundarios podría resaltar mejor los llamados a la acción, mejorando la interacción del usuario."
+        "Sitio 1": "Su identidad de marca se basa en una combinación de naranja, azul y blanco. Esto proyecta una imagen dinámica y profesional.",
+        "Sitio 2": "La paleta principal de colores incluye negro, rojo y blanco. Comunica una estética audaz y centrada en la tecnología.",
+        "Sitio 3": "Opera con una paleta de azules, blancos y grises. Los colores transmiten una percepción de seriedad y confianza al usuario.",
+        "Sitio de la imagen": "El encabezado superior emplea un azul vibrante sobre un fondo blanco. El logotipo incorpora este azul con detalles en negro, ofreciendo una apariencia simple y directa.",
+        "": "",
+        "conclusion": "Explorar una paleta de colores complementaria para suavizar el contraste. Integrar el color de marca de forma más consistente en elementos interactivos."
     },
     {
         "criterion_or_website": "Visual Elements",
-        "PcComponentes.com": "Presenta imágenes de productos de alta resolución y gráficos detallados, esenciales para las decisiones de compra informadas.",
-        "Hard Zone": "Incorpora visuales atractivos, incluyendo fotos detalladas e infografías, que enriquecen los artículos técnicos complejos.",
-        "El Chapuzas Informático": "Muestra fotografía de producto nítida y gráficos personalizados, elevando el atractivo visual de sus exhaustivas revisiones.",
-        "Pity PC": "Las imágenes de productos son claras y están bien expuestas en la página principal, lo cual es fundamental para el compromiso visual. La consistencia en el estilo contribuye a una experiencia unificada.",
-        "conclusion": "Las imágenes de productos son adecuadas; no obstante, implementar elementos visuales más dinámicos como vistas 360 grados o comparadores interactivos podría enriquecer la exploración. La adición de pequeños iconos relevantes a los encabezados de sección también sería beneficiosa."
+        "Sitio 1": "Presenta imágenes de producto de alta resolución y gráficos promocionales. El diseño general es moderno y pulcro.",
+        "Sitio 2": "Se distingue por sus fotografías de producto profesionales y detalladas. Incluye además iconos claros para funcionalidades específicas.",
+        "Sitio 3": "Muestra imágenes de productos nítidas y banners publicitarios discretos. Los iconos utilizados son limpios y fáciles de entender.",
+        "Sitio de la imagen": "Las imágenes de los componentes son nítidas y tienen un fondo blanco simple. Se observa un logotipo minimalista en el encabezado izquierdo.",
+        "": "",
+        "conclusion": "Añadir más elementos visuales, como iconos descriptivos o banners promocionales. Mejorar la consistencia en el estilo de las imágenes de producto."
     },
     {
         "criterion_or_website": "Navigation & UX",
-        "PcComponentes.com": "Ofrece una navegación intuitiva con filtros de categoría avanzados y una potente búsqueda, simplificando la compra en línea.",
-        "Hard Zone": "La estructura de menú clara y los enlaces a artículos relacionados facilitan la exploración de su vasto repositorio de información tecnológica.",
-        "El Chapuzas Informático": "Se caracteriza por una organización de contenido lógica y un acceso sencillo a sus distintas secciones, garantizando una fluidez informativa.",
-        "Pity PC": "La barra de navegación es simple y muy visible, proporcionando acceso directo a secciones clave como 'Información' y 'Arma tu PC'. La barra de búsqueda también está bien situada.",
-        "conclusion": "La navegación actual es directa, pero la incorporación de un mega-menú más detallado podría soportar un crecimiento futuro en categorías de productos. Asegurar que todos los elementos interactivos ofrezcan retroalimentación visual clara mejoraría significativamente la confianza del usuario."
+        "Sitio 1": "Ofrece un mega menú extenso y una barra de búsqueda destacada. La navegación es intuitiva y facilita el acceso rápido.",
+        "Sitio 2": "Dispone de una navegación superior robusta y filtros laterales detallados. Permite una exploración eficiente de su vasto catálogo.",
+        "Sitio 3": "Su menú principal está bien organizado por categorías lógicas. Esto permite al usuario encontrar rápidamente lo que busca.",
+        "Sitio de la imagen": "La navegación superior es simple con enlaces básicos y una barra de búsqueda prominente. El icono de usuario sugiere acceso a perfil personal.",
+        "": "",
+        "conclusion": "Expandir las opciones de navegación principales para incluir categorías de productos. Mejorar la barra de búsqueda con sugerencias o autocompletado."
     },
     {
         "criterion_or_website": "Organization & Structure",
-        "PcComponentes.com": "Organiza los productos en jerarquías lógicas, permitiendo a los usuarios una navegación sin esfuerzo hasta elementos específicos.",
-        "Hard Zone": "Estructura sus artículos con encabezados y párrafos bien definidos, lo que mejora la legibilidad de grandes volúmenes de texto técnico.",
-        "El Chapuzas Informático": "Emplea un formato de blog claro con categorías y etiquetas, ayudando eficazmente a los lectores a encontrar información relevante.",
-        "Pity PC": "La página de inicio separa eficazmente el eslogan principal de 'Componentes populares', creando un flujo de contenido limpio. Los enlaces de navegación principales están agrupados lógicamente en la parte superior derecha.",
-        "conclusion": "Aunque el contenido está bien agrupado, la introducción de opciones de filtrado más avanzadas en las listas de productos permitiría una mayor personalización. Implementar 'migas de pan' (breadcrumbs) podría ofrecer a los usuarios un mejor contexto de su ubicación dentro de la jerarquía del sitio."
+        "Sitio 1": "La arquitectura de la información es lógica, con categorías claras y páginas de producto detalladas. Facilita la comprensión del catálogo.",
+        "Sitio 2": "Presenta una estructura de categorías profunda y páginas de destino bien definidas. Esto ayuda a los usuarios a navegar por opciones.",
+        "Sitio 3": "La disposición del contenido es muy clara, con listas de productos y secciones informativas. Promueve una experiencia de usuario ordenada.",
+        "Sitio de la imagen": "Muestra un diseño sencillo con un encabezado principal y una sección de 'Componentes populares'. La cuadrícula de productos ofrece una buena visibilidad inicial.",
+        "": "",
+        "conclusion": "Desarrollar una estructura de contenido más jerárquica para las categorías. Incorporar secciones adicionales para guías o recursos útiles."
     },
     {
         "criterion_or_website": "Accessibility",
-        "PcComponentes.com": "Cumple con estándares de accesibilidad, ofreciendo texto alternativo para imágenes y soporte para navegación con teclado.",
-        "Hard Zone": "Se esfuerza por mantener un contraste adecuado entre texto y fondo, mejorando la legibilidad para una amplia gama de usuarios.",
-        "El Chapuzas Informático": "Asegura que su contenido sea accesible con un diseño responsivo y compatibilidad con lectores de pantalla, beneficiando a todos.",
-        "Pity PC": "El diseño de alto contraste azul y blanco contribuye a una buena visibilidad general, y los elementos interactivos parecen tener un tamaño adecuado. Los tamaños de fuente son generalmente legibles.",
-        "conclusion": "Mejorar el soporte de navegación por teclado y asegurar que todos los elementos interactivos estén correctamente etiquetados para lectores de pantalla es crucial. Ampliar las opciones de contraste de color o proporcionar un modo oscuro incrementaría aún más la usabilidad para individuos con discapacidades visuales."
+        "Sitio 1": "Se esfuerza por cumplir estándares de accesibilidad, como el contraste de colores. Incluye navegación con teclado y etiquetas.",
+        "Sitio 2": "Frecuentemente invierte en mejoras de accesibilidad digital. Esto incluye un buen contraste y soporte para lectores de pantalla.",
+        "Sitio 3": "Considera el contraste de texto y fondo para asegurar legibilidad. Se enfoca en una experiencia de navegación clara para todos.",
+        "Sitio de la imagen": "El contraste entre el azul del encabezado y el texto blanco es adecuado. No se evidencian otros elementos de accesibilidad avanzada en la captura.",
+        "": "",
+        "conclusion": "Asegurar el contraste adecuado en todos los elementos interactivos. Implementar etiquetas ARIA y textos alternativos para imágenes para mejorar la accesibilidad."
     },
     {
         "criterion_or_website": "Functionality",
-        "PcComponentes.com": "Dispone de una robusta plataforma de comercio electrónico con pasarelas de pago seguras y seguimiento exhaustivo de pedidos.",
-        "Hard Zone": "Ofrece un rendimiento de carga veloz y funciones de búsqueda eficaces, permitiendo un acceso rápido a la información deseada.",
-        "El Chapuzas Informático": "Proporciona un sistema de comentarios totalmente funcional y botones para compartir en redes sociales, incentivando la interacción comunitaria.",
-        "Pity PC": "La barra de búsqueda es un elemento funcional clave, permitiendo a los usuarios encontrar componentes específicos con rapidez. Los enlaces de navegación también parecen ser completamente operativos y responsivos.",
-        "conclusion": "Considerar la adición de un configurador de PC 'Arma tu PC', una función muy demandada en este sector, sería un gran avance. Un sistema de cuentas de usuario con historial de pedidos y listas de deseos también podría aumentar significativamente el compromiso."
+        "Sitio 1": "Ofrece un rendimiento rápido y estable en todas las páginas. La búsqueda y los formularios funcionan sin errores apreciables.",
+        "Sitio 2": "Se caracteriza por su alta velocidad de carga y estabilidad operativa. La experiencia de compra es fluida y sin interrupciones.",
+        "Sitio 3": "Garantiza tiempos de carga eficientes y una plataforma estable. Esto proporciona una experiencia de usuario fiable y consistente.",
+        "Sitio de la imagen": "La funcionalidad no puede ser evaluada con la imagen estática. No se pueden observar la velocidad, estabilidad, o errores de la plataforma.",
+        "": "",
+        "conclusion": "Optimizar la velocidad de carga de la página para una mejor experiencia. Asegurar la estabilidad de los elementos interactivos y formularios."
     },
     {
         "criterion_or_website": "Interactivity",
-        "PcComponentes.com": "Permite a los usuarios dejar valoraciones y plantear preguntas sobre productos, creando así una comunidad de compradores activa.",
-        "Hard Zone": "Fomenta la participación mediante secciones de comentarios y encuestas, construyendo un diálogo continuo con su extensa audiencia.",
-        "El Chapuzas Informático": "Ofrece campos de comentarios para discusiones y la opción de suscripción a boletines para mantenerse al día con las novedades.",
-        "Pity PC": "Los enlaces de navegación existentes proporcionan interactividad básica, dirigiendo eficazmente a los usuarios a diferentes secciones. La barra de búsqueda ofrece retroalimentación inmediata al escribir.",
-        "conclusion": "Introducir herramientas de comparación de productos o cuestionarios interactivos para guiar a los usuarios en la elección de componentes sería valioso. Una sección de comentarios para artículos o páginas de productos podría fomentar el compromiso de la comunidad y el contenido generado por el usuario."
+        "Sitio 1": "Posee diversos estados hover para enlaces y botones. Proporciona retroalimentación visual al usuario en cada interacción.",
+        "Sitio 2": "Sus elementos interactivos responden dinámicamente. Ofrece mensajes claros y microinteracciones que mejoran la experiencia.",
+        "Sitio 3": "Implementa sutiles efectos hover en sus elementos clicables. Esto guía al usuario de forma intuitiva a través del sitio.",
+        "Sitio de la imagen": "La barra de búsqueda muestra un placeholder de texto. Los enlaces superiores parecen tener un efecto de subrayado al pasar el cursor.",
+        "": "",
+        "conclusion": "Introducir microinteracciones visuales al interactuar con productos. Desarrollar estados hover y focus más distintivos para botones y enlaces."
     },
     {
         "criterion_or_website": "SEO",
-        "PcComponentes.com": "Emplea descripciones de productos ricas en palabras clave y una estructura de URL amigable para los motores de búsqueda.",
-        "Hard Zone": "Optimiza sus artículos con meta descripciones, títulos pertinentes y enlaces internos, mejorando su visibilidad en línea.",
-        "El Chapuzas Informático": "Aplica prácticas SEO sólidas, incluyendo contenido de alta calidad y optimización de imágenes para el mejor posicionamiento.",
-        "Pity PC": "Los títulos y encabezados parecen semánticamente relevantes para los componentes de PC, lo que sugiere una optimización básica de palabras clave. La estructura URL simple es propicia para la indexación.",
-        "conclusion": "Optimizar las meta descripciones y etiquetas de título en todas las páginas para incluir más palabras clave relevantes y puntos de venta únicos. Desarrollar un blog con contenido valioso podría mejorar significativamente el tráfico orgánico y la autoridad del dominio."
+        "Sitio 1": "Optimiza sus títulos, meta descripciones y H1s. La estructura del sitio está diseñada para un buen rastreo e indexación.",
+        "Sitio 2": "Destaca por su SEO técnico y on-page, usando datos estructurados. Esto le permite un alto posicionamiento en motores de búsqueda.",
+        "Sitio 3": "Utiliza palabras clave relevantes y encabezados optimizados. Esto contribuye a su visibilidad orgánica en los resultados de búsqueda.",
+        "Sitio de la imagen": "Los títulos principales como 'Aprendé, Armá y Compará' actúan como H1s. Otros elementos SEO como meta descripciones no son observables.",
+        "": "",
+        "conclusion": "Añadir metadescripciones y títulos SEO únicos para cada página. Implementar datos estructurados para productos y contenido relevante."
     },
     {
-        "criterion_or_website": "Rendimiento Técnico",
-        "PcComponentes.com": "Presenta tiempos de carga rápidos y una infraestructura robusta, soportando eficazmente un alto volumen de tráfico y transacciones.",
-        "Hard Zone": "Optimiza sus imágenes y scripts, lo que se traduce en una experiencia de navegación fluida y muy eficiente para el usuario.",
-        "El Chapuzas Informático": "Posee un sitio web ligero y bien codificado, asegurando una carga rápida incluso con una extensa cantidad de contenido multimedia.",
-        "Pity PC": "La página carga rápidamente según los elementos visibles, indicando un enfoque en la entrega eficiente de recursos. La responsividad sugiere un backend bien optimizado para operaciones básicas.",
-        "conclusion": "Realizar auditorías de rendimiento regulares para identificar y resolver posibles cuellos de botella en la velocidad de carga de la página, especialmente con contenido dinámico. La optimización adicional del tamaño de las imágenes y el aprovechamiento del almacenamiento en caché del navegador podría conducir a una experiencia más consistentemente rápida."
+        "criterion_or_website": "Descubrimiento de productos y filtrado",
+        "Sitio 1": "Ofrece filtros avanzados por especificaciones, marca y precio. Facilita enormemente la búsqueda de componentes específicos.",
+        "Sitio 2": "Posee amplias opciones de filtrado y herramientas de comparación de productos. Esto ayuda a los usuarios a tomar decisiones informadas.",
+        "Sitio 3": "Dispone de filtros de categoría robustos y búsqueda por especificaciones. También ofrece configuradores para sistemas personalizados.",
+        "Sitio de la imagen": "Solo se visualiza una barra de búsqueda genérica en el encabezado. No se aprecian opciones de filtrado o clasificación de productos en la interfaz mostrada.",
+        "": "",
+        "conclusion": "Incorporar filtros por categoría, marca, precio y especificaciones técnicas. Añadir opciones de ordenación (precio, popularidad) para mejorar la búsqueda."
     },
     {
-        "criterion_or_website": "Conclusión Final",
-        "PcComponentes.com": "",
-        "Hard Zone": "",
-        "El Chapuzas Informático": "",
-        "Pity PC": "",
-        "conclusion": "El sitio web presenta una base sólida con una interfaz limpia y una navegación intuitiva para los usuarios. Para mejorar su oferta, podría beneficiarse enormemente de la adición de funcionalidades avanzadas como un configurador de PC y herramientas de comparación. Optimizar el SEO con contenido de blog y descripciones meta más ricas, junto con una mayor interactividad y opciones de accesibilidad, potenciarían su relevancia y experiencia de usuario en el competitivo mercado de componentes."
+        "criterion_or_website": "",
+        "Sitio 1": "",
+        "Sitio 2": "",
+        "Sitio 3": "",
+        "Sitio de la imagen": "",
+        "": "",
+        "conclusion": "El sitio de la imagen presenta una interfaz limpia y una estructura inicial clara, con una navegación sencilla y componentes populares bien expuestos. Para optimizar su potencial, debería priorizar la implementación de filtros detallados para mejorar el descubrimiento de productos, enriquecer la interactividad con efectos visuales más evidentes y asegurar la accesibilidad completa, como textos alternativos. Mejorar los elementos SEO on-page y la velocidad de carga también impulsaría su rendimiento general."
     }
 ]
