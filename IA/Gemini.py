@@ -15,12 +15,32 @@ import json
 import time
 import random
 from openai import OpenAI
-from dotenv import load_dotenv, dotenv_values 
+from dotenv import load_dotenv, dotenv_values
+import psycopg2
+
 
 load_dotenv()
 
 client = genai.Client(api_key=os.getenv("GEMINI_KEY"))
 clientChat = OpenAI(api_key=os.getenv("CHAT_KEY"))
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+# Conectarse a la base de datos
+try:
+    conn = psycopg2.connect(DATABASE_URL)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT version();")
+    version = cursor.fetchone()
+    print("Conectado a:", version)
+
+    cursor.close()
+    conn.close()
+    print("Conexión cerrada correctamente.")
+
+except Exception as e:
+    print("Error al conectar:", e)
+
 
 #modelo de la tabla
 class WebsiteValue(BaseModel):
@@ -274,7 +294,7 @@ codigo_json = [
 ]
 
 # Ejemplo de fixes integrados (parcial)
-def createImgSearching(conclusion_text, img_path, creativity):
+def createImgSearching(conclusion_text, img_path):
     """
     Genera una nueva imagen basada en img_path aplicando únicamente las mejoras de conclusion_text.
     """
@@ -282,7 +302,7 @@ def createImgSearching(conclusion_text, img_path, creativity):
     if isinstance(img_path, str):
         # Es una ruta de archivo
         if not os.path.exists(img_path):
-            print(f"❌ Imagen no encontrada: {img_path}")
+            print(f"Imagen no encontrada: {img_path}")
             return None
         img = Image.open(img_path).convert("RGB")
 
@@ -291,7 +311,7 @@ def createImgSearching(conclusion_text, img_path, creativity):
         img = img_path.convert("RGB")
 
     else:
-        print("❌ Tipo de imagen no válido. Se esperaba ruta (str) o imagen PIL.")
+        print("Tipo de imagen no válido. Se esperaba ruta (str) o imagen PIL.")
         return None
 
 
@@ -316,22 +336,20 @@ def createImgSearching(conclusion_text, img_path, creativity):
     width, height = img.size
 
     # Generar prompt dinámico según creatividad
-    if creativity < 0.3:
-        prompt_final = f"""
-        Mejora la legibilidad y contraste de esta imagen, manteniendo su estructura, tamaño y estilo lo más fiel posible. Debe tener width de {width} y height de {height}. Siempre haz los textos legibles y con letras, no simbolos.
-        Considera lo siguiente: {conclusion_text}
-        """
-    elif creativity < 0.7:
-        prompt_final = f"""
-        Rediseña la imagen para hacerla más atractiva y clara.
-        Conserva estructura y tamaño, pero puedes ajustar colores, tipografía y contraste. Debe tener width de {width} y height de {height}. Siempre haz los textos legibles y con letras, no simbolos.
-        Considera lo siguiente: {conclusion_text}
-        """
-    else:
-        prompt_final = f"""
-        Reimagina la imagen con creatividad, cambiando colores, estilos y layout, pero manteniendo la funcionalidad principal. Debe tener width de {width} y height de {height}. Siempre haz los textos legibles y con letras, no simbolos.
-        Considera lo siguiente: {conclusion_text}
-        """
+    prompt_final = f"""
+    Rediseñá visualmente esta página web para hacerla mucho más atractiva, moderna y creativa,
+    manteniendo el propósito general de la interfaz pero reinterpretando libremente su estilo visual.
+    
+    ✦ Podés reacomodar la disposición de los elementos, cambiar proporciones, jugar con espacios vacíos.
+    ✦ Usá una paleta de colores equilibrada, con contraste claro y buena legibilidad.
+    ✦ Incorporá ideas actuales de diseño UI/UX (2025): sombras suaves, degradados, glassmorphism, neón o minimalismo moderno.
+    ✦ Tipografía limpia y legible; nada de símbolos o letras irreconocibles.
+    ✦ Si el sitio parece de tecnología o mercado (por ejemplo, "PC Market"), dale un estilo tech-futurista con energía visual.
+    ✦ Evitá deformar textos existentes; mantenelos realistas.
+    
+    Tené en cuenta lo siguiente para guiar el rediseño:
+    {conclusion_text}
+    """
     
     # Generar imagen
     response_img = client.models.generate_content(
@@ -340,7 +358,11 @@ def createImgSearching(conclusion_text, img_path, creativity):
             types.Part.from_text(text=prompt_final),
             types.Part.from_bytes(data=img_bytes, mime_type=mime_type)
         ],
-        config=types.GenerateContentConfig(response_modalities=["TEXT", "IMAGE"])
+        config=types.GenerateContentConfig(
+        response_modalities=["TEXT", "IMAGE"],
+        temperature=0.9,
+        top_p=0.95
+        )
     )
 
     # Extraer imagen generada
@@ -592,7 +614,7 @@ def createJson(prompt, img_path="image.jpg"):
     if not conclusion.strip():
         conclusion = "No hubo sugerencias claras, pero mejora la navegación y la accesibilidad visual."
 
-    imagen_b64 = createImgSearching(conclusion, img_path, 0.8)
+    imagen_b64 = createImgSearching(conclusion, img_path)
     
     resultado_txt = createTxt(
             imagen_b64,

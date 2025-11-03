@@ -63,22 +63,6 @@ if(!response.ok) throw new Error(responseData.error || `error ${responseData.sta
     return(responseData )
 }
 
-export const postTask = async (nombre, limite, token, id, responsable) => {
-
-    const result = await fetch(`https://localhost:3000/api/projects/${id}/tasks`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json',
-                    'authorization': `bearer ${token}`},
-        body: JSON.stringify({
-            nombre: nombre,
-            limite: limite,
-            id_persona_responsable: responsable,
-        })
-    })
-    const resultData = await response.json()
-    if(!response.ok) throw new Error(responseData.error || `error ${responseData.status}`)
-    return(responseData)
-}
 
 export const stringToColor = (str)=> {
     let hash = 0;
