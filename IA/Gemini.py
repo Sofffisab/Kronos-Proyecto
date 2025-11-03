@@ -15,12 +15,32 @@ import json
 import time
 import random
 from openai import OpenAI
-from dotenv import load_dotenv, dotenv_values 
+from dotenv import load_dotenv, dotenv_values
+import psycopg2
+
 
 load_dotenv()
 
 client = genai.Client(api_key=os.getenv("GEMINI_KEY"))
 clientChat = OpenAI(api_key=os.getenv("CHAT_KEY"))
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+# Conectarse a la base de datos
+try:
+    conn = psycopg2.connect(DATABASE_URL)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT version();")
+    version = cursor.fetchone()
+    print("Conectado a:", version)
+
+    cursor.close()
+    conn.close()
+    print("Conexión cerrada correctamente.")
+
+except Exception as e:
+    print("Error al conectar:", e)
+
 
 #modelo de la tabla
 class WebsiteValue(BaseModel):
@@ -339,7 +359,7 @@ def createImgSearching(conclusion_text, img_path):
             types.Part.from_bytes(data=img_bytes, mime_type=mime_type)
         ],
         config=types.GenerateContentConfig(
-        response_modalities=["TEXT", "IMAGE"]
+        response_modalities=["TEXT", "IMAGE"],
         temperature=0.9,
         top_p=0.95
         )
