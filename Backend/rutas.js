@@ -36,7 +36,7 @@ const setuprouter = ({ login, signup, authentication, getevents, permision, redi
     //router.post("/users/signup", signup);
     router.get("/auth/google/callback", permision);
     router.get("/api/calendar/events", authentication, getevents);
-    router.get('/auth/google', authentication, redirectwithgoogle);
+    router.get('/auth/google', redirectwithgoogle);
     router.post("/api/calendar/events", authentication, createevents);
     router.delete("/api/calendar/events/:eventId", authentication, deleteevents);
     router.put("/api/calendar/events/:eventId", authentication, updateevents);

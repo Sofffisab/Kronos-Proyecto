@@ -1,4 +1,5 @@
 import { prisma } from '../prisma/prisma.js';
+import { Buffer } from "buffer"
 
 const setuparchivos = () => {
 
@@ -59,7 +60,7 @@ const setuparchivos = () => {
             const ismember = await prisma.tiene.findFirst({
                 where: {
                     id_persona: personaId,
-                    id_proyecto: parseInt(proyectoId, 10)
+                    id_proyecto: Number.parseInt(proyectoId, 10)
                 }
             });
 
@@ -71,7 +72,7 @@ const setuparchivos = () => {
                 data: {
                     formato: formato,
                     nombrearchivo: nombrearchivo,
-                    archivo: archivo,
+                    archivo: Buffer.from(archivo, "base64"),
                     id_persona: personaId,
                     id_proyecto: parseInt(proyectoId, 10),
                 },

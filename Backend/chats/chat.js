@@ -150,7 +150,7 @@ const setupchat = () => {
         try {
             const chats = await prisma.chat.findMany({
                 where: {
-                    tiene_pc: {
+                    personas_tiene: {
                         some: {
                             id_persona: personaId
                         }
