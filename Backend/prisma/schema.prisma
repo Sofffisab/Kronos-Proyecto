@@ -151,3 +151,15 @@ model leido {
   persona persona @relation(fields: [id_persona], references: [id])
   @@unique([id_mensaje, id_persona])
 }
+
+// mirkin
+model ia_paginas {
+  id    Int      @id @default(autoincrement())
+  name_archivo    String 
+  archivo_codigo_pagina  String 
+  lenguaje    String 
+  foto_pagina_jpg   Bytes
+}
+
+// july
+//model ia_fechas {}
