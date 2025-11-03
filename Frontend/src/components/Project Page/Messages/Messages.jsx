@@ -2,9 +2,10 @@ import { useState } from 'react'
 import styles from './messages.module.css'
 import Input from './Input'
 import Chat from './Chat'
+import { useTasks } from '../../../context/ProjectContext'
 
 export default function Messages() {
-
+    const {contextMessages} = useTasks()
     const [messages, setMessages]= useState(null)
     const [msgValue, setMsgValue]= useState('')
 

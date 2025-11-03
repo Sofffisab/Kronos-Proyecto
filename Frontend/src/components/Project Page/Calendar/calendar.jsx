@@ -51,7 +51,7 @@ export default function Calendar(props) {
             center: '',
             end: 'prevYear prev today next nextYear' 
           }}
-          selectable={props.seelectable && true}
+          selectable={props.selectable && true}
           dateClick={props.selectable && ((info)=>addTask(info))}
           select={props.selectable &&((info)=> addTask(info))}
           events={tasks}

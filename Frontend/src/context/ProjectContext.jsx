@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { getChatMessages } from "../../api/messages.js";
 import {getProjects} from '../../api/project.js'
 
 const TaskContext = createContext()
@@ -12,6 +13,7 @@ export function TaskProvider({children}) {
     const [contextProject, setProject] = useState({})
     const [contextTasks, setTasks] = useState([])
     const [currentId, setCurrentId]= useState(null)
+    const [contextChat, setContextChat] = useState(null)
 
 
 async function fetchProject(id) {
@@ -20,11 +22,24 @@ async function fetchProject(id) {
     setProject(project)
     setTasks(project.tareas)
     
+
+}
+async function fetchMessages(id) {
+
+    const messages = await getChatMessages(localStorage.getItem('token'), id)
+    setContextChat(messages)
 }
 
 useEffect(()=>{
     if(currentId) fetchProject(currentId)
 },[currentId])
+
+useEffect(() => {
+    if (contextProject.chats && contextProject.chats.length > 0) {
+      fetchMessages(contextProject.chats[0].id);
+    }
+  }, [contextProject]);
+
 
 
 
