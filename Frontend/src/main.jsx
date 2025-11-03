@@ -11,6 +11,7 @@ import ProjectPage from "./Pages/ProjectPage.jsx";
 import Recover from "./Pages/Recover.jsx";
 import CreateProjectPage from './Pages/CreateProjectPage.jsx'
 import './global.css'
+import { TaskProvider } from "./context/ProjectContext.jsx";
 const router = createBrowserRouter([
   { path: "/", element:<TokenAuth> <LandingPage /> </TokenAuth> },
   { path: "*", element: <ErrorPage /> },
@@ -25,6 +26,8 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
  
   <StrictMode>
+    <TaskProvider>
     <RouterProvider router={router} />
+    </TaskProvider>
   </StrictMode> 
 );

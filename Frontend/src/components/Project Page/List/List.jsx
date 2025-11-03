@@ -3,16 +3,19 @@ import InputModal from "../../modals/InputModal";
 import { useEffect } from "react";
 import { useState } from "react";
 import style from './list.module.css'
+import { postTask } from "../../../../api/tasks";
 import Category from "./Category";
 import Bar from "./Bar.jsx";
 import Table from "./table";
 import Task from "./Task";
+import { useTasks } from "../../../context/ProjectContext";
 export default function List(props) {
+  const {contextTasks, contextProject, fetchProject} = useTasks()
   const [modal, toggleModal] = useState(false);
-  const [tasks, setTasks] = useState(props.tasks? props.tasks : []);
-
-  const miembros = props.project.personas_tiene.map((persona)=>(
-    {nombre: persona.persona.nombre, id: persona.id}))
+  const tasks = contextTasks
+console.log(contextTasks)
+  const miembros = contextProject?.personas_tiene?.map((persona)=>(
+    {nombre: persona.persona.nombre, id: persona.id_persona}))
 
   useEffect(() => {
     if (modal) {
@@ -25,7 +28,14 @@ export default function List(props) {
       document.body.style.overflow = "auto";
     };
   }, [modal]);
+const uploadTask = async (obj) => {
+  try {
+   await postTask(obj.name, obj.date, obj.person, localStorage.getItem('token'), props.projectId)}
+  
+  catch(e) {console.log(e)}
+  finally {await fetchProject(props.projectId)}
 
+}
   const submitModal = () => {
     console.log("bege");
     const name = document.getElementById("name").value;
@@ -36,7 +46,7 @@ export default function List(props) {
 
     const obj = {
       name: name,
-      icon: person,
+      person:parseInt( person),
       state: state,
       priority: pri,
       date: date,
@@ -44,21 +54,24 @@ export default function List(props) {
     };
 
     if(!name || !date || !person || !pri || !state) return;
-    setTasks((prev) => [...prev, obj]);
+    uploadTask(obj)
     toggleModal(false);
   };
 const mapTasks = (taskState)=>{
   
-  return tasks.filter((task)=>task.state==taskState).map((task) => (
+  return tasks.map((task) => (
     <Task
-      name={task.name}
-      icon={task.icon}
+      name={task.nombre}
+      icon={task.id_persona}
       priority={task.priority}
-      date={task.date}
-      state={task.state}
+      date={new Date (task.limite).toDateString()}
+      state={task.estado}
       key={task.id}
     />
   ))}
+
+
+  
   return (
     <>
       {modal && (
