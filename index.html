@@ -2,62 +2,198 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Inicio • Rity</title>
-    <meta name="description" content="Aprendé, armá y compará componentes de PC. Explorá información, guías y productos populares con un buscador claro y navegación simple." />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,600,0,0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>PCity | Aprendé, Armá y Compará</title>
+    <meta
+      name="description"
+      content="Buscá componentes, armá tu PC y compará hardware. PCity ofrece una interfaz clara con búsqueda central, categorías y tarjetas de productos."
+    />
     <link rel="stylesheet" href="style.css" />
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Crimson+Text:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400..700,0..1,-50..200"
+    />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
     <script src="../../socket.js"></script>
     <script type="module" src="script.js" defer></script>
   </head>
+
   <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
     <div class="inicio">
+      <!-- Header -->
       <header class="site-header" role="banner">
-        <div class="header-inner">
-          <a class="brand" href="../inicio/index.html" aria-label="Ir al inicio">
-            <img src="../../recursos/img/logo.png" alt="Rity, logo" class="brand-logo" />
-          </a>
-
-          <form class="buscador" role="search" aria-label="Buscar componentes" autocomplete="off">
-            <label class="sr-only" for="input1">Buscar</label>
-            <input type="search" class="busc" id="input1" placeholder="Buscar" enterkeyhint="search" />
-            <div class="busqs" id="busq1" role="listbox" aria-live="polite"></div>
-          </form>
-
-          <div class="header-actions">
-            <nav class="main-nav" aria-label="Principal">
-              <a class="navlink" href="../informacion/index.html">información</a>
-              <a class="navlink" href="../armar-pc/index.html">Arma tu PC</a>
-              <a class="navlink" href="../comparacion/index.html">Conocer</a>
-            </nav>
-
-            <div class="account-cta" aria-hidden="true">
-              <span class="cta-line"></span>
-              <span class="cta-line short"></span>
-            </div>
-
-            <button class="log" id="persona" aria-label="Perfil">
-              <img src="../../recursos/img/personita.png" alt="" />
-            </button>
+        <div class="topbar" aria-hidden="true">
+          <div class="container topbar__inner">
+            <ul class="topbar__links" role="list">
+              <li><button class="toplink" type="button" onclick="location.href='../informacion/index.html'">Guías</button></li>
+              <li><button class="toplink" type="button" onclick="location.href='../comparacion/index.html'">Comparativas</button></li>
+              <li><button class="toplink" type="button" onclick="location.href='../armar-pc/index.html'">Arma tu PC</button></li>
+            </ul>
           </div>
         </div>
+
+        <div class="mainbar">
+          <div class="container mainbar__inner">
+            <a href="/" class="brand" aria-label="Ir al inicio">
+              <img src="../../recursos/img/logo.png" alt="PCity" class="brand__logo" />
+            </a>
+
+            <div class="buscador" role="search" aria-label="Buscar componentes">
+              <div class="search">
+                <span class="material-symbols-outlined search__icon" aria-hidden="true">search</span>
+                <input
+                  type="text"
+                  class="busc"
+                  id="input1"
+                  placeholder="Buscar componentes, GPUs, CPUs…"
+                  autocomplete="off"
+                  aria-controls="busq1"
+                  aria-expanded="false"
+                />
+                <button class="search__clear" type="button" aria-label="Limpiar búsqueda" hidden>
+                  <span class="material-symbols-outlined">close</span>
+                </button>
+              </div>
+              <div class="busqs" id="busq1" role="listbox" aria-label="Sugerencias"></div>
+            </div>
+
+            <nav class="actions" aria-label="Acciones">
+              <button class="action" type="button" onclick="location.href='../informacion/index.html'">Información</button>
+              <button class="action" type="button" onclick="location.href='../armar-pc/index.html'">Arma tu PC</button>
+              <button class="action" type="button" onclick="location.href='../comparacion/index.html'">Comparar</button>
+              <button class="action action--icon" id="persona" type="button" aria-label="Perfil">
+                <span class="material-symbols-outlined">account_circle</span>
+              </button>
+            </nav>
+          </div>
+        </div>
+
+        <!-- Chips / categorías -->
+        <nav class="mega container" aria-label="Categorías">
+          <ul class="chips" role="list">
+            <li><a class="chip" href="#" role="link">Procesadores</a></li>
+            <li><a class="chip" href="#" role="link">Placas de video</a></li>
+            <li><a class="chip" href="#" role="link">Motherboards</a></li>
+            <li><a class="chip" href="#" role="link">Memorias RAM</a></li>
+            <li><a class="chip" href="#" role="link">Almacenamiento</a></li>
+            <li><a class="chip" href="#" role="link">Fuentes</a></li>
+            <li><a class="chip" href="#" role="link">Gabinetes</a></li>
+            <li><a class="chip" href="#" role="link">Periféricos</a></li>
+            <li><button class="chip chip--dropdown" type="button" aria-haspopup="true" aria-expanded="false">Explorar</button></li>
+          </ul>
+        </nav>
       </header>
 
-      <main id="contenido">
-        <section class="hero" aria-labelledby="hero-title">
-          <h1 id="hero-title">Aprendé, Armá y Compará</h1>
-        </section>
-
-        <section class="popular" aria-labelledby="popular-title">
-          <h2 id="popular-title">Componentes populares</h2>
-          <div class="componentesPopu" role="list">
-            <!-- El script poblará esta grilla -->
+      <!-- Hero oscuro con brillo cian -->
+      <section class="hero" aria-label="Destacados">
+        <div class="container hero__inner">
+          <div class="neon-card neon-card--badge" aria-hidden="true">
+            <div class="badge__title">NOVEDAD</div>
+            <div class="badge__body">Lanzamientos y ofertas</div>
           </div>
-        </section>
+
+          <div class="neon-card neon-card--main" role="region" aria-label="Arma tu PC">
+            <div class="neon__grid">
+              <div class="neon__copy">
+                <h2 class="neon__title">Armá tu equipo ideal</h2>
+                <p class="neon__desc">
+                  Configurá, compará rendimiento y precio en tiempo real.
+                </p>
+                <div class="neon__cta">
+                  <button class="btn btn--neon" type="button" onclick="location.href='../armar-pc/index.html'">
+                    Empezar ahora
+                    <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+                  </button>
+                </div>
+              </div>
+              <div class="neon__art" aria-hidden="true">
+                <div class="laptop"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="neon-row">
+            <article class="neon-card neon-card--mini" aria-label="Benchmarks y reviews">
+              <h3 class="mini__title">Benchmarks y Reviews</h3>
+              <p class="mini__meta">Comparativas objetivas</p>
+            </article>
+            <article class="neon-card neon-card--mini" aria-label="Guías y tutoriales">
+              <h3 class="mini__title">Guías y Tutoriales</h3>
+              <p class="mini__meta">Paso a paso para cada nivel</p>
+            </article>
+            <article class="neon-card neon-card--mini" aria-label="Noticias y lanzamientos">
+              <h3 class="mini__title">Noticias</h3>
+              <p class="mini__meta">Lo último en hardware</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Contenido claro -->
+      <main id="contenido" class="content-light" role="main">
+        <div class="container">
+          <h1 class="page-title">Aprendé, Armá y Compará</h1>
+
+          <section aria-labelledby="comp-populares">
+            <div class="section-head">
+              <h2 id="comp-populares">Componentes populares</h2>
+              <a href="#" class="link">Ver todos</a>
+            </div>
+
+            <div class="componentesPopu" data-dynamic="true">
+              <!-- Ejemplos de tarjetas (se pueden reemplazar dinámicamente) -->
+              <article class="card">
+                <img src="../../recursos/img/gpu-placeholder.jpg" alt="Placa de video serie 40" class="card__img" />
+                <div class="card__body">
+                  <h3 class="card__title">GeForce RTX 4070</h3>
+                  <p class="card__text">12 GB GDDR6X · 200W</p>
+                </div>
+              </article>
+
+              <article class="card">
+                <img src="../../recursos/img/cpu-placeholder.jpg" alt="Procesador de 8 núcleos" class="card__img" />
+                <div class="card__body">
+                  <h3 class="card__title">Ryzen 7 7700</h3>
+                  <p class="card__text">8C/16T · 5.3 GHz Boost</p>
+                </div>
+              </article>
+
+              <article class="card">
+                <img src="../../recursos/img/ssd-placeholder.jpg" alt="SSD NVMe" class="card__img" />
+                <div class="card__body">
+                  <h3 class="card__title">SSD NVMe 1TB</h3>
+                  <p class="card__text">7000 MB/s · PCIe 4.0</p>
+                </div>
+              </article>
+
+              <article class="card">
+                <img src="../../recursos/img/ram-placeholder.jpg" alt="Memoria RAM DDR5" class="card__img" />
+                <div class="card__body">
+                  <h3 class="card__title">DDR5 32GB (2×16)</h3>
+                  <p class="card__text">6000 MT/s · CL36</p>
+                </div>
+              </article>
+            </div>
+          </section>
+        </div>
       </main>
     </div>
   </body>
