@@ -25,7 +25,7 @@ const setuptareas = () => {
         return res.status(403).json({ error: "You don't have permission to create tasks in this project" });
       };
 
-      const responsableId = id_persona_responsable || personaId;
+      const responsableId = id_responsable || personaId;
 
       const isresponsablemember = await prisma.tiene.findFirst({
         where: {
@@ -306,7 +306,82 @@ const setuptareas = () => {
     };
   };
 
-  return { createtarea, gettareas, updatetarea, deletetarea };
+  const gettarea = async (req, res) => {
+    const { tareaId } = req.params;
+    const personaId = req.personaId;
+
+    try {
+      if (!tareaId) {
+        return res.status(400).json({ error: "missing data" });
+      }
+
+      const tarea = await prisma.tareas.findUnique({
+        where: {
+          id: Number.parseInt(tareaId, 10),
+        },
+        include: {
+          asignado: {
+            select: {
+              id: true,
+              usuario: true,
+              nombre: true,
+            },
+          },
+          responsable: {
+            select: {
+              id: true,
+              usuario: true,
+              nombre: true,
+            },
+          },
+          proyecto: {
+            select: {
+              id: true,
+              nombre: true,
+            },
+          },
+        },
+      });
+
+      if (!tarea) {
+        return res.status(404).json({ error: "task not found" });
+      }
+
+      const ismember = await prisma.tiene.findFirst({
+        where: {
+          id_persona: personaId,
+          id_proyecto: tarea.id_proyecto,
+        },
+      });
+
+      if (!ismember) {
+        return res.status(403).json({ error: "You don't have permission to view this task" });
+      }
+
+      const now = new Date();
+      const limiteDate = new Date(tarea.limite);
+      let color = "yellow";
+
+      if (tarea.estado === "done") {
+        color = "green";
+      } else if (tarea.estado === "in-progress") {
+        color = "yellow";
+      } else if (tarea.estado === "pending") {
+        if (now > limiteDate) {
+          color = "black";
+        } else {
+          color = "red";
+        }
+      }
+
+      res.status(200).json({ ...tarea, color });
+    } catch (error) {
+      console.error("Error getting task:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  };
+
+  return { createtarea, gettareas, gettarea, updatetarea, deletetarea };
 };
 
 export default setuptareas;

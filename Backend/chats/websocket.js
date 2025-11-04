@@ -29,6 +29,12 @@ function setupwebsocketserver(app, JWT_SECRET, prisma, wsInstance) {
 
       try {
         const { chatId, mensaje } = JSON.parse(message.toString());
+        
+        if (!chatId || isNaN(parseInt(chatId, 10))) {
+          ws.send(JSON.stringify({ error: 'Invalid chat ID' }));
+          return;
+        }
+
         console.log(`we got a message for chat ${chatId} from person ${personaId}:`, mensaje);
 
         const hasAccess = await prisma.tiene_pc.findFirst({

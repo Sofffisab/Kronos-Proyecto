@@ -46,4 +46,4 @@ const setupiapaginas = () => {
 
 export default setupiapaginas;
 
-//july
+//july]

@@ -52,10 +52,10 @@ const { authentication } = setupautenticacion(JWT_SECRET);
 const { authorization, getatoken, lookfortoken, permision, getevents, redirectwithgoogle, createevents, deleteevents, updateevents } = setupcalendario();
 const { seefile, uploadfile } = setuparchivos();
 const { createchat, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers } = setupchat();
-const { createtarea, gettareas, updatetarea, deletetarea } = setuptareas();
+const { createtarea, gettarea, gettareas, updatetarea, deletetarea } = setuptareas();
 const { getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones } = setuppersonalizaciones();
 const { createproject, getprojects, getproject, updateproject, invitetoproject, joinproject } = setupproyectos()
-const router = setuprouter({ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, joinproject, createtarea, gettareas, updatetarea, deletetarea, getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones });
+const router = setuprouter({ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, joinproject, createtarea, gettareas, updatetarea, gettarea, deletetarea, getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones });
 
 console.log('[DEBUG] Router created:', router);
 console.log('[DEBUG] Router stack:', router.stack?.length, 'routes');

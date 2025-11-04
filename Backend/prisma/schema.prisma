@@ -14,29 +14,33 @@ model persona {
   nombre  String
   contrasenia  String
   usuario  String   @unique
+  foto_perfil   Bytes?
+  horario_inicio        DateTime? @db.Time 
+  horario_fin           DateTime? @db.Time
 
   archivos        archivos[]
   mensajes        mensajes[]
-  tareas          tareas[]
   personalizaciones personalizaciones[]
   proyectos_tiene tiene[]
   chat_tiene tiene_pc[]
   leido_mensajes     leido[] 
 
   googleRefreshToken String?
+
+  tareas_responsable    tareas[] @relation("TareaResponsable")
+  tareas_asignadas      tareas[] @relation("TareaAsignado")
 }
 
 model archivos {
   formato  String
   archivo   Bytes
-  nombrearchivo   String @unique
+  nombrearchivo   String    @@unique([nombrearchivo, id_proyecto])
   id    Int     @id @default(autoincrement())
   id_persona  Int
   id_proyecto   Int
 
   persona       persona  @relation(fields: [id_persona], references: [id])
   proyecto      proyecto @relation(fields: [id_proyecto], references: [id])
-
 }
 
 model mensajes {
@@ -58,11 +62,17 @@ model tareas {
   id    Int    @id @default(autoincrement())
   id_proyecto   Int
   id_persona    Int
+  id_responsable  Int?
+  nombre_responsable  String?
   limite      DateTime
   eventId   String?
+  // estos dos hay que hacer cuentas para la logistica de manejo default
+  importancia         String?  
+  orden               Int?
 
-  proyecto      proyecto @relation(fields: [id_proyecto], references: [id])
-  persona       persona  @relation(fields: [id_persona], references: [id])
+  responsable         persona?  @relation("TareaResponsable", fields: [id_responsable], references: [id])
+  asignado            persona  @relation("TareaAsignado", fields: [usuario_persona], references: [usuario])
+  proyecto            proyecto @relation(fields: [id_proyecto], references: [id])
 }
 
 model personalizaciones {
@@ -91,6 +101,8 @@ model proyecto {
   fechaInicio DateTime @default(now())
   fechaFin DateTime?
   creadorId Int
+  foto_perfil   Bytes?
+  oficio    String?
 
   archivos        archivos[]
   tareas          tareas[]
@@ -152,7 +164,6 @@ model leido {
   @@unique([id_mensaje, id_persona])
 }
 
-// mirkin
 model ia_paginas {
   id    Int      @id @default(autoincrement())
   name_archivo    String 
@@ -160,6 +171,3 @@ model ia_paginas {
   lenguaje    String 
   foto_pagina_jpg   Bytes
 }
-
-// july
-//model ia_fechas {}

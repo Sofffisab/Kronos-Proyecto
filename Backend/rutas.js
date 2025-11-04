@@ -1,8 +1,7 @@
 import pkg from 'express';
 const { Router } = pkg;
 
-const setuprouter = ({ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, joinproject, createtarea, gettareas, updatetarea, deletetarea, getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones }) => {
-    
+const setuprouter = ({ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, joinproject, createtarea, gettareas, gettarea, updatetarea, deletetarea, getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones }) => { 
     console.log('[DEBUG] setuprouter called');
     console.log('[DEBUG] signup function:', typeof signup);
     console.log('[DEBUG] login function:', typeof login);
@@ -27,13 +26,9 @@ const setuprouter = ({ login, signup, authentication, getevents, permision, redi
         });
     });
 
-    router.post("/users/signup", (req, res, next) => {
-        console.log('[DEBUG] Signup route hit!');
-        next();
-    }, signup);
 
     router.post("/users/login", login);
-    //router.post("/users/signup", signup);
+    router.post("/users/signup", signup);
     router.get("/auth/google/callback", permision);
     router.get("/api/calendar/events", authentication, getevents);
     router.get('/auth/google', redirectwithgoogle);
@@ -55,6 +50,7 @@ const setuprouter = ({ login, signup, authentication, getevents, permision, redi
     router.post("/api/projects/join", authentication, joinproject);
     router.post("/api/projects/:proyectoId/tasks", authentication, createtarea);
     router.get("/api/projects/:proyectoId/tasks", authentication, gettareas);
+    router.get("/api/tasks/:tareaId", authentication, gettarea);
     router.put("/api/tasks/:tareaId", authentication, updatetarea);
     router.delete("/api/tasks/:tareaId", authentication, deletetarea);
     router.get("/api/customizations", authentication, getpersonalizaciones);
