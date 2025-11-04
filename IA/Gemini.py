@@ -347,7 +347,7 @@ def createImgSearching(conclusion_text, img_path):
     ✦ Incorporá ideas actuales de diseño UI/UX (2025): sombras suaves, degradados, glassmorphism, neón o minimalismo moderno.
     ✦ Tipografía limpia y legible; nada de símbolos o letras irreconocibles.
     ✦ Si el sitio parece de tecnología o mercado (por ejemplo, "PC Market"), dale un estilo tech-futurista con energía visual.
-    ✦ Evitá deformar textos existentes; mantenelos realistas.
+    ✦ Evitá deformar textos existentes; mantenelos realistas y legibles
     
     Tené en cuenta lo siguiente para guiar el rediseño:
     {conclusion_text}
@@ -645,7 +645,7 @@ Rules:
 - Website1–Website3 (columns): each = short intro phrase + one descriptive sentence of 20–30 words.Do not mention the Website in each cell.  
 - Website4 (column): same, but refers to the website from the provided image.  
 - "Conclusion" (column): only Website4 improvements, implicit comparison, highlight strengths + suggestions, never mention website names.  
-Try not to use the same words for the cells, so each creteria doesn't have the exact words. Use an extensive vocabulary
+Try  to use different words for the cells, so each creteria doesn't have the exact same words. Use an extensive vocabulary
 Output must be strictly consistent, 6 keys per row, no extra text. And just should have 11 rows (without a "final" conclusion)
 The response must be in spanish. 
 

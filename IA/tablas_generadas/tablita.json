@@ -1,90 +1,90 @@
 [
     {
         "criterion_or_website": "Typography & Readability",
-        "Tom's Hardware": "Fuentes claras, legibles. El portal utiliza fuentes serif y sans-serif bien balanceadas, asegurando una lectura confortable en artículos extensos y detalles técnicos; la jerarquía visual facilita el escaneo rápido de la información.",
-        "PC Gamer": "Tipografía dinámica, atractiva. Esta publicación emplea una tipografía moderna con encabezados impactantes, diseñada para captar la atención del lector y complementar el contenido visualmente inmersivo del sector de videojuegos.",
-        "TechRadar": "Lectura fluida, consistente. La plataforma exhibe una tipografía sans-serif limpia y consistente en todo su contenido, promoviendo una experiencia de lectura muy accesible y sin distracciones para el usuario.",
-        "Rity": "Tipografía sencilla, funcional. El sitio presenta una tipografía básica y estándar, con tamaños adecuados para los títulos y textos de componentes, aunque carece de una diferenciación estilística que enriquezca la experiencia visual general.",
-        "conclusion": "Mejora la legibilidad en ciertos bloques de texto, como descripciones largas, explorando contrastes o espaciados para evitar la monotonía visual. Podría integrar estilos tipográficos más modernos que refuercen la identidad."
+        "Tom's Hardware": "Estilo profesional. Utiliza fuentes sans-serif claras y tamaños legibles, optimizados para una lectura prolongada de análisis técnicos y guías detalladas.",
+        "PC Gamer": "Diseño dinámico. Emplea una combinación de tipografías atractivas para títulos y un cuerpo de texto nítido que facilita la inmersión en noticias y reseñas de juegos de PC.",
+        "TechRadar": "Apariencia moderna. Predominan tipografías limpias y bien espaciadas, asegurando una experiencia de lectura cómoda en todos sus artículos sobre tecnología y comparativas de hardware.",
+        "PCity": "Fuentes sencillas. La tipografía principal parece ser una sans-serif estándar que ofrece una legibilidad aceptable, aunque sin un estilo distintivo, lo que podría restarle impacto visual.",
+        "conclusion": "PCity se beneficiaría de refinar su selección tipográfica, explorando fuentes modernas o variaciones de peso para crear una jerarquía visual más atractiva. Esto enriquecería la experiencia de lectura y le otorgaría un estilo distintivo."
     },
     {
         "criterion_or_website": "Colors & Branding",
-        "Tom's Hardware": "Paleta sobria, profesional. La marca emplea una combinación de colores oscuros y neutros, con acentos sutiles, reflejando su enfoque técnico y serio en análisis de hardware y noticias del sector.",
-        "PC Gamer": "Colores vibrantes, enérgicos. La identidad visual de esta publicación se define por tonos intensos, especialmente rojos y negros, que evocan la emoción y el dinamismo inherentes al mundo del gaming en PC.",
-        "TechRadar": "Identidad fresca, moderna. El sitio utiliza una paleta de colores claros y acentos brillantes, proyectando una imagen de innovación y accesibilidad, adecuada para un público tecnológico amplio y diverso.",
-        "Rity": "Esquema básico, funcional. El diseño del portal se centra en un azul brillante para la cabecera y el blanco del fondo, lo que lo hace funcional pero no posee una paleta de colores distintiva o branding fuerte.",
-        "conclusion": "Considerar una paleta de colores más variada y atractiva, quizás con tonos complementarios, para mejorar la estética y reforzar una identidad de marca más memorable. Podría usar el color para jerarquizar información."
+        "Tom's Hardware": "Identidad sobria. Su paleta de colores tiende a ser funcional, con tonos neutros y acentos para resaltar información clave, reforzando su imagen de autoridad técnica.",
+        "PC Gamer": "Marca vibrante. Combina colores oscuros con acentos brillantes, creando una estética que resuena con la cultura gamer y sus expectativas de contenido emocionante y visualmente atractivo.",
+        "TechRadar": "Esquema corporativo. Exhibe una paleta de colores equilibrada, a menudo con azules o verdes que transmiten confianza y modernidad, alineándose con su cobertura tecnológica.",
+        "PCity": "Esquema simple. El uso prominente de azul brillante en la cabecera con blanco para el contenido es funcional, pero carece de matices o un diseño de marca que lo distinga claramente.",
+        "conclusion": "Es crucial que PCity desarrolle una paleta de colores más sofisticada y un diseño de logo que transmita una identidad de marca única. Dejar atrás la apariencia genérica le permitirá destacar en el mercado."
     },
     {
         "criterion_or_website": "Visual Elements",
-        "Tom's Hardware": "Imágenes técnicas, detalladas. Los elementos visuales consisten en fotografías de alta calidad, gráficos comparativos y diagramas técnicos, apoyando la profundidad analítica de cada artículo y reseña especializada.",
-        "PC Gamer": "Gráficos inmersivos, atractivos. Se observa un uso extensivo de capturas de pantalla de juegos, tráilers incrustados y fotografías de productos con un estilo pulcro, diseñados para sumergir al lector en la experiencia.",
-        "TechRadar": "Iconografía clara, limpia. La plataforma incorpora imágenes de producto grandes y nítidas, así como iconos intuitivos y gráficos de soporte que mejoran la comprensión y el atractivo visual general del contenido.",
-        "Rity": "Imágenes producto, sencillas. El portal muestra fotografías de componentes claras y centradas, con buena calidad, pero la presentación general carece de diversidad gráfica o elementos visuales interactivos que enriquezcan la experiencia.",
-        "conclusion": "Diversificar los elementos visuales más allá de las imágenes de producto, incluyendo iconos personalizados, ilustraciones o gráficos informativos que hagan el contenido más dinámico. Mejoraría la estética general."
+        "Tom's Hardware": "Imágenes técnicas. Presenta fotografías de alta calidad de componentes, gráficos detallados y capturas de pantalla que apoyan exhaustivamente sus análisis y comparativas.",
+        "PC Gamer": "Gráficos inmersivos. Incorpora abundantes imágenes de juegos, tráilers y videos que capturan la esencia del gaming, complementando sus reseñas y noticias de manera efectiva.",
+        "TechRadar": "Contenido multimedia. Utiliza un buen equilibrio de imágenes de productos, infografías y videos explicativos que enriquecen la comprensión de sus guías y análisis tecnológicos.",
+        "PCity": "Componentes populares. Muestra imágenes cuadradas de productos sin un fondo coherente o estilo unificado, lo que las hace parecer básicas y no contribuye a una estética profesional.",
+        "conclusion": "PCity podría estandarizar el estilo de sus imágenes de productos, quizás con fondos neutros o recortes uniformes. Integrar más elementos gráficos de apoyo visual a la información mejoraría la estética profesional."
     },
     {
         "criterion_or_website": "Navigation & UX",
-        "Tom's Hardware": "Navegación lógica, eficiente. La estructura de menú es profunda y bien organizada, permitiendo a los usuarios encontrar rápidamente información específica sobre componentes, benchmarks o guías de compra.",
-        "PC Gamer": "Experiencia fluida, intuitiva. El diseño prioriza una navegación sencilla con categorías claras y una barra de búsqueda prominente, facilitando el descubrimiento de contenido relevante para jugadores entusiastas.",
-        "TechRadar": "Flujo de usuario, directo. La organización de la navegación es muy accesible, con menús bien definidos y enlaces internos coherentes que guían al usuario a través de sus diversas secciones temáticas.",
-        "Rity": "Barra superior, clara. La navegación del portal es básica y funcional, con enlaces principales en la parte superior que permiten acceder a secciones clave como ",
-        "conclusion": "Expandir las opciones de navegación, quizás con un menú lateral o filtros avanzados para "
+        "Tom's Hardware": "Navegación profunda. Ofrece menús extensos y bien categorizados que permiten a los usuarios acceder rápidamente a diversas secciones, desde noticias hasta guías de compra especializadas.",
+        "PC Gamer": "Ruta clara. Su navegación es intuitiva, diseñada para que los aficionados a los videojuegos encuentren fácilmente noticias, reseñas y recursos específicos del ámbito gaming.",
+        "TechRadar": "Interfaz amigable. Proporciona una experiencia de usuario fluida con menús claros y una estructura lógica, facilitando la exploración de sus amplias categorías de productos tecnológicos.",
+        "PCity": "Barra superior limitada. La navegación superior incluye 'Información', 'Arma tu PC' y 'Comparar', lo cual es funcional, pero carece de la profundidad necesaria para una experiencia completa.",
+        "conclusion": "PCity debería expandir las opciones de navegación con menús desplegables y filtros, mejorando la usabilidad para que los usuarios encuentren componentes o información específica con mayor facilidad."
     },
     {
         "criterion_or_website": "Organization & Structure",
-        "Tom's Hardware": "Estructura jerárquica, robusta. El contenido se organiza en categorías lógicas con subsecciones detalladas, facilitando la exploración de temas complejos desde una perspectiva técnica y muy especializada.",
-        "PC Gamer": "Disposición temática, atractiva. La organización prioriza una mezcla de noticias, reseñas y artículos destacados en la página principal, estructurados para un consumo rápido y visualmente atractivo para la comunidad gamer.",
-        "TechRadar": "Diseño modular, adaptable. El portal presenta una estructura de contenido en bloques que se adapta bien a distintos formatos y dispositivos, facilitando el acceso a noticias, análisis y guías de compra de forma ordenada.",
-        "Rity": "Diseño lineal, predecible. La disposición del contenido es muy sencilla, con una cabecera, un título central y una sección de componentes populares, lo que proporciona una estructura clara aunque limitada en opciones de presentación.",
-        "conclusion": "Implementar una organización más modular o temática para destacar diferentes tipos de contenido, como guías o novedades, ofreciendo así una experiencia de exploración más rica y estructurada al usuario."
+        "Tom's Hardware": "Estructura modular. Presenta contenido en bloques bien definidos, con secciones dedicadas a noticias, reseñas, guías de compra y foros, facilitando la búsqueda de información técnica.",
+        "PC Gamer": "Maquetación temática. Organiza su contenido por géneros de juegos, noticias recientes y reseñas destacadas, creando un flujo lógico que satisface los intereses de su audiencia gamer.",
+        "TechRadar": "Diseño por categorías. Estructura el sitio con secciones claras para diferentes tipos de tecnología y productos, permitiendo una exploración metódica de su vasto repositorio de información.",
+        "PCity": "Disposición simple. El contenido se muestra en una columna central con un encabezado principal y una cuadrícula de productos, lo que resulta en una organización básica y un tanto monótona.",
+        "conclusion": "PCity se beneficiaría de una estructura de página más dinámica, utilizando columnas, secciones de contenido destacado y una jerarquía visual que guíe al usuario a través de la información relevante."
     },
     {
         "criterion_or_website": "Accessibility",
-        "Tom's Hardware": "Contrastes adecuados, buena. Los colores y textos están diseñados para ofrecer un buen contraste, facilitando la lectura a usuarios con diversas capacidades visuales y garantizando una experiencia inclusiva general.",
-        "PC Gamer": "Elementos legibles, funcionales. A pesar de su diseño enfocado en la estética de juego, la plataforma mantiene un buen contraste entre texto y fondo, asegurando que el contenido sea accesible para la mayoría de usuarios.",
-        "TechRadar": "Estándares cumplidos, buena. El portal se adhiere a pautas de accesibilidad web, proporcionando textos claros, navegación por teclado y descripciones alternativas para imágenes, asegurando una experiencia equitativa.",
-        "Rity": "Legibilidad simple, básica. El contraste entre el texto y el fondo es generalmente bueno, lo que favorece la legibilidad, pero no se observan características avanzadas de accesibilidad web implementadas.",
-        "conclusion": "Añadir atributos ARIA, navegación por teclado mejorada y descripciones de imágenes (alt text) para cumplir con estándares de accesibilidad, permitiendo a usuarios con discapacidades acceder plenamente al contenido del portal."
+        "Tom's Hardware": "Cumplimiento técnico. Generalmente sigue buenas prácticas de accesibilidad web, asegurando que el contenido sea accesible para una audiencia diversa, incluyendo usuarios con discapacidades.",
+        "PC Gamer": "Diseño inclusivo. Busca optimizar la experiencia para todos los usuarios, prestando atención al contraste de colores y la navegación por teclado, mejorando la usabilidad general.",
+        "TechRadar": "Funcionalidad estándar. Implementa características de accesibilidad esenciales como texto alternativo y estructura semántica, facilitando la interacción con herramientas de asistencia.",
+        "PCity": "Potencial de mejora. Aunque el contraste de colores es adecuado, la ausencia de indicadores visuales o personalización sugiere oportunidades para una mayor inclusividad.",
+        "conclusion": "PCity necesita incorporar descripciones alternativas para imágenes y asegurar la navegación por teclado en todos los elementos interactivos. Ofrecer opciones de tamaño de texto también mejoraría significativamente la inclusividad."
     },
     {
         "criterion_or_website": "Functionality",
-        "Tom's Hardware": "Herramientas robustas, útiles. El portal ofrece comparadores de rendimiento, bases de datos de productos y filtros avanzados, proporcionando a los usuarios herramientas completas para sus investigaciones de hardware.",
-        "PC Gamer": "Características interactivas, diversas. La plataforma incluye foros activos, secciones de comentarios en artículos y un sistema de búsqueda eficiente, facilitando la interacción y el acceso a información relevante.",
-        "TechRadar": "Módulos operativos, completos. El sitio integra un potente buscador, filtros de categorías y un sistema de recomendación de productos, optimizando la experiencia de usuario y la eficiencia de búsqueda.",
-        "Rity": "Funcionalidades clave, presentes. El portal ofrece un buscador básico y las secciones ",
-        "conclusion": "Enriquecer las funcionalidades del comparador y del configurador de PC, añadiendo filtros por precio, marca, rendimiento o compatibilidad, para ofrecer una herramienta más potente y personalizada a los usuarios."
+        "Tom's Hardware": "Herramientas robustas. Ofrece comparadores de productos, benchmarks interactivos y filtros avanzados, proporcionando una funcionalidad completa para el análisis de hardware.",
+        "PC Gamer": "Características interactivas. Incluye filtros de búsqueda de juegos, secciones de comentarios activas y enlaces a tiendas, mejorando la experiencia del usuario y su interacción con el contenido.",
+        "TechRadar": "Utilidades prácticas. Provee buscadores eficientes, opciones de suscripción y una integración fluida de reseñas y guías de compra, asistiendo al usuario en su proceso de decisión.",
+        "PCity": "Funciones básicas. La barra de búsqueda y los enlaces de navegación indican funcionalidades clave, pero la imagen no revela la profundidad de sus capacidades, pareciendo aún incipientes.",
+        "conclusion": "PCity requiere expandir sus herramientas con filtros de producto más detallados y un comparador interactivo robusto. Integrar un configurador de PCs guiado ofrecería un valor añadido significativo a los usuarios."
     },
     {
         "criterion_or_website": "Interactivity",
-        "Tom's Hardware": "Comunidad activa, foros. Los usuarios pueden participar en foros de discusión, dejar comentarios en los artículos y personalizar sus feeds, fomentando una comunidad muy participativa y un intercambio de conocimientos.",
-        "PC Gamer": "Participación activa, valorada. Se promueve la interacción mediante encuestas, comentarios dinámicos en reseñas y la integración con redes sociales, construyendo una sólida comunidad de jugadores apasionados.",
-        "TechRadar": "Opciones de interacción, variadas. La plataforma permite a los usuarios comentar, compartir contenido en redes sociales y suscribirse a newsletters, fomentando la participación y manteniendo al público conectado con novedades.",
-        "Rity": "Interacción limitada, directa. Las opciones interactivas se reducen a la búsqueda y las herramientas de armado/comparación, sin elementos como comentarios, foros o integración con redes sociales para la comunidad.",
-        "conclusion": "Introducir elementos de interacción social como comentarios en productos, un sistema de valoraciones o la integración con foros, para construir una comunidad y enriquecer la experiencia del usuario con opiniones."
+        "Tom's Hardware": "Compromiso profundo. Permite comentarios, foros de discusión y encuestas, fomentando una comunidad activa y el intercambio de conocimientos entre entusiastas del PC.",
+        "PC Gamer": "Comunidad activa. Proporciona secciones de comentarios, integración de redes sociales y contenido generado por usuarios, cultivando una fuerte interacción entre su audiencia gamer.",
+        "TechRadar": "Participación guiada. Ofrece encuestas de satisfacción, comentarios en artículos y un sistema de valoración, animando a los usuarios a expresar sus opiniones y experiencias.",
+        "PCity": "Interacción limitada. La imagen no muestra elementos interactivos más allá de la navegación principal y los productos clickeables, lo que sugiere una falta de foros o personalización.",
+        "conclusion": "Para fomentar el engagement, PCity podría añadir secciones de comentarios en los productos. Implementar un configurador de PCs interactivo y un sistema de votación para componentes aumentaría la participación del usuario."
     },
     {
         "criterion_or_website": "SEO",
-        "Tom's Hardware": "Optimización profunda, efectiva. El portal utiliza palabras clave relevantes, estructura de enlaces internos robusta y meta descripciones precisas, asegurando alta visibilidad en resultados de búsqueda especializados.",
-        "PC Gamer": "Posicionamiento orgánico, sólido. La publicación implementa buenas prácticas SEO con títulos optimizados, contenido fresco y una fuerte autoridad de dominio, atrayendo tráfico constante desde búsquedas de juegos y hardware.",
-        "TechRadar": "Cobertura amplia, relevante. El sitio optimiza su contenido para un gran volumen de palabras clave, con una estructura URL clara y contenido actualizado, posicionándose bien para guías de compra y análisis generales.",
-        "Rity": "Optimización básica, incipiente. Los títulos de página son descriptivos, pero la plataforma podría beneficiarse de una estrategia más robusta, con metas descripciones detalladas y una mejor estructura de encabezados para SEO.",
-        "conclusion": "Mejorar la estrategia SEO con optimización de palabras clave más profundas, creación de contenido original y mejora de la estructura de enlaces internos, aumentando la visibilidad y el tráfico orgánico del sitio."
+        "Tom's Hardware": "Autoridad establecida. Su antigüedad y contenido técnico de alta calidad le otorgan un fuerte posicionamiento en motores de búsqueda para términos relacionados con hardware y reviews.",
+        "PC Gamer": "Optimización temática. Utiliza palabras clave relevantes para la industria del gaming, estructura de URLs amigable y enlaces internos, logrando una alta visibilidad en búsquedas de juegos y hardware.",
+        "TechRadar": "Estrategia integral. Emplea una sólida arquitectura de enlaces, contenido optimizado para palabras clave y una rápida velocidad de carga, asegurando una fuerte presencia en resultados de búsqueda.",
+        "PCity": "Ausencia de evidencia. La información visual no permite inferir su estrategia SEO; sin embargo, necesitaría una optimización cuidadosa de títulos, descripciones y estructura de contenido para competir.",
+        "conclusion": "PCity debe implementar una estrategia SEO robusta que incluya investigación de palabras clave, optimización de metadatos y una estructura de enlaces interna fuerte. Esto es crucial para su visibilidad y para competir eficazmente."
     },
     {
-        "criterion_or_website": "Performance & Speed",
-        "Tom's Hardware": "Carga rápida, optimizada. El portal muestra un excelente rendimiento, con tiempos de carga muy bajos gracias a la optimización de imágenes, minificación de scripts y un robusto CDN, mejorando la experiencia de usuario.",
-        "PC Gamer": "Rendimiento eficiente, constante. A pesar de los ricos elementos multimedia, el sitio carga rápidamente gracias a la compresión de imágenes y un buen manejo de recursos, proporcionando una navegación fluida al usuario.",
-        "TechRadar": "Velocidad sólida, responsive. La plataforma demuestra una carga ágil y es altamente responsiva, adaptándose bien a diferentes dispositivos y garantizando una experiencia fluida sin demoras significativas para el usuario.",
-        "Rity": "Carga aceptable, mejorable. El sitio presenta tiempos de carga razonables, pero existe margen de mejora en la optimización de recursos como imágenes y scripts, lo que impactaría positivamente la experiencia general.",
-        "conclusion": "Optimizar el rendimiento del sitio web reduciendo el tamaño de las imágenes, utilizando caché del navegador y priorizando la carga de contenido visible, para ofrecer una experiencia de usuario más rápida y eficiente."
+        "criterion_or_website": "Content Freshness",
+        "Tom's Hardware": "Contenido actualizado. Publica diariamente noticias, reseñas de hardware recién lanzado y guías actualizadas, manteniendo a su audiencia informada sobre las últimas tendencias.",
+        "PC Gamer": "Flujo constante. Ofrece una corriente continua de noticias de juegos, parches, eventos y reseñas de nuevos lanzamientos, manteniendo su contenido pertinente y atractivo para gamers.",
+        "TechRadar": "Publicación regular. Actualiza frecuentemente sus artículos con las últimas novedades tecnológicas, cubriendo lanzamientos de productos y tendencias de la industria para mantener la relevancia.",
+        "PCity": "Frecuencia incierta. La imagen no permite determinar la regularidad de las actualizaciones de contenido o la frecuencia de adición de nuevos productos, crucial para la relevancia.",
+        "conclusion": "PCity debería asegurar una actualización constante de productos y contenido informativo, publicando artículos sobre nuevas tecnologías y lanzamientos. Esto mantendría el interés del usuario y su relevancia en el sector."
     },
     {
-        "criterion_or_website": "Final Conclusion",
+        "criterion_or_website": "",
         "Tom's Hardware": "",
         "PC Gamer": "",
         "TechRadar": "",
-        "Rity": "",
-        "conclusion": "El portal 'Rity' destaca por su enfoque claro en el armado y comparación de PCs, ofreciendo una base funcional muy sólida. Para mejorar, debería enriquecer su diseño visual y tipográfico, expandir las funcionalidades de sus herramientas con filtros avanzados, e integrar elementos interactivos para fomentar una comunidad más activa. Además, una estrategia SEO más robusta y mejoras de rendimiento asegurarían una mayor visibilidad y una experiencia de usuario superior, elevando su posición frente a competidores establecidos."
+        "PCity": "",
+        "conclusion": "PCity muestra una base sólida para la comparación y configuración de PCs. Para maximizar su potencial, debe enriquecer su diseño visual y tipográfico, expandir la profundidad de su navegación y funcionalidades interactivas, e implementar una estrategia SEO y de contenido fresco para atraer y retener usuarios de manera efectiva."
     }
 ]

@@ -2,212 +2,215 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>PCity | Armá, compará y aprendé</title>
-    <meta
-      name="description"
-      content="PCity: armá tu PC, compará componentes y aprendé. Buscador inteligente, categorías rápidas y cards de productos con un diseño claro y accesible."
-    />
-    <link rel="stylesheet" href="style.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
-    <script src="../../socket.js"></script>
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "PCity",
-        "url": "https://example.com/",
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": "https://example.com/?q={search_term_string}",
-          "query-input": "required name=search_term_string"
-        }
-      }
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PCity — Inicio</title>
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..900&family=Crimson+Text:ital,wght@0,600;1,400&display=swap"      
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400..700,0..1,-50..200"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24..48,400..700,0..1,0..200" />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- Sockets + App -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
+    <script src="../../socket.js"></script>
     <script type="module" src="script.js" defer></script>
   </head>
-  <body>
-    <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
-    <div class="inicio">
+  <body>
+    <div class="app">
+      <!-- Header principal -->
       <header class="site-header" role="banner">
-        <div class="wrap">
-          <a class="brand" href="../inicio/index.html" aria-label="Inicio PCity">
-            <img src="../../recursos/img/logo.png" alt="PCity" loading="lazy" />
+        <div class="container header-row">
+          <a href="/" class="logo" aria-label="PCity, ir a inicio">
+            <img src="../../recursos/img/logo.png" alt="PCity" />
           </a>
 
-          <div class="buscador" role="search" aria-label="Buscar en PCity">
-            <form id="searchForm" action="./" role="search">
-              <span class="material-symbols-outlined search-ico" aria-hidden="true">search</span>
-              <input
-                type="search"
-                id="input1"
-                class="busc"
-                placeholder="Buscar componentes, marcas o categorías"
-                autocomplete="off"
-                aria-autocomplete="list"
-                aria-controls="busq1"
-                aria-expanded="false"
-                aria-haspopup="listbox"
-              />
-              <button class="btn btn--primary btn--search" type="submit" aria-label="Buscar">
-                <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
-              </button>
-            </form>
-            <div class="busqs" id="busq1" role="listbox" aria-label="Sugerencias"></div>
-          </div>
+          <!-- Buscador -->
+          <form class="search" role="search" aria-label="Buscar">
+            <span class="material-symbols-outlined search-icon" aria-hidden="true">search</span>
+            <input
+              type="text"
+              class="busc"
+              id="input1"
+              placeholder="Buscar componentes, guías o comparativas"
+              autocomplete="off"
+              aria-autocomplete="list"
+              aria-controls="busq1"
+              aria-expanded="false"
+              aria-haspopup="listbox"
+            />
+            <div class="busqs" id="busq1" role="listbox" aria-label="Sugerencias de búsqueda"></div>
+          </form>
 
-          <nav class="main-nav" aria-label="Navegación principal">
-            <a class="navlink info" href="../informacion/index.html">Información</a>
-            <a class="navlink armar" href="../armar-pc/index.html">Arma tu PC</a>
-            <a class="navlink comparar" href="../comparacion/index.html">Comparar</a>
-            <button class="log avatar-btn" id="persona" aria-label="Cuenta">
-              <img src="../../recursos/img/personita.png" alt="" />
+          <div class="header-actions">
+            <a class="btn btn-accent" href="../armar-pc/index.html">Configurar PC</a>
+            <button class="icon-btn" aria-label="Notificaciones">
+              <span class="material-symbols-outlined">notifications</span>
             </button>
-          </nav>
+            <button class="icon-btn" id="persona" aria-label="Cuenta">
+              <img src="../../recursos/img/personita.png" alt="Cuenta" />
+            </button>
+          </div>
         </div>
 
-        <nav class="utility-nav" aria-label="Categorías rápidas">
-          <ul class="chips">
-            <li><a href="#" class="chip"><span class="material-symbols-outlined">memory</span>RAM</a></li>
-            <li><a href="#" class="chip"><span class="material-symbols-outlined">computer</span>Placas madre</a></li>
-            <li><a href="#" class="chip"><span class="material-symbols-outlined">deployed_code</span>CPU</a></li>
-            <li><a href="#" class="chip"><span class="material-symbols-outlined">monitor</span>Monitores</a></li>
-            <li><a href="#" class="chip"><span class="material-symbols-outlined">graphic_eq</span>GPU</a></li>
-            <li><a href="#" class="chip"><span class="material-symbols-outlined">sd_card</span>SSD</a></li>
-            <li><a href="#" class="chip"><span class="material-symbols-outlined">power_rounded</span>Fuentes</a></li>
-            <li><a href="#" class="chip"><span class="material-symbols-outlined">speaker</span>Periféricos</a></li>
-          </ul>
+        <!-- Subnavegación / breadcrumbs + categorías rápidas -->
+        <nav class="subnav" aria-label="Navegación secundaria">
+          <div class="container subnav-row">
+            <ul class="breadcrumbs" role="list">
+              <li><a href="#">Inicio</a></li>
+              <li aria-hidden="true">/</li>
+              <li><a href="#">Hardware</a></li>
+              <li aria-hidden="true">/</li>
+              <li><a href="#">Guías y comparativas</a></li>
+            </ul>
+
+            <ul class="quickcats" role="list">
+              <li><a class="chip" href="../informacion/index.html">Información</a></li>
+              <li><a class="chip" href="../comparacion/index.html">Comparar</a></li>
+              <li><a class="chip" href="../armar-pc/index.html">Arma tu PC</a></li>
+              <li><a class="chip" href="#">Ofertas</a></li>
+            </ul>
+          </div>
         </nav>
       </header>
 
-      <main id="contenido" class="home" role="main">
-        <section class="grid">
-          <!-- Destacado grande -->
-          <article class="card card--featured" aria-labelledby="destacadoTit">
-            <header class="card-hd">
-              <h2 id="destacadoTit">
-                <span class="pill pill--dark">Destacado</span>
-                Monitor 27" QHD 165Hz
-              </h2>
-              <div class="meta">
-                <span class="badge">Nuevo</span>
-                <span class="badge badge--info">Stock alto</span>
-              </div>
-            </header>
-            <figure class="media">
-              <img
-                src="../../recursos/img/pcity.png"
-                alt="Monitor 27 pulgadas QHD 165Hz"
-                loading="lazy"
-              />
-            </figure>
-            <div class="card-bd">
-              <p class="desc">
-                Panel IPS 165Hz con 1ms MPRT. Freesync Premium. Ideal gaming.
-              </p>
-              <div class="price-cta">
-                <div class="price">
-                  <span class="now">$ 269.999</span>
-                  <span class="before">$ 319.999</span>
-                </div>
-                <button class="btn btn--primary">
-                  Añadir al comparador
-                  <span class="material-symbols-outlined" aria-hidden="true">compare_arrows</span>
-                </button>
-              </div>
-            </div>
-          </article>
-
-          <!-- Lateral 1 -->
-          <article class="card card--side">
-            <header class="card-hd">
-              <h3 class="card-title">
-                <span class="pill pill--dark">Repuesto</span> Gabinete RGB
-              </h3>
-            </header>
-            <div class="card-bd side-flex">
-              <img src="../../recursos/img/pcity.png" alt="" loading="lazy" />
-              <div class="side-meta">
-                <p class="mini">ATX | Vidrio templado | 4 fans ARGB</p>
-                <div class="price small">
-                  <span class="now">$ 99.999</span>
-                </div>
-                <button class="btn btn--ghost">Ver detalle</button>
-              </div>
-            </div>
-          </article>
-
-          <!-- Lateral 2 -->
-          <article class="card card--side">
-            <header class="card-hd">
-              <h3 class="card-title">
-                <span class="pill pill--dark">Kit</span> Upgrade Ryzen
-              </h3>
-            </header>
-            <div class="card-bd side-flex">
-              <img src="../../recursos/img/pcity.png" alt="" loading="lazy" />
-              <div class="side-meta">
-                <p class="mini">Ryzen 5 | 16GB | B550</p>
-                <div class="price small">
-                  <span class="now">$ 345.000</span>
-                </div>
-                <button class="btn btn--ghost">Ver detalle</button>
-              </div>
-            </div>
-          </article>
-
-          <!-- Panel de mensajes -->
-          <section class="panel" aria-labelledby="panelTit">
-            <h2 id="panelTit" class="panel-title">
-              <span class="material-symbols-outlined" aria-hidden="true">campaign</span>
-              Panel de mensajes
-            </h2>
-            <p>
-              Envíos a todo el país. 6 cuotas sin interés con tarjetas bancarias
-              seleccionadas. Soporte por chat en vivo.
-            </p>
-            <div class="panel-actions">
-              <a class="link" href="#">Política de devoluciones</a>
-              <a class="link" href="#">Garantías</a>
-            </div>
-          </section>
-
-          <!-- Lista rápida -->
-          <aside class="card card--list">
-            <header class="card-hd">
-              <h3 class="card-title">¿Qué estás buscando?</h3>
-            </header>
-            <ul class="list">
-              <li><a href="#">Armar PC gamer 1080p</a></li>
-              <li><a href="#">Actualizar GPU</a></li>
-              <li><a href="#">Mejor relación precio/calidad</a></li>
+      <!-- Layout principal -->
+      <main class="container layout" id="contenido">
+        <!-- Sidebar izquierda -->
+        <aside class="sidebar" aria-label="Categorías">
+          <h2 class="sidebar-title">Tendencias</h2>
+          <nav>
+            <ul class="side-nav" role="list">
+              <li><a href="#">CPUs</a></li>
+              <li><a href="#">GPUs</a></li>
+              <li><a href="#">Disipadores</a></li>
+              <li><a href="#">Motherboards</a></li>
+              <li><a href="#">Almacenamiento</a></li>
+              <li><a href="#">Fuentes</a></li>
+              <li><a href="#">Gabinetes</a></li>
               <li><a href="#">Periféricos</a></li>
             </ul>
-          </aside>
+          </nav>
+
+          <div class="side-cards">
+            <a class="side-card side-card--purple" href="#">PC por tipo</a>
+            <a class="side-card" href="#">Noticias</a>
+            <a class="side-card" href="#">Comparaciones</a>
+            <a class="side-card" href="#">Últimos análisis</a>
+            <a class="side-card" href="#">Configurador</a>
+          </div>
+        </aside>
+
+        <!-- Feed central -->
+        <section class="feed" aria-label="Contenido principal">
+          <!-- Card destacada tipo guía (bloque ámbar con label) -->
+          <article class="card card--guide">
+            <div class="card-ribbon ribbon--guide">Guía</div>
+            <header class="card-header">
+              <h3 class="card-title">Cómo elegir tu primera GPU en 2025</h3>
+              <p class="card-meta">Actualizado el 19/10/2025 • Lectura: 8 min</p>
+            </header>
+            <div class="card-body">
+              <figure class="card-media">
+                <img src="../../recursos/img/ej-gpu.png" alt="Tarjeta gráfica de ejemplo" />
+              </figure>
+              <p class="card-summary">
+                Aprende a comparar rendimiento por dólar, consumo y temperaturas. Te mostramos qué mirar en memoria,
+                bus, y cuándo conviene esperar a nuevas series.
+              </p>
+              <a href="#" class="link-cta">Ver la guía completa</a>
+            </div>
+          </article>
+
+          <!-- Card de noticia -->
+          <article class="card card--news">
+            <div class="card-ribbon ribbon--news">Novedad</div>
+            <header class="card-header">
+              <h3 class="card-title">SSD PCIe 5.0: ¿vale la pena el salto?</h3>
+              <p class="card-meta">Por Equipo PCity • 18/10/2025</p>
+            </header>
+            <div class="card-body">
+              <figure class="card-media">
+                <img src="../../recursos/img/ej-ssd.png" alt="SSD NVMe de ejemplo" />
+              </figure>
+              <p class="card-summary">
+                Probamos modelos tope de gama y medimos beneficios reales en cargas de trabajo diarias. Resultados y
+                recomendaciones por presupuesto.
+              </p>
+              <a href="#" class="link-cta">Leer análisis</a>
+            </div>
+          </article>
+
+          <!-- Card de comparativa -->
+          <article class="card card--compare">
+            <div class="card-ribbon ribbon--compare">Comparativa</div>
+            <header class="card-header">
+              <h3 class="card-title">Ryzen 7 vs Core i7: gaming y productividad</h3>
+              <p class="card-meta">Benchmarks en 12 juegos y 5 apps</p>
+            </header>
+            <div class="card-body">
+              <figure class="card-media">
+                <img src="../../recursos/img/ej-cpu.png" alt="Cajas de CPU comparadas" />
+              </figure>
+              <p class="card-summary">
+                Gráficos claros, consumo, temperaturas y relación precio/rendimiento para ayudarte a decidir hoy.
+              </p>
+              <a href="#" class="link-cta">Ver resultados</a>
+            </div>
+          </article>
         </section>
 
-        <!-- Componentes populares -->
-        <section class="section">
-          <header class="section-hd">
-            <h2 class="section-title">
-              <span class="pill pill--accent">Componentes populares</span>
-            </h2>
-          </header>
+        <!-- Columna derecha -->
+        <aside class="rightbar" aria-label="Destacados">
+          <!-- Review destacada con barra superior morada -->
+          <article class="card card--featured">
+            <div class="featured-bar" aria-hidden="true"></div>
+            <header class="card-header">
+              <span class="badge">Review</span>
+              <h3 class="card-title">Intel Core i5 vs Ryzen 5 — 2025</h3>
+            </header>
+            <div class="card-body">
+              <figure class="card-media">
+                <img src="../../recursos/img/ej-cpu-box.png" alt="Caja de procesador" />
+              </figure>
+              <p class="card-summary">Pruebas completas, temperaturas y mejor compra por rango de precio.</p>
+              <a href="#" class="btn btn-primary">Leer más</a>
+            </div>
+          </article>
 
-          <div class="componentesPopu product-grid" id="popularGrid" aria-live="polite"></div>
-        </section>
+          <!-- Presupuestos recomendados -->
+          <section class="card card--budget">
+            <header class="card-header">
+              <h3 class="card-title">Presupuestos recomendados</h3>
+            </header>
+            <ul class="budget-list" role="list">
+              <li class="budget-item">
+                <img src="../../recursos/img/ej-cpu-box.png" alt="" />
+                <div>
+                  <p class="budget-name">PC 1080p</p>
+                  <p class="budget-meta">Ideal esports • $</p>
+                </div>
+                <a href="#" class="btn btn-outline">Explorar</a>
+              </li>
+              <li class="budget-item">
+                <img src="../../recursos/img/ej-gpu.png" alt="" />
+                <div>
+                  <p class="budget-name">PC 1440p</p>
+                  <p class="budget-meta">Equilibrada • $$</p>
+                </div>
+                <a href="#" class="btn btn-outline">Explorar</a>
+              </li>
+            </ul>
+          </section>
+        </aside>
       </main>
+
+      <!-- Accesibilidad: salto a contenido -->
+      <a class="skip-link" href="#contenido">Saltar al contenido</a>
     </div>
   </body>
 </html>
