@@ -29,4 +29,58 @@ export const getChatMessages = async (token, chatId) => {
     return responseData
 }
 
-export const postMessages = async () =>{}
+
+let socket = null;
+let listeners = new Set();
+
+export function connectChatSocket(token) {
+  if (socket && socket.readyState === WebSocket.OPEN) {
+    console.log('conectado');
+    return socket;
+  }
+
+  socket = new WebSocket("ws://localhost:3000/chat", token);
+
+  socket.onopen = () => {
+    console.log("conectado");
+  };
+
+  socket.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    listeners.forEach((callback) => callback(data));
+  };
+
+  socket.onclose = (event) => {
+    console.log("descconectado", event.reason);
+  };
+
+  socket.onerror = (err) => {
+    console.error("error websocket", err);
+  };
+
+  return socket;
+}
+
+
+export function onChatMessage(callback) {
+  listeners.add(callback);
+  return () => listeners.delete(callback); 
+}
+
+
+export function sendChatMessage(chatId, mensaje) {
+  if (!socket || socket.readyState !== WebSocket.OPEN) {
+    console.error("websocket no abierto");
+    return;
+  }
+  socket.send(JSON.stringify({ chatId, mensaje }));
+}
+
+
+export function disconnectChatSocket() {
+  if (socket) {
+    socket.close();
+    socket = null;
+  }
+}
+

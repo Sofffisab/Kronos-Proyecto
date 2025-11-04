@@ -1,6 +1,8 @@
 
 
-export const login = async (email,pass)=> {
+
+
+export const login = async (email,pass,)=> {
     const response = await fetch('http://localhost:3000/users/login', {
 method: 'POST',
 headers: { 'Content-Type': 'application/json'},
@@ -8,9 +10,10 @@ body: JSON.stringify({mailI: email,
     usuarioI: email, 
     contraseniaP: pass })
 })
+
 const responseData = await response.json()  
 if(!response.ok)  throw new Error(responseData.error ||'error '+response.status)
-
+console.log(responseData)
 return responseData;
 }
 

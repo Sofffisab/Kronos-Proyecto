@@ -25,7 +25,7 @@ const setuptareas = () => {
         return res.status(403).json({ error: "You don't have permission to create tasks in this project" });
       };
 
-      const responsableId = id_responsable || personaId;
+      const responsableId = id_persona_responsable || personaId;
 
       const isresponsablemember = await prisma.tiene.findFirst({
         where: {

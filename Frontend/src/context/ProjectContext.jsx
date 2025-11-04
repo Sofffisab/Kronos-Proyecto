@@ -10,6 +10,7 @@ export function useTasks() {
 
 export function TaskProvider({children}) {
 
+    const [userId, setUserId] = useState(null)
     const [contextProject, setProject] = useState({})
     const [contextTasks, setTasks] = useState([])
     const [currentId, setCurrentId]= useState(null)
@@ -44,5 +45,5 @@ useEffect(() => {
 
 
 return(
-    <TaskContext.Provider value={{contextTasks, contextProject, fetchProject,setCurrentId, currentId}}>{children}</TaskContext.Provider>
+    <TaskContext.Provider value={{contextTasks, contextProject, fetchProject,setCurrentId, currentId, contextChat, userId, setUserId}}>{children}</TaskContext.Provider>
 )}
