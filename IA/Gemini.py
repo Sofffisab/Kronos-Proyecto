@@ -23,9 +23,10 @@ load_dotenv()
 
 client = genai.Client(api_key=os.getenv("GEMINI_KEY"))
 clientChat = OpenAI(api_key=os.getenv("CHAT_KEY"))
-DATABASE_URL = os.getenv("DATABASE_URL")
+#DATABASE_URL = os.getenv("DATABASE_URL")
 
 # Conectarse a la base de datos
+"""
 try:
     conn = psycopg2.connect(DATABASE_URL)
     cursor = conn.cursor()
@@ -40,6 +41,7 @@ try:
 
 except Exception as e:
     print("Error al conectar:", e)
+    """
 
 
 #modelo de la tabla
@@ -349,6 +351,7 @@ def createImgSearching(conclusion_text, img_path):
     
     Tené en cuenta lo siguiente para guiar el rediseño:
     {conclusion_text}
+    
     """
     
     # Generar imagen
@@ -360,7 +363,7 @@ def createImgSearching(conclusion_text, img_path):
         ],
         config=types.GenerateContentConfig(
         response_modalities=["TEXT", "IMAGE"],
-        temperature=0.9,
+        temperature=0.8,
         top_p=0.95
         )
     )
@@ -639,7 +642,7 @@ Each row has in this order:
 Websites 1 to 3 have to be the most famous about {theme}, and the 4th is the one of the img insterted.
 Rules:  
 - Criteria order (rows): Typography & Readability, Colors & Branding, Visual Elements, Navigation & UX, Organization & Structure, Accessibility, Functionality, Interactivity, SEO, +1 extra criterion you choose, +Final Conclusion row (only fill "Conclusion").  
-- Website1–Website3 (columns): each = short intro phrase + one descriptive sentence of 10–20 words.Do not mention the Website in each cell.  
+- Website1–Website3 (columns): each = short intro phrase + one descriptive sentence of 20–30 words.Do not mention the Website in each cell.  
 - Website4 (column): same, but refers to the website from the provided image.  
 - "Conclusion" (column): only Website4 improvements, implicit comparison, highlight strengths + suggestions, never mention website names.  
 Try not to use the same words for the cells, so each creteria doesn't have the exact words. Use an extensive vocabulary

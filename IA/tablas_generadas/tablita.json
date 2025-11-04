@@ -1,90 +1,90 @@
 [
     {
-        "criterion_or_website": "Tipografía y legibilidad",
-        "(NamePage1)": "Tipos profesionales. Este medio emplea fuentes sans-serif claras, garantizando que el texto principal sea cómodo para la lectura en artículos extensos.",
-        "(NamePage2)": "Fuentes contemporáneas. El portal utiliza tipografías modernas y variadas, equilibrando titulares impactantes con párrafos fácilmente legibles y atractivos.",
-        "(NamePage3)": "Estilo distintivo. El sitio combina fuentes audaces para encabezados y una principal nítida, reforzando su identidad visual orientada al gaming.",
-        "(NamePage4)": "Claridad visible. El portal usa una tipografía sans-serif limpia y tamaños adecuados para los títulos, pero los nombres de producto son algo pequeños.",
-        "conclusion": "La tipografía del sitio es clara, pero optimizar el tamaño de fuente en las descripciones de productos mejoraría notablemente su legibilidad."
+        "criterion_or_website": "Typography & Readability",
+        "Tom's Hardware": "Fuentes claras, legibles. El portal utiliza fuentes serif y sans-serif bien balanceadas, asegurando una lectura confortable en artículos extensos y detalles técnicos; la jerarquía visual facilita el escaneo rápido de la información.",
+        "PC Gamer": "Tipografía dinámica, atractiva. Esta publicación emplea una tipografía moderna con encabezados impactantes, diseñada para captar la atención del lector y complementar el contenido visualmente inmersivo del sector de videojuegos.",
+        "TechRadar": "Lectura fluida, consistente. La plataforma exhibe una tipografía sans-serif limpia y consistente en todo su contenido, promoviendo una experiencia de lectura muy accesible y sin distracciones para el usuario.",
+        "Rity": "Tipografía sencilla, funcional. El sitio presenta una tipografía básica y estándar, con tamaños adecuados para los títulos y textos de componentes, aunque carece de una diferenciación estilística que enriquezca la experiencia visual general.",
+        "conclusion": "Mejora la legibilidad en ciertos bloques de texto, como descripciones largas, explorando contrastes o espaciados para evitar la monotonía visual. Podría integrar estilos tipográficos más modernos que refuercen la identidad."
     },
     {
-        "criterion_or_website": "Colores e identidad visual",
-        "(NamePage1)": "Paleta funcional. El medio opta por colores sobrios, priorizando la información técnica y la seriedad del contenido para el público especializado.",
-        "(NamePage2)": "Diseño vibrante. El portal emplea una paleta de colores moderna y distintiva, ayudando a diferenciar secciones y captar la atención visualmente.",
-        "(NamePage3)": "Imagen marcada. El sitio utiliza una combinación de colores oscura y contrastada, reflejando fuertemente su marca y la estética del gaming.",
-        "(NamePage4)": "Contraste básico. El portal exhibe un cabezal azul brillante con texto blanco y un cuerpo blanco con texto negro, ofreciendo buena visibilidad.",
-        "conclusion": "Los colores del sitio son funcionales, pero una paleta más desarrollada podría fortalecer la marca y el atractivo visual general del portal."
+        "criterion_or_website": "Colors & Branding",
+        "Tom's Hardware": "Paleta sobria, profesional. La marca emplea una combinación de colores oscuros y neutros, con acentos sutiles, reflejando su enfoque técnico y serio en análisis de hardware y noticias del sector.",
+        "PC Gamer": "Colores vibrantes, enérgicos. La identidad visual de esta publicación se define por tonos intensos, especialmente rojos y negros, que evocan la emoción y el dinamismo inherentes al mundo del gaming en PC.",
+        "TechRadar": "Identidad fresca, moderna. El sitio utiliza una paleta de colores claros y acentos brillantes, proyectando una imagen de innovación y accesibilidad, adecuada para un público tecnológico amplio y diverso.",
+        "Rity": "Esquema básico, funcional. El diseño del portal se centra en un azul brillante para la cabecera y el blanco del fondo, lo que lo hace funcional pero no posee una paleta de colores distintiva o branding fuerte.",
+        "conclusion": "Considerar una paleta de colores más variada y atractiva, quizás con tonos complementarios, para mejorar la estética y reforzar una identidad de marca más memorable. Podría usar el color para jerarquizar información."
     },
     {
-        "criterion_or_website": "Elementos visuales",
-        "(NamePage1)": "Gráficos detallados. El medio integra abundantes imágenes de productos, gráficos de rendimiento y esquemas técnicos, ilustrando exhaustivamente sus análisis.",
-        "(NamePage2)": "Multimedia variada. El portal utiliza imágenes de alta calidad, videos y sliders, enriqueciendo significativamente el contenido y la experiencia del usuario.",
-        "(NamePage3)": "Atractivo visual. El sitio destaca con grandes imágenes de juegos y hardware, así como banners promocionales, captando rápidamente la atención.",
-        "(NamePage4)": "Productos claros. El portal muestra imágenes nítidas de componentes, facilitando la identificación visual aunque sin elementos gráficos adicionales notables.",
-        "conclusion": "Las imágenes de producto del sitio son nítidas, pero la incorporación de iconos o ilustraciones adicionales podría enriquecer su presentación visual."
+        "criterion_or_website": "Visual Elements",
+        "Tom's Hardware": "Imágenes técnicas, detalladas. Los elementos visuales consisten en fotografías de alta calidad, gráficos comparativos y diagramas técnicos, apoyando la profundidad analítica de cada artículo y reseña especializada.",
+        "PC Gamer": "Gráficos inmersivos, atractivos. Se observa un uso extensivo de capturas de pantalla de juegos, tráilers incrustados y fotografías de productos con un estilo pulcro, diseñados para sumergir al lector en la experiencia.",
+        "TechRadar": "Iconografía clara, limpia. La plataforma incorpora imágenes de producto grandes y nítidas, así como iconos intuitivos y gráficos de soporte que mejoran la comprensión y el atractivo visual general del contenido.",
+        "Rity": "Imágenes producto, sencillas. El portal muestra fotografías de componentes claras y centradas, con buena calidad, pero la presentación general carece de diversidad gráfica o elementos visuales interactivos que enriquezcan la experiencia.",
+        "conclusion": "Diversificar los elementos visuales más allá de las imágenes de producto, incluyendo iconos personalizados, ilustraciones o gráficos informativos que hagan el contenido más dinámico. Mejoraría la estética general."
     },
     {
-        "criterion_or_website": "Navegación y UX",
-        "(NamePage1)": "Menú estructurado. El medio ofrece una navegación compleja pero lógica, permitiendo a los usuarios acceder a categorías y filtros específicos fácilmente.",
-        "(NamePage2)": "Ruta intuitiva. El portal presenta una estructura de menú clara y una barra de búsqueda eficiente, facilitando la exploración del vasto contenido.",
-        "(NamePage3)": "Acceso directo. El sitio utiliza menús desplegables y enlaces destacados, guiando al usuario rápidamente hacia secciones populares y reviews.",
-        "(NamePage4)": "Barra superior. El portal exhibe una barra de búsqueda central y enlaces de navegación clave en la cabecera, ofreciendo opciones directas.",
-        "conclusion": "La navegación visible del sitio es sencilla, pero menús más extensos o \"breadcrumbs\" guiarían mejor a los usuarios en búsquedas profundas."
+        "criterion_or_website": "Navigation & UX",
+        "Tom's Hardware": "Navegación lógica, eficiente. La estructura de menú es profunda y bien organizada, permitiendo a los usuarios encontrar rápidamente información específica sobre componentes, benchmarks o guías de compra.",
+        "PC Gamer": "Experiencia fluida, intuitiva. El diseño prioriza una navegación sencilla con categorías claras y una barra de búsqueda prominente, facilitando el descubrimiento de contenido relevante para jugadores entusiastas.",
+        "TechRadar": "Flujo de usuario, directo. La organización de la navegación es muy accesible, con menús bien definidos y enlaces internos coherentes que guían al usuario a través de sus diversas secciones temáticas.",
+        "Rity": "Barra superior, clara. La navegación del portal es básica y funcional, con enlaces principales en la parte superior que permiten acceder a secciones clave como ",
+        "conclusion": "Expandir las opciones de navegación, quizás con un menú lateral o filtros avanzados para "
     },
     {
-        "criterion_or_website": "Organización y estructura",
-        "(NamePage1)": "Contenido ordenado. El medio estructura sus artículos con encabezados, subtítulos y listas, facilitando el escaneo y la asimilación de información.",
-        "(NamePage2)": "Secciones claras. El portal divide su contenido en bloques bien definidos con titulares grandes, mejorando la comprensión y el flujo de lectura.",
-        "(NamePage3)": "Diseño modular. El sitio organiza artículos y noticias en módulos visualmente atractivos, facilitando la exploración de diverso contenido relevante.",
-        "(NamePage4)": "Diseño lineal. El portal presenta un diseño simple con un título principal y una sección de productos debajo, mostrando una jerarquía básica.",
-        "conclusion": "La organización del sitio es básica, pero una mejor estructura de categorías y filtros en la página optimizaría la exploración de componentes."
+        "criterion_or_website": "Organization & Structure",
+        "Tom's Hardware": "Estructura jerárquica, robusta. El contenido se organiza en categorías lógicas con subsecciones detalladas, facilitando la exploración de temas complejos desde una perspectiva técnica y muy especializada.",
+        "PC Gamer": "Disposición temática, atractiva. La organización prioriza una mezcla de noticias, reseñas y artículos destacados en la página principal, estructurados para un consumo rápido y visualmente atractivo para la comunidad gamer.",
+        "TechRadar": "Diseño modular, adaptable. El portal presenta una estructura de contenido en bloques que se adapta bien a distintos formatos y dispositivos, facilitando el acceso a noticias, análisis y guías de compra de forma ordenada.",
+        "Rity": "Diseño lineal, predecible. La disposición del contenido es muy sencilla, con una cabecera, un título central y una sección de componentes populares, lo que proporciona una estructura clara aunque limitada en opciones de presentación.",
+        "conclusion": "Implementar una organización más modular o temática para destacar diferentes tipos de contenido, como guías o novedades, ofreciendo así una experiencia de exploración más rica y estructurada al usuario."
     },
     {
-        "criterion_or_website": "Accesibilidad",
-        "(NamePage1)": "Diseño inclusivo. El medio mantiene altos contrastes y opciones de tamaño de texto, garantizando la legibilidad para un amplio rango de usuarios.",
-        "(NamePage2)": "Estándares seguidos. El portal se adhiere a pautas de accesibilidad, ofreciendo una experiencia cómoda para usuarios con diversas necesidades.",
-        "(NamePage3)": "Usabilidad general. El sitio prioriza la claridad del texto y la navegación con teclado, favoreciendo a usuarios con diferentes capacidades.",
-        "(NamePage4)": "Contraste evidente. El portal presenta buen contraste entre texto y fondo, favoreciendo la legibilidad, aunque otras características no son visibles.",
-        "conclusion": "El contraste del sitio es adecuado, pero explorar descripciones alternativas para imágenes y navegación con teclado sería beneficioso."
+        "criterion_or_website": "Accessibility",
+        "Tom's Hardware": "Contrastes adecuados, buena. Los colores y textos están diseñados para ofrecer un buen contraste, facilitando la lectura a usuarios con diversas capacidades visuales y garantizando una experiencia inclusiva general.",
+        "PC Gamer": "Elementos legibles, funcionales. A pesar de su diseño enfocado en la estética de juego, la plataforma mantiene un buen contraste entre texto y fondo, asegurando que el contenido sea accesible para la mayoría de usuarios.",
+        "TechRadar": "Estándares cumplidos, buena. El portal se adhiere a pautas de accesibilidad web, proporcionando textos claros, navegación por teclado y descripciones alternativas para imágenes, asegurando una experiencia equitativa.",
+        "Rity": "Legibilidad simple, básica. El contraste entre el texto y el fondo es generalmente bueno, lo que favorece la legibilidad, pero no se observan características avanzadas de accesibilidad web implementadas.",
+        "conclusion": "Añadir atributos ARIA, navegación por teclado mejorada y descripciones de imágenes (alt text) para cumplir con estándares de accesibilidad, permitiendo a usuarios con discapacidades acceder plenamente al contenido del portal."
     },
     {
-        "criterion_or_website": "Funcionalidad",
-        "(NamePage1)": "Herramientas útiles. El medio ofrece comparadores, filtros avanzados y especificaciones técnicas detalladas, añadiendo valor práctico al usuario.",
-        "(NamePage2)": "Recursos completos. El portal incluye guías de compra interactivas, herramientas de búsqueda avanzada y secciones de comentarios, enriqueciendo la experiencia.",
-        "(NamePage3)": "Características robustas. El sitio permite la búsqueda por juegos o componentes, integrando enlaces a tiendas y secciones de noticias actualizadas.",
-        "(NamePage4)": "Búsqueda visible. El portal dispone de una barra de búsqueda y secciones para \"Arma tu PC\" y \"Comparar\", sugiriendo funcionalidades clave.",
-        "conclusion": "Las funcionalidades inferidas del sitio son prometedoras, pero se recomienda ampliar las opciones de filtrado y comparación de productos directamente."
+        "criterion_or_website": "Functionality",
+        "Tom's Hardware": "Herramientas robustas, útiles. El portal ofrece comparadores de rendimiento, bases de datos de productos y filtros avanzados, proporcionando a los usuarios herramientas completas para sus investigaciones de hardware.",
+        "PC Gamer": "Características interactivas, diversas. La plataforma incluye foros activos, secciones de comentarios en artículos y un sistema de búsqueda eficiente, facilitando la interacción y el acceso a información relevante.",
+        "TechRadar": "Módulos operativos, completos. El sitio integra un potente buscador, filtros de categorías y un sistema de recomendación de productos, optimizando la experiencia de usuario y la eficiencia de búsqueda.",
+        "Rity": "Funcionalidades clave, presentes. El portal ofrece un buscador básico y las secciones ",
+        "conclusion": "Enriquecer las funcionalidades del comparador y del configurador de PC, añadiendo filtros por precio, marca, rendimiento o compatibilidad, para ofrecer una herramienta más potente y personalizada a los usuarios."
     },
     {
-        "criterion_or_website": "Interactividad",
-        "(NamePage1)": "Enganche con el lector. El medio fomenta la participación con secciones de comentarios, foros activos y encuestas relevantes para la comunidad.",
-        "(NamePage2)": "Compromiso activo. El portal incluye votaciones, valoraciones de usuarios y foros de discusión, creando una comunidad participativa y dinámica.",
-        "(NamePage3)": "Compromiso lúdico. El sitio ofrece comentarios, reseñas de usuarios y enlaces a comunidades, promoviendo una interacción efectiva entre gamers.",
-        "(NamePage4)": "Opciones directas. El portal muestra enlaces como \"Arma tu PC\" y \"Comparar\", sugiriendo interacción, pero no se observan comentarios ni foros.",
-        "conclusion": "Las opciones de interacción del sitio son directas, aunque incorporar reseñas de usuarios o un sistema de comentarios enriquecería la experiencia."
+        "criterion_or_website": "Interactivity",
+        "Tom's Hardware": "Comunidad activa, foros. Los usuarios pueden participar en foros de discusión, dejar comentarios en los artículos y personalizar sus feeds, fomentando una comunidad muy participativa y un intercambio de conocimientos.",
+        "PC Gamer": "Participación activa, valorada. Se promueve la interacción mediante encuestas, comentarios dinámicos en reseñas y la integración con redes sociales, construyendo una sólida comunidad de jugadores apasionados.",
+        "TechRadar": "Opciones de interacción, variadas. La plataforma permite a los usuarios comentar, compartir contenido en redes sociales y suscribirse a newsletters, fomentando la participación y manteniendo al público conectado con novedades.",
+        "Rity": "Interacción limitada, directa. Las opciones interactivas se reducen a la búsqueda y las herramientas de armado/comparación, sin elementos como comentarios, foros o integración con redes sociales para la comunidad.",
+        "conclusion": "Introducir elementos de interacción social como comentarios en productos, un sistema de valoraciones o la integración con foros, para construir una comunidad y enriquecer la experiencia del usuario con opiniones."
     },
     {
         "criterion_or_website": "SEO",
-        "(NamePage1)": "Estrategia robusta. El medio optimiza sus títulos, encabezados y contenido con palabras clave relevantes, atrayendo tráfico orgánico constante.",
-        "(NamePage2)": "Visibilidad alta. El portal utiliza una estructura de URL amigable, metadescripciones claras y contenido actualizado, posicionándose bien en búsquedas.",
-        "(NamePage3)": "Contenido clave. El sitio integra títulos optimizados, descripciones ricas y una buena jerarquía de encabezados, favoreciendo su ranking en búsquedas.",
-        "(NamePage4)": "Elementos básicos. El portal exhibe títulos de sección claros y nombres de producto, indicando una base para la optimización on-page.",
-        "conclusion": "Los elementos SEO visibles del sitio son adecuados, pero fortalecer la jerarquía de encabezados y el uso estratégico de palabras clave sería clave."
+        "Tom's Hardware": "Optimización profunda, efectiva. El portal utiliza palabras clave relevantes, estructura de enlaces internos robusta y meta descripciones precisas, asegurando alta visibilidad en resultados de búsqueda especializados.",
+        "PC Gamer": "Posicionamiento orgánico, sólido. La publicación implementa buenas prácticas SEO con títulos optimizados, contenido fresco y una fuerte autoridad de dominio, atrayendo tráfico constante desde búsquedas de juegos y hardware.",
+        "TechRadar": "Cobertura amplia, relevante. El sitio optimiza su contenido para un gran volumen de palabras clave, con una estructura URL clara y contenido actualizado, posicionándose bien para guías de compra y análisis generales.",
+        "Rity": "Optimización básica, incipiente. Los títulos de página son descriptivos, pero la plataforma podría beneficiarse de una estrategia más robusta, con metas descripciones detalladas y una mejor estructura de encabezados para SEO.",
+        "conclusion": "Mejorar la estrategia SEO con optimización de palabras clave más profundas, creación de contenido original y mejora de la estructura de enlaces internos, aumentando la visibilidad y el tráfico orgánico del sitio."
     },
     {
-        "criterion_or_website": "Rendimiento y velocidad",
-        "(NamePage1)": "Carga eficiente. El medio se optimiza para una velocidad de carga rápida, garantizando una experiencia fluida incluso con contenido multimedia pesado.",
-        "(NamePage2)": "Experiencia ágil. El portal presenta una excelente optimización de imágenes y recursos, resultando en tiempos de carga mínimos y agradables.",
-        "(NamePage3)": "Rapidez notable. El sitio utiliza técnicas de caché y compresión, asegurando que las páginas carguen velozmente para sus usuarios ávidos.",
-        "(NamePage4)": "Diseño ligero. El portal parece tener una estructura visual sencilla y pocos elementos pesados, sugiriendo una carga potencialmente rápida.",
-        "conclusion": "El diseño del sitio parece ligero, pero optimizar la compresión de imágenes y el código podría garantizar tiempos de carga consistentemente rápidos."
+        "criterion_or_website": "Performance & Speed",
+        "Tom's Hardware": "Carga rápida, optimizada. El portal muestra un excelente rendimiento, con tiempos de carga muy bajos gracias a la optimización de imágenes, minificación de scripts y un robusto CDN, mejorando la experiencia de usuario.",
+        "PC Gamer": "Rendimiento eficiente, constante. A pesar de los ricos elementos multimedia, el sitio carga rápidamente gracias a la compresión de imágenes y un buen manejo de recursos, proporcionando una navegación fluida al usuario.",
+        "TechRadar": "Velocidad sólida, responsive. La plataforma demuestra una carga ágil y es altamente responsiva, adaptándose bien a diferentes dispositivos y garantizando una experiencia fluida sin demoras significativas para el usuario.",
+        "Rity": "Carga aceptable, mejorable. El sitio presenta tiempos de carga razonables, pero existe margen de mejora en la optimización de recursos como imágenes y scripts, lo que impactaría positivamente la experiencia general.",
+        "conclusion": "Optimizar el rendimiento del sitio web reduciendo el tamaño de las imágenes, utilizando caché del navegador y priorizando la carga de contenido visible, para ofrecer una experiencia de usuario más rápida y eficiente."
     },
     {
-        "criterion_or_website": "Conclusión final",
-        "(NamePage1)": "",
-        "(NamePage2)": "",
-        "(NamePage3)": "",
-        "(NamePage4)": "",
-        "conclusion": "El sitio analizado destaca por su interfaz limpia y navegación directa, facilitando la búsqueda inicial de componentes. Para mejorar, debería priorizar la expansión de filtros de búsqueda, optimizar la legibilidad de descripciones de productos y enriquecer la experiencia interactiva con reseñas de usuarios. Estas acciones potenciarán su utilidad y atractivo para la comunidad de entusiastas de PC."
+        "criterion_or_website": "Final Conclusion",
+        "Tom's Hardware": "",
+        "PC Gamer": "",
+        "TechRadar": "",
+        "Rity": "",
+        "conclusion": "El portal 'Rity' destaca por su enfoque claro en el armado y comparación de PCs, ofreciendo una base funcional muy sólida. Para mejorar, debería enriquecer su diseño visual y tipográfico, expandir las funcionalidades de sus herramientas con filtros avanzados, e integrar elementos interactivos para fomentar una comunidad más activa. Además, una estrategia SEO más robusta y mejoras de rendimiento asegurarían una mayor visibilidad y una experiencia de usuario superior, elevando su posición frente a competidores establecidos."
     }
 ]
