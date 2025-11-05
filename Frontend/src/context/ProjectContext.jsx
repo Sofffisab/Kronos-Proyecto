@@ -1,49 +1,89 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { getChatMessages } from "../../api/messages.js";
-import {getProjects} from '../../api/project.js'
+import { getProjects } from "../../api/project.js";
+import {jwtDecode} from 'jwt-decode'
+import {
+  connectChatSocket,
+  onChatMessage,
+  disconnectChatSocket,
+} from "../../api/messages.js";
 
-const TaskContext = createContext()
+const TaskContext = createContext();
 
 export function useTasks() {
-    return useContext(TaskContext)
+  return useContext(TaskContext);
 }
 
-export function TaskProvider({children}) {
+export function TaskProvider({ children }) {
+  const [userId, setUserId] = useState(null);
+  const [contextProject, setProject] = useState({});
+  const [contextTasks, setTasks] = useState([]);
+  const [currentId, setCurrentId] = useState(null);
+  const [contextChat, setContextChat] = useState([]);
+  async function fetchProject(id) {
+    const project = await getProjects(localStorage.getItem("token"), id);
+    setProject(project);
+    setTasks(project.tareas);
+  }
 
-    const [userId, setUserId] = useState(null)
-    const [contextProject, setProject] = useState({})
-    const [contextTasks, setTasks] = useState([])
-    const [currentId, setCurrentId]= useState(null)
-    const [contextChat, setContextChat] = useState(null)
+ 
+  async function fetchMessages(chatId) {
+    const messages = await getChatMessages(localStorage.getItem("token"), chatId);
+    setContextChat(messages);
+  }
+
+  useEffect(()=>{
+    const token = localStorage.getItem('token')
+    if(!token) return
+
+    const decoded = jwtDecode(token)
+    setUserId(decoded.id)
+  },[contextProject])
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    const socket = connectChatSocket(token);
+
+    const unsubscribe = onChatMessage((data) => {
+  
+      if (data.id_chat === contextProject.chats?.[0]?.id) {
+        setContextChat((prev) => {
+
+          if (prev.some((msg) => msg.id === data.id)) return prev;
+          return [...prev, data];
+        });
+      }
+    });
+
+    return () => {
+      unsubscribe();
+      disconnectChatSocket();
+    };
+  }, [contextProject.chats?.[0]?.id]);
 
 
-async function fetchProject(id) {
+  useEffect(() => {
+    if (currentId) fetchProject(currentId);
+  }, [currentId]);
 
-    const project = await getProjects(localStorage.getItem('token'), id)
-    setProject(project)
-    setTasks(project.tareas)
-    
-
+  return (
+    <TaskContext.Provider
+      value={{
+        contextTasks,
+        contextProject,
+        fetchProject,
+        setCurrentId,
+        fetchMessages,
+        currentId,
+        contextChat,
+        setContextChat, 
+        userId,
+        setUserId,
+      }}
+    >
+      {children}
+    </TaskContext.Provider>
+  );
 }
-async function fetchMessages(id) {
-
-    const messages = await getChatMessages(localStorage.getItem('token'), id)
-    setContextChat(messages)
-}
-
-useEffect(()=>{
-    if(currentId) fetchProject(currentId)
-},[currentId])
-
-useEffect(() => {
-    if (contextProject.chats && contextProject.chats.length > 0) {
-      fetchMessages(contextProject.chats[0].id);
-    }
-  }, [contextProject]);
-
-
-
-
-return(
-    <TaskContext.Provider value={{contextTasks, contextProject, fetchProject,setCurrentId, currentId, contextChat, userId, setUserId}}>{children}</TaskContext.Provider>
-)}

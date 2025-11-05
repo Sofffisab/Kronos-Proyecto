@@ -11,7 +11,7 @@ import { useTasks } from "../context/ProjectContext";
 
 export default function ProjectPage() {
     const params = useParams()
-    const {fetchProject, setCurrentId}= useTasks()
+    const {fetchProject, setCurrentId, contextProject}= useTasks()
 const [sbStatus, setSbStatus] = useState(false)
 const [projects, setProjects] = useState([])
 const [loading,setLoading]= useState(true)
@@ -42,7 +42,7 @@ return(
  <>
 <NavBarWSearch menuFunc={() => setSbStatus(!sbStatus)}/>
 <SideBar  projects={projects}style={style}/>
-{!params.id?<div className='emptyProjPage'><p>Load a project to begin...</p></div> : <PageContent projectId={params.id} SbOpen={sbStatus}/>}
+{!params.id?<div className='emptyProjPage'><p>Load a project to begin...</p></div> : <PageContent projName={contextProject.nombre}projectId={params.id} SbOpen={sbStatus}/>}
 </>
 )
 }

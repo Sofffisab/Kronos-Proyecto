@@ -64,6 +64,21 @@ if(!response.ok) throw new Error(responseData.error || `error ${responseData.sta
     return(responseData )
 }
 
+export const inviteToProject = async (projId, mail, token) => {
+    const response = await fetch(`http://localhhost:3000/${projId}/invite`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json',
+        'authorization': `bearer ${token}`
+    },
+    body: {
+        mail: mail,
+    }
+    })
+    const responseData = await response.json()
+    if(!response.ok) throw new Error(responseData.error || `error ${responseData.status}`)
+    return(responseData )
+}
+
 
 export const stringToColor = (str)=> {
     let hash = 0;
