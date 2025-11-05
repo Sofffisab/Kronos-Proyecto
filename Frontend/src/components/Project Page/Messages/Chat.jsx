@@ -4,13 +4,13 @@ import { useTasks } from '../../../context/ProjectContext'
 export default function(props) {
     
 
-    const {userId } = useTasks()
+    const {user } = useTasks()
     let messageObj = []
     if(props.messages) messageObj = props.messages
 
     const mapMsg =(messageObj)=> {if(messageObj.length>0)  { return(messageObj.map((msg)=> (
-        <div key={msg.id}className={msg.id_persona==userId? `${style.normalMsg} ${style.leftMsg}` : `${style.normalMsg} ${style.rightMsg}`}>
-            <Bubble own={msg.own} text={msg.mensaje}/>
+        <div key={msg.id}className={msg.id_persona==user.id? `${style.normalMsg} ${style.leftMsg}` : `${style.normalMsg} ${style.rightMsg}`}>
+            <Bubble own={msg.id_persona==user.id} text={msg.mensaje}/>
         </div>
     )))}else  return <p className={style.noMsg}>No new messages...</p>}
 

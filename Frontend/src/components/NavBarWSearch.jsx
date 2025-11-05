@@ -1,10 +1,11 @@
-import { Navigate, useNavigate } from "react-router";
-import LogoWText from "./LogoWText";
+import {useState} from 'react'
+import { useTasks } from '../context/ProjectContext';
+import AccountModal from './modals/AccountModal';
 import SearchBar from "./SearchBar";
 
 export default function NavBarWSearch(props) {
-
-    const navigate = useNavigate()
+const {user} = useTasks()
+const [modal, setModal] = useState(false)
 
 return(
     <div className="NavSearch">
@@ -15,7 +16,8 @@ return(
         <SearchBar/>
         <div id='rightIcons'>
         <img id='rightIcon1' src='../../public/questionIcon.svg'/>
-        <img id='rightIcon2' src='../../public/UserDropDown.svg'/>
+        <img onClick={()=>setModal(true)} id='rightIcon2' src='../../public/UserDropDown.svg'/>,
+        {modal && <AccountModal name={user.mail} diableBg={()=>setModal(false)}/>}
         </div>
 
     </div>

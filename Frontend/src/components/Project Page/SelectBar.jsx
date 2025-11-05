@@ -7,8 +7,8 @@ import SimpleButton from "../SimpleButton";
 import style from './PgContent.module.css'
 export default function ProjectPgSelectBar(props) {
 const [modal, setModalState] = useState(false)
-const createProject = ()=> {
-    inviteToProject();
+const createProject = (currentId, mail, token)=> {
+    inviteToProject(currentId, mail, token);
     setModalState(false)
 }
     return(

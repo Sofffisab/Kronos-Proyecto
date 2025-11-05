@@ -15,7 +15,7 @@ export function useTasks() {
 }
 
 export function TaskProvider({ children }) {
-  const [userId, setUserId] = useState(null);
+  const [user, setUser] = useState(null);
   const [contextProject, setProject] = useState({});
   const [contextTasks, setTasks] = useState([]);
   const [currentId, setCurrentId] = useState(null);
@@ -37,7 +37,7 @@ export function TaskProvider({ children }) {
     if(!token) return
 
     const decoded = jwtDecode(token)
-    setUserId(decoded.id)
+    setUser(decoded)
   },[contextProject])
 
   useEffect(() => {
@@ -79,8 +79,8 @@ export function TaskProvider({ children }) {
         currentId,
         contextChat,
         setContextChat, 
-        userId,
-        setUserId,
+        user,
+        setUser,
       }}
     >
       {children}

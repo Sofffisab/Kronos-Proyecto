@@ -68,3 +68,9 @@ justify-content: center;
 height: 100%;
 gap: 2vh;
 }
+
+.logoutBtn {
+
+  color: red;
+
+}
