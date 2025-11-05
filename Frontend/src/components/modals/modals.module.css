@@ -74,3 +74,37 @@ gap: 2vh;
   color: red;
 
 }
+
+.AccountModal {
+  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+
+}
+.userName {
+  display: flex;
+  gap: 10%;
+  font-size: var(--headerSize);
+}
+.userName img{
+height: 7rem;
+width: auto;
+
+}
+.accountModalBody{
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background-color: var(--mainColor);
+  padding: 1%;
+  box-sizing: border-box;
+  border-radius: 20px;
+  height: auto;
+  width: 20rem;
+  position: absolute;
+  top: 10%;
+  right: 5%;
+  box-shadow: var(--dfBoxShadow);
+}

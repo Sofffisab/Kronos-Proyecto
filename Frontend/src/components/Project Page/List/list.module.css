@@ -20,6 +20,10 @@
 .bar span {
     color: var(--fontContrast);
 }
+.agregarTxt {
+    opacity: 0.6;
+    cursor: pointer;
+}
 .agregarBtn {
     cursor: pointer;
     display: flex;

@@ -76,7 +76,7 @@ font-size: var(--mediumHeaderSize);
 .bar {
     width: 100%;
     height: 1.2rem;
-    background-color: var(--secondaryColor);
+    background-color: var(--tertiaryColor);
     border-radius: 50px;
 }
 .innerBar {

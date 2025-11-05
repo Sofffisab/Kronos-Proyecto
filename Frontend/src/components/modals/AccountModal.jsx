@@ -13,10 +13,10 @@ export default function AccountModal(props) {
     }
 
     return(
-        <DisabledBg modal={
-        <BaseModal inputs={
-            <div>
-        <div><img/><p>{props.name}</p></div>
+        <DisabledBg noOpacity={true}modal={
+        <BaseModal style={style.accountModalBody}inputs={
+            <div className={style.AccountModal}>
+        <div className={style.userName}><img src="../public/UserPicInsert.svg"/><p>{props.name}</p></div>
         <SimpleButton text='Cerrar sesión' icon='logout' class={style.logoutBtn} onClick={logOut}/>
         </div>
         }/>} onClick={props.disableBg}/>

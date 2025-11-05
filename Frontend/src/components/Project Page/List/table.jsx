@@ -18,7 +18,7 @@ export default function Table(props) {
       </div>
       <div className={styles[style]}>{props.tasks}</div>
       <Separator />
-      <p onClick={()=>props.onClick()}>Agregar tarea...</p>
+      <p className={styles.agregarTxt}onClick={()=>props.onClick()}>Agregar tarea...</p>
     </div>
   );
 }

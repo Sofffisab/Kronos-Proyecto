@@ -17,7 +17,7 @@ return(
         <div id='rightIcons'>
         <img id='rightIcon1' src='../../public/questionIcon.svg'/>
         <img onClick={()=>setModal(true)} id='rightIcon2' src='../../public/UserDropDown.svg'/>,
-        {modal && <AccountModal name={user.mail} diableBg={()=>setModal(false)}/>}
+        {modal && <AccountModal name={user.mail} disableBg={()=>setModal(false)}/>}
         </div>
 
     </div>

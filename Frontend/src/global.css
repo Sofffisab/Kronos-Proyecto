@@ -1,10 +1,10 @@
 
   :root {
-    --secondaryColor: #D9D9D9;
-    --mainColor: white;
+    --secondaryColor: #AFC8BD;
+    --mainColor: #FFFFF7;
     --fontContrast: #000;
-    --tertiaryColor: #A2A2A2;
-    --darkerTertiaryColor: #898585;
+    --tertiaryColor: #678C99;
+    --darkerTertiaryColor: #C3CCAE;
     --textColor: rgb(255, 255, 255);
     --font: 'inter';
     --classyFont: 'Castoro Titling';
@@ -29,6 +29,7 @@
     width: 100%
   }
   input::placeholder {
+    color: var(--tertiaryColor);
     user-select: none;
     opacity: 50%;
     font: var(--font);

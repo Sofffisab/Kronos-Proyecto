@@ -5,12 +5,12 @@ const setuptareas = () => {
   const { lookfortoken } = setupcalendario();
 
   const createtarea = async (req, res) => {
-    const { nombre, limite, id_persona_responsable } = req.body;
+    const { nombre, limite, id_persona_responsable, estado } = req.body;
     const { proyectoId } = req.params;
     const personaId = req.personaId;
 
     try {
-      if (!nombre || !limite || !proyectoId) {
+      if (!nombre || !limite || !proyectoId || !estado) {
         return res.status(400).json({ error: "missing data" });
       };
 
@@ -41,7 +41,7 @@ const setuptareas = () => {
       const newtarea = await prisma.tareas.create({
         data: {
           nombre: nombre,
-          estado: "pending",
+          estado: estado,
           limite: limite,
           id_proyecto: Number.parseInt(proyectoId, 10),
           id_persona: responsableId,
@@ -164,7 +164,7 @@ const setuptareas = () => {
 
   const updatetarea = async (req, res) => {
     const { tareaId } = req.params;
-    const { estado, nombre, limite } = req.body;
+    const { estado, nombre, limite, } = req.body;
     const personaId = req.personaId;
 
     try {

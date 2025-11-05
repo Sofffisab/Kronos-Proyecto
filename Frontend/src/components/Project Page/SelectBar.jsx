@@ -20,10 +20,10 @@ const createProject = (currentId, mail, token)=> {
 <SimpleButton class={style['compartirBtn']} icon='lock' text='Compartir' onClick={()=>setModalState(true)}/>
 </div>
 <div className={style['topMenuPgContentList']}>
-    <p onClick={() => props.setSelected(1)} style={props.selected==1? {backgroundColor: '#A2A2A2'} : {}}>Calendario</p>
-    <p onClick={() => props.setSelected(2)} style={props.selected==2? {backgroundColor: '#A2A2A2'} : {}}>Lista de Tareas</p>
-    <p onClick={() => props.setSelected(3)} style={props.selected==3? {backgroundColor: '#A2A2A2'} : {}}>Tablero Kanban</p>
-    <p onClick={() => props.setSelected(4)} style={props.selected==4? {backgroundColor: '#A2A2A2'} : {}}>Mensajes</p>
+    <p onClick={() => props.setSelected(1)} className={props.selected==1? style.selectedOption : {}}>Calendario</p>
+    <p onClick={() => props.setSelected(2)} className={props.selected==2? style.selectedOption : {}}>Lista de Tareas</p>
+    <p onClick={() => props.setSelected(3)} className={props.selected==3? style.selectedOption : {}}>Tablero Kanban</p>
+    <p onClick={() => props.setSelected(4)} className={props.selected==4? style.selectedOption : {}}>Mensajes</p>
 </div>
 <Separator style={{width: '100%', position:'absolute', left: '0px', opacity: '30%'}}/>
 </div>

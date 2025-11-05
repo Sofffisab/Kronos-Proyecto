@@ -2,11 +2,14 @@ import CreateProjectForm from "../components/Create Project/CreateProjectForm.js
 import { useState } from "react"
 import Navbar from "../components/NavBar.jsx";
 import Window from "../components/Create Project/Window.jsx";
-import { postProject, postTasks } from "../../api/project.js";
+import { postProject} from "../../api/project.js";
+import { postTask } from "../../api/tasks.js";
 import { useNavigate } from "react-router";
 import LoadingScreen from '../components/LoadingScreen.jsx'
+import { useTasks } from "../context/ProjectContext.jsx";
 export default function CreateProjectPage() {
     const navigate = useNavigate()
+    const {user} = useTasks()
     const [loading, setLoading] = useState(false)
     const [input, setInput] = useState('')
     const [ step, setStep] = useState(1)
@@ -47,10 +50,10 @@ export default function CreateProjectPage() {
     const createProject = async ()=> {
         try {
             setLoading(true)
-          const project = await postProject(nombre, '2025-11-30', localStorage.getItem('token'))
+          const project = await postProject(nombre, '2025-11-30', localStorage.getItem('token'), )
           console.log(project)
            for (const task of tasks) {
-            await postTasks(project.project.id, task.name, '2025-11-30', localStorage.getItem('token'))
+            await postTask(task.name,  '2025-11-30',user.id,  localStorage.getItem('token'),project.project.id, 'pending')
             
            }
            

@@ -56,7 +56,8 @@ const { createchat, sendmessage, getchatmessages, updatemessagestatus, getchatpe
 const { createtarea, gettarea, gettareas, updatetarea, deletetarea } = setuptareas();
 const { getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones } = setuppersonalizaciones();
 const { createproject, getprojects, getproject, updateproject, invitetoproject, joinproject } = setupproyectos()
-const router = setuprouter({ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, joinproject, createtarea, gettareas, updatetarea, gettarea, deletetarea, getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones, save, lookfor, saveresponse, getdata, updatetime, });
+const {save, lookfor, saveresponse, getdata, updatetime} = setupia()
+const router = setuprouter({ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, joinproject, createtarea, gettareas, updatetarea, gettarea, deletetarea, getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones,save, lookfor, saveresponse, getdata, updatetime,});
 
 console.log('[DEBUG] Router created:', router);
 console.log('[DEBUG] Router stack:', router.stack?.length, 'routes');

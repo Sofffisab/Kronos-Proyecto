@@ -39,7 +39,7 @@ export function connectChatSocket(token) {
     return socket;
   }
 
-  socket = new WebSocket("ws://localhost:3000/chat", token);
+  socket = new WebSocket(`ws://localhost:3000/chat?token=${token}`);
 
   socket.onopen = () => {
     console.log("conectado");

@@ -7,6 +7,7 @@
     margin-top: 12.5vh;
     margin-left: 22.5%;
     transition: var(--easeTransition);
+    background-color: var(--mainColor);
 }
 .topMenuPgContent {
     transition: var(--easeTransition);
@@ -24,7 +25,7 @@
     align-items: center;
   }
   .topMenuContentTitle {
-  gap: 60%
+  gap: 80%
   }
   .topMenuPgContentList {
   gap: 1%;
@@ -32,6 +33,7 @@
   
   }
   .topMenuPgContentList p {
+    transition: var(--easeTransition);
   cursor: pointer;
   padding: 1%;
   margin-bottom: .25%;
@@ -39,8 +41,13 @@
   width: 15%;
   text-align: center;
   }
+
+  .selectedOption {
+    background-color: var(--tertiaryColor);
+  }
+
   .topMenuPgContentList p:hover {
-  background-color: var(--secondaryColor);
+  background-color: var(--tertiaryColor);
   
   }
   .proyectosTitle {

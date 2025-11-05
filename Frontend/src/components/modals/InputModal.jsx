@@ -25,9 +25,8 @@ export default function InputModal(props) {
         </select>
         <label>Estado</label>
         <select id="state">
-          <option value="iniciada">Iniciada</option>
-          <option value="pendiente">Pendiente</option>
-          <option value='realizada'>Realizada</option>
+          <option value="pending">Pending</option>
+          <option value='resolved'>Resolved</option>
         </select></div>} buttonTxt='Crear' submit={props.submit}/>
       }
     />

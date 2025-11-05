@@ -13,7 +13,7 @@ export default function List(props) {
   const {contextTasks, contextProject, fetchProject} = useTasks()
   const [modal, toggleModal] = useState(false);
   const tasks = contextTasks
-console.log(contextTasks)
+
   const miembros = contextProject?.personas_tiene?.map((persona)=>(
     {nombre: persona.persona.nombre, id: persona.id_persona}))
 
@@ -30,7 +30,7 @@ console.log(contextTasks)
   }, [modal]);
 const uploadTask = async (obj) => {
   try {
-   await postTask(obj.name, obj.date, obj.person, localStorage.getItem('token'), props.projectId)}
+   await postTask(obj.name, obj.date, obj.person, localStorage.getItem('token'), props.projectId, obj.state)}
   
   catch(e) {console.log(e)}
   finally {await fetchProject(props.projectId)}
@@ -50,7 +50,7 @@ const uploadTask = async (obj) => {
       state: state,
       priority: pri,
       date: date,
-      id: Math.random(),
+     
     };
 
     if(!name || !date || !person || !pri || !state) return;
@@ -58,9 +58,12 @@ const uploadTask = async (obj) => {
     toggleModal(false);
   };
 const mapTasks = (taskState)=>{
+
+  const mappedTasks = tasks.filter((task)=>(task.estado==taskState ))
   
-  return tasks.map((task) => (
+  return mappedTasks.map((task) => (
     <Task
+      id={task.id}
       name={task.nombre}
       icon={task.id_persona}
       priority={task.priority}
@@ -81,19 +84,15 @@ const mapTasks = (taskState)=>{
       <Category />
       <Table
         onClick={props.selectable && (() => toggleModal(true))}
-        name="Tareas iniciadas"
-        tasks={mapTasks('iniciada')}
+        name="Tareas Realizadas"
+        tasks={mapTasks('resolved')}
       />
       <Table
         onClick={props.selectable && (() => toggleModal(true))}
         name="Tareas pendientes"
-        tasks={mapTasks('pendiente')}
+        tasks={mapTasks('pending')}
       />
-      <Table
-        onClick={props.selectable && (() => toggleModal(true))}
-        name="Tareas finalizadas"
-        tasks={mapTasks('realizada')}
-      />
+     
     </>
   );
 }
