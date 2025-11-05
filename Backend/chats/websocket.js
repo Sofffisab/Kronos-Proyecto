@@ -7,7 +7,9 @@ function setupwebsocketserver(app, JWT_SECRET, prisma, wsInstance) {
   app.ws('/chat', async (ws, req) => {
     console.log('someone joined the chat');
 
-    const token = req.headers['sec-websocket-protocol'];
+    const url = new URL(req.url, `http://${req.headers.host}`)
+    const token = url.searchParams.get("token")
+
     if (!token) {
       console.log('No token provided, closing connection');
       ws.close(1008, 'Authentication required');
@@ -30,7 +32,7 @@ function setupwebsocketserver(app, JWT_SECRET, prisma, wsInstance) {
       try {
         const { chatId, mensaje } = JSON.parse(message.toString());
         
-        if (!chatId || isNaN(parseInt(chatId, 10))) {
+        if (!chatId || isNaN(Number.parseInt(chatId, 10))) {
           ws.send(JSON.stringify({ error: 'Invalid chat ID' }));
           return;
         }
@@ -40,7 +42,7 @@ function setupwebsocketserver(app, JWT_SECRET, prisma, wsInstance) {
         const hasAccess = await prisma.tiene_pc.findFirst({
             where: {
                 id_persona: personaId,
-                id_chat: parseInt(chatId, 10)
+                id_chat: Number.parseInt(chatId, 10)
             }
         });
 

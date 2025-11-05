@@ -34,13 +34,15 @@ model persona {
 model archivos {
   formato  String
   archivo   Bytes
-  nombrearchivo   String    @@unique([nombrearchivo, id_proyecto])
+  nombrearchivo   String    
   id    Int     @id @default(autoincrement())
   id_persona  Int
   id_proyecto   Int
 
   persona       persona  @relation(fields: [id_persona], references: [id])
   proyecto      proyecto @relation(fields: [id_proyecto], references: [id])
+
+  @@unique([nombrearchivo, id_proyecto])
 }
 
 model mensajes {
@@ -71,7 +73,7 @@ model tareas {
   orden               Int?
 
   responsable         persona?  @relation("TareaResponsable", fields: [id_responsable], references: [id])
-  asignado            persona  @relation("TareaAsignado", fields: [usuario_persona], references: [usuario])
+  asignado            persona  @relation("TareaAsignado", fields: [id_persona], references: [id])
   proyecto            proyecto @relation(fields: [id_proyecto], references: [id])
 }
 
@@ -166,8 +168,12 @@ model leido {
 
 model ia_paginas {
   id    Int      @id @default(autoincrement())
+  pagina_id Int
   name_archivo    String 
   archivo_codigo_pagina  String 
   lenguaje    String 
   foto_pagina_jpg   Bytes
+  respuesta_ia    String?
+
+    @@index([pagina_id])
 }

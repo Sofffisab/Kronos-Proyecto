@@ -26,7 +26,7 @@ const setupchat = () => {
             const newchat = await prisma.chat.create({
                 data: {
                     nombre: nombre,
-                    id_proyecto: parseInt(proyectoId, 10),
+                    id_proyecto: Number.parseInt(proyectoId, 10),
                 },
             });
 
@@ -40,7 +40,7 @@ const setupchat = () => {
             });
 
             await prisma.tiene_pc.createMany({
-                data: projectMembers.map(member => ({
+                data: projectMembers.map((member) => ({
                     id_persona: member.id_persona,
                     id_chat: newchat.id
                 }))
@@ -48,7 +48,7 @@ const setupchat = () => {
 
             await prisma.tiene_rc.create({
                 data: {
-                    id_proyecto: parseInt(proyectoId, 10),
+                    id_proyecto: Number.parseInt(proyectoId, 10),
                     id_chat: newchat.id
                 }
             });
@@ -58,6 +58,43 @@ const setupchat = () => {
             console.error("Error creating chat:", error);
             res.status(500).json({ error: "Internal Server Error" });
         };
+    };
+
+    const sendmessage = async (req, res) => {
+    const { chatId } = req.params
+    const { mensaje } = req.body
+    const personaId = req.personaId
+
+    if (!chatId || !mensaje) {
+      return res.status(400).json({ error: "Missing required fields" })
+    }
+
+    try {
+      const hasaccess = await prisma.tiene_pc.findFirst({
+        where: {
+          id_persona: personaId,
+          id_chat: Number.parseInt(chatId, 10),
+        },
+      })
+
+      if (!hasaccess) {
+        return res.status(403).json({ error: "You don't have access to this chat" })
+      }
+
+      const newmessage = await prisma.mensajes.create({
+        data: {
+          id_chat: Number.parseInt(chatId, 10),
+          id_persona: personaId,
+          mensaje: mensaje,
+          estado: "sent",
+        },
+      })
+
+      res.status(201).json({ message: "Message sent successfully", mensaje: newmessage })
+    } catch (error) {
+      console.error("Error sending message:", error)
+      res.status(500).json({ error: "Internal Server Error" })
+    }
     };
 
     const getchatmessages = async (req, res) => {
@@ -215,7 +252,7 @@ const setupchat = () => {
         };
     };
 
-    return { createchat, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers };
+    return { createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers };
 };
 
 export default setupchat;

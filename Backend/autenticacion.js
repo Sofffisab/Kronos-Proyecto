@@ -1,5 +1,3 @@
-// middleware de autentificación
-
 import jwt from 'jsonwebtoken';
 const setupautenticacion = (JWT_SECRET) => {
 

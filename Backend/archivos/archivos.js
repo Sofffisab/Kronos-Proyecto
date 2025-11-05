@@ -1,6 +1,9 @@
 import { prisma } from '../prisma/prisma.js';
 import { Buffer } from "buffer"
 
+const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10mb los acepta sino no
+const ALLOWED_FORMATS = ["pdf", "jpg", "jpeg", "png", "gif", "doc", "docx", "txt", "zip"]
+
 const setuparchivos = () => {
 
     const seefile = async (req, res) => {
@@ -57,6 +60,15 @@ const setuparchivos = () => {
                 return res.status(400).json({error: "missing data"});
             };
 
+            if (!ALLOWED_FORMATS.includes(formato.toLowerCase())) {
+                return res.status(400).json({ error: "File type not allowed" })
+            }
+
+            const fileBuffer = Buffer.from(archivo, "base64")
+            if (fileBuffer.length > MAX_FILE_SIZE) {
+                return res.status(413).json({ error: "File too large. Max 10MB" })
+            }
+
             const ismember = await prisma.tiene.findFirst({
                 where: {
                     id_persona: personaId,
@@ -72,7 +84,7 @@ const setuparchivos = () => {
                 data: {
                     formato: formato,
                     nombrearchivo: nombrearchivo,
-                    archivo: Buffer.from(archivo, "base64"),
+                    archivo: fileBuffer,
                     id_persona: personaId,
                     id_proyecto: parseInt(proyectoId, 10),
                 },
