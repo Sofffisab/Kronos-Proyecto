@@ -10,6 +10,7 @@
     "googleapis": "^164.1.0",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.2",
     "prisma": "^6.14.0",
     "resend": "^6.2.2",
     "ws": "^8.18.3",

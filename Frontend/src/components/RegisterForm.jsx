@@ -2,8 +2,9 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { Link} from "react-router";
 import { useNavigate } from "react-router";
+import { useTasks } from "../context/ProjectContext";
 export default function RegisterForm(props) {
-
+  const {setUserPhoto} = useTasks()
   const navigate = useNavigate()
 
     const {
@@ -31,6 +32,10 @@ export default function RegisterForm(props) {
       
       const result = props.onSubmit && await props.onSubmit(data.nombre, data.email, data.password, data.pfp)
       console.log(result)
+     if (result.photo) {
+  setUserPhoto(result.photo); 
+}
+
       localStorage.setItem("token",result.token); // hacer dsp con cookies 🍪🍪
        navigate('/')}
       catch(e){
@@ -65,7 +70,7 @@ return(
   <div className='biggerRegisterContainer'>
         <div className="imgInput">
           <img id='imgRegister' src="public/userPicInsert.svg"/>
-        <input id='registerImg' type='file' accept='image/*'
+        <input id='registerImg' type='file' accept='image/jpeg'
         {...register('pfp', {required: 'inserte una imagen'})}/>
         </div>
         <div className='smallerRegisterContainer'>

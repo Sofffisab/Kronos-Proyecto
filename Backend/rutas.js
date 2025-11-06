@@ -1,4 +1,6 @@
 import pkg from 'express';
+import multer from 'multer';
+const upload = multer()
 const { Router } = pkg;
 
 const setuprouter = ({ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, joinproject, createtarea, gettareas, gettarea, updatetarea, deletetarea, getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones, save, lookfor, saveresponse, getdata, updatetime }) => { 
@@ -29,7 +31,7 @@ const setuprouter = ({ login, signup, authentication, getevents, permision, redi
 
 
     router.post("/users/login", login);
-    router.post("/users/signup", signup);
+    router.post("/users/signup", upload.single('foto_perfil'), signup);
     router.get("/auth/google/callback", permision);
     router.get("/api/calendar/events", authentication, getevents);
     router.get('/auth/google', redirectwithgoogle);

@@ -22,17 +22,15 @@ return responseData;
    export const register = async (nombre, email, pass, foto) => {
 
      {
-        foto = await foto[0].arrayBuffer()
-        const bytes = new Uint8Array(foto)
+        const body = new FormData()
+        body.append('mail',email)
+        body.append('contraseniaPrior', pass)
+        body.append('usuario', nombre)
+        body.append('nombre', nombre)
+        body.append('foto_perfil', foto[0])
     const response = await fetch('http://localhost:3000/users/signup', {
          method: 'POST',
-         headers: { 'Content-Type': 'application/json'},
-         body: JSON.stringify({
-             mail: email, 
-             contraseniaPrior: pass,
-            usuario: nombre,
-            nombre: nombre,
-        foto_perfil: bytes })
+         body: body
          })
          const responseData = await response.json();
          if(!response.ok) throw new Error(responseData.error ||'error '+response.status)

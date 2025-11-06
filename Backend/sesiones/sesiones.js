@@ -40,6 +40,8 @@ const setupsesiones = (JWT_SECRET) => {
                 message: "Logged in successfully", 
                 token ,
                 photo: persona.foto_perfil
+  ? `data:image/jpeg;base64,${Buffer.from(persona.foto_perfil).toString('base64')}`
+  : null
             });
 
         } catch (error) {
@@ -52,12 +54,13 @@ const setupsesiones = (JWT_SECRET) => {
     const signup = async (req, res) => {
         console.log('[DEBUG] Inside signup function');
         console.log('[DEBUG] Request body:', req.body);
-        const {usuario, nombre, mail, contraseniaPrior, foto_perfil} = req.body;
-        console.log('[DEBUG] Destructured values:', { usuario, nombre, mail, contraseniaPrior, foto_perfil });
+        const {usuario, nombre, mail, contraseniaPrior} = req.body;
+        const fotoBuffer = req.file?.buffer
+        console.log('[DEBUG] Destructured values:', { usuario, nombre, mail, contraseniaPrior, fotoBuffer });
 
         try {
 
-            if (!usuario || !nombre || !mail || !contraseniaPrior || !foto_perfil) {
+            if (!usuario || !nombre || !mail || !contraseniaPrior || !fotoBuffer) {
                 return res.status(400).json({error: "All fields are required"});
             };
 
@@ -69,7 +72,7 @@ const setupsesiones = (JWT_SECRET) => {
                     nombre: nombre,
                     mail: mail,
                     contrasenia: contrasenia,
-                    foto_perfil: foto_perfil,
+                    foto_perfil: fotoBuffer,
 
                 },
             });
@@ -81,7 +84,10 @@ const setupsesiones = (JWT_SECRET) => {
                 expiresIn: '8h' 
             });
 
-            res.status(201).json({ message: "user created successfully", token: token, photo: persona.foto_perfil });
+            res.status(201).json({ message: "user created successfully", token: token, photo: persona.foto_perfil
+  ? `data:image/jpeg;base64,${Buffer.from(persona.foto_perfil).toString('base64')}`
+  : null
+  });
 
         } catch (error){
             console.log('[DEBUG] Error in signup:', error);

@@ -20,6 +20,7 @@ export function TaskProvider({ children }) {
   const [contextTasks, setTasks] = useState([]);
   const [currentId, setCurrentId] = useState(null);
   const [contextChat, setContextChat] = useState([]);
+  const [userPhoto, setUserPhoto] = useState()
   async function fetchProject(id) {
     const project = await getProjects(localStorage.getItem("token"), id);
     setProject(project);
@@ -81,6 +82,8 @@ export function TaskProvider({ children }) {
         setContextChat, 
         user,
         setUser,
+        userPhoto,
+        setUserPhoto,
       }}
     >
       {children}
