@@ -11,7 +11,6 @@ from typing import List
 import base64
 import pandas as pd
 from tabulate import tabulate
-import json
 import time
 import random
 from openai import OpenAI
