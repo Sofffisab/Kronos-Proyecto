@@ -65,42 +65,11 @@ grounding_tool = types.Tool(
 )
 
 
-#ERROR
-def retry_request(func, *args, **kwargs):
-    max_retries = 5
-    delay = 2
-    for attempt in range(max_retries):
-        try:
-            return func(*args, **kwargs)
-        except genai.errors.ServerError as e:
-            if "503" in str(e) and attempt < max_retries - 1:
-                sleep_time = delay * (2 ** attempt) + random.uniform(0, 1)
-                print(f"Server sobrecargado (503). Retrying in {sleep_time:.1f} seconds...")
-                time.sleep(sleep_time)
-            else:
-                raise
 
-
-
-#crear img
-def createImg(prompt):
-    response = retry_request(
-        client.models.generate_content,
-        model="gemini-2.0-flash-preview-image-generation",
-        contents=[
-            {"role": "user", "parts": [{"text": prompt}]}
-        ],
-        config=types.GenerateContentConfig(
-        response_modalities=['TEXT', 'IMAGE']
-        )
-    )
-    for part in response.candidates[0].content.parts:
-        if part.text is not None:
-            print(part.text)
-        elif part.inline_data is not None:
-            image = Image.open(BytesIO((part.inline_data.data)))
-            image.save('gemini-image.png')
-            image.show()
+language_map = {
+    "index.html": "html",
+    "style.css": "css",
+}
 
 codigo_json = [
     {
@@ -294,6 +263,45 @@ codigo_json = [
     }
 ]
 
+
+#ERROR
+def retry_request(func, *args, **kwargs):
+    max_retries = 5
+    delay = 2
+    for attempt in range(max_retries):
+        try:
+            return func(*args, **kwargs)
+        except genai.errors.ServerError as e:
+            if "503" in str(e) and attempt < max_retries - 1:
+                sleep_time = delay * (2 ** attempt) + random.uniform(0, 1)
+                print(f"Server sobrecargado (503). Retrying in {sleep_time:.1f} seconds...")
+                time.sleep(sleep_time)
+            else:
+                raise
+
+
+
+#crear img
+def createImg(prompt):
+    response = retry_request(
+        client.models.generate_content,
+        model="gemini-2.0-flash-preview-image-generation",
+        contents=[
+            {"role": "user", "parts": [{"text": prompt}]}
+        ],
+        config=types.GenerateContentConfig(
+        response_modalities=['TEXT', 'IMAGE']
+        )
+    )
+    for part in response.candidates[0].content.parts:
+        if part.text is not None:
+            print(part.text)
+        elif part.inline_data is not None:
+            image = Image.open(BytesIO((part.inline_data.data)))
+            image.save('gemini-image.png')
+            image.show()
+
+
 # Ejemplo de fixes integrados (parcial)
 def createImgSearching(conclusion_text, img_path):
     """
@@ -376,11 +384,6 @@ def createImgSearching(conclusion_text, img_path):
             return edited_img
 
 
-language_map = {
-    "index.html": "html",
-    "style.css": "css",
-}
-
 
 #CREAR CODIGO ARREGLADO
 def createTxt(img_from_ai,conclusions_json, codigo_json, language_map):
@@ -441,7 +444,7 @@ def createTxt(img_from_ai,conclusions_json, codigo_json, language_map):
     {json.dumps(conclusions_json, indent=2, ensure_ascii=False)}
     """
     
-    print("✅ request de createTxt hecho")
+    print("Request de createTxt hecho")
     # Llamada al modelo
     response = clientChat.responses.create(
         model="gpt-5",
@@ -461,7 +464,7 @@ def createTxt(img_from_ai,conclusions_json, codigo_json, language_map):
                     ]
         }]
     )
-    print("✅Request de texto hecho")
+    print("Response de texto hecho")
 
     output_text = response.output_text
 
@@ -544,10 +547,9 @@ def createJson(prompt, img_path="image.jpg"):
     # Recorremos las partes del contenido
     for part in candidate.content.parts:
         if part.text:
-            tabla_json_str = part.text  # Aquí tenemos el JSON como string
+            tabla_json_str = part.text 
             break
 
-    # Parseamos a dict
     tabla_generada_dict = json.loads(tabla_json_str)
 
     # Convertimos a Pydantic
@@ -568,7 +570,7 @@ def createJson(prompt, img_path="image.jpg"):
             if w.name not in all_websites:
                 all_websites.append(w.name)
 
-    # 2. Construir filas por criterio
+    # Construir filas por criterio
     rows = []
     for row in tabla_generada.table_data:
         row_dict = {"criterion_or_website": row.criterion_or_website}
@@ -580,7 +582,7 @@ def createJson(prompt, img_path="image.jpg"):
         rows.append(row_dict)
 
 
-    # 3. Crear DataFrame con columnas fijas
+    # Crear DataFrame con columnas fijas
     cols = ["criterion_or_website"] + all_websites + ["conclusion"]
     df = pd.DataFrame(rows)[cols]
 
@@ -627,6 +629,7 @@ def createJson(prompt, img_path="image.jpg"):
 
 
     print("Markdown generado:\n", resultado_txt["markdown"])
+    return resultado_txt
 
 
 

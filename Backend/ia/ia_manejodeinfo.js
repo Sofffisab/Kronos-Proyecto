@@ -5,11 +5,11 @@ const setupia = () => {
 //         - Mirkin - 
 
   const save = async (req, res) => {
-    const { name_archivo, archivo_codigo_pagina, lenguaje, foto_pagina_jpg } = req.body
+    const { name_archivo, archivo_codigo_pagina, lenguaje, foto_pagina_jpg, tema } = req.body
     const personaId = req.personaId
 
     try {
-      if (!name_archivo || !archivo_codigo_pagina || !lenguaje || !foto_pagina_jpg) {
+      if (!name_archivo || !archivo_codigo_pagina || !lenguaje || !foto_pagina_jpg || !tema) {
         return res.status(400).json({ error: "missing data" })
       }
 
@@ -21,6 +21,7 @@ const setupia = () => {
           archivo_codigo_pagina: archivo_codigo_pagina,
           lenguaje: lenguaje,
           foto_pagina_jpg: fotoBuffer,
+          tema: tema,
         },
       })
 
