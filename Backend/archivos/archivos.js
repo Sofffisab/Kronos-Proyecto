@@ -101,7 +101,53 @@ const setuparchivos = () => {
         };
     };
 
-    return {seefile, uploadfile};
+    const deletefile = async (req, res) => {
+        const { nombrearchivo } = req.params;
+        const personaId = req.personaId;
+
+        try {
+            if (!nombrearchivo) {
+                return res.status(400).json({ error: "missing data" });;
+            };
+
+        const archivo = await prisma.archivos.findFirst({
+            where: {
+            nombrearchivo: nombrearchivo,
+            },
+            include: {
+            proyecto: {
+                select: {
+                creadorId: true,
+                },
+            },
+            },
+        });
+
+        if (!archivo) {
+            return res.status(404).json({ error: "File not found" });
+        };
+
+        const isowner = archivo.id_persona === personaId;
+        const isprojectcreator = archivo.proyecto?.creadorId === personaId;
+
+        if (!isowner && !isprojectcreator) {
+            return res.status(403).json({ error: "You don't have permission to delete this file" });
+        };
+
+        await prisma.archivos.delete({
+            where: {
+            id: archivo.id,
+            },
+        });
+
+      res.status(200).json({ message: "File deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting file:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    };
+  };
+
+    return {seefile, uploadfile, deletefile};
 };
 
 export default setuparchivos;

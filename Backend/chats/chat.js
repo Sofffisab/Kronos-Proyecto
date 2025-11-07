@@ -181,6 +181,115 @@ const setupchat = () => {
         };
     };
 
+    const markmessageasread = async (req, res) => {
+        const { messageId } = req.params;
+        const personaId = req.personaId;
+
+        try {
+            if (!messageId) {
+                return res.status(400).json({ error: "missing data" });
+            };
+
+            const message = await prisma.mensajes.findUnique({
+                where: {
+                    id: Number.parseInt(messageId, 10),
+                },
+            });
+
+            if (!message) {
+                return res.status(404).json({ error: "Message not found" });
+            };
+
+            const hasaccess = await prisma.tiene_pc.findFirst({
+                where: {
+                id_persona: personaId,
+                id_chat: message.id_chat,
+                },
+            });
+
+            if (!hasaccess) {
+                return res.status(403).json({ error: "You don't have permission to read this message" });
+            };
+
+            const alreadyread = await prisma.leido.findUnique({
+                where: { 
+                    id_mensaje_id_persona: {
+                        id_mensaje: Number.parseInt(messageId, 10),
+                        id_persona: personaId,
+                    },
+                },
+            });
+
+            if (alreadyread) {
+                return res.status(200).json({ message: "Message already marked as read" });
+            } else {
+                await prisma.leido.create({
+                    data: {
+                        id_mensaje: Number.parseInt(messageId, 10),
+                        id_persona: personaId,
+                    },
+                });
+                res.status(201).json({ message: "Message marked as read successfully" });
+            }
+
+        } catch (error) {
+            console.error("Error marking message as read:", error);
+            res.status(500).json({ error: "Internal Server Error" });
+        };
+    };
+
+    const getmessagereaders = async (req, res) => {
+        const { messageId } = req.params;
+        const personaId = req.personaId;
+
+        try {
+            if (!messageId) {
+                return res.status(400).json({ error: "missing data" });
+            };
+
+            const message = await prisma.mensajes.findUnique({
+                where: {
+                id: Number.parseInt(messageId, 10),
+                },
+            });
+
+            if (!message) {
+                return res.status(404).json({ error: "Message not found" });
+            };
+
+            const hasaccess = await prisma.tiene_pc.findFirst({
+                where: {
+                id_persona: personaId,
+                id_chat: message.id_chat,
+                },
+            });
+
+            if (!hasaccess) {
+                return res.status(403).json({ error: "You don't have permission to view this information" });
+            };
+
+            const readers = await prisma.leido.findMany({
+                where: {
+                id_mensaje: Number.parseInt(messageId, 10),
+                },
+                include: {
+                    persona: {
+                        select: {
+                        id: true,
+                        usuario: true,
+                        nombre: true,
+                        },
+                    },
+                },
+            });
+            res.status(200).json(readers.map((r) => r.persona));
+
+        } catch (error) {
+            console.error("Error getting message readers:", error);
+            res.status(500).json({ error: "Internal Server Error" });
+        };
+    };
+
     const getchatperperson = async (req, res) => {
         const personaId = req.personaId;
 
@@ -252,7 +361,123 @@ const setupchat = () => {
         };
     };
 
-    return { createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers };
+
+    const deletechat = async (req, res) => {
+        const { chatId } = req.params;
+        const personaId = req.personaId;
+
+        try {
+            if (!chatId) {
+                return res.status(400).json({ error: "missing data" });
+            };
+
+            const chat = await prisma.chat.findUnique({
+                where: {
+                    id: Number.parseInt(chatId, 10),
+                },
+                include: {
+                    proyecto: true,
+                },
+            });
+
+            if (!chat) {
+                return res.status(404).json({ error: "Chat not found" });
+            };
+
+            const ismember = await prisma.tiene.findFirst({
+                where: {
+                    id_persona: personaId,
+                    id_proyecto: chat.id_proyecto,
+                },
+            });
+
+            if (!ismember) {
+                return res.status(403).json({ error: "You don't have permission to delete this chat" });
+            };
+
+            await prisma.leido.deleteMany({
+                where: {
+                    mensaje: {
+                        id_chat: Number.parseInt(chatId, 10),
+                    },
+                },
+            });
+
+            await prisma.mensajes.deleteMany({
+                where: {
+                    id_chat: Number.parseInt(chatId, 10),
+                },
+            });
+
+            await prisma.tiene_pc.deleteMany({
+                where: {
+                    id_chat: Number.parseInt(chatId, 10),
+                },
+            });
+
+            await prisma.tiene_rc.deleteMany({
+                where: {
+                    id_chat: Number.parseInt(chatId, 10),
+                },
+            });
+
+            await prisma.chat.delete({
+                where: {
+                    id: Number.parseInt(chatId, 10),
+                },
+            });
+
+            res.status(200).json({ message: "Chat deleted successfully" });
+        } catch (error) {
+            console.error("Error deleting chat:", error);
+            res.status(500).json({ error: "Internal Server Error" });
+        };
+    };
+
+    const renamechat = async (req, res) => {
+        const { chatId } = req.params;
+        const { nombre } = req.body;
+        const personaId = req.personaId;
+
+        try {
+            if (!chatId || !nombre) {
+                return res.status(400).json({ error: "missing data" });
+            };
+
+            const chat = await prisma.chat.findUnique({
+                where: {
+                    id: Number.parseInt(chatId, 10),
+                },
+            });
+
+            if (!chat) {
+                return res.status(404).json({ error: "Chat not found" });
+            };
+
+            const hasaccess = await prisma.tiene_pc.findFirst({
+                where: {
+                    id_persona: personaId,
+                    id_chat: Number.parseInt(chatId, 10),
+                },
+            });
+
+            if (!hasaccess) {
+                return res.status(403).json({ error: "You don't have permission to rename this chat" });
+            };
+
+            const updatedchat = await prisma.chat.update({
+                where: { id: Number.parseInt(chatId, 10) },
+                data: { nombre: nombre },
+            });
+
+            res.status(200).json({ message: "Chat renamed successfully", chat: updatedchat });
+        } catch (error) {
+            console.error("Error renaming chat:", error);
+            res.status(500).json({ error: "Internal Server Error" });
+        };
+    };
+
+    return { createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, markmessageasread, getmessagereaders, deletechat, renamechat };
 };
 
 export default setupchat;

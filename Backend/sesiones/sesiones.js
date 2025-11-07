@@ -105,7 +105,46 @@ const setupsesiones = (JWT_SECRET) => {
         };
     }
     
-    return {login, signup};
+    const updateuserprofile = async (req, res) => {
+        const personaId = req.personaId;
+        const { usuario, nombre, horario_inicio, horario_fin } = req.body;
+
+        try {
+            if (!usuario && !nombre && !horario_inicio && !horario_fin) {
+                return res.status(400).json({ error: "No data provided to update" });
+            };
+
+            const updateData = {};
+            if (usuario) updateData.usuario = usuario;
+            if (nombre) updateData.nombre = nombre;
+            if (horario_inicio) updateData.horario_inicio = new Date(horario_inicio);
+            if (horario_fin) updateData.horario_fin = new Date(horario_fin);
+
+            const updatedpersona = await prisma.persona.update({
+                where: { id: personaId },
+                data: updateData,
+                select: {
+                    id: true,
+                    usuario: true,
+                    nombre: true,
+                    mail: true,
+                    horario_inicio: true,
+                    horario_fin: true,
+                },
+            });
+
+            res.status(200).json({ message: "User profile updated successfully", user: updatedpersona });
+
+        } catch (error) {
+            if (error.code === "P2002") {
+                return res.status(409).json({ error: "Username already taken" });
+            };
+            console.error("Error updating user profile:", error);
+            res.status(500).json({ error: "Internal Server Error" });
+        };
+    };
+
+    return {login, signup, updateuserprofile};
 };
 
 export default setupsesiones;
