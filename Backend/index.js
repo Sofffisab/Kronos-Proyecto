@@ -5,7 +5,6 @@ import expressWs from 'express-ws';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import cors from 'cors';
-
 import setuprouter from './rutas.js';
 import setupsesiones from './sesiones/sesiones.js';
 import setupcalendario from './calendario/calendario.js';
@@ -48,16 +47,16 @@ const limiter = rateLimit({
 
 app.use('/api/', limiter);
 
-const { login, signup, updateuserprofile } = setupsesiones(JWT_SECRET);
+const { login, signup, updateuserprofile, deleteaccount, getcurrentuser, transferprojectownership } = setupsesiones(JWT_SECRET);
 const { authentication } = setupautenticacion(JWT_SECRET);
 const { authorization, getatoken, lookfortoken, permision, getevents, redirectwithgoogle, createevents, deleteevents, updateevents } = setupcalendario();
 const { seefile, uploadfile, deletefile} = setuparchivos();
 const { createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, markmessageasread, getmessagereaders, deletechat, renamechat } = setupchat();
 const { createtarea, gettarea, gettareas, updatetarea, deletetarea } = setuptareas();
 const { getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones } = setuppersonalizaciones();
-const { createproject, getprojects, getproject, updateproject, invitetoproject, joinproject, getprojectchats, getprojectfiles, getprojectmembers, removefromproject, deleteproject, getuserinvitations } = setupproyectos()
+const { createproject, getprojects, getproject, updateproject, invitetoproject, resendinvitation, joinproject, getprojectchats, getprojectfiles, getprojectmembers, removefromproject, deleteproject, getuserinvitations, reassignmembertasks } = setupproyectos()
 const {save, lookfor, saveresponse, getdata, updatetime} = setupia()
-const router = setuprouter({ login, signup, updateuserprofile, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, deletefile, createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, joinproject, createtarea, gettareas, updatetarea, gettarea, deletetarea, getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones,save, lookfor, saveresponse, getdata, updatetime, createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, markmessageasread, getmessagereaders, deletechat, renamechat, getprojectchats, getprojectfiles, getprojectmembers, removefromproject, deleteproject, getuserinvitations });
+const router = setuprouter({ login, signup, updateuserprofile, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, deletefile, createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, resendinvitation, joinproject, createtarea, gettareas, updatetarea, gettarea, deletetarea, getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones,save, lookfor, saveresponse, getdata, updatetime, createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, markmessageasread, getmessagereaders, deletechat, renamechat, getprojectchats, getprojectfiles, getprojectmembers, removefromproject, deleteproject, getuserinvitations, deleteaccount, getcurrentuser, transferprojectownership, reassignmembertasks });
 
 console.log('[DEBUG] Router created:', router);
 console.log('[DEBUG] Router stack:', router.stack?.length, 'routes');

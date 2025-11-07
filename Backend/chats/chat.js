@@ -361,7 +361,6 @@ const setupchat = () => {
         };
     };
 
-
     const deletechat = async (req, res) => {
         const { chatId } = req.params;
         const personaId = req.personaId;
@@ -477,7 +476,176 @@ const setupchat = () => {
         };
     };
 
-    return { createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, markmessageasread, getmessagereaders, deletechat, renamechat };
+    const addmembertochat = async (req, res) => {
+        const { chatId } = req.params;
+        const { id_persona } = req.body;
+        const personaId = req.personaId;
+
+        try {
+            if (!chatId || !id_persona) {
+                return res.status(400).json({ error: "missing data" });
+            };
+
+            const chat = await prisma.chat.findUnique({
+                where: {
+                    id: Number.parseInt(chatId, 10),
+                },
+                include: {
+                    proyecto: true,
+                },
+            });
+
+            if (!chat) {
+                return res.status(404).json({ error: "Chat not found" });
+            };
+
+            const isrequestermember = await prisma.tiene.findFirst({
+                where: {
+                    id_persona: personaId,
+                    id_proyecto: chat.id_proyecto,
+                },
+            });
+
+            if (!isrequestermember) {
+                return res.status(403).json({ error: "You don't have permission to add members to this chat" });
+            };
+
+            const isnewmemberinproject = await prisma.tiene.findFirst({
+                where: {
+                    id_persona: Number.parseInt(id_persona, 10),
+                    id_proyecto: chat.id_proyecto,
+                },
+            });
+
+            if (!isnewmemberinproject) {
+                return res.status(400).json({ error: "Person is not a member of this project" });
+            };
+
+            const alreadyinchat = await prisma.tiene_pc.findFirst({
+                where: {
+                    id_persona: Number.parseInt(id_persona, 10),
+                    id_chat: Number.parseInt(chatId, 10),
+                },
+            });
+
+            if (alreadyinchat) {
+                return res.status(400).json({ error: "Person is already a member of this chat" });
+            };
+
+            await prisma.tiene_pc.create({
+                data: {
+                    id_persona: Number.parseInt(id_persona, 10),
+                    id_chat: Number.parseInt(chatId, 10),
+                },
+            });
+
+            res.status(201).json({ message: "Member added to chat successfully" });
+        } catch (error) {
+            console.error("Error adding member to chat:", error);
+            res.status(500).json({ error: "Internal Server Error" });
+        };
+    };
+
+    const deletemessage = async (req, res) => {
+        const { messageId } = req.params;
+        const personaId = req.personaId;
+
+        try {
+            if (!messageId) {
+                return res.status(400).json({ error: "missing data" });
+            };
+
+            const message = await prisma.mensajes.findUnique({
+                where: {
+                    id: Number.parseInt(messageId, 10),
+                },
+            });
+
+            if (!message) {
+                return res.status(404).json({ error: "Message not found" });
+            };
+
+            if (message.id_persona !== personaId) {
+                return res.status(403).json({ error: "You can only delete your own messages" });
+            };
+
+            await prisma.leido.deleteMany({
+                where: {
+                    id_mensaje: Number.parseInt(messageId, 10),
+                },
+            });
+
+            await prisma.mensajes.delete({
+                where: {
+                    id: Number.parseInt(messageId, 10),
+                },
+            });
+
+            res.status(200).json({ message: "Message deleted successfully" });
+        } catch (error) {
+            console.error("Error deleting message:", error);
+            res.status(500).json({ error: "Internal Server Error" });
+        };
+    };
+
+    const removememberfromchat = async (req, res) => {
+        const { chatId, personaId: memberToRemove } = req.params;
+        const personaId = req.personaId;
+
+        try {
+            if (!chatId || !memberToRemove) {
+                return res.status(400).json({ error: "missing data" });
+            };
+
+            const chat = await prisma.chat.findUnique({
+                where: {
+                    id: Number.parseInt(chatId, 10),
+                },
+                include: {
+                    proyecto: true,
+                },
+            });
+
+            if (!chat) {
+                return res.status(404).json({ error: "Chat not found" });
+            };
+
+            const isrequestermember = await prisma.tiene.findFirst({
+                where: {
+                    id_persona: personaId,
+                    id_proyecto: chat.id_proyecto,
+                },
+            });
+
+            if (!isrequestermember) {
+                return res.status(403).json({ error: "You don't have permission to remove members from this chat" });
+            };
+
+            const memberinchat = await prisma.tiene_pc.findFirst({
+                where: {
+                    id_persona: Number.parseInt(memberToRemove, 10),
+                    id_chat: Number.parseInt(chatId, 10),
+                },
+            });
+
+            if (!memberinchat) {
+                return res.status(404).json({ error: "Member not found in this chat" });
+            };
+
+            await prisma.tiene_pc.delete({
+                where: {
+                    id: memberinchat.id,
+                },
+            });
+
+            res.status(200).json({ message: "Member removed from chat successfully" });
+        } catch (error) {
+            console.error("Error removing member from chat:", error);
+            res.status(500).json({ error: "Internal Server Error" });
+        };
+    }; //bien pero no maneja eliminado y los mensajes
+//
+    return { createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, markmessageasread, getmessagereaders, deletechat, renamechat, addmembertochat, deletemessage };
 };
 
 export default setupchat;

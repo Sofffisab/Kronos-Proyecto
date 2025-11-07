@@ -243,6 +243,85 @@ const setupproyectos = () => {
     };
   };
 
+  const resendinvitation = async (req, res) => {
+    const { codigo } = req.params;
+    const personaId = req.personaId;
+
+    try {
+      if (!codigo) {
+        return res.status(400).json({ error: "missing data" });
+      };
+
+      const invitation = await prisma.invitaciones.findUnique({
+        where: {
+          codigo: codigo,
+        },
+        include: {
+          proyecto: {
+            select: {
+              nombre: true,
+            },
+          },
+        },
+      });
+
+      if (!invitation) {
+        return res.status(404).json({ error: "Invitation not found" });
+      };
+
+      if (invitation.estado !== "pending") {
+        return res.status(400).json({ error: "Invitation is not pending" });
+      };
+
+      const ismember = await prisma.tiene.findFirst({
+        where: {
+          id_persona: personaId,
+          id_proyecto: invitation.id_proyecto,
+        },
+      });
+
+      if (!ismember) {
+        return res.status(403).json({ error: "You don't have permission to resend invitations for this project" });
+      };
+
+      let nuevoCodigo;
+      let codigoExists = true;
+
+      while (codigoExists) {
+        nuevoCodigo = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        const existing = await prisma.invitaciones.findUnique({
+          where: { codigo: nuevoCodigo },
+        });
+        codigoExists = !!existing;
+      };
+
+      const fechaExpiracion = new Date();
+      fechaExpiracion.setDate(fechaExpiracion.getDate() + 7);
+
+      const updatedInvitation = await prisma.invitaciones.update({
+        where: {
+          codigo: codigo,
+        },
+        data: {
+          codigo: nuevoCodigo,
+          fechaExpiracion: fechaExpiracion,
+        },
+      });
+
+      const mailresult = await sendinvitationmail(invitation.mail, nuevoCodigo, invitation.proyecto.nombre);
+
+      if (!mailresult.success) {
+        console.error("Failed to resend invitation mail:", mailresult.error);
+        return res.status(500).json({ error: "Failed to resend invitation email" });
+      };
+
+      res.status(200).json({ message: "Invitation email resent successfully", invitation: updatedInvitation });
+    } catch (error) {
+      console.error("Error resending invitation:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    };
+  };
+
   const joinproject = async (req, res) => {
     const { codigo } = req.body;
     const personaId = req.personaId;
@@ -671,7 +750,60 @@ const setupproyectos = () => {
     };
   };
 
-  return { createproject, getprojects, getproject, updateproject, invitetoproject, joinproject, getprojectchats, getprojectfiles, getprojectmembers, removefromproject, deleteproject, getuserinvitations };
+  const reassignmembertasks = async (req, res) => {
+    const { proyectoId, fromPersonaId, toPersonaId } = req.body;
+    const personaId = req.personaId;
+
+    try {
+      if (!proyectoId || !fromPersonaId) {
+        return res.status(400).json({ error: "missing data" });
+      };
+
+      const project = await prisma.proyecto.findUnique({
+        where: {
+          id: Number.parseInt(proyectoId, 10),
+        },
+      });
+
+      if (!project) {
+        return res.status(404).json({ error: "Project not found" });
+      };
+
+      if (project.creadorId !== personaId) {
+        return res.status(403).json({ error: "Only the project creator can reassign tasks" });
+      };
+
+      if (toPersonaId) {
+        const newAssigneeIsMember = await prisma.tiene.findFirst({
+          where: {
+            id_persona: Number.parseInt(toPersonaId, 10),
+            id_proyecto: Number.parseInt(proyectoId, 10),
+          },
+        });
+
+        if (!newAssigneeIsMember) {
+          return res.status(400).json({ error: "New assignee must be a member of the project" })
+        };
+      };
+
+      await prisma.tareas.updateMany({
+        where: {
+          id_persona: Number.parseInt(fromPersonaId, 10),
+          id_proyecto: Number.parseInt(proyectoId, 10),
+        },
+        data: {
+          id_persona: toPersonaId ? Number.parseInt(toPersonaId, 10) : null,
+        },
+      });
+
+      res.status(200).json({ message: "Tasks reassigned successfully" });
+    } catch (error) {
+      console.error("Error reassigning tasks:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    };
+  };
+
+  return { createproject, getprojects, getproject, updateproject, invitetoproject, resendinvitation, joinproject, getprojectchats, getprojectfiles, getprojectmembers, removefromproject, deleteproject, getuserinvitations, reassignmembertasks };
 };
 
 export default setupproyectos;
