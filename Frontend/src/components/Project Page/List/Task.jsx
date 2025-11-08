@@ -23,13 +23,17 @@ useEffect(()=>{if(props.state === 'pending') setToggled(false)
         
     return(
         <>
-        {modal && <TaskModal id={props.id}title={props.name} disableBg={()=>setModal(false)}/>}
+        {modal && <TaskModal date={props.date} responsable={props.icon}id={props.id}title={props.name} disableBg={()=>setModal(false)}/>}
         <div className={style['category']}>
         <div ><span onClick={ toggleTask} className='material-symbols-outlined'>check_box{!toggled && '_outline_blank'}</span><p className={toggled? style['title-checked'] : style['title']}>{props.name}</p></div>
         <div>{props.icon}</div>
         <div>{props.date}</div>
-        <div>{props.priority}</div>
-        <div>{props.state}</div>
+        <div>
+        <p className={`${style.colored} ${props.priority=='high'? style.high : props.priority=='mid'? style.mid : props.priority=='low'? style.low : null}`}>{props.priority}</p>
+        </div>
+        <div>
+        <p className={`${style.colored} ${props.state=='pending'? style.pending : props.state=='resolved'? style.resolved : null}`}>{props.state}</p>
+        </div>
         <div className={style['end']}><span className="material-symbols-outlined " onClick={()=>setModal(true)}>more_vert</span></div>
         </div>
         </>

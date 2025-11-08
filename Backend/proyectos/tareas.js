@@ -5,12 +5,12 @@ const setuptareas = () => {
   const { lookfortoken } = setupcalendario();
 
   const createtarea = async (req, res) => {
-    const { nombre, limite, id_persona_responsable, estado } = req.body;
+    const { nombre, limite, id_persona_responsable, estado, importancia } = req.body;
     const { proyectoId } = req.params;
     const personaId = req.personaId;
 
     try {
-      if (!nombre || !limite || !proyectoId || !estado) {
+      if (!nombre || !limite || !proyectoId || !estado || !importancia) {
         return res.status(400).json({ error: "missing data" });
       };
 
@@ -38,6 +38,12 @@ const setuptareas = () => {
         return res.status(400).json({ error: "responsible person is not a member of this project" });
       };
 
+      const nombre_responsable = await prisma.persona.findUnique({
+        where: {id: responsableId},
+        select: {nombre: true}
+      })
+      
+
       const newtarea = await prisma.tareas.create({
         data: {
           nombre: nombre,
@@ -45,6 +51,8 @@ const setuptareas = () => {
           limite: limite,
           id_proyecto: Number.parseInt(proyectoId, 10),
           id_persona: responsableId,
+          nombre_responsable: nombre_responsable.nombre,
+          importancia: importancia,
         },
       });
 

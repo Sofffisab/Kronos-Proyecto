@@ -131,3 +131,30 @@ cursor: pointer;
     cursor: pointer;
 }
 
+.colored {
+    border-radius: 10px;
+    margin: 0px;
+    height: 3rem;
+    width: 5rem;
+    display: flex;
+    align-items: center;
+    padding: 5%;
+    box-sizing: border-box;
+}
+
+.high {
+    background-color: #D2C1B7;
+}
+.mid {
+    background-color: #D6C292;
+}
+.low { 
+    background-color: #FEF9EC;
+}
+
+.pending { 
+    background-color: #CD8E8E;
+}
+.resolved {
+    background-color: #758136C7;
+}

@@ -1,4 +1,4 @@
-export const postTask = async (nombre, limite, responsable, token, projectId, estado) => {
+export const postTask = async (nombre, limite, responsable, token, projectId, estado, priority) => {
     const response = await fetch(`http://localhost:3000/api/projects/${projectId}/tasks`, {
         'method': 'POST',
         'headers': {
@@ -9,6 +9,7 @@ export const postTask = async (nombre, limite, responsable, token, projectId, es
                 limite: new Date (limite).toISOString(),
                 id_persona_responsable: responsable,
                 estado: estado,
+                importancia: priority,
             })
     })
     const responseData = await response.json()

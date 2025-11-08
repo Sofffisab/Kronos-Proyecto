@@ -30,7 +30,7 @@ export default function List(props) {
   }, [modal]);
 const uploadTask = async (obj) => {
   try {
-   await postTask(obj.name, obj.date, obj.person, localStorage.getItem('token'), props.projectId, obj.state)}
+   await postTask(obj.name, obj.date, obj.person, localStorage.getItem('token'), props.projectId, obj.state, obj.priority)}
   
   catch(e) {console.log(e)}
   finally {await fetchProject(props.projectId)}
@@ -65,8 +65,8 @@ const mapTasks = (taskState)=>{
     <Task
       id={task.id}
       name={task.nombre}
-      icon={task.id_persona}
-      priority={task.priority}
+      icon={task.nombre_responsable}
+      priority={task.importancia}
       date={new Date (task.limite).toDateString()}
       state={task.estado}
       key={task.id}

@@ -20,8 +20,13 @@ export default function TaskModal(props) {
     return(
 
         <DisabledBg onClick={props.disableBg} modal={<BaseModal title={props.title} inputs={
-
+            <>
+            <div>
+            <p>Limite: {props.date}</p>
+            <p>Responsable: {props.responsable}</p>
+            </div>
             <SimpleButton class={style.deleteTaskBtn}text='delete' icon='delete' onClick={()=>handleDelete(props.id)}/>
+                </>
         }/>}/>
 
     )
