@@ -24,7 +24,7 @@ return(
             </div>
         </div>
         <div className={style.tasks}>
-            {props.type=='cal'? <Calendar tasks={props.tasks}/>: 
+            {props.type=='cal'? <Calendar noLogin={true}tasks={props.tasks}/>: 
             props.type=='tab'? <KanBan tasks={props.tasks}/>: 
             props.type=='list'? <div className={style.listDiv}><List tasks={props.tasks}/></div>
             :mappedTasks}

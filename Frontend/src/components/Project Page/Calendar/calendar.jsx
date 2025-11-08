@@ -61,7 +61,7 @@ export default function Calendar(props) {
         }
     }
 
-    if( loggedIn) return(
+    if( loggedIn || props.noLogin) return(
         <>
         {eModal && <EventModal title={modalData.title} date={modalData.date} desc={modalData.desc} disable={()=> toggleEModal(false)}/>}
         {modal && <CalendarModal disableModal={()=>toggleModal(false)} submit={(title, desc)=>createTask(title, desc, date)}/>}
@@ -82,5 +82,5 @@ export default function Calendar(props) {
        />
        </>
     )
-    if(!loggedIn) return(<SimpleButton  class='googleSyncButton'text='Sync google calendar' onClick={connectGoogleCalendar}/>)
+    if(!loggedIn ) return(<SimpleButton  class='googleSyncButton'text='Sync google calendar' onClick={connectGoogleCalendar}/>)
 }

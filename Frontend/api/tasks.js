@@ -30,6 +30,20 @@ export const markTask = async (tareaId, estado, token) => {
     if(!response.ok) throw new Error(responseData.error || 'error '+responseData.status)
         
     return(responseData)
+}
 
+
+
+export const deleteTask = async (id, token) => {
+   const response = await fetch(`http://localhost:3000/api/tasks/${id}`,{
+    method: 'DELETE',
+    headers: {'Content-Type': 'application/json',
+            'Authorization': `bearer ${token}`}}
+   )
+
+   const responseData = await response.json()
+    if(!response.ok) throw new Error(responseData.error || 'error '+responseData.status)
+        
+    return(responseData)
 
 }

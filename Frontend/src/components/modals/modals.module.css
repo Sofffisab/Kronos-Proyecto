@@ -108,3 +108,14 @@ width: auto;
   right: 5%;
   box-shadow: var(--dfBoxShadow);
 }
+
+.deleteTaskBtn {
+    display: flex;
+    background-color: var(--secondaryColor);
+    padding: 2%;
+    width: 50%;
+    border-radius: 15px;
+    justify-content: center;
+    align-items: center;
+    color: red
+}

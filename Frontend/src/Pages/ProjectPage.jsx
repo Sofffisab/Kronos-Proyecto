@@ -8,10 +8,12 @@ import PageContent from "../components/Project Page/PageContent"
 import { getProjects } from "../../api/project";
 import LoadingScreen from '../components/LoadingScreen.jsx'
 import { useTasks } from "../context/ProjectContext";
+import { useNavigate } from "react-router";
 
 export default function ProjectPage() {
     const params = useParams()
-    const {fetchProject, setCurrentId, contextProject}= useTasks()
+    const navigate = useNavigate()
+    const { setCurrentId, contextProject}= useTasks()
 const [sbStatus, setSbStatus] = useState(false)
 const [projects, setProjects] = useState([])
 const [loading,setLoading]= useState(true)
@@ -22,7 +24,9 @@ useEffect(()=> {
         setProjects(data)
         
     }
-    catch(e) {console.log(e)}
+    catch(e) {console.log(e)
+        navigate('/')
+    }
     finally {setLoading(false)}
 }
 fetchData()

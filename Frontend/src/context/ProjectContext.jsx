@@ -24,7 +24,7 @@ export function TaskProvider({ children }) {
   async function fetchProject(id) {
     const project = await getProjects(localStorage.getItem("token"), id);
     setProject(project);
-    setTasks(project.tareas);
+    setTasks(project.tareas ||[]);
   }
 
  
@@ -38,12 +38,17 @@ export function TaskProvider({ children }) {
 
 
   useEffect(()=>{
+
+    if(userPhoto) localStorage.setItem('pfp', userPhoto)
     const token = localStorage.getItem('token')
     if(!token) return
 
     const decoded = jwtDecode(token)
     setUser(decoded)
-  },[contextProject])
+  },[userPhoto])
+
+  
+
 
   useEffect(() => {
     const token = localStorage.getItem("token");

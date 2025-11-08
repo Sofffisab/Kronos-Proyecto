@@ -10,7 +10,8 @@ export default function AccountModal(props) {
     const navigate = useNavigate()
 
     const logOut = () => {
-        localStorage.setItem('token', null)
+        localStorage.removeItem('token')
+                localStorage.removeItem('pfp')
         navigate('/')
     }
 
@@ -18,7 +19,7 @@ export default function AccountModal(props) {
         <DisabledBg noOpacity={true}modal={
         <BaseModal style={style.accountModalBody}inputs={
             <div className={style.AccountModal}>
-        <div className={style.userName}><img src={userPhoto}/><p>{props.name}</p></div>
+        <div className={style.userName}><img src={userPhoto || localStorage.getItem('pfp')}/><p>{props.name}</p></div>
         <SimpleButton text='Cerrar sesión' icon='logout' class={style.logoutBtn} onClick={logOut}/>
         </div>
         }/>} onClick={props.disableBg}/>
