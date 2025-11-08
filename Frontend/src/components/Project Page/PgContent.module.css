@@ -48,6 +48,7 @@
 
   .topMenuPgContentList p:hover {
   background-color: var(--tertiaryColor);
+  opacity: 0.8;
   
   }
   .proyectosTitle {

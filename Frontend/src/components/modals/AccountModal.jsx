@@ -3,8 +3,10 @@ import BaseModal from "./BaseModal";
 import { useNavigate } from "react-router";
 import style from './modals.module.css'
 import DisabledBg from "./DisabledBg";
+import { useTasks } from "../../context/ProjectContext";
 export default function AccountModal(props) {
 
+    const {userPhoto} = useTasks()
     const navigate = useNavigate()
 
     const logOut = () => {
@@ -16,7 +18,7 @@ export default function AccountModal(props) {
         <DisabledBg noOpacity={true}modal={
         <BaseModal style={style.accountModalBody}inputs={
             <div className={style.AccountModal}>
-        <div className={style.userName}><img src="../public/UserPicInsert.svg"/><p>{props.name}</p></div>
+        <div className={style.userName}><img src={userPhoto}/><p>{props.name}</p></div>
         <SimpleButton text='Cerrar sesión' icon='logout' class={style.logoutBtn} onClick={logOut}/>
         </div>
         }/>} onClick={props.disableBg}/>

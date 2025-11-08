@@ -25,9 +25,15 @@ return responseData;
         const body = new FormData()
         body.append('mail',email)
         body.append('contraseniaPrior', pass)
-        body.append('usuario', nombre)
+        body.append('usuario', email)
         body.append('nombre', nombre)
-        body.append('foto_perfil', foto[0])
+
+         if (foto && foto.length > 0) {
+            body.append('foto_perfil', foto[0])
+        } else if (foto instanceof File) {
+            body.append('foto_perfil', foto)
+        }
+
     const response = await fetch('http://localhost:3000/users/signup', {
          method: 'POST',
          body: body

@@ -3,14 +3,20 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import './Calendar.css'
 import CalendarModal from '../../modals/CalendarModal.jsx'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import EventModal from '../../modals/eventModal'
+import { useTasks } from '../../../context/ProjectContext.jsx'
+import { connectGoogleCalendar, fetchEvents, postEvent } from '../../../../api/calendar.js'
+import SimpleButton from '../../SimpleButton.jsx'
 export default function Calendar(props) {
+
+    const {currentId} = useTasks()
     const [date, setDate]= useState()
     const [tasks, setTasks] = useState(props.tasks? props.tasks :[]);
     const [modal, toggleModal] = useState(false)
     const [eModal, toggleEModal] = useState(false)
     const [modalData, setModalData ]= useState({})
+    const [loggedIn, setLoggedIn] = useState(null)
     const triggerEModal = (info)=> {
         toggleEModal(true);
          setModalData( {
@@ -20,25 +26,42 @@ export default function Calendar(props) {
         })
 
     }
-    const addTask = (info)=> {
+
+    useEffect(()=>{
+        const load = async()=>{
+        try {
+            setLoggedIn(true)
+        const event = await fetchEvents(localStorage.getItem('token'))
+        setTasks(event)}
+        catch(e) {console.log(e)
+            setLoggedIn(false)
+        }}
+        load()
+    },[currentId])
+
+    const addTask =  (info)=> {
         toggleModal(true);
         setDate({start: info.date? info.date : info.start, end: info.end})
     }
-    const createTask = (title,desc, date)=> {
+    const createTask = async (title, date)=> {
         const event = {
-            id: Math.random().toString(),
-            title: title,
+            summary: title,
             start: date.start,
             end: date.end? date.end : date.start,
-            allDay: true,
-            extendedProps: {
-                desc: desc},
+            
         }
-        setTasks([...tasks, event])
-        toggleModal(false)
+        try{
+        const result = await postEvent(localStorage.getItem('token'),event)
+        console.log(result)
+        const events = await fetchEvents(localStorage.getItem('token'))
+        setTasks(events)
+        toggleModal(false)}
+        catch(e) {
+            console.log(e)
+        }
     }
 
-    return(
+    if( loggedIn) return(
         <>
         {eModal && <EventModal title={modalData.title} date={modalData.date} desc={modalData.desc} disable={()=> toggleEModal(false)}/>}
         {modal && <CalendarModal disableModal={()=>toggleModal(false)} submit={(title, desc)=>createTask(title, desc, date)}/>}
@@ -59,4 +82,5 @@ export default function Calendar(props) {
        />
        </>
     )
+    if(!loggedIn) return(<SimpleButton  class='googleSyncButton'text='Sync google calendar' onClick={connectGoogleCalendar}/>)
 }

@@ -41,7 +41,6 @@
     margin: 0px
 }
 .leftMsg {
-    background-color: tomato;
     justify-content: flex-start;
 }
 .rightMsg {

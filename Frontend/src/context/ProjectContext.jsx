@@ -30,8 +30,12 @@ export function TaskProvider({ children }) {
  
   async function fetchMessages(chatId) {
     const messages = await getChatMessages(localStorage.getItem("token"), chatId);
-    setContextChat(messages);
-  }
+    setContextChat(messages)
+    }
+  
+  
+
+
 
   useEffect(()=>{
     const token = localStorage.getItem('token')
@@ -66,7 +70,9 @@ export function TaskProvider({ children }) {
 
 
   useEffect(() => {
-    if (currentId) fetchProject(currentId);
+    if (currentId) {fetchProject(currentId)
+
+    };
   }, [currentId]);
 
   return (

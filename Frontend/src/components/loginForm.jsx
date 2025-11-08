@@ -2,8 +2,10 @@ import {useForm} from 'react-hook-form'
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router';
+import { useTasks } from '../context/ProjectContext';
 export default function(props) {
     const formFields = props.fields;
+    const {setUserPhoto} = useTasks()
     const navigate = useNavigate()
     const [step, setStep] = useState(0)
     const [email, setEmail] =useState();
@@ -31,6 +33,7 @@ export default function(props) {
        const bege = await props.onSubmit(data.username, data.password)
        console.log(bege)
           localStorage.setItem("token",bege.token); // hacer dsp con cookies 🍪🍪
+          setUserPhoto(bege.photo)
          navigate('/')}
          catch(e) {
            setError("password",{type: "500", message:e.message})

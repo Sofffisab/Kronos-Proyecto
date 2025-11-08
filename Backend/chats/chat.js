@@ -645,7 +645,7 @@ const setupchat = () => {
         };
     }; //bien pero no maneja eliminado y los mensajes
 //
-    return { createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, markmessageasread, getmessagereaders, deletechat, renamechat, addmembertochat, deletemessage };
+    return { createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, markmessageasread, getmessagereaders, deletechat, renamechat, addmembertochat, deletemessage, removememberfromchat };
 };
 
 export default setupchat;

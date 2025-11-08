@@ -56,6 +56,7 @@ const setupsesiones = (JWT_SECRET) => {
         console.log('[DEBUG] Inside signup function');
         console.log('[DEBUG] Request body:', req.body);
         const {usuario, nombre, mail, contraseniaPrior} = req.body;
+        console.log(req.file)
         const fotoBuffer = req.file?.buffer
         console.log('[DEBUG] Destructured values:', { usuario, nombre, mail, contraseniaPrior, fotoBuffer });
 
