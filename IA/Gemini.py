@@ -1,654 +1,369 @@
 # pip install -r lib.txt --no-warn-script-location
-import os
-import re
+import sys
 import json
+import base64
+import os
 from google import genai
 from google.genai import types
 from PIL import Image, ImageEnhance
 from io import BytesIO
 from pydantic import BaseModel
 from typing import List
-import base64
-import pandas as pd
 from tabulate import tabulate
-import time
-import random
 from openai import OpenAI
 from dotenv import load_dotenv, dotenv_values
-import psycopg2
 
+# ============================================================================
+# CONFIGURACIÓN INICIAL
+# ============================================================================
 
 load_dotenv()
 
 client = genai.Client(api_key=os.getenv("GEMINI_KEY"))
 clientChat = OpenAI(api_key=os.getenv("CHAT_KEY"))
-#DATABASE_URL = os.getenv("DATABASE_URL")
-
-# Conectarse a la base de datos
-"""
-try:
-    conn = psycopg2.connect(DATABASE_URL)
-    cursor = conn.cursor()
-
-    cursor.execute("SELECT version();")
-    version = cursor.fetchone()
-    print("Conectado a:", version)
-
-    cursor.close()
-    conn.close()
-    print("Conexión cerrada correctamente.")
-
-except Exception as e:
-    print("Error al conectar:", e)
-    """
-
-
-#modelo de la tabla
-class WebsiteValue(BaseModel):
-    name: str
-    text: str
-
-class TableRow(BaseModel):
-    criterion_or_website: str
-    websites: List[WebsiteValue]
-    conclusion: str = None
-
-class TableData(BaseModel):
-    table_data: List[TableRow]
 
 SAVE_DIR = "tablas_generadas"
 os.makedirs(SAVE_DIR, exist_ok=True)
 
-#acceso a buscar en google
+# Herramienta de búsqueda de Google (solo para Gemini)
 grounding_tool = types.Tool(
     google_search=types.GoogleSearch()
 )
 
+# ============================================================================
+# MODELOS DE DATOS (PYDANTIC)
+# ============================================================================
 
+class WebsiteValue(BaseModel):
+    criterion: str
+    website1: str
+    website2: str
+    website3: str
+    website4: str
+    conclusion: str
 
-language_map = {
-    "index.html": "html",
-    "style.css": "css",
-}
+class TableRow(BaseModel):
+    row: WebsiteValue
 
-codigo_json = [
-    {
-        "name": "index.html",
-        "content": """
-        <!DOCTYPE html>
-        <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Inicio</title>
-                <link rel="stylesheet" href="style.css">
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
-                <script src="../../socket.js"></script>
-                <script type="module" src="script.js" defer></script>
-                <link rel="preconnect" href="https://fonts.googleapis.com">
-                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-                <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-                <link rel="preconnect" href="https://fonts.googleapis.com">
-                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-                <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
-                <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-            </head>
-            <body>
+class TableData(BaseModel):
+    rows: List[TableRow]
 
-                <div class="inicio">
-                    <header>
-                        <img src="../../recursos/img/logo.png">
-                        <div class="buscador">
-                            <input type="text" class="busc" id="input1" placeholder="Buscar">
-                            <div class="busqs" id="busq1"></div>
-                        </div>
-                        <nav>
-                            <button class="info" onclick="location.href='../informacion/index.html'">Información</button>
-                            <button class="armar" onclick="location.href='../armar-pc/index.html'">Arma tu PC</button>
-                            <button class="comparar" onclick="location.href='../comparacion/index.html'">Comparar</button>
-                            <button class="log" id="persona"><img src="../../recursos/img/personita.png"></button>
-                        </nav>
-                    </header>
-                
-                    <section>
-                        <h1>Bienvenido a <img class="pcity" src="../../recursos/img/pcity.png"></h1>
-                        <h2>Armá, compará y aprendé</h2>
-                    </section>
-                
-                    <p>Componentes populares</p>
-                    <div class="componentesPopu">
-                    </div>
-                </div>
-            </body>
-        </html>
-        """
-            },
-            {
-                "name": "style.css",
-                "content": """
-        body{
-            margin: 0%;
-            padding: 0%;
-            height: 100vh;
-            width: 100vw;
-            overflow-x: hidden;
+# ============================================================================
+# FUNCIONES DE UTILIDAD
+# ============================================================================
+
+def load_data_from_backend(json_file_path):
+    """Carga datos enviados desde el backend Node.js"""
+    try:
+        with open(json_file_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        
+        return {
+            'language_map': data['language_map'],
+            'codigo_json': data['codigo_json'],
+            'image_base64': data['image_base64'],
+            'theme': data['theme'],
+            'paginaId': data['paginaId']
         }
+    except Exception as e:
+        raise Exception(f"Error al cargar datos del backend: {str(e)}")
 
-        .inicio{
-            width: 100%;
-            height: 100%;
-        }
+def save_image_from_base64(base64_string, output_path="image.jpg"):
+    """Convierte base64 a imagen y la guarda"""
+    try:
+        image_data = base64.b64decode(base64_string)
+        with open(output_path, 'wb') as f:
+            f.write(image_data)
+        return output_path
+    except Exception as e:
+        raise Exception(f"Error al guardar imagen: {str(e)}")
 
-        header{
-            height: 15%;
-            width: 100%;
-            background-color: #101E35;
-            z-index: -1;
-            margin-top: 0%;
-            display: flex;
-            justify-content: space-between;
-        }
+def cleanup_temp_files(*file_paths):
+    """Elimina archivos temporales"""
+    for file_path in file_paths:
+        try:
+            if os.path.exists(file_path):
+                os.remove(file_path)
+        except Exception as e:
+            print(f"Warning: No se pudo eliminar {file_path}: {str(e)}", file=sys.stderr)
 
-        nav{
-            width: 45%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+# ============================================================================
+# FUNCIONES DE REINTENTOS
+# ============================================================================
 
-        .armar,.comparar,.info,.log{
-            font-family: "Inter", sans-serif;
-            font-optical-sizing: auto;
-            font-weight: 600;
-            font-size: 1.5rem;
-            background-color: transparent;
-            border: none;
-            color: #A6A6A6;
-            margin-right: 3%;
-            transition: 0,3s ease;
-        }
-
-        .busc{
-            height: 45px;
-            width: 100%;
-            border-radius: 12px;
-            margin-top: 3%;
-            border: solid;
-            border-color: #103263;
-            border-width: 3px;
-            font-size: larger;
-            background-color: white;
-            font-family: 'crimson text';
-            font-weight: 500;
-        }
-
-        .busc::placeholder{
-            color: #D9D9D9;
-            background-image: url(../../recursos/img/lupa.buscador.png);
-            background-size: 20px;
-            background-repeat: no-repeat;
-            background-position: left 2px center;
-            padding-left: 27px;
-        }
-
-        .busc:focus{
-            outline: none;
-        }
-
-        .buscador{
-            display: flex;
-            flex-direction: column;
-            position: absolute;
-            left: 12%;
-        }
-
-        .busqs{
-            width: 557px;
-            background-color: white;
-            border-radius: 0 0 10px 10px;
-            font-family: 'crimson text', serif;
-            font-weight: 500;
-            position: relative;
-        }
-
-        .busqs div {
-            padding: 10px;
-            cursor: pointer;
-            border-bottom: 1px solid #e9e9e9;
-            background-color: transparent;
-            transition: background-color 0.2s ease;
-        }
-
-        .busqs div:hover {
-            background-color: #f0f0f0;
-        }
-
-        section{
-            height: 35%;
-            width: 100%;
-            background-image: url(../../recursos/img/fondo.png);
-            background-color: #103263;
-            background-size: cover;
-            margin-top: 0%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        section h1{
-            font-family: 'inter';
-            font-weight: bolder;
-            font-size: 5rem;
-            margin-top: -1%;
-            margin-left: 16%;
-            width: 60%;
-            display: flex;
-        }
-
-        section h2{
-            font-family: 'inter';
-            margin-top: -5%;
-            font-size: 2.5rem;
-            font-style: bold;
-        }
-
-        .componentesPopu{
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-evenly;
-            gap:10px;
-        }
-    """
-    }
-]
-
-
-#ERROR
-def retry_request(func, *args, **kwargs):
-    max_retries = 5
-    delay = 2
+def retry_request(func, *args, max_retries=3, **kwargs):
+    """Reintenta una función en caso de error"""
     for attempt in range(max_retries):
         try:
             return func(*args, **kwargs)
-        except genai.errors.ServerError as e:
-            if "503" in str(e) and attempt < max_retries - 1:
-                sleep_time = delay * (2 ** attempt) + random.uniform(0, 1)
-                print(f"Server sobrecargado (503). Retrying in {sleep_time:.1f} seconds...")
-                time.sleep(sleep_time)
-            else:
+        except Exception as e:
+            if attempt == max_retries - 1:
                 raise
+            print(f"Intento {attempt + 1} falló: {str(e)}. Reintentando...", file=sys.stderr)
+    return None
 
+# ============================================================================
+# FUNCIONES DE GENERACIÓN CON IA
+# ============================================================================
 
-
-#crear img
-def createImg(prompt):
-    response = retry_request(
-        client.models.generate_content,
-        model="gemini-2.0-flash-preview-image-generation",
-        contents=[
-            {"role": "user", "parts": [{"text": prompt}]}
-        ],
-        config=types.GenerateContentConfig(
-        response_modalities=['TEXT', 'IMAGE']
+def createJson(prompt, img_path):
+    """Crea un JSON con análisis de la página web usando Gemini (por la capacidad de visión)"""
+    try:
+        # Cargar imagen
+        img = Image.open(img_path)
+        
+        # Llamada a Gemini con búsqueda en Google (solo Gemini puede analizar imágenes)
+        response = retry_request(
+            client.models.generate_content,
+            model='gemini-2.0-flash-exp',
+            contents=[prompt, img],
+            config=types.GenerateContentConfig(
+                tools=[grounding_tool],
+                response_modalities=["TEXT"],
+                response_mime_type="application/json",
+                response_schema=TableData
+            )
         )
-    )
-    for part in response.candidates[0].content.parts:
-        if part.text is not None:
-            print(part.text)
-        elif part.inline_data is not None:
-            image = Image.open(BytesIO((part.inline_data.data)))
-            image.save('gemini-image.png')
-            image.show()
+        
+        # Parsear respuesta
+        resultado_json = json.loads(response.text)
+        return resultado_json
+        
+    except Exception as e:
+        raise Exception(f"Error en createJson: {str(e)}")
 
-
-# Ejemplo de fixes integrados (parcial)
-def createImgSearching(conclusion_text, img_path):
-    """
-    Genera una nueva imagen basada en img_path aplicando únicamente las mejoras de conclusion_text.
-    """
-        # --- Detectar tipo de input ---
-    if isinstance(img_path, str):
-        # Es una ruta de archivo
-        if not os.path.exists(img_path):
-            print(f"Imagen no encontrada: {img_path}")
-            return None
-        img = Image.open(img_path).convert("RGB")
-
-    elif isinstance(img_path, Image.Image):
-        # Es una imagen ya cargada (por ejemplo, resultado de una generación anterior)
-        img = img_path.convert("RGB")
-
-    else:
-        print("Tipo de imagen no válido. Se esperaba ruta (str) o imagen PIL.")
+def createImgSearching(conclusion_text):
+    """Genera referencias de diseño mejorado usando OpenAI con web browsing"""
+    try:
+        # Crear prompt para buscar referencias de diseño
+        prompt = f"""
+        Based on these website improvement suggestions:
+        {conclusion_text}
+        
+        Search the web for modern website design examples and best practices that address these improvements.
+        Provide specific design recommendations including:
+        - Layout improvements
+        - Typography suggestions
+        - Color scheme recommendations
+        - Navigation enhancements
+        - Modern UI/UX patterns
+        - Accessibility improvements
+        
+        Format your response as a detailed design guide with specific examples and references.
+        """
+        
+        # Llamada a OpenAI (mejor para generar texto detallado)
+        response = retry_request(
+            clientChat.chat.completions.create,
+            model="gpt-4o",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are an expert web designer and UX specialist. Provide detailed, actionable design recommendations based on current web design trends and best practices."
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            temperature=0.7,
+            max_tokens=2000
+        )
+        
+        return response.choices[0].message.content
+        
+    except Exception as e:
+        print(f"Warning: No se pudo generar referencia de diseño: {str(e)}", file=sys.stderr)
         return None
 
-
-    # Reducir resolución si es muy grande (mejor interpretación de layout)
-    target_width = 1280
-    if img.width > target_width:
-        new_height = int(target_width * img.height / img.width)
-        img = img.resize((target_width, new_height), Image.LANCZOS)
-
-    # Mejorar color y contraste (facilita detección de secciones)
-    img = ImageEnhance.Color(img).enhance(1.15)
-    img = ImageEnhance.Contrast(img).enhance(1.1)
-
-    # Guardar imagen preprocesada temporalmente
-    preprocessed_path = "preprocesada.png"
-    img.save(preprocessed_path)
-
-    with open(preprocessed_path, "rb") as f:
-        img_bytes = f.read()
-
-    mime_type = "image/png"
-    width, height = img.size
-
-    # Generar prompt dinámico según creatividad
-    prompt_final = f"""
-    Rediseñá visualmente esta página web para hacerla mucho más atractiva, moderna y creativa,
-    manteniendo el propósito general de la interfaz pero reinterpretando libremente su estilo visual.
-    
-    ✦ Podés reacomodar la disposición de los elementos, cambiar proporciones, jugar con espacios vacíos.
-    ✦ Usá una paleta de colores equilibrada, con contraste claro y buena legibilidad.
-    ✦ Incorporá ideas actuales de diseño UI/UX (2025): sombras suaves, degradados, glassmorphism, neón o minimalismo moderno.
-    ✦ Tipografía limpia y legible; nada de símbolos o letras irreconocibles.
-    ✦ Si el sitio parece de tecnología o mercado (por ejemplo, "PC Market"), dale un estilo tech-futurista con energía visual.
-    ✦ Evitá deformar textos existentes; mantenelos realistas y legibles
-    
-    Tené en cuenta lo siguiente para guiar el rediseño:
-    {conclusion_text}
-    
-    """
-    
-    # Generar imagen
-    response_img = client.models.generate_content(
-        model="gemini-2.0-flash-preview-image-generation",
-        contents=[
-            types.Part.from_text(text=prompt_final),
-            types.Part.from_bytes(data=img_bytes, mime_type=mime_type)
-        ],
-        config=types.GenerateContentConfig(
-        response_modalities=["TEXT", "IMAGE"],
-        temperature=0.8,
-        top_p=0.95
-        )
-    )
-
-    # Extraer imagen generada
-    for part in response_img.candidates[0].content.parts:
-        if part.inline_data:
-            edited_img = Image.open(BytesIO(part.inline_data.data))
-            edited_img.save("imagen_editada.png")
-            edited_img.show()
-            return edited_img
-
-
-
-#CREAR CODIGO ARREGLADO
-def createTxt(img_from_ai,conclusions_json, codigo_json, language_map):
-    """
-    img_from_ai: ruta a la imagen generada
-    conclusions_json: JSON con conclusiones/sugerencias
-    codigo_json: lista de dicts con "name" y "content"
-    language_map: dict que indica lenguaje de cada archivo, ej:
-                  {"index.html": "html", "style.css": "css", "script.js": "javascript"}
-    """
-
-    codigo_blocks = []
-    for c in codigo_json:
-        # Cada c debe tener al menos "name" y "content"
-        name = c.get("name", "archivo")
-        content = c.get("content", "")
-        lang = language_map.get(name, "text")  # usa el lenguaje definido por usuario, sino "text"
-        codigo_blocks.append(f"🔧 Archivo: {name}\n```{lang}\n{content}\n```")
-
-    codigo_str = "\n\n".join(codigo_blocks)
-
-
-    # Preparar contents para el prompt
-    img_b64 = None
-
-    if isinstance(img_from_ai, str):
-        if img_from_ai.startswith("data:image"):
-            img_b64 = img_from_ai.split(",", 1)[1]
-        elif len(img_from_ai) > 1000:
-            img_b64 = img_from_ai
-
-
-    # Preparar contents para el prompt
-    if img_from_ai:
-        if isinstance(img_from_ai, Image.Image):
-            buffered = BytesIO()
-            img_from_ai.save(buffered, format="PNG")
-            img_bytes = buffered.getvalue()
-            img_b64 = base64.b64encode(img_bytes).decode("utf-8")
-
-        elif isinstance(img_from_ai, str) and os.path.exists(img_from_ai):
-            with open(img_from_ai, "rb") as f:
-                img_bytes = f.read()
-            img_b64 = base64.b64encode(img_bytes).decode("utf-8")
-
-    # Si no se pudo obtener la imagen
-    if not img_b64:
-        print("No se pudo codificar la imagen, usando solo texto.")
-        img_b64 = ""  # Evita el UnboundLocalError
-
-    prompt = f"""
-    Vas a recibir: (A) código del sitio SIN cambios aplicados, (B) img de la página CON los cambios aplicados, (C) JSON DE conclusiones de las mejoras y cambios realizados en la img.
-    Mejora el código para que la UI coincida exactamente con la imagen y las sugerencias planteadas.
-    Devuelve SOLO BLOQUES DE CÓDIGO Markdown con encabezado '🔧 Archivo: <nombre>' y triple backticks con lenguaje indicado.
-    Código actual:
-    {codigo_str}
-    Conclusiones / sugerencias:
-    {json.dumps(conclusions_json, indent=2, ensure_ascii=False)}
-    """
-    
-    print("Request de createTxt hecho")
-    # Llamada al modelo
-    response = clientChat.responses.create(
-        model="gpt-5",
-        tools=[{"type": "web_search"}],
-        input=[
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "input_text",
-                        "text": (prompt)
-                    },
-                    {
-                        "type": "input_image", 
-                        "image_url": img_b64 if img_b64.startswith("data:image") else f"data:image/png;base64,{img_b64}"
-                    }
-                    ]
-        }]
-    )
-    print("Response de texto hecho")
-
-    output_text = response.output_text
-
-    # Parse bloques
-    pattern = r"(?:🔧\s*)?Archivo:\s*(.*?)\n```([\w+\-]+)\n(.*?)```"
-    matches = re.findall(pattern, output_text, re.DOTALL)
-    parsed = []
-    for filename, lang, code in matches:
-        parsed.append({"name": filename.strip(), "lang": lang.strip(), "content": code.rstrip()})
-
-    return {"markdown": output_text, "files": parsed}
-
-
-#crear tabla e img buscando en internet
-def createJson(prompt, img_path="image.jpg"):
-
-    contents_buscar_paginas = [
-    {
-        "role": "user",
-        "content": [
-            {
-                "type": "input_text",
-                "text": (
-                    "Crea un prompt en base a tu función de búsqueda en internet para poder conseguir información "
-                    "acerca del siguiente prompt y dárselo a otra IA generadora de tablas: " + prompt
-                )
-            }
-        ]
-    }
-]
-
-    
-    response = clientChat.responses.create(
-        model="gpt-5",
-        tools=[{"type": "web_search"}],
-        input=contents_buscar_paginas
-    )
-
-    print("Response de tabla hecho")
-
-    prompt_board = response.output_text + prompt
-
-    if os.path.exists(img_path):
-        with open(img_path, "rb") as f:
-            inserted_img = f.read()
-        with Image.open(img_path) as img:
-            img_format = img.format.lower()
-            mime_type = f"image/{img_format}" if img_format != "jpg" else "image/jpeg"
-    else:
-        print(f"Imagen no encontrada: {img_path}")
-        return
-
-
-
-    contents_tabla = [
-        {
-            "role":"user",
-            "parts": [
-                types.Part.from_text(text=prompt_board),
-                types.Part.from_bytes(data=inserted_img, mime_type=mime_type)
+def createTxt(design_reference, conclusions_json, codigo_json, language_map):
+    """Genera código mejorado basado en el análisis usando OpenAI"""
+    try:
+        # Extraer conclusiones del JSON
+        conclusiones = []
+        if 'rows' in conclusions_json:
+            for row in conclusions_json['rows']:
+                if 'row' in row and 'conclusion' in row['row']:
+                    conclusiones.append(row['row']['conclusion'])
+        
+        conclusiones_text = "\n".join(conclusiones)
+        
+        # Preparar información de archivos
+        archivos_info = []
+        for archivo in codigo_json:
+            lenguaje = language_map.get(archivo['name'], 'unknown')
+            archivos_info.append({
+                "name": archivo['name'],
+                "language": lenguaje,
+                "content": archivo['content']
+            })
+        
+        # Crear prompt estructurado para OpenAI
+        codigo_completo = "\n\n".join([
+            f"// File: {archivo['name']} (Language: {language_map.get(archivo['name'], 'unknown')})\n{archivo['content']}" 
+            for archivo in codigo_json
+        ])
+        
+        prompt = f"""
+        Eres un experto desarrollador web senior. Tu tarea es mejorar el siguiente código basándote en:
+        
+        SUGERENCIAS DE MEJORA:
+        {conclusiones_text}
+        
+        GUÍA DE DISEÑO:
+        {design_reference}
+        
+        CÓDIGO ACTUAL:
+        {codigo_completo}
+        
+        REQUISITOS:
+        1. Mantén exactamente la misma estructura de archivos y nombres
+        2. Aplica todas las mejoras sugeridas de manera profesional
+        3. Mejora la accesibilidad (ARIA labels, semantic HTML, contraste)
+        4. Optimiza para SEO (meta tags, estructura semántica)
+        5. Mejora la UX (navegación intuitiva, responsive design)
+        6. Usa las mejores prácticas modernas de desarrollo web
+        7. Mantén el mismo número de archivos
+        8. Asegúrate de que el código sea limpio y bien comentado
+        
+        RESPONDE ÚNICAMENTE CON UN JSON VÁLIDO en este formato exacto:
+        {{
+            "archivos": [
+                {{
+                    "name": "nombre_del_archivo",
+                    "language": "lenguaje_programacion",
+                    "content": "código_mejorado_completo"
+                }}
             ]
-        }
-    ]
-
-
- #hacer tablita
-    response = retry_request(
-        client.models.generate_content,
-        model="gemini-2.5-flash",
-        contents=contents_tabla,
-        config={
-            "response_mime_type": "application/json",
-            "response_schema": TableData.model_json_schema()
-        },
-    )
-
-    # Tomamos el primer candidato
-    candidate = response.candidates[0]
-
-    # Recorremos las partes del contenido
-    for part in candidate.content.parts:
-        if part.text:
-            tabla_json_str = part.text 
-            break
-
-    tabla_generada_dict = json.loads(tabla_json_str)
-
-    # Convertimos a Pydantic
-    tabla_generada = TableData.model_validate(tabla_generada_dict)
-
-    # Filtrar fila de final conclusion
-    tabla_generada.table_data = [
-        row for row in tabla_generada.table_data 
-        if row.criterion_or_website.lower() != "conclusion"
-    ]
-
-
-
- #ajustar los datos a las filas y columnas
-    all_websites = []
-    for row in tabla_generada.table_data:
-        for w in row.websites:
-            if w.name not in all_websites:
-                all_websites.append(w.name)
-
-    # Construir filas por criterio
-    rows = []
-    for row in tabla_generada.table_data:
-        row_dict = {"criterion_or_website": row.criterion_or_website}
-        for site in all_websites:
-            text = next((w.text for w in row.websites if w.name == site), "")
-            row_dict[site] = text
-        # Solo Website4 es la “conclusion” de mejoras
-        row_dict["conclusion"] = row.conclusion or ""
-        rows.append(row_dict)
-
-
-    # Crear DataFrame con columnas fijas
-    cols = ["criterion_or_website"] + all_websites + ["conclusion"]
-    df = pd.DataFrame(rows)[cols]
-
-
-
-
-
-    # Guardar JSON
-    json_path = os.path.join(SAVE_DIR, "tablita.json")
-    with open(json_path, "w", encoding="utf-8") as f:
-        json.dump(rows, f, ensure_ascii=False, indent=4)
-    print("JSON creado")
-
-    with open("tablas_generadas/tablita.json", "r", encoding="utf-8") as f:
-        data = json.load(f)
-
-    print("tabla guardada")
-
-    # Guardar Excel
-    xlsx_path = os.path.join(SAVE_DIR, "tablita.xlsx")
-    df.to_excel(xlsx_path, index=False)
-    print("Excel creado")
-
-    #por si cambiamos de lugar las filas y columnas 
-    conclusion = None
-    if "conclusion" in df.columns:
-        conclusion = " ".join(df["conclusion"].dropna().tolist())
-    else:
-        conclusion = " ".join(df.iloc[-1].dropna().tolist())
-
-    print("Conclusión de tabla hecho")
-
-    if not conclusion.strip():
-        conclusion = "No hubo sugerencias claras, pero mejora la navegación y la accesibilidad visual."
-
-    imagen_b64 = createImgSearching(conclusion, img_path)
-    
-    resultado_txt = createTxt(
-            imagen_b64,
-            rows,
-            codigo_json,
-            language_map
+        }}
+        
+        NO agregues explicaciones fuera del JSON. Solo el JSON.
+        """
+        
+        # Llamada a OpenAI (mejor para generar código)
+        response = retry_request(
+            clientChat.chat.completions.create,
+            model="gpt-4o",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are an expert full-stack web developer. You provide clean, modern, and optimized code following best practices. Always respond with valid JSON only."
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            temperature=0.3,
+            max_tokens=4000,
+            response_format={ "type": "json_object" }
         )
+        
+        # Parsear respuesta
+        codigo_mejorado = json.loads(response.choices[0].message.content)
+        return codigo_mejorado
+        
+    except Exception as e:
+        raise Exception(f"Error en createTxt: {str(e)}")
 
+# ============================================================================
+# FUNCIÓN PRINCIPAL
+# ============================================================================
 
-    print("Markdown generado:\n", resultado_txt["markdown"])
-    return resultado_txt
+def main():
+    """Función principal que procesa los datos del backend"""
+    
+    # Verificar argumentos
+    if len(sys.argv) < 2:
+        error_response = {"success": False, "error": "No se proporcionó archivo JSON"}
+        print(json.dumps(error_response))
+        sys.exit(1)
+    
+    json_file = sys.argv[1]
+    img_path = None
+    
+    try:
+        # 1. Cargar datos del backend
+        backend_data = load_data_from_backend(json_file)
+        
+        language_map = backend_data['language_map']
+        codigo_json = backend_data['codigo_json']
+        theme = backend_data['theme']
+        pagina_id = backend_data['paginaId']
+        
+        # 2. Guardar imagen desde base64
+        img_path = f"temp_image_{pagina_id}.jpg"
+        save_image_from_base64(backend_data['image_base64'], img_path)
+        
+        # 3. Crear análisis de la página con Gemini (necesita visión)
+        prompt_analisis = f"""
+        The JSON returned must be an array of 11 rows (objects).  
+        Each row has in this order:  
+        "criterion", "website1", "website2", "website3", "website4", "conclusion".
+        
+        Websites 1 to 3 have to be the most famous about {theme}, and the 4th is the one of the img inserted.
+        
+        Rules:  
+        - Criteria order (rows): Typography & Readability, Colors & Branding, Visual Elements, 
+          Navigation & UX, Organization & Structure, Accessibility, Functionality, Interactivity, 
+          SEO, +1 extra criterion you choose, +Final Conclusion row (only fill "conclusion").
+        - Website1–Website3 (columns): each = short intro phrase + one descriptive sentence of 20–30 words.
+          Do not mention the Website in each cell.
+        - Website4 (column): same, but refers to the website from the provided image.
+        - "Conclusion" (column): only Website4 improvements, implicit comparison, highlight strengths + suggestions, 
+          never mention website names.
+        
+        Try to use different words for the cells, so each criteria doesn't have the exact same words. 
+        Use an extensive vocabulary.
+        Output must be strictly consistent, 6 keys per row, no extra text. 
+        And just should have 11 rows (without a "final" conclusion).
+        
+        The response must be in Spanish.
+        """
+        
+        resultado_json = createJson(prompt_analisis, img_path)
+        
+        # 4. Generar referencia de diseño con OpenAI (mejor para texto)
+        conclusions_text = "\n".join([
+            row['row']['conclusion'] 
+            for row in resultado_json.get('rows', []) 
+            if 'row' in row and 'conclusion' in row['row']
+        ])
+        
+        design_reference = createImgSearching(conclusions_text)
+        
+        # 5. Generar código mejorado con OpenAI (mejor para código)
+        codigo_mejorado = createTxt(design_reference, resultado_json, codigo_json, language_map)
+        
+        # 6. Preparar resultado final
+        resultado_final = {
+            "success": True,
+            "paginaId": pagina_id,
+            "tabla_analisis": resultado_json,
+            "codigo_mejorado": codigo_mejorado,
+            "referencia_diseno": design_reference
+        }
+        
+        # 7. Enviar resultado al backend (via stdout)
+        print(json.dumps(resultado_final, ensure_ascii=False))
+        
+    except Exception as e:
+        # En caso de error, enviar respuesta de error
+        error_response = {
+            "success": False,
+            "error": str(e)
+        }
+        print(json.dumps(error_response, ensure_ascii=False))
+        sys.exit(1)
+        
+    finally:
+        # 8. Limpiar archivos temporales
+        if img_path:
+            cleanup_temp_files(img_path, json_file)
 
+# ============================================================================
+# PUNTO DE ENTRADA
+# ============================================================================
 
-
-
-
-theme = 'PC MARKET'
-
-createJson(f"""
-The JSON returned must be an array of 11 rows (objects).  
-Each row has in this order:  
-"criterion", "(NamePage1)", "(NamePage2)", "(NamePage3)", "(NamePage4)", "Conclusion".
-Websites 1 to 3 have to be the most famous about {theme}, and the 4th is the one of the img insterted.
-Rules:  
-- Criteria order (rows): Typography & Readability, Colors & Branding, Visual Elements, Navigation & UX, Organization & Structure, Accessibility, Functionality, Interactivity, SEO, +1 extra criterion you choose, +Final Conclusion row (only fill "Conclusion").  
-- Website1–Website3 (columns): each = short intro phrase + one descriptive sentence of 20–30 words.Do not mention the Website in each cell.  
-- Website4 (column): same, but refers to the website from the provided image.  
-- "Conclusion" (column): only Website4 improvements, implicit comparison, highlight strengths + suggestions, never mention website names.  
-Try  to use different words for the cells, so each creteria doesn't have the exact same words. Use an extensive vocabulary
-Output must be strictly consistent, 6 keys per row, no extra text. And just should have 11 rows (without a "final" conclusion)
-The response must be in spanish. 
-
-""")
+if __name__ == "__main__":
+    main()

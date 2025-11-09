@@ -1,19 +1,28 @@
 // EN TODO EL ARCHIVO FALTA AGREGAR LOS ;
-import { prisma } from "../prisma/prisma.js"
+import { prisma } from "../prisma/prisma.js";
+import { exec } from "child_process";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+import fs from "fs";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const setupia = () => {
-//         - Mirkin - 
+  // ============================================================================
+  // FUNCIONES PARA MIRKIN - ANÁLISIS DE PÁGINAS WEB
+  // ============================================================================
 
   const save = async (req, res) => {
-    const { name_archivo, archivo_codigo_pagina, lenguaje, foto_pagina_jpg, tema } = req.body
-    const personaId = req.personaId
+    const { name_archivo, archivo_codigo_pagina, lenguaje, foto_pagina_jpg, tema } = req.body;
+    const personaId = req.personaId;
 
     try {
       if (!name_archivo || !archivo_codigo_pagina || !lenguaje || !foto_pagina_jpg || !tema) {
-        return res.status(400).json({ error: "missing data" })
+        return res.status(400).json({ error: "missing data" });
       }
 
-      const fotoBuffer = Buffer.from(foto_pagina_jpg, "base64")
+      const fotoBuffer = Buffer.from(foto_pagina_jpg, "base64");
 
       const nuevapagina = await prisma.ia_paginas.create({
         data: {
@@ -23,15 +32,15 @@ const setupia = () => {
           foto_pagina_jpg: fotoBuffer,
           tema: tema,
         },
-      })
+      });
 
-      res.status(201).json({ message: "page saved successfully", pagina: nuevapagina })
+      res.status(201).json({ message: "page saved successfully", pagina: nuevapagina });
     } catch (error) {
-      console.error("Error saving page:", error)
-      res.status(500).json({ error: "Internal Server Error" })
+      console.error("Error saving page:", error);
+      res.status(500).json({ error: "Internal Server Error" });
     }
-  }
-/*
+  };
+  /*
     Funcionalidad: Guardar página analizada
 
     NECESITA UN FOREACH
@@ -39,68 +48,196 @@ const setupia = () => {
     que por cada archivo de codigo sea necesario un name_archivo, archivo_codigo_pagina y language
     que cada pagina pueda tener solo una foto pagina compartida (en cada fila con mismo id se coloca la misma)
     que todos los archivos de una misma pagina se guarden con el mismo id
-*/
+  */
 
   const lookfor = async (req, res) => {
-    const { paginaId } = req.params
-    const personaId = req.personaId
+    const { paginaId } = req.params;
+    const personaId = req.personaId;
 
     try {
       if (!paginaId) {
-        return res.status(400).json({ error: "missing data" })
+        return res.status(400).json({ error: "missing data" });
       }
 
       const paginas = await prisma.ia_paginas.findMany({
         where: {
           id: Number.parseInt(paginaId, 10),
         },
-      })
+      });
 
       if (!paginas || paginas.length === 0) {
-        return res.status(404).json({ error: "page not found" })
+        return res.status(404).json({ error: "page not found" });
       }
 
       const paginasagrupadas = paginas.map((pagina) => ({
         name_archivo: pagina.name_archivo,
         archivo_codigo_pagina: pagina.archivo_codigo_pagina,
         lenguaje: pagina.lenguaje,
-      }))
+      }));
 
-      res.status(200).json(paginasagrupadas)
+      res.status(200).json(paginasagrupadas);
     } catch (error) {
-      console.error("Error finding page:", error)
-      res.status(500).json({ error: "Internal Server Error" })
+      console.error("Error finding page:", error);
+      res.status(500).json({ error: "Internal Server Error" });
     }
-  }
-/*
+  };
+  /*
     Funcionalidad: Buscar todas las páginas con el mismo ID y agruparlas
 
     Esto agarra de la base de datos la info como si YA FUERA un array
     necesito que HAGA un array de TODAS las filas DISTINTAS en la db con mismo id_pagina
-*/
+  */
 
-    const saveresponse = async (req, res) => {
-        const { respuesta_ia } = req.params
-        const personaId = req.personaId
+  const saveresponse = async (req, res) => {
+    const { respuesta_ia } = req.params;
+    const personaId = req.personaId;
 
-        try {
-            if ( !respuesta_ia ) {
-                return res.status(400).json({ error: "missing data" })
-            }
+    try {
+      if (!respuesta_ia) {
+        return res.status(400).json({ error: "missing data" });
+      }
 
-            const respuestaJSON = JSON.stringify(respuesta_ia)
-            res.status(200).json({ message: "IA response saved successfully", pagina: paginaactualizada })
-            respuestaJSON;
-        } catch (error) {
-            console.error("Error saving IA response:", error)
-            res.status(500).json({ error: "Internal Server Error" })
-        }
+      const respuestaJSON = JSON.stringify(respuesta_ia);
+      res.status(200).json({ message: "IA response saved successfully", pagina: paginaactualizada });
+      respuestaJSON;
+    } catch (error) {
+      console.error("Error saving IA response:", error);
+      res.status(500).json({ error: "Internal Server Error" });
     }
-/*
-  Funcionalidad: Guardar respuesta de la IA que analiza
-*/
+  };
+  /*
+    Funcionalidad: Guardar respuesta de la IA que analiza
+  */
 
+  const sendToPython = async (req, res) => {
+    const { paginaId } = req.params;
+    const personaId = req.personaId;
 
+    try {
+      if (!paginaId) {
+        return res.status(400).json({ error: "missing data" });
+      }
+
+      // 1. Obtener todas las filas con el mismo paginaId
+      const paginas = await prisma.ia_paginas.findMany({
+        where: {
+          id: Number.parseInt(paginaId, 10),
+        },
+      });
+
+      if (!paginas || paginas.length === 0) {
+        return res.status(404).json({ error: "page not found" });
+      }
+
+      // 2. Construir language_map y codigo_json
+      const language_map = {};
+      const codigo_json = [];
+
+      paginas.forEach((pagina) => {
+        language_map[pagina.name_archivo] = pagina.lenguaje;
+        codigo_json.push({
+          name: pagina.name_archivo,
+          content: pagina.archivo_codigo_pagina,
+        });
+      });
+
+      // 3. Obtener la foto (es la misma para todas las filas con mismo id)
+      const foto_pagina_jpg = paginas[0].foto_pagina_jpg.toString("base64");
+      const tema = paginas[0].tema;
+
+      // 4. Preparar datos para Python
+      const datosParaPython = {
+        language_map,
+        codigo_json,
+        image_base64: foto_pagina_jpg,
+        theme: tema,
+        paginaId: Number.parseInt(paginaId, 10),
+      };
+
+      // 5. Guardar datos en archivo temporal JSON
+      const tempDir = join(__dirname, "../../IA/temp");
+      if (!fs.existsSync(tempDir)) {
+        fs.mkdirSync(tempDir, { recursive: true });
+      }
+
+      const tempFile = join(tempDir, `temp_${paginaId}_${Date.now()}.json`);
+      fs.writeFileSync(tempFile, JSON.stringify(datosParaPython, null, 2));
+
+      // 6. Ruta al script de Python
+      const pythonScript = join(__dirname, "../../IA/Gemini.py");
+
+      // 7. Ejecutar Python
+      console.log(`Ejecutando Python con archivo: ${tempFile}`);
+
+      exec(`python "${pythonScript}" "${tempFile}"`, { maxBuffer: 10 * 1024 * 1024 }, (error, stdout, stderr) => {
+        // 8. Limpiar archivo temporal
+        try {
+          if (fs.existsSync(tempFile)) {
+            fs.unlinkSync(tempFile);
+          }
+        } catch (cleanupError) {
+          console.error("Error limpiando archivo temporal:", cleanupError);
+        }
+
+        // 9. Manejar errores de ejecución
+        if (error) {
+          console.error("Error ejecutando Python:", error);
+          console.error("stderr:", stderr);
+          return res.status(500).json({
+            error: "Error processing with IA",
+            details: stderr || error.message,
+          });
+        }
+
+        // 10. Parsear y validar resultado
+        try {
+          const resultado = JSON.parse(stdout);
+
+          if (!resultado.success) {
+            return res.status(500).json({
+              error: "IA processing failed",
+              details: resultado.error,
+            });
+          }
+
+          // 11. Enviar respuesta exitosa
+          res.status(200).json({
+            message: "IA processing completed successfully",
+            resultado: {
+              paginaId: resultado.paginaId,
+              tabla_analisis: resultado.tabla_analisis,
+              codigo_mejorado: resultado.codigo_mejorado,
+              referencia_diseno: resultado.referencia_diseno,
+            },
+          });
+        } catch (parseError) {
+          console.error("Error parseando resultado de Python:", parseError);
+          console.error("stdout:", stdout);
+          return res.status(500).json({
+            error: "Error parsing IA response",
+            details: parseError.message,
+            raw_output: stdout.substring(0, 500), // Primeros 500 chars para debug
+          });
+        }
+      });
+    } catch (error) {
+      console.error("Error sending to Python:", error);
+      res.status(500).json({ error: "Internal Server Error", details: error.message });
+    }
+  };
+  /*
+    Funcionalidad: Enviar datos a Python para análisis con IA
+    
+    Flujo:
+    1. Busca todas las filas con el mismo paginaId
+    2. Construye language_map y codigo_json
+    3. Prepara datos en formato JSON
+    4. Guarda archivo temporal
+    5. Ejecuta script Python
+    6. Recibe y parsea resultado
+    7. Limpia archivos temporales
+    8. Devuelve resultado al frontend
+  */
 
 
 /*       - July -
