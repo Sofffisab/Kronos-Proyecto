@@ -5,13 +5,12 @@ import base64
 import os
 from google import genai
 from google.genai import types
-from PIL import Image, ImageEnhance
+from PIL import Image
 from io import BytesIO
 from pydantic import BaseModel
 from typing import List
-from tabulate import tabulate
 from openai import OpenAI
-from dotenv import load_dotenv, dotenv_values
+from dotenv import load_dotenv
 
 # ============================================================================
 # CONFIGURACIÓN INICIAL
@@ -21,9 +20,6 @@ load_dotenv()
 
 client = genai.Client(api_key=os.getenv("GEMINI_KEY"))
 clientChat = OpenAI(api_key=os.getenv("CHAT_KEY"))
-
-SAVE_DIR = "tablas_generadas"
-os.makedirs(SAVE_DIR, exist_ok=True)
 
 # Herramienta de búsqueda de Google (solo para Gemini)
 grounding_tool = types.Tool(
@@ -52,11 +48,12 @@ class TableData(BaseModel):
 # FUNCIONES DE UTILIDAD
 # ============================================================================
 
-def load_data_from_backend(json_file_path):
-    """Carga datos enviados desde el backend Node.js"""
+def load_data_from_stdin():
+    """Carga datos enviados desde el backend Node.js por stdin"""
     try:
-        with open(json_file_path, 'r', encoding='utf-8') as f:
-            data = json.load(f)
+        # Leer todo el stdin
+        input_data = sys.stdin.read()
+        data = json.loads(input_data)
         
         return {
             'language_map': data['language_map'],
@@ -68,24 +65,14 @@ def load_data_from_backend(json_file_path):
     except Exception as e:
         raise Exception(f"Error al cargar datos del backend: {str(e)}")
 
-def save_image_from_base64(base64_string, output_path="image.jpg"):
-    """Convierte base64 a imagen y la guarda"""
+def base64_to_image(base64_string):
+    """Convierte base64 a objeto Image de PIL (sin guardar en disco)"""
     try:
         image_data = base64.b64decode(base64_string)
-        with open(output_path, 'wb') as f:
-            f.write(image_data)
-        return output_path
+        img = Image.open(BytesIO(image_data))
+        return img
     except Exception as e:
-        raise Exception(f"Error al guardar imagen: {str(e)}")
-
-def cleanup_temp_files(*file_paths):
-    """Elimina archivos temporales"""
-    for file_path in file_paths:
-        try:
-            if os.path.exists(file_path):
-                os.remove(file_path)
-        except Exception as e:
-            print(f"Warning: No se pudo eliminar {file_path}: {str(e)}", file=sys.stderr)
+        raise Exception(f"Error al convertir imagen: {str(e)}")
 
 # ============================================================================
 # FUNCIONES DE REINTENTOS
@@ -106,12 +93,9 @@ def retry_request(func, *args, max_retries=3, **kwargs):
 # FUNCIONES DE GENERACIÓN CON IA
 # ============================================================================
 
-def createJson(prompt, img_path):
+def createJson(prompt, img):
     """Crea un JSON con análisis de la página web usando Gemini (por la capacidad de visión)"""
     try:
-        # Cargar imagen
-        img = Image.open(img_path)
-        
         # Llamada a Gemini con búsqueda en Google (solo Gemini puede analizar imágenes)
         response = retry_request(
             client.models.generate_content,
@@ -133,7 +117,7 @@ def createJson(prompt, img_path):
         raise Exception(f"Error en createJson: {str(e)}")
 
 def createImgSearching(conclusion_text):
-    """Genera referencias de diseño mejorado usando OpenAI con web browsing"""
+    """Genera referencias de diseño mejorado usando OpenAI"""
     try:
         # Crear prompt para buscar referencias de diseño
         prompt = f"""
@@ -187,16 +171,6 @@ def createTxt(design_reference, conclusions_json, codigo_json, language_map):
                     conclusiones.append(row['row']['conclusion'])
         
         conclusiones_text = "\n".join(conclusiones)
-        
-        # Preparar información de archivos
-        archivos_info = []
-        for archivo in codigo_json:
-            lenguaje = language_map.get(archivo['name'], 'unknown')
-            archivos_info.append({
-                "name": archivo['name'],
-                "language": lenguaje,
-                "content": archivo['content']
-            })
         
         # Crear prompt estructurado para OpenAI
         codigo_completo = "\n\n".join([
@@ -271,29 +245,19 @@ def createTxt(design_reference, conclusions_json, codigo_json, language_map):
 # ============================================================================
 
 def main():
-    """Función principal que procesa los datos del backend"""
-    
-    # Verificar argumentos
-    if len(sys.argv) < 2:
-        error_response = {"success": False, "error": "No se proporcionó archivo JSON"}
-        print(json.dumps(error_response))
-        sys.exit(1)
-    
-    json_file = sys.argv[1]
-    img_path = None
+    """Función principal que procesa los datos del backend (desde stdin)"""
     
     try:
-        # 1. Cargar datos del backend
-        backend_data = load_data_from_backend(json_file)
+        # 1. Cargar datos del backend (desde stdin)
+        backend_data = load_data_from_stdin()
         
         language_map = backend_data['language_map']
         codigo_json = backend_data['codigo_json']
         theme = backend_data['theme']
         pagina_id = backend_data['paginaId']
         
-        # 2. Guardar imagen desde base64
-        img_path = f"temp_image_{pagina_id}.jpg"
-        save_image_from_base64(backend_data['image_base64'], img_path)
+        # 2. Convertir imagen de base64 a PIL Image (sin guardar en disco)
+        img = base64_to_image(backend_data['image_base64'])
         
         # 3. Crear análisis de la página con Gemini (necesita visión)
         prompt_analisis = f"""
@@ -321,7 +285,7 @@ def main():
         The response must be in Spanish.
         """
         
-        resultado_json = createJson(prompt_analisis, img_path)
+        resultado_json = createJson(prompt_analisis, img)
         
         # 4. Generar referencia de diseño con OpenAI (mejor para texto)
         conclusions_text = "\n".join([
@@ -353,13 +317,8 @@ def main():
             "success": False,
             "error": str(e)
         }
-        print(json.dumps(error_response, ensure_ascii=False))
+        print(json.dumps(error_response, ensure_ascii=False), file=sys.stderr)
         sys.exit(1)
-        
-    finally:
-        # 8. Limpiar archivos temporales
-        if img_path:
-            cleanup_temp_files(img_path, json_file)
 
 # ============================================================================
 # PUNTO DE ENTRADA

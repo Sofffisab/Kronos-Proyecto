@@ -1,9 +1,8 @@
 // EN TODO EL ARCHIVO FALTA AGREGAR LOS ;
 import { prisma } from "../prisma/prisma.js";
-import { exec } from "child_process";
+import { spawn } from "child_process";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
-import fs from "fs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -154,44 +153,46 @@ const setupia = () => {
         paginaId: Number.parseInt(paginaId, 10),
       };
 
-      // 5. Guardar datos en archivo temporal JSON
-      const tempDir = join(__dirname, "../../IA/temp");
-      if (!fs.existsSync(tempDir)) {
-        fs.mkdirSync(tempDir, { recursive: true });
-      }
-
-      const tempFile = join(tempDir, `temp_${paginaId}_${Date.now()}.json`);
-      fs.writeFileSync(tempFile, JSON.stringify(datosParaPython, null, 2));
-
-      // 6. Ruta al script de Python
+      // 5. Ruta al script de Python
       const pythonScript = join(__dirname, "../../IA/Gemini.py");
 
-      // 7. Ejecutar Python
-      console.log(`Ejecutando Python con archivo: ${tempFile}`);
+      // 6. Ejecutar Python usando spawn (mejor que exec para pasar datos por stdin)
+      console.log(`Ejecutando Python con paginaId: ${paginaId}`);
 
-      exec(`python "${pythonScript}" "${tempFile}"`, { maxBuffer: 10 * 1024 * 1024 }, (error, stdout, stderr) => {
-        // 8. Limpiar archivo temporal
-        try {
-          if (fs.existsSync(tempFile)) {
-            fs.unlinkSync(tempFile);
-          }
-        } catch (cleanupError) {
-          console.error("Error limpiando archivo temporal:", cleanupError);
-        }
+      const pythonProcess = spawn("python", [pythonScript]);
 
-        // 9. Manejar errores de ejecución
-        if (error) {
-          console.error("Error ejecutando Python:", error);
-          console.error("stderr:", stderr);
+      let stdoutData = "";
+      let stderrData = "";
+
+      // 7. Enviar datos JSON a Python por stdin
+      pythonProcess.stdin.write(JSON.stringify(datosParaPython));
+      pythonProcess.stdin.end();
+
+      // 8. Capturar stdout (resultado de Python)
+      pythonProcess.stdout.on("data", (data) => {
+        stdoutData += data.toString();
+      });
+
+      // 9. Capturar stderr (errores de Python)
+      pythonProcess.stderr.on("data", (data) => {
+        stderrData += data.toString();
+        console.error("Python stderr:", data.toString());
+      });
+
+      // 10. Manejar cierre del proceso Python
+      pythonProcess.on("close", (code) => {
+        if (code !== 0) {
+          console.error(`Python process exited with code ${code}`);
+          console.error("stderr:", stderrData);
           return res.status(500).json({
             error: "Error processing with IA",
-            details: stderr || error.message,
+            details: stderrData || `Process exited with code ${code}`,
           });
         }
 
-        // 10. Parsear y validar resultado
+        // 11. Parsear y validar resultado
         try {
-          const resultado = JSON.parse(stdout);
+          const resultado = JSON.parse(stdoutData);
 
           if (!resultado.success) {
             return res.status(500).json({
@@ -200,7 +201,7 @@ const setupia = () => {
             });
           }
 
-          // 11. Enviar respuesta exitosa
+          // 12. Enviar respuesta exitosa
           res.status(200).json({
             message: "IA processing completed successfully",
             resultado: {
@@ -212,13 +213,22 @@ const setupia = () => {
           });
         } catch (parseError) {
           console.error("Error parseando resultado de Python:", parseError);
-          console.error("stdout:", stdout);
+          console.error("stdout:", stdoutData);
           return res.status(500).json({
             error: "Error parsing IA response",
             details: parseError.message,
-            raw_output: stdout.substring(0, 500), // Primeros 500 chars para debug
+            raw_output: stdoutData.substring(0, 500),
           });
         }
+      });
+
+      // 13. Manejar errores del proceso
+      pythonProcess.on("error", (error) => {
+        console.error("Error spawning Python process:", error);
+        res.status(500).json({
+          error: "Failed to start Python process",
+          details: error.message,
+        });
       });
     } catch (error) {
       console.error("Error sending to Python:", error);
@@ -226,19 +236,24 @@ const setupia = () => {
     }
   };
   /*
-    Funcionalidad: Enviar datos a Python para análisis con IA
+    Funcionalidad: Enviar datos a Python para análisis con IA (usando stdin/stdout)
     
     Flujo:
     1. Busca todas las filas con el mismo paginaId
     2. Construye language_map y codigo_json
     3. Prepara datos en formato JSON
-    4. Guarda archivo temporal
-    5. Ejecuta script Python
-    6. Recibe y parsea resultado
-    7. Limpia archivos temporales
+    4. Usa spawn() para ejecutar Python
+    5. Envía datos por stdin
+    6. Recibe resultado por stdout
+    7. Parsea y valida resultado
     8. Devuelve resultado al frontend
+    
+    Ventajas sobre archivos temporales:
+    - No hay I/O de disco (más rápido)
+    - No hay que limpiar archivos
+    - Más seguro (datos no quedan en disco)
+    - Mejor manejo de errores en tiempo real
   */
-
 
 /*       - July -
 
