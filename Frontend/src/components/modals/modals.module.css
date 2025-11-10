@@ -5,7 +5,7 @@
   height: 100%;
   width: 100%;
   background-color: rgba(1, 1, 1, 0.442);
-  z-index: 1000;
+  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -118,4 +118,19 @@ width: auto;
     justify-content: center;
     align-items: center;
     color: red
+}
+
+.selected {
+
+  border: rgba(0, 0, 0, 0.582) 3px solid;
+  border-radius: 25px;
+}
+
+.palleteBox {
+  gap: 2vmin;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 50vw
 }

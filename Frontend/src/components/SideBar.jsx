@@ -6,7 +6,7 @@ import { stringToColor } from '../../api/project.js'
 export default function SideBar(props) {
     
 const projects = props.projects? props.projects.map((item)=> (
-<Link className='project' key={item.id}to={'/project/'+item.id}> <div><div className='projectColorBox' style={{backgroundColor: stringToColor(item.nombre)}}/><p>{item.nombre}</p></div></Link>
+<Link className='project' key={item.id}to={'/project/'+item.id}> <div><div className='projectColorBox' style={{backgroundColor: stringToColor(item.nombre)}}/><p className='projectBoxName'>{item.nombre}</p></div></Link>
 )) : 'Nothing to see here...'
 
 const teams = props.teams? props.teams.map((item)=> (
@@ -19,7 +19,6 @@ return(
     <div id='addBtn'><span className='material-symbols-outlined'>add_circle</span>Crear</div>
     <div id='inicioBtn'><span className='material-symbols-outlined'>home</span>Inicio</div>
     <div id='tareasBtn'><span className='material-symbols-outlined'>list_alt_add</span>Mis tareas</div>
-    <div id='notifBtn'><span className='material-symbols-outlined'>notifications</span>Notificaciones</div>
 </ul>
 
 <Separator/>

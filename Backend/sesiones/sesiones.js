@@ -32,11 +32,12 @@ const setupsesiones = (JWT_SECRET) => {
 
             const token = jwt.sign({ 
                 personaId: persona.id, 
-                mail: persona.mail 
+                mail: persona.mail,
+                nombre: persona.nombre
             }, JWT_SECRET, { 
                 expiresIn: '8h' 
             });
-
+           
             res.status(200).json({ 
                 message: "Logged in successfully", 
                 token ,
@@ -81,7 +82,9 @@ const setupsesiones = (JWT_SECRET) => {
 
             const token = jwt.sign({ 
                 personaId: persona.id, 
-                mail: persona.mail 
+                mail: persona.mail, 
+                nombre: persona.nombre
+                
             }, JWT_SECRET, { 
                 expiresIn: '8h' 
             });

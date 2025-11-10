@@ -21,11 +21,48 @@ export function TaskProvider({ children }) {
   const [currentId, setCurrentId] = useState(null);
   const [contextChat, setContextChat] = useState([]);
   const [userPhoto, setUserPhoto] = useState()
+const [variables, setVariables] = useState()
   async function fetchProject(id) {
     const project = await getProjects(localStorage.getItem("token"), id);
     setProject(project);
     setTasks(project.tareas ||[]);
   }
+
+  function setCSSVariables(name, value) {
+    document.documentElement.style.setProperty(name, value);
+    localStorage.setItem(name, value); 
+    
+  } 
+
+  const updateVariables = (pallete) => {
+    
+   const colors =  pallete=='blue'? {secondary: '#AFC8BD', tertiary: '#678C99', darkerTertiary: '#C3CCAE'} :
+                    pallete=='gray'? {secondary: '#D6C292', tertiary: '#FFF1CF', darkerTertiary: '#B8C7CC'} :
+                    pallete=='orange'? {secondary: '#FFD137', tertiary: '#D98C2D', darkerTertiary: '#FF5E45'} : 
+                    pallete=='pink'? {secondary: '#EC89A5', tertiary: '#A25C78', darkerTertiary: '#6F3A51'} :
+                    pallete=='purple'? {secondary: '#B854A7', tertiary: '#654085', darkerTertiary: '#283464'} :
+                    pallete=='yellow'? {secondary: '#F3FFCB', tertiary: '#FFFC94', darkerTertiary: '#FFD650'} : 
+                   null
+                   
+  if(colors) {setCSSVariables('--secondaryColor', colors.secondary);
+  setCSSVariables('--tertiaryColor', colors.tertiary);
+  setCSSVariables('--darkerTertiaryColor', colors.darkerTertiary);}
+  }
+
+
+  useEffect(()=> {
+   
+    const pallete = localStorage.getItem('pallete')
+    if(pallete) setVariables(pallete)
+    updateVariables(pallete)
+  },[])
+
+  useEffect(()=>{
+    if (!variables) return;
+    localStorage.setItem('pallete', variables)
+    updateVariables(variables)
+  },[variables])
+
 
  
   async function fetchMessages(chatId) {
@@ -41,10 +78,9 @@ export function TaskProvider({ children }) {
 
     if(userPhoto) localStorage.setItem('pfp', userPhoto)
     const token = localStorage.getItem('token')
-    if(!token) return
-
+    if(token) {
     const decoded = jwtDecode(token)
-    setUser(decoded)
+    setUser(decoded)}
   },[userPhoto])
 
   
@@ -75,6 +111,7 @@ export function TaskProvider({ children }) {
 
 
   useEffect(() => {
+
     if (currentId) {fetchProject(currentId)
 
     };
@@ -95,6 +132,7 @@ export function TaskProvider({ children }) {
         setUser,
         userPhoto,
         setUserPhoto,
+        setVariables
       }}
     >
       {children}

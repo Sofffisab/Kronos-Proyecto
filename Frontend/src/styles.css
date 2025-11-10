@@ -329,7 +329,7 @@ button {
   height: 100vh;
   width: 98.9vw;
   display: flex;
-  position: relative;
+  position: fixed;
   top: 0px;
   left: 0px;
   justify-content: center;
@@ -602,4 +602,13 @@ button {
   height: 2rem;
   width: 2rem;
   border-radius: 10px;
+}
+
+.projectBoxName {
+
+  white-space: nowrap;
+    max-width: 10rem;
+    text-overflow: ellipsis;      
+    overflow: hidden;
+
 }

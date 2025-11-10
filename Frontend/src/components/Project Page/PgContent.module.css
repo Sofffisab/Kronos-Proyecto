@@ -21,11 +21,11 @@
   }
   .topMenuPgContent div {
     display: flex;
-    justify-content: flex-start;
+  
     align-items: center;
   }
   .topMenuContentTitle {
-  gap: 80%
+  justify-content: space-between;
   }
   .topMenuPgContentList {
   gap: 1%;

@@ -3,10 +3,11 @@ import { useState } from "react";
 import { Link} from "react-router";
 import { useNavigate } from "react-router";
 import { useTasks } from "../context/ProjectContext";
+import LoadingScreen from './LoadingScreen.jsx'
 export default function RegisterForm(props) {
   const {setUserPhoto} = useTasks()
   const navigate = useNavigate()
-
+const [loading, setLoading] = useState(false)
     const {
         register,
         handleSubmit,
@@ -29,7 +30,7 @@ export default function RegisterForm(props) {
         else {
           console.log(data);
           try{
-      
+      setLoading(true)
       const result = props.onSubmit && await props.onSubmit(data.nombre, data.email, data.password, data.pfp)
       console.log(result)
      if (result.photo) {
@@ -39,6 +40,7 @@ export default function RegisterForm(props) {
       localStorage.setItem("token",result.token); // hacer dsp con cookies 🍪🍪
        navigate('/')}
       catch(e){
+        setLoading(false)
         setError("password",{type: "500", message:e.message})
 
       }}} 
@@ -49,6 +51,7 @@ export default function RegisterForm(props) {
 return(
 
 <>
+{loading && <LoadingScreen/>}
 {email && <div className='gmailIngresado'>
   <span id="userNameIco" className="material-symbols-outlined">account_circle</span>
         <p>Te registraste como {email}</p>
