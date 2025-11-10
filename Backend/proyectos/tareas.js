@@ -14,6 +14,17 @@ const setuptareas = () => {
         return res.status(400).json({ error: "missing data" });
       };
 
+      const validEstados = ["pending", "in-progress", "done"];
+      const validImportancia = ["low", "medium", "high"];
+    
+      if (!validEstados.includes(estado)) {
+        return res.status(400).json({ error: "Invalid estado. Must be: pending, in-progress, or done" });
+      };
+    
+      if (!validImportancia.includes(importancia)) {
+        return res.status(400).json({ error: "Invalid importancia. Must be: low, medium, or high" });
+      };
+
       const ismember = await prisma.tiene.findFirst({
         where: {
           id_persona: personaId,

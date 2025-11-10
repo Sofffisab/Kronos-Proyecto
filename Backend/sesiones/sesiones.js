@@ -1,7 +1,6 @@
 import { prisma } from '../prisma/prisma.js';
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
-import { tr } from 'zod/v4/locales';
 
 
 const setupsesiones = (JWT_SECRET) => {
@@ -148,7 +147,7 @@ const setupsesiones = (JWT_SECRET) => {
             res.status(500).json({ error: "Internal Server Error" });
         };
     };
-//
+
     const getcurrentuser = async (req, res) => {
         const personaId = req.personaId;
 
@@ -185,6 +184,179 @@ const setupsesiones = (JWT_SECRET) => {
             res.status(500).json({ error: "Internal Server Error" });
         };
     }
+/*
+    const deleteaccount = async (req, res) => {
+    const personaId = req.personaId;
+
+    try {
+        const persona = await prisma.persona.findUnique({
+        where: {
+            id: personaId,
+        },
+        });
+
+        if (!persona) {
+        return res.status(404).json({ error: "User not found" });
+        }
+
+        const ownedprojects = await prisma.proyecto.findMany({
+        where: {
+            creadorId: personaId,
+        },
+        include: {
+            personas_tiene: true,
+        },
+        });
+
+        const projectsWithOtherMembers = ownedprojects.filter((project) => project.personas_tiene.length > 1);
+
+        if (projectsWithOtherMembers.length > 0) {
+        return res.status(400).json({
+            error: "Cannot delete account while being creator of projects with other members",
+            projectsRequiringAction: projectsWithOtherMembers.map((p) => ({
+            id: p.id,
+            nombre: p.nombre,
+            memberCount: p.personas_tiene.length,
+            })),
+            message: "You must transfer project ownership or remove other members before deleting your account",
+        });
+        }
+
+        // <CHANGE> Eliminar mensajes y lecturas en TODOS los chats donde el usuario participa (no solo proyectos propios)
+        await prisma.leido.deleteMany({
+        where: {
+            id_persona: personaId,
+        },
+        });
+
+        await prisma.mensajes.deleteMany({
+        where: {
+            id_persona: personaId,
+        },
+        });
+        // </CHANGE>
+
+        // Eliminar proyectos propios (sin otros miembros)
+        for (const project of ownedprojects) {
+        const chats = await prisma.chat.findMany({
+            where: {
+            id_proyecto: project.id,
+            },
+            select: {
+            id: true,
+            },
+        });
+
+        for (const chat of chats) {
+            await prisma.leido.deleteMany({
+            where: {
+                mensaje: {
+                id_chat: chat.id,
+                },
+            },
+            });
+
+            await prisma.mensajes.deleteMany({
+            where: {
+                id_chat: chat.id,
+            },
+            });
+
+            await prisma.tiene_pc.deleteMany({
+            where: {
+                id_chat: chat.id,
+            },
+            });
+
+            await prisma.tiene_rc.deleteMany({
+            where: {
+                id_chat: chat.id,
+            },
+            });
+        }
+
+        await prisma.chat.deleteMany({
+            where: {
+            id_proyecto: project.id,
+            },
+        });
+
+        await prisma.tareas.deleteMany({
+            where: {
+            id_proyecto: project.id,
+            },
+        });
+
+        await prisma.archivos.deleteMany({
+            where: {
+            id_proyecto: project.id,
+            },
+        });
+
+        await prisma.invitaciones.deleteMany({
+            where: {
+            id_proyecto: project.id,
+            },
+        });
+
+        await prisma.tiene.deleteMany({
+            where: {
+            id_proyecto: project.id,
+            },
+        });
+
+        await prisma.proyecto.delete({
+            where: {
+            id: project.id,
+            },
+        });
+        }
+
+        await prisma.tiene_pc.deleteMany({
+        where: {
+            id_persona: personaId,
+        },
+        });
+
+        await prisma.tiene.deleteMany({
+        where: {
+            id_persona: personaId,
+        },
+        });
+
+        await prisma.archivos.deleteMany({
+        where: {
+            id_persona: personaId,
+        },
+        });
+
+        await prisma.tareas.updateMany({
+        where: {
+            id_persona: personaId,
+        },
+        data: {
+            id_persona: null,
+        },
+        });
+
+        await prisma.personalizaciones.deleteMany({
+        where: {
+            id_persona: personaId,
+        },
+        });
+
+        await prisma.persona.delete({
+        where: {
+            id: personaId,
+        },
+        });
+
+        res.status(200).json({ message: "Account deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting account:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+    };
 
     const deleteaccount = async (req, res) => {
         const personaId = req.personaId
@@ -209,7 +381,6 @@ const setupsesiones = (JWT_SECRET) => {
             },
         })
 
-        // Check if any owned projects have other members
         const projectsWithOtherMembers = ownedprojects.filter((project) => project.personas_tiene.length > 1)
 
         if (projectsWithOtherMembers.length > 0) {
@@ -311,17 +482,23 @@ const setupsesiones = (JWT_SECRET) => {
             },
         })
 
-        await prisma.leido.deleteMany({
+        await prisma.leido.updateMany({
             where: {
-            id_persona: personaId,
+                id_persona: personaId,
             },
-        })
+            data: {
+                id_persona: null,
+            },
+        });
 
-        await prisma.mensajes.deleteMany({
+        await prisma.mensajes.updateMany({
             where: {
-            id_persona: personaId,
+                id_persona: personaId,
             },
-        })
+            data: {
+                id_persona: null,
+            },
+        });
 
         await prisma.archivos.deleteMany({
             where: {
@@ -356,10 +533,10 @@ const setupsesiones = (JWT_SECRET) => {
         res.status(500).json({ error: "Internal Server Error" })
         }
     } 
-//
+*/
     const transferprojectownership = async (req, res) => {
-        const personaId = req.personaId;
-        const { proyectoId, newCreadorId } = req.body;
+        const { personaId, proyectoId } = req.params;
+        const newCreadorId = req.body;
 
         try {
             if (!proyectoId || !newCreadorId) {

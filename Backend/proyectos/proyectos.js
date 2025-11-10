@@ -751,8 +751,8 @@ const setupproyectos = () => {
   };
 
   const reassignmembertasks = async (req, res) => {
-    const { proyectoId, fromPersonaId, toPersonaId } = req.body;
-    const personaId = req.personaId;
+    const { proyectoId, personaId: fromPersonaId } = req.params;
+    const toPersonaId = req.body;
 
     try {
       if (!proyectoId || !fromPersonaId) {
@@ -769,7 +769,7 @@ const setupproyectos = () => {
         return res.status(404).json({ error: "Project not found" });
       };
 
-      if (project.creadorId !== personaId) {
+      if (project.creadorId !== requesterId) {
         return res.status(403).json({ error: "Only the project creator can reassign tasks" });
       };
 

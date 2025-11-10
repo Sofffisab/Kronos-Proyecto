@@ -15,7 +15,7 @@ model persona {
   contrasenia  String
   usuario  String   @unique
   foto_perfil   Bytes?
-  horario_inicio        DateTime? @db.Time 
+  horario_inicio        DateTime? @db.Time  
   horario_fin           DateTime? @db.Time
 
   archivos        archivos[]
@@ -23,38 +23,41 @@ model persona {
   personalizaciones personalizaciones[]
   proyectos_tiene tiene[]
   chat_tiene tiene_pc[]
-  leido_mensajes     leido[] 
+  leido_mensajes     leido[]
 
   googleRefreshToken String?
 
   tareas_responsable    tareas[] @relation("TareaResponsable")
   tareas_asignadas      tareas[] @relation("TareaAsignado")
+  
+  proyectos_creados proyecto[] @relation("ProyectoCreador")
 }
 
 model archivos {
   formato  String
   archivo   Bytes
-  nombrearchivo   String    
+  nombrearchivo   String     
   id    Int     @id @default(autoincrement())
   id_persona  Int
   id_proyecto   Int
 
-  persona       persona  @relation(fields: [id_persona], references: [id])
-  proyecto      proyecto @relation(fields: [id_proyecto], references: [id])
+  persona       persona  @relation(fields: [id_persona], references: [id], onDelete: Cascade)
+  proyecto      proyecto @relation(fields: [id_proyecto], references: [id], onDelete: Cascade)
 
   @@unique([nombrearchivo, id_proyecto])
 }
 
 model mensajes {
   id_chat   Int
-  id_persona    Int
+  id_persona    Int?
   mensaje   String
   estado    String
   id    Int     @id @default(autoincrement())
   fecha_envio DateTime @default(now())
 
-  chat          chat     @relation(fields: [id_chat], references: [id])
-  persona       persona  @relation(fields: [id_persona], references: [id])
+  chat          chat     @relation(fields: [id_chat], references: [id], onDelete: Cascade)
+  persona       persona?  @relation(fields: [id_persona], references: [id], onDelete: SetNull)
+
   leidopor leido[]
 }
 
@@ -63,18 +66,17 @@ model tareas {
   estado    String
   id    Int    @id @default(autoincrement())
   id_proyecto   Int
-  id_persona    Int
+  id_creador    Int
   id_responsable  Int?
   nombre_responsable  String?
   limite      DateTime
   eventId   String?
-  // estos dos hay que hacer cuentas para la logistica de manejo default
   importancia         String?  
   orden               Int?
 
-  responsable         persona?  @relation("TareaResponsable", fields: [id_responsable], references: [id])
-  asignado            persona  @relation("TareaAsignado", fields: [id_persona], references: [id])
-  proyecto            proyecto @relation(fields: [id_proyecto], references: [id])
+  responsable         persona?  @relation("TareaResponsable", fields: [id_responsable], references: [id], onDelete: SetNull)
+  proyecto            proyecto @relation(fields: [id_proyecto], references: [id], onDelete: Cascade)
+
 }
 
 model personalizaciones {
@@ -82,27 +84,27 @@ model personalizaciones {
   id_persona    Int
   codigo_a_insertar   String
 
-  persona             persona  @relation(fields: [id_persona], references: [id])
+  persona             persona  @relation(fields: [id_persona], references: [id], onDelete: Cascade)
 }
 
 model tiene {
   id        Int      @id @default(autoincrement())
-  id_persona  Int 
+  id_persona  Int  
   id_proyecto   Int
 
-  persona       persona  @relation(fields: [id_persona], references: [id])
-  proyecto      proyecto @relation(fields: [id_proyecto], references: [id])
+  persona       persona  @relation(fields: [id_persona], references: [id], onDelete: Cascade)
+  proyecto      proyecto @relation(fields: [id_proyecto], references: [id], onDelete: Cascade)
   @@unique([id_persona, id_proyecto])
 }
 
 model proyecto {
   id        Int      @id @default(autoincrement())
-  nombre     String   
+  nombre     String    
   limite     DateTime
   descripcion String?
   fechaInicio DateTime @default(now())
   fechaFin DateTime?
-  creadorId Int
+  creadorId Int?
   foto_perfil   Bytes?
   oficio    String?
 
@@ -112,6 +114,8 @@ model proyecto {
   chats           chat[]
   invitaciones    invitaciones[]
   chats_tiene_rc  tiene_rc[]
+  
+  creador         persona @relation("ProyectoCreador", fields: [creadorId], references: [id], onDelete: Restrict)
 }
 
 model invitaciones {
@@ -123,15 +127,15 @@ model invitaciones {
   fechaEnvio DateTime @default(now())
   fechaExpiracion DateTime
 
-  proyecto  proyecto @relation(fields: [id_proyecto], references: [id])
+  proyecto  proyecto @relation(fields: [id_proyecto], references: [id], onDelete: Cascade)
 }
 
 model chat {
   id        Int      @id @default(autoincrement())
-  nombre     String   
+  nombre     String    
 
   id_proyecto   Int
-  proyecto      proyecto @relation(fields: [id_proyecto], references: [id])
+  proyecto      proyecto @relation(fields: [id_proyecto], references: [id], onDelete: Cascade)
   mensajes      mensajes[]
   personas_tiene  tiene_pc[]
   tiene_rc      tiene_rc[]
@@ -141,9 +145,9 @@ model tiene_pc {
   id         Int      @id @default(autoincrement())
   id_persona Int
   id_chat    Int
-  
-  persona    persona  @relation(fields: [id_persona], references: [id])
-  chat       chat     @relation(fields: [id_chat], references: [id])
+   
+  persona    persona  @relation(fields: [id_persona], references: [id], onDelete: Cascade)
+  chat       chat     @relation(fields: [id_chat], references: [id], onDelete: Cascade)
   @@unique([id_persona, id_chat])
 }
 
@@ -151,29 +155,29 @@ model tiene_rc {
   id          Int      @id @default(autoincrement())
   id_proyecto Int
   id_chat     Int
-  
-  proyecto    proyecto @relation(fields: [id_proyecto], references: [id])
-  chat        chat     @relation(fields: [id_chat], references: [id])
+   
+  proyecto    proyecto @relation(fields: [id_proyecto], references: [id], onDelete: Cascade)
+  chat        chat     @relation(fields: [id_chat], references: [id], onDelete: Cascade)
 }
 
 model leido {
   id Int @id @default(autoincrement())
   id_mensaje Int
-  id_persona Int
+  id_persona Int?
 
-  mensaje mensajes @relation(fields: [id_mensaje], references: [id])
-  persona persona @relation(fields: [id_persona], references: [id])
+  mensaje mensajes @relation(fields: [id_mensaje], references: [id], onDelete: Cascade)
+  persona persona? @relation(fields: [id_persona], references: [id], onDelete: SetNull)
   @@unique([id_mensaje, id_persona])
 }
 
 model ia_paginas {
-  id    Int      @id @default(autoincrement())
-  pagina_id Int
-  name_archivo    String 
-  archivo_codigo_pagina  String 
-  lenguaje    String 
-  foto_pagina_jpg   Bytes
+  id              Int      @id @default(autoincrement())
+  pagina_id       Int
+  language_map    Json
+  codigo_json     Json
+  imagen_jpg      Bytes
+  tema            String
   respuesta_ia    String?
 
-    @@index([pagina_id])
+  @@index([pagina_id])
 }
