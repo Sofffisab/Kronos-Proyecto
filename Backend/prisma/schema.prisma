@@ -15,7 +15,7 @@ model persona {
   contrasenia  String
   usuario  String   @unique
   foto_perfil   Bytes?
-  horario_inicio        DateTime? @db.Time 
+  horario_inicio        DateTime? @db.Time  
   horario_fin           DateTime? @db.Time
 
   archivos        archivos[]
@@ -23,24 +23,26 @@ model persona {
   personalizaciones personalizaciones[]
   proyectos_tiene tiene[]
   chat_tiene tiene_pc[]
-  leido_mensajes     leido[] 
+  leido_mensajes     leido[]
 
   googleRefreshToken String?
 
   tareas_responsable    tareas[] @relation("TareaResponsable")
   tareas_asignadas      tareas[] @relation("TareaAsignado")
+  
+  proyectos_creados proyecto[] @relation("ProyectoCreador")
 }
 
 model archivos {
   formato  String
   archivo   Bytes
-  nombrearchivo   String    
+  nombrearchivo   String     
   id    Int     @id @default(autoincrement())
   id_persona  Int
   id_proyecto   Int
 
-  persona       persona  @relation(fields: [id_persona], references: [id])
-  proyecto      proyecto @relation(fields: [id_proyecto], references: [id])
+  persona       persona  @relation(fields: [id_persona], references: [id], onDelete: Cascade)
+  proyecto      proyecto @relation(fields: [id_proyecto], references: [id], onDelete: Cascade)
 
   @@unique([nombrearchivo, id_proyecto])
 }
@@ -55,6 +57,7 @@ model mensajes {
 
   chat          chat     @relation(fields: [id_chat], references: [id], onDelete: Cascade)
   persona       persona?  @relation(fields: [id_persona], references: [id], onDelete: SetNull)
+
   leidopor leido[]
 }
 
@@ -81,27 +84,27 @@ model personalizaciones {
   id_persona    Int
   codigo_a_insertar   String
 
-  persona             persona  @relation(fields: [id_persona], references: [id])
+  persona             persona  @relation(fields: [id_persona], references: [id], onDelete: Cascade)
 }
 
 model tiene {
   id        Int      @id @default(autoincrement())
-  id_persona  Int 
+  id_persona  Int  
   id_proyecto   Int
 
-  persona       persona  @relation(fields: [id_persona], references: [id])
-  proyecto      proyecto @relation(fields: [id_proyecto], references: [id])
+  persona       persona  @relation(fields: [id_persona], references: [id], onDelete: Cascade)
+  proyecto      proyecto @relation(fields: [id_proyecto], references: [id], onDelete: Cascade)
   @@unique([id_persona, id_proyecto])
 }
 
 model proyecto {
   id        Int      @id @default(autoincrement())
-  nombre     String   
+  nombre     String    
   limite     DateTime
   descripcion String?
   fechaInicio DateTime @default(now())
   fechaFin DateTime?
-  creadorId Int
+  creadorId Int?
   foto_perfil   Bytes?
   oficio    String?
 
@@ -111,6 +114,8 @@ model proyecto {
   chats           chat[]
   invitaciones    invitaciones[]
   chats_tiene_rc  tiene_rc[]
+  
+  creador         persona @relation("ProyectoCreador", fields: [creadorId], references: [id], onDelete: Restrict)
 }
 
 model invitaciones {
@@ -122,15 +127,15 @@ model invitaciones {
   fechaEnvio DateTime @default(now())
   fechaExpiracion DateTime
 
-  proyecto  proyecto @relation(fields: [id_proyecto], references: [id])
+  proyecto  proyecto @relation(fields: [id_proyecto], references: [id], onDelete: Cascade)
 }
 
 model chat {
   id        Int      @id @default(autoincrement())
-  nombre     String   
+  nombre     String    
 
   id_proyecto   Int
-  proyecto      proyecto @relation(fields: [id_proyecto], references: [id])
+  proyecto      proyecto @relation(fields: [id_proyecto], references: [id], onDelete: Cascade)
   mensajes      mensajes[]
   personas_tiene  tiene_pc[]
   tiene_rc      tiene_rc[]
@@ -140,9 +145,9 @@ model tiene_pc {
   id         Int      @id @default(autoincrement())
   id_persona Int
   id_chat    Int
-  
-  persona    persona  @relation(fields: [id_persona], references: [id])
-  chat       chat     @relation(fields: [id_chat], references: [id])
+   
+  persona    persona  @relation(fields: [id_persona], references: [id], onDelete: Cascade)
+  chat       chat     @relation(fields: [id_chat], references: [id], onDelete: Cascade)
   @@unique([id_persona, id_chat])
 }
 
@@ -150,9 +155,9 @@ model tiene_rc {
   id          Int      @id @default(autoincrement())
   id_proyecto Int
   id_chat     Int
-  
-  proyecto    proyecto @relation(fields: [id_proyecto], references: [id])
-  chat        chat     @relation(fields: [id_chat], references: [id])
+   
+  proyecto    proyecto @relation(fields: [id_proyecto], references: [id], onDelete: Cascade)
+  chat        chat     @relation(fields: [id_chat], references: [id], onDelete: Cascade)
 }
 
 model leido {

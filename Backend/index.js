@@ -51,7 +51,7 @@ const { login, signup, updateuserprofile, deleteaccount, getcurrentuser, transfe
 const { authentication } = setupautenticacion(JWT_SECRET);
 const { authorization, getatoken, lookfortoken, permision, getevents, redirectwithgoogle, createevents, deleteevents, updateevents } = setupcalendario();
 const { seefile, uploadfile, deletefile} = setuparchivos();
-const { createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, markmessageasread, getmessagereaders, deletechat, renamechat,  addmembertochat,  deletemessage, removememberfromchat } = setupchat();
+const { createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, markmessageasread, getmessagereaders, deletechat, renamechat, addmembertochat, deletemessage, removememberfromchat } = setupchat();
 const { createtarea, gettarea, gettareas, updatetarea, deletetarea } = setuptareas();
 const { getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones } = setuppersonalizaciones();
 const { createproject, getprojects, getproject, updateproject, invitetoproject, resendinvitation, joinproject, getprojectchats, getprojectfiles, getprojectmembers, removefromproject, deleteproject, getuserinvitations, reassignmembertasks } = setupproyectos()

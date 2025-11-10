@@ -769,7 +769,7 @@ const setupproyectos = () => {
         return res.status(404).json({ error: "Project not found" });
       };
 
-      if (project.creadorId !== personaId) {
+      if (project.creadorId !== requesterId) {
         return res.status(403).json({ error: "Only the project creator can reassign tasks" });
       };
 
