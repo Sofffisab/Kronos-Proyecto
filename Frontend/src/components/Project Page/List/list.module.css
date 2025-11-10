@@ -81,6 +81,9 @@ font-size: var(--mediumSize);
     border: 1px inset #0000004d;
     border-left: none;
 }
+.category span {
+    cursor: pointer
+}
 
 .end {
     border-right: none;
