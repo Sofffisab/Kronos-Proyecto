@@ -6,7 +6,6 @@ import SearchBar from "./SearchBar";
 export default function NavBarWSearch(props) {
 const {user} = useTasks()
 const [modal, setModal] = useState(false)
-
 return(
     <div className="NavSearch">
         <div id='leftIcons'>
@@ -17,7 +16,7 @@ return(
         <div id='rightIcons'>
         <img id='rightIcon1' src='../../public/questionIcon.svg'/>
         <img onClick={()=>setModal(true)} id='rightIcon2' src='../../public/UserDropDown.svg'/>,
-        {modal && <AccountModal name={user.mail} disableBg={()=>setModal(false)}/>}
+        {modal && <AccountModal name={user.nombre}mail={user.mail} disableBg={()=>setModal(false)}/>}
         </div>
 
     </div>
