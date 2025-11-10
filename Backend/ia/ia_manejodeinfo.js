@@ -270,7 +270,7 @@ subir a calendario
     const personaId = req.personaId
 
     try {
-      if (!horario_inicio || horario_fin ) {
+      if (!horario_inicio || !horario_fin ) {
         return res.status(400).json({ error: "missing data" })
       }
 

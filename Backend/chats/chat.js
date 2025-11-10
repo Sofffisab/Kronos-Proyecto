@@ -96,7 +96,6 @@ const setupchat = () => {
       res.status(500).json({ error: "Internal Server Error" })
     }
     };
-
     const getchatmessages = async (req, res) => {
         const { chatId } = req.params;
         const personaId = req.personaId;

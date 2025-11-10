@@ -206,7 +206,6 @@ const setupsesiones = (JWT_SECRET) => {
             },
         })
 
-        // Check if any owned projects have other members
         const projectsWithOtherMembers = ownedprojects.filter((project) => project.personas_tiene.length > 1)
 
         if (projectsWithOtherMembers.length > 0) {
@@ -308,17 +307,23 @@ const setupsesiones = (JWT_SECRET) => {
             },
         })
 
-        await prisma.leido.deleteMany({
+        await prisma.leido.updateMany({
             where: {
-            id_persona: personaId,
+                id_persona: personaId,
             },
-        })
+            data: {
+                id_persona: null,
+            },
+        });
 
-        await prisma.mensajes.deleteMany({
+        await prisma.mensajes.updateMany({
             where: {
-            id_persona: personaId,
+                id_persona: personaId,
             },
-        })
+            data: {
+                id_persona: null,
+            },
+        });
 
         await prisma.archivos.deleteMany({
             where: {
@@ -355,8 +360,8 @@ const setupsesiones = (JWT_SECRET) => {
     } 
 //
     const transferprojectownership = async (req, res) => {
-        const personaId = req.personaId;
-        const { proyectoId, newCreadorId } = req.body;
+        const { personaId, proyectoId } = req.params;
+        const newCreadorId = req.body;
 
         try {
             if (!proyectoId || !newCreadorId) {

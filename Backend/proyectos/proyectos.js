@@ -751,8 +751,8 @@ const setupproyectos = () => {
   };
 
   const reassignmembertasks = async (req, res) => {
-    const { proyectoId, fromPersonaId, toPersonaId } = req.body;
-    const personaId = req.personaId;
+    const { proyectoId, personaId: fromPersonaId } = req.params;
+    const toPersonaId = req.body;
 
     try {
       if (!proyectoId || !fromPersonaId) {

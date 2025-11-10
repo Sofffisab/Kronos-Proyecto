@@ -47,14 +47,14 @@ model archivos {
 
 model mensajes {
   id_chat   Int
-  id_persona    Int
+  id_persona    Int?
   mensaje   String
   estado    String
   id    Int     @id @default(autoincrement())
   fecha_envio DateTime @default(now())
 
-  chat          chat     @relation(fields: [id_chat], references: [id])
-  persona       persona  @relation(fields: [id_persona], references: [id])
+  chat          chat     @relation(fields: [id_chat], references: [id], onDelete: Cascade)
+  persona       persona?  @relation(fields: [id_persona], references: [id], onDelete: SetNull)
   leidopor leido[]
 }
 
@@ -63,18 +63,17 @@ model tareas {
   estado    String
   id    Int    @id @default(autoincrement())
   id_proyecto   Int
-  id_persona    Int
+  id_creador    Int
   id_responsable  Int?
   nombre_responsable  String?
   limite      DateTime
   eventId   String?
-  // estos dos hay que hacer cuentas para la logistica de manejo default
   importancia         String?  
   orden               Int?
 
-  responsable         persona?  @relation("TareaResponsable", fields: [id_responsable], references: [id])
-  asignado            persona  @relation("TareaAsignado", fields: [id_persona], references: [id])
-  proyecto            proyecto @relation(fields: [id_proyecto], references: [id])
+  responsable         persona?  @relation("TareaResponsable", fields: [id_responsable], references: [id], onDelete: SetNull)
+  proyecto            proyecto @relation(fields: [id_proyecto], references: [id], onDelete: Cascade)
+
 }
 
 model personalizaciones {
@@ -159,21 +158,21 @@ model tiene_rc {
 model leido {
   id Int @id @default(autoincrement())
   id_mensaje Int
-  id_persona Int
+  id_persona Int?
 
-  mensaje mensajes @relation(fields: [id_mensaje], references: [id])
-  persona persona @relation(fields: [id_persona], references: [id])
+  mensaje mensajes @relation(fields: [id_mensaje], references: [id], onDelete: Cascade)
+  persona persona? @relation(fields: [id_persona], references: [id], onDelete: SetNull)
   @@unique([id_mensaje, id_persona])
 }
 
 model ia_paginas {
-  id    Int      @id @default(autoincrement())
-  pagina_id Int
-  name_archivo    String 
-  archivo_codigo_pagina  String 
-  lenguaje    String 
-  foto_pagina_jpg   Bytes
+  id              Int      @id @default(autoincrement())
+  pagina_id       Int
+  language_map    Json
+  codigo_json     Json
+  imagen_jpg      Bytes
+  tema            String
   respuesta_ia    String?
 
-    @@index([pagina_id])
+  @@index([pagina_id])
 }
