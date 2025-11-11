@@ -1,0 +1,42 @@
+.iaPage {
+    height: calc(100vh - 12.5vh);
+    margin-top: 12.5vh;
+    width: 77.5%;
+    margin-left: 22.5%;
+}
+
+.title {
+    display: flex;
+    justify-content: flex-start;
+    gap: 2%;
+    align-items: center;
+    padding: 2%;
+    box-sizing: border-box;
+    font-family: var(--font);
+    font-size: calc(var(--headerSize) * 1.2)
+}
+.section {
+    font-family: var(--font);
+    
+}
+.section p {
+    color: var(--tertiaryColor);
+}
+.section input, textarea {
+    border: none;
+    padding: 1.5%;
+    resize: none;
+    font-family: var(--font);
+    font-size: var(--mediumSize);
+    width: 100%;
+    height: auto;
+    min-height: 8rem;
+    display: flex;  
+    white-space: pre-wrap; 
+    word-wrap: break-word; 
+    overflow-wrap: break-word;
+    
+}
+.section textarea:focus {
+    outline: none;
+}

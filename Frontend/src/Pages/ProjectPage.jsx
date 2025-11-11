@@ -9,8 +9,9 @@ import { getProjects } from "../../api/project";
 import LoadingScreen from '../components/LoadingScreen.jsx'
 import { useTasks } from "../context/ProjectContext";
 import { useNavigate } from "react-router";
+import IaPage from '../components/IaPage/IaPage.jsx'
 
-export default function ProjectPage() {
+export default function ProjectPage(props) {
     const params = useParams()
     const navigate = useNavigate()
     const { setCurrentId, contextProject}= useTasks()
@@ -46,7 +47,7 @@ return(
  <>
 <NavBarWSearch menuFunc={() => setSbStatus(!sbStatus)}/>
 <SideBar  projects={projects}style={style}/>
- <PageContent projName={contextProject.nombre}projectId={params.id} SbOpen={sbStatus}/>
+ {props.ia? <IaPage SbOpen={sbStatus}/> : <PageContent projName={contextProject.nombre}projectId={params.id} SbOpen={sbStatus}/>}
 </>
 )
 }

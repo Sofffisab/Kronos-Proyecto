@@ -85,7 +85,12 @@ const mapTasks = (taskState)=>{
       <Table
         onClick={props.selectable && (() => toggleModal(true))}
         name="Tareas Realizadas"
-        tasks={mapTasks('resolved')}
+        tasks={mapTasks('done')}
+      />
+      <Table
+        onClick={props.selectable && (() => toggleModal(true))}
+        name="Tareas Realizadas"
+        tasks={mapTasks('in-progress')}
       />
       <Table
         onClick={props.selectable && (() => toggleModal(true))}
