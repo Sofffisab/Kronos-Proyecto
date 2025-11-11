@@ -1,112 +1,82 @@
-// EN TODO EL ARCHIVO FALTA AGREGAR LOS ;
 import { prisma } from "../prisma/prisma.js";
-import { spawn } from "child_process";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
+import { spawn } from 'child_process';
+import { join } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const setupia = () => {
+
+
   // ============================================================================
   // FUNCIONES PARA MIRKIN - ANÁLISIS DE PÁGINAS WEB
   // ============================================================================
 
   const save = async (req, res) => {
-    const { name_archivo, archivo_codigo_pagina, lenguaje, foto_pagina_jpg, tema } = req.body;
+    const { pagina_id, archivos, foto_pagina_jpg, tema } = req.body;
     const personaId = req.personaId;
 
     try {
-      if (!name_archivo || !archivo_codigo_pagina || !lenguaje || !foto_pagina_jpg || !tema) {
+      // 1. Validar datos obligatorios
+      if (!pagina_id || !archivos || !Array.isArray(archivos) || archivos.length === 0 || !foto_pagina_jpg || !tema) {
         return res.status(400).json({ error: "missing data" });
       }
 
+      // 2. Construir language_map (objeto con nombre_archivo: lenguaje)
+      const language_map = {};
+      archivos.forEach((archivo) => {
+        if (!archivo.nombre || !archivo.lenguaje) {
+          throw new Error("Each archivo must have 'nombre' and 'lenguaje'");
+        }
+        language_map[archivo.nombre] = archivo.lenguaje;
+      });
+
+      // 3. Construir codigo_json (array de objetos con name y content)
+      const codigo_json = archivos.map((archivo) => {
+        if (!archivo.codigo) {
+          throw new Error("Each archivo must have 'codigo'");
+        }
+        return {
+          name: archivo.nombre,
+          content: archivo.codigo,
+        };
+      });
+
+      // 4. Convertir imagen base64 a Buffer
       const fotoBuffer = Buffer.from(foto_pagina_jpg, "base64");
 
+      // 5. Guardar en la base de datos
       const nuevapagina = await prisma.ia_paginas.create({
         data: {
-          name_archivo: name_archivo,
-          archivo_codigo_pagina: archivo_codigo_pagina,
-          lenguaje: lenguaje,
-          foto_pagina_jpg: fotoBuffer,
+          pagina_id: Number.parseInt(pagina_id, 10),
+          language_map: language_map,
+          codigo_json: codigo_json,
+          imagen_jpg: fotoBuffer,
           tema: tema,
         },
       });
 
-      res.status(201).json({ message: "page saved successfully", pagina: nuevapagina });
-    } catch (error) {
-      console.error("Error saving page:", error);
-      res.status(500).json({ error: "Internal Server Error" });
-    }
-  };
-  /*
-    Funcionalidad: Guardar página analizada
-
-    NECESITA UN FOREACH
-    falta poder subir mas de un archivo de codigo
-    que por cada archivo de codigo sea necesario un name_archivo, archivo_codigo_pagina y language
-    que cada pagina pueda tener solo una foto pagina compartida (en cada fila con mismo id se coloca la misma)
-    que todos los archivos de una misma pagina se guarden con el mismo id
-  */
-
-  const lookfor = async (req, res) => {
-    const { paginaId } = req.params;
-    const personaId = req.personaId;
-
-    try {
-      if (!paginaId) {
-        return res.status(400).json({ error: "missing data" });
-      }
-
-      const paginas = await prisma.ia_paginas.findMany({
-        where: {
-          id: Number.parseInt(paginaId, 10),
-        },
+      res.status(201).json({ 
+        message: "page saved successfully", 
+        pagina: {
+          id: nuevapagina.id,
+          pagina_id: nuevapagina.pagina_id,
+          tema: nuevapagina.tema,
+          archivos_guardados: archivos.length
+        }
       });
 
-      if (!paginas || paginas.length === 0) {
-        return res.status(404).json({ error: "page not found" });
-      }
-
-      const paginasagrupadas = paginas.map((pagina) => ({
-        name_archivo: pagina.name_archivo,
-        archivo_codigo_pagina: pagina.archivo_codigo_pagina,
-        lenguaje: pagina.lenguaje,
-      }));
-
-      res.status(200).json(paginasagrupadas);
     } catch (error) {
-      console.error("Error finding page:", error);
-      res.status(500).json({ error: "Internal Server Error" });
-    }
+      console.error("Error saving page:", error);
+      res.status(500).json({ 
+        error: "Internal Server Error", 
+        details: error.message,
+        retry: true,
+      });
+    };
   };
-  /*
-    Funcionalidad: Buscar todas las páginas con el mismo ID y agruparlas
-
-    Esto agarra de la base de datos la info como si YA FUERA un array
-    necesito que HAGA un array de TODAS las filas DISTINTAS en la db con mismo id_pagina
-  */
-
-  const saveresponse = async (req, res) => {
-    const { respuesta_ia } = req.params;
-    const personaId = req.personaId;
-
-    try {
-      if (!respuesta_ia) {
-        return res.status(400).json({ error: "missing data" });
-      }
-
-      const respuestaJSON = JSON.stringify(respuesta_ia);
-      res.status(200).json({ message: "IA response saved successfully", pagina: paginaactualizada });
-      respuestaJSON;
-    } catch (error) {
-      console.error("Error saving IA response:", error);
-      res.status(500).json({ error: "Internal Server Error" });
-    }
-  };
-  /*
-    Funcionalidad: Guardar respuesta de la IA que analiza
-  */
 
   const sendToPython = async (req, res) => {
     const { paginaId } = req.params;
@@ -120,7 +90,7 @@ const setupia = () => {
       // 1. Obtener todas las filas con el mismo paginaId
       const paginas = await prisma.ia_paginas.findMany({
         where: {
-          id: Number.parseInt(paginaId, 10),
+          pagina_id: Number.parseInt(paginaId, 10),
         },
       });
 
@@ -129,19 +99,11 @@ const setupia = () => {
       }
 
       // 2. Construir language_map y codigo_json
-      const language_map = {};
-      const codigo_json = [];
-
-      paginas.forEach((pagina) => {
-        language_map[pagina.name_archivo] = pagina.lenguaje;
-        codigo_json.push({
-          name: pagina.name_archivo,
-          content: pagina.archivo_codigo_pagina,
-        });
-      });
+      const language_map = paginas[0].language_map;
+      const codigo_json = paginas[0].codigo_json;
+      const foto_pagina_jpg = paginas[0].imagen_jpg.toString("base64");
 
       // 3. Obtener la foto (es la misma para todas las filas con mismo id)
-      const foto_pagina_jpg = paginas[0].foto_pagina_jpg.toString("base64");
       const tema = paginas[0].tema;
 
       // 4. Preparar datos para Python
@@ -235,150 +197,60 @@ const setupia = () => {
       res.status(500).json({ error: "Internal Server Error", details: error.message });
     }
   };
-  /*
-    Funcionalidad: Enviar datos a Python para análisis con IA (usando stdin/stdout)
-    
-    Flujo:
-    1. Busca todas las filas con el mismo paginaId
-    2. Construye language_map y codigo_json
-    3. Prepara datos en formato JSON
-    4. Usa spawn() para ejecutar Python
-    5. Envía datos por stdin
-    6. Recibe resultado por stdout
-    7. Parsea y valida resultado
-    8. Devuelve resultado al frontend
-    
-    Ventajas sobre archivos temporales:
-    - No hay I/O de disco (más rápido)
-    - No hay que limpiar archivos
-    - Más seguro (datos no quedan en disco)
-    - Mejor manejo de errores en tiempo real
-  */
 
-/*       - July -
-
-AGARRAR: Horario laboral(personas), limite de tareas(tareas), importancia (tareas), orden (tareas), 
-redistribuir informacion
-preguntar si quiere agregar a calendario
-subir a calendario
-*/
-
-  const getdata = async (req, res) => {
-    const { proyectoId } = req.params;
+  const saveResponse = async (req, res) => {
+    const { paginaId, tabla_analisis, codigo_mejorado, referencia_diseno } = req.body;
     const personaId = req.personaId;
-    const {horario_inicio, horario_fin} = req.params
-    const {limite, importancia, orden} = req.params
 
     try {
-      if (!horario_inicio || !horario_fin ) {
-        return res.status(400).json({ error: "missing data" })
+      // 1. Validar datos obligatorios
+      if (!paginaId || !tabla_analisis || !codigo_mejorado || !referencia_diseno) {
+        return res.status(400).json({ error: "missing data" });
       }
 
-      const ismember = await prisma.tiene.findMany({
-        where: {
-          id_persona: personaId,
-          id_proyecto: Number.parseInt(proyectoId, 10),
-        },
-      })
+      // 2. Construir objeto JSON con la respuesta completa
+      const respuesta_ia_json = {
+        tabla_analisis: tabla_analisis,
+        codigo_mejorado: codigo_mejorado,
+        referencia_diseno: referencia_diseno,
+        fecha_procesamiento: new Date().toISOString(),
+      };
 
-      if (!ismember) {
-        return res.status(403).json({ error: "You don't have permission to access this project" })
+      // 3. Convertir a string JSON para guardar en respuesta_ia (String?)
+      const respuesta_ia_string = JSON.stringify(respuesta_ia_json);
+
+      // 4. Actualizar el registro existente
+      const paginaActualizada = await prisma.ia_paginas.updateMany({
+        where: {
+          pagina_id: Number.parseInt(paginaId, 10),
+        },
+        data: {
+          respuesta_ia: respuesta_ia_string,
+        },
+      });
+
+      // 5. Verificar que se actualizó
+      if (paginaActualizada.count === 0) {
+        return res.status(404).json({ error: "page not found" });
       }
 
-      const persona = await prisma.persona.findUnique({
-        where: {
-          id: personaId,
-        },
-        select: {
-          horario_inicio: true,
-          horario_fin: true,
-        },
-      })
+      res.status(200).json({ 
+        message: "response saved successfully", 
+        paginaId: paginaId,
+        registros_actualizados: paginaActualizada.count
+      });
 
-      const tareas = await prisma.tareas.findMany({
-        where: {
-          id_proyecto: Number.parseInt(proyectoId, 10),
-        },
-        select: {
-          id: true,
-          nombre: true,
-          limite: true,
-          importancia: true,
-          orden: true,
-          estado: true,
-        },
-        orderBy: {
-          limite: "asc",
-        },
-      })
-
-      const datosparaia = {
-        horario_inicio: persona.horario_inicio,
-        horario_fin: persona.horario_fin,
-        tareas: tareas,
-      }
-
-      res.status(200).json(datosparaia)
     } catch (error) {
-      console.error("Error getting data for July:", error)
-      res.status(500).json({ error: "Internal Server Error" })
-    }
-  }
-/*
-  Funcionalidad: Obtener datos para organizar horarios
+      console.error("Error saving IA response:", error);
+      res.status(500).json({ 
+        error: "Internal Server Error", 
+        details: error.message,
+        retry: true 
+      });
+    };
+  };
 
-  Hay que hacer que traiga todas las tablas y valores
-*/
-
-  const updatetime = async (req, res) => {
-    const { proyectoId } = req.params
-    const { tareas_actualizadas } = req.body
-    const personaId = req.personaId
-
-    try {
-      if (!proyectoId || !tareas_actualizadas || !Array.isArray(tareas_actualizadas)) {
-        return res.status(400).json({ error: "missing data" })
-      }
-
-      const ismember = await prisma.tiene.findFirst({
-        where: {
-          id_persona: personaId,
-          id_proyecto: Number.parseInt(proyectoId, 10),
-        },
-      })
-
-      if (!ismember) {
-        return res.status(403).json({ error: "You don't have permission to update this project" })
-      }
-
-      const actualizaciones = tareas_actualizadas.map(async (tarea) => {
-        const updateData = {}
-        if (tarea.importancia !== undefined) updateData.importancia = tarea.importancia
-        if (tarea.orden !== undefined) updateData.orden = tarea.orden
-
-        return prisma.tareas.update({
-          where: {
-            id: tarea.id,
-          },
-          data: updateData,
-        })
-      })
-
-      await Promise.all(actualizaciones)
-
-      res.status(200).json({ message: "schedule updated successfully" })
-    } catch (error) {
-      console.error("Error updating schedule:", error)
-      res.status(500).json({ error: "Internal Server Error" })
-    }
-  }
-/*
-Funcionalidad: Actualizar cronograma sugerido 
-
-Falta cambiar todo (el metodo esta bien, falta la info especifica que necesita)
-*/
-
-  return { save, lookfor, saveresponse, getdata, updatetime }
+  return { save, sendToPython, saveResponse }
 }
 
 export default setupia
