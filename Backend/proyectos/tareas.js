@@ -3,6 +3,18 @@ import setupcalendario from "../calendario/calendario.js";
 
 const setuptareas = () => {
   const { lookfortoken } = setupcalendario();
+  
+  const calcularColorTarea = (tarea) => {
+    const now = new Date();
+    const limiteDate = new Date(tarea.limite);
+      
+    if (tarea.estado === "done") return "green";
+    if (tarea.estado === "in-progress") return "yellow";
+    if (tarea.estado === "pending") {
+      return now > limiteDate ? "black" : "red";
+    }
+    return "yellow";
+  };
 
   const createtarea = async (req, res) => {
     const { nombre, limite, id_persona_responsable, estado, importancia } = req.body;
@@ -101,9 +113,20 @@ const setuptareas = () => {
         };
       } catch (calendarError) {
         console.error("Error creating calendar event:", calendarError);
-      };
+        return res.status(201).json({ 
+          message: "task created successfully but calendar event failed", 
+          tarea: newtarea,
+          calendarFailed: true,
+          calendarError: "Failed to add to Google Calendar. You can add it manually."
+        });
+      }
 
-      res.status(201).json({ message: "task created successfully", tarea: newtarea });
+      res.status(201).json({ 
+        message: "task created successfully", 
+        tarea: newtarea,
+        calendarAdded: !!newtarea.eventId
+      });    
+    
     } catch (error) {
       console.error("Error creating task:", error);
       res.status(500).json({ error: "Internal Server Error" });
@@ -148,32 +171,10 @@ const setuptareas = () => {
         },
       });
 
-      const tareasconcolor = tareas.map((tarea) => {
-        const now = new Date();
-        const limiteDate = new Date(tarea.limite);
-        let color = "yellow";
-
-        if (tarea.estado === "done") {
-          if (now > limiteDate) {
-            color = "green";
-          } else {
-            color = "green";
-          };
-        } else if (tarea.estado === "in-progress") {
-          color = "yellow";
-        } else if (tarea.estado === "pending") {
-          if (now > limiteDate) {
-            color = "black";
-          } else {
-            color = "red";
-          };
-        };
-
-        return {
-          ...tarea,
-          color: color,
-        };
-      });
+      const tareasconcolor = tareas.map((tarea) => ({
+        ...tarea,
+        color: calcularColorTarea(tarea),
+      }));
 
       res.status(200).json(tareasconcolor);
     } catch (error) {
@@ -274,6 +275,12 @@ const setuptareas = () => {
           };
         } catch (calendarError) {
           console.error("Error updating calendar event:", calendarError);
+          return res.status(200).json({ 
+            message: "task updated successfully but calendar sync failed", 
+            tarea: updatedtarea,
+            calendarSyncFailed: true,
+            calendarError: "Calendar update failed. Changes not reflected in Google Calendar."
+          });
         };
       };
 
@@ -376,10 +383,13 @@ const setuptareas = () => {
         },
       });
 
-      const creador = await prisma.persona.findUnique({
-      where: { id: tarea.id_creador },
-      select: { id: true, usuario: true, nombre: true }
-  });
+
+      const creador = tarea.id_creador 
+        ? await prisma.persona.findUnique({
+            where: { id: tarea.id_creador },
+            select: { id: true, usuario: true, nombre: true }
+          })
+        : null;
 
       if (!tarea) {
         return res.status(404).json({ error: "task not found" });
@@ -396,23 +406,7 @@ const setuptareas = () => {
         return res.status(403).json({ error: "You don't have permission to view this task" });
       }
 
-      const now = new Date();
-      const limiteDate = new Date(tarea.limite);
-      let color = "yellow";
-
-      if (tarea.estado === "done") {
-        color = "green";
-      } else if (tarea.estado === "in-progress") {
-        color = "yellow";
-      } else if (tarea.estado === "pending") {
-        if (now > limiteDate) {
-          color = "black";
-        } else {
-          color = "red";
-        }
-      }
-
-      res.status(200).json({ ...tarea, color, creador });
+      res.status(200).json({ ...tarea, color: calcularColorTarea(tarea), creador });    
     } catch (error) {
       console.error("Error getting task:", error);
       res.status(500).json({ error: "Internal Server Error" });

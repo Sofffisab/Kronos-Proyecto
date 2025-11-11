@@ -40,11 +40,17 @@ const setupproyectos = () => {
       res.status(201).json({ message: "project created successfully", project: newproject });
     } catch (error) {
       if (error instanceof z.ZodError) {
-        return res.status(400).json({ error: error.errors });
-      }
+        return res.status(400).json({ 
+          error: "Validation failed",
+          details: error.errors,
+          retry: false
+        });
+      };
       console.error("Error creating project:", error);
-      res.status(500).json({ error: "Internal Server Error" });
-      throw error;
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true
+      });
     };
   };
 
@@ -205,16 +211,27 @@ const setupproyectos = () => {
         },
       });
 
-      
       let codigo;
       let codigoExists = true;
+      let intentos = 0;
+      const MAX_INTENTOS = 10;
 
-      while (codigoExists) {
-        codigo = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      while (codigoExists && intentos < MAX_INTENTOS) {
+        codigo = Math.random().toString(36).substring(2, 15) + 
+        Math.random().toString(36).substring(2, 15);
         const existing = await prisma.invitaciones.findUnique({
           where: { codigo: codigo },
         });
+
         codigoExists = !!existing;
+        intentos++;
+      };
+
+      if (intentos >= MAX_INTENTOS) {
+        return res.status(500).json({ 
+          error: "Could not generate unique code", 
+          retry: true 
+        });
       };
 
       const fechaExpiracion = new Date();
@@ -234,8 +251,13 @@ const setupproyectos = () => {
 
       if (!mailresult.success) {
         console.error("Failed to send invitation mail:", mailresult.error);
-      };
-
+        return res.status(201).json({ 
+          message: "invitation created but email failed to send", 
+          invitation: invitation,
+          emailFailed: true,
+          codigo: codigo
+        });
+      }
       res.status(201).json({ message: "invitation created successfully", invitation: invitation });
     } catch (error) {
       console.error("Error creating invitation:", error);
@@ -286,13 +308,24 @@ const setupproyectos = () => {
 
       let nuevoCodigo;
       let codigoExists = true;
+      let intentos = 0;
+      const MAX_INTENTOS = 10;
 
-      while (codigoExists) {
-        nuevoCodigo = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      while (codigoExists && intentos < MAX_INTENTOS) {
+        nuevoCodigo = Math.random().toString(36).substring(2, 15) + 
+        Math.random().toString(36).substring(2, 15);
         const existing = await prisma.invitaciones.findUnique({
           where: { codigo: nuevoCodigo },
         });
         codigoExists = !!existing;
+        intentos++;
+      };
+
+      if (intentos >= MAX_INTENTOS) {
+        return res.status(500).json({ 
+          error: "Could not generate unique code", 
+          retry: true 
+        });
       };
 
       const fechaExpiracion = new Date();
@@ -751,8 +784,9 @@ const setupproyectos = () => {
   };
 
   const reassignmembertasks = async (req, res) => {
-    const { proyectoId, personaId: fromPersonaId } = req.params;
+    const { proyectoId } = req.params;
     const { toPersonaId } = req.body;
+    const { personaId: fromPersonaId } = req.personaId;
 
     try {
       if (!proyectoId || !fromPersonaId) {

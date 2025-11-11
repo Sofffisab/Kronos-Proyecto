@@ -160,7 +160,12 @@ const setupcalendario = () => {
 
     } catch (error) {
       console.error('Failed to create event:', error);
-      res.status(500).json({ error: 'Failed to create event' });
+      const isAuthError = error.code === 401 || error.message?.includes('invalid_grant');
+      res.status(isAuthError ? 401 : 500).json({ 
+        error: isAuthError ? 'Calendar access expired. Please reconnect' : 'Failed to create event',
+        retry: !isAuthError, 
+        needsReauth: isAuthError
+      });
     };
   };
 
@@ -187,7 +192,12 @@ const setupcalendario = () => {
       res.status(204).json();
     } catch (error) {
       console.error('Failed to delete event:', error);
-      res.status(500).json({ error: 'Failed to delete event' });
+      const isAuthError = error.code === 401 || error.message?.includes('invalid_grant');
+      res.status(isAuthError ? 401 : 500).json({ 
+        error: isAuthError ? 'Calendar access expired. Please reconnect' : 'Failed to create event',
+        retry: !isAuthError, 
+        needsReauth: isAuthError
+      });
     };
   };
 
@@ -217,7 +227,12 @@ const setupcalendario = () => {
 
     } catch (error) {
       console.error('Failed to update event:', error);
-      res.status(500).json({error:'Failed to update event'});
+      const isAuthError = error.code === 401 || error.message?.includes('invalid_grant');
+      res.status(isAuthError ? 401 : 500).json({ 
+        error: isAuthError ? 'Calendar access expired. Please reconnect' : 'Failed to create event',
+        retry: !isAuthError, 
+        needsReauth: isAuthError
+      });
     };
   };
 
