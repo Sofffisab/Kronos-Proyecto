@@ -10,6 +10,7 @@ export default function AccountModal(props) {
     const [modal, setModal] = useState(false)
     const {userPhoto} = useTasks()
     const navigate = useNavigate()
+    
     const openEditModal = ()=>{
         
         setModal(true)
@@ -26,9 +27,16 @@ export default function AccountModal(props) {
         <DisabledBg noOpacity={true}modal={
         <BaseModal style={style.accountModalBody}inputs={
             <div className={style.AccountModal}>
-        <div className={style.userName}><img src={userPhoto || localStorage.getItem('pfp')}/><p>{props.mail}</p></div>
+        <div className={style.userName}><img src={userPhoto || localStorage.getItem('pfp')}/>
+        <div
+        ><p>{props.name}</p>
+        <p className={style.email}>{props.mail}</p>
+        </div></div>
+        
+        <div className={style.accModalBtns}>
         <SimpleButton text='Personalización' icon='edit' class={style.editBtn} onClick={openEditModal}/>
         <SimpleButton text='Cerrar sesión' icon='logout' class={style.logoutBtn} onClick={logOut}/>
+        </div>
         </div>
         }/>} onClick={props.disableBg}/>
         </>

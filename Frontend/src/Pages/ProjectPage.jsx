@@ -46,7 +46,7 @@ return(
  <>
 <NavBarWSearch menuFunc={() => setSbStatus(!sbStatus)}/>
 <SideBar  projects={projects}style={style}/>
-{!params.id?<div className='emptyProjPage'><p>Load a project to begin...</p></div> : <PageContent projName={contextProject.nombre}projectId={params.id} SbOpen={sbStatus}/>}
+ <PageContent projName={contextProject.nombre}projectId={params.id} SbOpen={sbStatus}/>
 </>
 )
 }

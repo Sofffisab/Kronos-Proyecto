@@ -62,8 +62,14 @@ return(
 <form onSubmit={handleSubmit(onSubmit)} className={props.class}>
 
        {step==1 &&  ( <div className='inputBox'>
-        <input id='firstInputRegister' 
-         {...register('email', {required:'inserte un email'})}
+        <input type='email'id='firstInputRegister' 
+         {...register('email', {required:'inserte un email',
+        
+         pattern: {
+          value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+          message: "Please enter a valid email address"
+         },
+        })}
         placeholder='nombre@empresa.com'/> 
          <button type='submit'style={step==1 ?{borderTopLeftRadius: '0px', borderBottomLeftRadius: '0px'} : null}> {step==1 ? 'Continuar' : 'Registrate'}</button>
 </div>)}
