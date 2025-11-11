@@ -264,10 +264,10 @@ subir a calendario
 */
 
   const getdata = async (req, res) => {
-    const { proyectoId } = req.params
+    const { proyectoId } = req.params;
+    const personaId = req.personaId;
     const {horario_inicio, horario_fin} = req.params
     const {limite, importancia, orden} = req.params
-    const personaId = req.personaId
 
     try {
       if (!horario_inicio || !horario_fin ) {

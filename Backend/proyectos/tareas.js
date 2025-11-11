@@ -52,7 +52,7 @@ const setuptareas = () => {
       const nombre_responsable = await prisma.persona.findUnique({
         where: {id: responsableId},
         select: {nombre: true}
-      })
+      });
       
 
       const newtarea = await prisma.tareas.create({
@@ -61,7 +61,8 @@ const setuptareas = () => {
           estado: estado,
           limite: limite,
           id_proyecto: Number.parseInt(proyectoId, 10),
-          id_persona: responsableId,
+          id_creador: personaId,
+          id_responsable: responsableId,
           nombre_responsable: nombre_responsable.nombre,
           importancia: importancia,
         },
@@ -134,7 +135,7 @@ const setuptareas = () => {
           id_proyecto: Number.parseInt(proyectoId, 10),
         },
         include: {
-          persona: {
+          responsable: {
             select: {
               id: true,
               usuario: true,
@@ -183,7 +184,7 @@ const setuptareas = () => {
 
   const updatetarea = async (req, res) => {
     const { tareaId } = req.params;
-    const { estado, nombre, limite, } = req.body;
+    const { estado, nombre, limite, id_persona_responsable} = req.body;
     const personaId = req.personaId;
 
     try {
@@ -216,6 +217,26 @@ const setuptareas = () => {
       if (estado) updateData.estado = estado;
       if (nombre) updateData.nombre = nombre;
       if (limite) updateData.limite = limite;
+      if (id_persona_responsable) {
+        const isresponsablemember = await prisma.tiene.findFirst({
+          where: {
+            id_persona: Number.parseInt(id_persona_responsable, 10),
+            id_proyecto: tarea.id_proyecto,
+          },
+        });
+
+        if (!isresponsablemember) {
+          return res.status(400).json({ error: "New responsible person is not a member of this project" });
+        };
+
+        const nombre_responsable = await prisma.persona.findUnique({
+          where: {id: Number.parseInt(id_persona_responsable, 10)},
+          select: {nombre: true}
+        });
+
+        updateData.id_responsable = Number.parseInt(id_persona_responsable, 10);
+        updateData.nombre_responsable = nombre_responsable.nombre;
+      };
 
       const updatedtarea = await prisma.tareas.update({
         where: {
@@ -227,7 +248,7 @@ const setuptareas = () => {
       if (tarea.eventId && (nombre || limite)) {
         try {
           const persona = await prisma.persona.findUnique({
-            where: { id: tarea.id_persona },
+            where: { id: tarea.id_responsable },
             select: { googleRefreshToken: true },
           });
 
@@ -296,7 +317,7 @@ const setuptareas = () => {
       if (tarea.eventId) {
         try {
           const persona = await prisma.persona.findUnique({
-            where: { id: tarea.id_persona },
+            where: { id: tarea.id_responsable },
             select: { googleRefreshToken: true },
           });
 
@@ -339,13 +360,6 @@ const setuptareas = () => {
           id: Number.parseInt(tareaId, 10),
         },
         include: {
-          asignado: {
-            select: {
-              id: true,
-              usuario: true,
-              nombre: true,
-            },
-          },
           responsable: {
             select: {
               id: true,
@@ -361,6 +375,11 @@ const setuptareas = () => {
           },
         },
       });
+
+      const creador = await prisma.persona.findUnique({
+      where: { id: tarea.id_creador },
+      select: { id: true, usuario: true, nombre: true }
+  });
 
       if (!tarea) {
         return res.status(404).json({ error: "task not found" });
@@ -393,7 +412,7 @@ const setuptareas = () => {
         }
       }
 
-      res.status(200).json({ ...tarea, color });
+      res.status(200).json({ ...tarea, color, creador });
     } catch (error) {
       console.error("Error getting task:", error);
       res.status(500).json({ error: "Internal Server Error" });

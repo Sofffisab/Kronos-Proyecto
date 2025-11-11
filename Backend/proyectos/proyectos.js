@@ -752,7 +752,7 @@ const setupproyectos = () => {
 
   const reassignmembertasks = async (req, res) => {
     const { proyectoId, personaId: fromPersonaId } = req.params;
-    const toPersonaId = req.body;
+    const { toPersonaId } = req.body;
 
     try {
       if (!proyectoId || !fromPersonaId) {
@@ -769,7 +769,7 @@ const setupproyectos = () => {
         return res.status(404).json({ error: "Project not found" });
       };
 
-      if (project.creadorId !== requesterId) {
+      if (project.creadorId !== personaId) {
         return res.status(403).json({ error: "Only the project creator can reassign tasks" });
       };
 
@@ -788,11 +788,15 @@ const setupproyectos = () => {
 
       await prisma.tareas.updateMany({
         where: {
-          id_persona: Number.parseInt(fromPersonaId, 10),
+          id_responsable: Number.parseInt(fromPersonaId, 10),
           id_proyecto: Number.parseInt(proyectoId, 10),
         },
         data: {
-          id_persona: toPersonaId ? Number.parseInt(toPersonaId, 10) : null,
+          id_responsable: toPersonaId ? Number.parseInt(toPersonaId, 10) : null,
+          nombre_responsable: toPersonaId ? (await prisma.persona.findUnique({
+            where: {id: Number.parseInt(toPersonaId, 10)},
+            select: {nombre: true},
+          })).nombre : null,
         },
       });
 

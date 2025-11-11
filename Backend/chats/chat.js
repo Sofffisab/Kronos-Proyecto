@@ -96,6 +96,7 @@ const setupchat = () => {
       res.status(500).json({ error: "Internal Server Error" })
     }
     };
+
     const getchatmessages = async (req, res) => {
         const { chatId } = req.params;
         const personaId = req.personaId;
@@ -120,13 +121,26 @@ const setupchat = () => {
                 where: {
                     id_chat: parseInt(chatId, 10)
                 },
+                include: {
+                    persona: {
+                        select: {
+                            id: true,
+                            nombre: true,
+                            usuario: true,
+                        }
+                    }
+                },
                 orderBy: {
                     id: 'asc'
                 }
             });
 
-            res.status(200).json(messages);
+            const messagesWithUserInfo = messages.map(msg => ({
+                ...msg,
+                persona: msg.persona || { id: null, nombre: "Usuario eliminado", usuario: "deleted" }
+            }));
 
+            res.status(200).json(messagesWithUserInfo);
         } catch (error) {
             console.error("Error getting messages:", error);
             res.status(500).json({ error: "Internal Server Error" });

@@ -29,7 +29,7 @@ model persona {
 
   tareas_responsable    tareas[] @relation("TareaResponsable")
   tareas_asignadas      tareas[] @relation("TareaAsignado")
-  
+  tareas_creadas    tareas[] @relation("TareaCreador")
   proyectos_creados proyecto[] @relation("ProyectoCreador")
 }
 
@@ -76,7 +76,7 @@ model tareas {
 
   responsable         persona?  @relation("TareaResponsable", fields: [id_responsable], references: [id], onDelete: SetNull)
   proyecto            proyecto @relation(fields: [id_proyecto], references: [id], onDelete: Cascade)
-
+  creador             persona  @relation("TareaCreador", fields: [id_creador], references: [id], onDelete: SetNull)
 }
 
 model personalizaciones {
