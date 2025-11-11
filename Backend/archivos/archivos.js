@@ -15,7 +15,7 @@ const setuparchivos = () => {
                 return res.status(400).json({ error: "missing data" });
             };
 
-            const archivo = await prisma.archivos.findUnique({
+            const archivo = await prisma.archivos.findFirst({
                 where: {
                     nombrearchivo: nombrearchivo
                 },
@@ -46,7 +46,10 @@ const setuparchivos = () => {
            
         } catch (error) {
             console.error("Error finding file:", error);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ 
+                error: "Internal Server Error",
+                retry: true 
+            });
         };
     };
 
@@ -97,7 +100,10 @@ const setuparchivos = () => {
                 return res.status(409).json({ error: "File name already exists" });
             }
             console.error("Error uploading file:", error);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ 
+                error: "Internal Server Error",
+                retry: true 
+            });
         };
     };
 
@@ -142,8 +148,11 @@ const setuparchivos = () => {
 
       res.status(200).json({ message: "File deleted successfully" });
     } catch (error) {
-      console.error("Error deleting file:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+        console.error("Error deleting file:", error);
+        res.status(500).json({ 
+            error: "Internal Server Error",
+            retry: true 
+        });
     };
   };
 

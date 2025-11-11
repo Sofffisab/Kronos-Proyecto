@@ -66,17 +66,20 @@ model tareas {
   estado    String
   id    Int    @id @default(autoincrement())
   id_proyecto   Int
-  id_creador    Int
+  id_creador    Int?
   id_responsable  Int?
   nombre_responsable  String?
   limite      DateTime
   eventId   String?
   importancia         String?  
   orden               Int?
+  id_asignado         Int?
+
 
   responsable         persona?  @relation("TareaResponsable", fields: [id_responsable], references: [id], onDelete: SetNull)
   proyecto            proyecto @relation(fields: [id_proyecto], references: [id], onDelete: Cascade)
-  creador             persona  @relation("TareaCreador", fields: [id_creador], references: [id], onDelete: SetNull)
+  creador             persona?  @relation("TareaCreador", fields: [id_creador], references: [id], onDelete: SetNull)
+  asignado            persona?  @relation("TareaAsignado", fields: [id_asignado], references: [id], onDelete: SetNull)
 }
 
 model personalizaciones {
@@ -115,7 +118,7 @@ model proyecto {
   invitaciones    invitaciones[]
   chats_tiene_rc  tiene_rc[]
   
-  creador         persona @relation("ProyectoCreador", fields: [creadorId], references: [id], onDelete: Restrict)
+  creador         persona? @relation("ProyectoCreador", fields: [creadorId], references: [id], onDelete: Restrict)
 }
 
 model invitaciones {

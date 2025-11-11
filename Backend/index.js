@@ -68,7 +68,10 @@ console.log('[DEBUG] Router mounted to app');
 
 app.use((err, req, res, next) => {
   console.error('Unhandled error:', err);
-  res.status(500).json({ error: 'Internal Server Error' });
+  res.status(500).json({ 
+    error: "Internal Server Error",
+    retry: true 
+  });
 });
 
 app.use((req, res) => {

@@ -56,7 +56,10 @@ const setupchat = () => {
             res.status(201).json({ message: "Chat created successfully", chat: newchat });
         } catch (error) {
             console.error("Error creating chat:", error);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ 
+                error: "Internal Server Error",
+                retry: true 
+            });
         };
     };
 
@@ -92,8 +95,11 @@ const setupchat = () => {
 
       res.status(201).json({ message: "Message sent successfully", mensaje: newmessage })
     } catch (error) {
-      console.error("Error sending message:", error)
-      res.status(500).json({ error: "Internal Server Error" })
+        console.error("Error sending message:", error)
+        res.status(500).json({ 
+            error: "Internal Server Error",
+            retry: true ,
+        });
     }
     };
 
@@ -143,7 +149,10 @@ const setupchat = () => {
             res.status(200).json(messagesWithUserInfo);
         } catch (error) {
             console.error("Error getting messages:", error);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ 
+                error: "Internal Server Error",
+                retry: true 
+            });
         };
     };
 
@@ -190,7 +199,10 @@ const setupchat = () => {
             res.status(200).json({ message: "Message status updated successfully", updatedmessage });
         } catch (error) {
             console.error("Error updating message status:", error);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ 
+                error: "Internal Server Error",
+                retry: true 
+            });
         };
     };
 
@@ -247,7 +259,10 @@ const setupchat = () => {
 
         } catch (error) {
             console.error("Error marking message as read:", error);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ 
+                error: "Internal Server Error",
+                retry: true 
+            });
         };
     };
 
@@ -295,11 +310,17 @@ const setupchat = () => {
                     },
                 },
             });
-            res.status(200).json(readers.map((r) => r.persona));
-
+            res.status(200).json(
+                readers
+                    .map((r) => r.persona)
+                    .filter((persona) => persona !== null)
+            );
         } catch (error) {
             console.error("Error getting message readers:", error);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ 
+                error: "Internal Server Error",
+                retry: true 
+            });
         };
     };
 
@@ -328,7 +349,10 @@ const setupchat = () => {
             res.status(200).json(chats);
         } catch (error) {
             console.error("Error getting person chats:", error);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ 
+                error: "Internal Server Error",
+                retry: true 
+            });
         };
     };
 
@@ -370,7 +394,10 @@ const setupchat = () => {
             res.status(200).json(members.map(m => m.persona));
         } catch (error) {
             console.error("Error getting chat members:", error);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ 
+                error: "Internal Server Error",
+                retry: true 
+            });
         };
     };
 
@@ -442,7 +469,10 @@ const setupchat = () => {
             res.status(200).json({ message: "Chat deleted successfully" });
         } catch (error) {
             console.error("Error deleting chat:", error);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ 
+                error: "Internal Server Error",
+                retry: true 
+            });
         };
     };
 
@@ -485,7 +515,10 @@ const setupchat = () => {
             res.status(200).json({ message: "Chat renamed successfully", chat: updatedchat });
         } catch (error) {
             console.error("Error renaming chat:", error);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ 
+                error: "Internal Server Error",
+                retry: true 
+            });
         };
     };
 
@@ -555,7 +588,10 @@ const setupchat = () => {
             res.status(201).json({ message: "Member added to chat successfully" });
         } catch (error) {
             console.error("Error adding member to chat:", error);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ 
+                error: "Internal Server Error",
+                retry: true 
+            });
         };
     };
 
@@ -578,8 +614,18 @@ const setupchat = () => {
                 return res.status(404).json({ error: "Message not found" });
             };
 
+            if (message.id_persona === null) {
+                return res.status(403).json({ 
+                    error: "Cannot delete messages from deleted users",
+                    retry: false 
+                });
+            };
+
             if (message.id_persona !== personaId) {
-                return res.status(403).json({ error: "You can only delete your own messages" });
+                return res.status(403).json({ 
+                    error: "You can only delete your own messages",
+                    retry: false 
+                });
             };
 
             await prisma.leido.deleteMany({
@@ -597,7 +643,10 @@ const setupchat = () => {
             res.status(200).json({ message: "Message deleted successfully" });
         } catch (error) {
             console.error("Error deleting message:", error);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ 
+                error: "Internal Server Error",
+                retry: true 
+            });
         };
     };
 
@@ -671,7 +720,10 @@ const setupchat = () => {
             res.status(200).json({ message: "Member removed from chat successfully" });
         } catch (error) {
             console.error("Error removing member from chat:", error);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ 
+                error: "Internal Server Error",
+                retry: true 
+            });
         };
     };
 

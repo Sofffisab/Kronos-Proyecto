@@ -47,7 +47,10 @@ const setupsesiones = (JWT_SECRET) => {
 
         } catch (error) {
             console.error("unsuccessful login", error);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ 
+                error: "Internal Server Error",
+                retry: true 
+            });
         };
         
     };
@@ -98,13 +101,16 @@ const setupsesiones = (JWT_SECRET) => {
             
             if (error.code === 'P2002') {
                 return res.status(409).json({ 
-                error: 'El email ya está registrado' 
+                    error: 'El email ya está registrado' ,
+                    retry: false,
+                    suggestion: 'Use a different email address'
                 });
             }
             console.error("error signing up", error);
             res.status(500).json({ 
                 error: "Internal Server Error",
-                details: error.message 
+                details: error.message,
+                retry: true 
             });
         };
     }
@@ -144,7 +150,10 @@ const setupsesiones = (JWT_SECRET) => {
                 return res.status(409).json({ error: "Username already taken" });
             };
             console.error("Error updating user profile:", error);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ 
+                error: "Internal Server Error",
+                retry: true 
+            });
         };
     };
 
@@ -181,7 +190,10 @@ const setupsesiones = (JWT_SECRET) => {
             res.status(200).json(userResponse);
         } catch (error) {
             console.error("Error getting current user:", error);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ 
+                error: "Internal Server Error",
+                retry: true 
+            });
         };
     }
 
@@ -196,7 +208,7 @@ const setupsesiones = (JWT_SECRET) => {
             });
 
             if (!persona) {
-            return res.status(404).json({ error: "User not found" });
+                return res.json(401).json({ error: "Authentication required" });
             }
 
             const ownedprojects = await prisma.proyecto.findMany({
@@ -221,25 +233,6 @@ const setupsesiones = (JWT_SECRET) => {
                     message: "You must transfer project ownership or remove other members before deleting your account",
                 });
             }
-
-            await prisma.leido.updateMany({
-                where: {
-                    id_persona: personaId,
-                },
-                data: {
-                    id_persona: null,
-                },
-            });
-            
-
-            await prisma.mensajes.updateMany({
-                where: {
-                    id_persona: personaId,
-                },
-                data: {
-                    id_persona: null,
-                },
-            });
 
             for (const project of ownedprojects) {
                 const chats = await prisma.chat.findMany({
@@ -358,7 +351,10 @@ const setupsesiones = (JWT_SECRET) => {
             res.status(200).json({ message: "Account deleted successfully" });
         } catch (error) {
             console.error("Error deleting account:", error);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ 
+                error: "Internal Server Error",
+                retry: true 
+            });
         }
     };
 
@@ -408,7 +404,10 @@ const setupsesiones = (JWT_SECRET) => {
             res.status(200).json({ message: "Project ownership transferred successfully" });
         } catch (error) {
             console.error("Error transferring project ownership:", error);
-            res.status(500).json({ error: "Internal Server Error" });
+            res.status(500).json({ 
+                error: "Internal Server Error",
+                retry: true 
+            });
         };
     };
 

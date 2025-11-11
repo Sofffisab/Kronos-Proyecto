@@ -129,7 +129,10 @@ const setuptareas = () => {
     
     } catch (error) {
       console.error("Error creating task:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
   };
 
@@ -179,7 +182,10 @@ const setuptareas = () => {
       res.status(200).json(tareasconcolor);
     } catch (error) {
       console.error("Error getting tasks:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
   };
 
@@ -287,7 +293,10 @@ const setuptareas = () => {
       res.status(200).json({ message: "task updated successfully", tarea: updatedtarea });
     } catch (error) {
       console.error("Error updating task:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
   };
 
@@ -349,7 +358,10 @@ const setuptareas = () => {
       res.status(204).json();
     } catch (error) {
       console.error("Error deleting task:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
   };
 
@@ -383,6 +395,9 @@ const setuptareas = () => {
         },
       });
 
+      if (!tarea) {
+        return res.status(404).json({ error: "task not found" });
+      }
 
       const creador = tarea.id_creador 
         ? await prisma.persona.findUnique({
@@ -390,10 +405,6 @@ const setuptareas = () => {
             select: { id: true, usuario: true, nombre: true }
           })
         : null;
-
-      if (!tarea) {
-        return res.status(404).json({ error: "task not found" });
-      }
 
       const ismember = await prisma.tiene.findFirst({
         where: {
@@ -409,7 +420,10 @@ const setuptareas = () => {
       res.status(200).json({ ...tarea, color: calcularColorTarea(tarea), creador });    
     } catch (error) {
       console.error("Error getting task:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     }
   };
 

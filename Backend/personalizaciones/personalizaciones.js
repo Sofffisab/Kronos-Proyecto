@@ -19,7 +19,10 @@ const setuppersonalizaciones = () => {
       res.status(200).json(personalizacion);
     } catch (error) {
       console.error("Error getting customizations:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
   };
 
@@ -92,7 +95,10 @@ const setuppersonalizaciones = () => {
       res.status(200).json({ message: "customizations updated successfully", personalizacion: personalizacion });
     } catch (error) {
       console.error("Error updating customizations:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
   };
 
@@ -119,7 +125,10 @@ const setuppersonalizaciones = () => {
       res.status(200).json({ message: "customizations deleted successfully" });
     } catch (error) {
       console.error("Error deleting customizations:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
   };
 

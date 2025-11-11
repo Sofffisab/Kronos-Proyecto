@@ -90,7 +90,10 @@ const setupcalendario = () => {
       res.json({ message: 'Authorization successful' });
     } catch (error) {
       console.error('Authorization failed:', error);
-      res.status(500).json({ error: 'Authorization failed.' });
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
 
   };
@@ -119,7 +122,10 @@ const setupcalendario = () => {
 
     } catch (error) {
       console.error('Failed to get events:', error);
-      res.status(500).json({ error: 'Failed to get events'});
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
   };
 

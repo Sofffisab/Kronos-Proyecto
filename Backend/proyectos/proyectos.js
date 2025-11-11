@@ -84,7 +84,10 @@ const setupproyectos = () => {
       res.status(200).json(projects);
     } catch (error) {
       console.error("Error getting projects:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
   };
 
@@ -136,7 +139,10 @@ const setupproyectos = () => {
       res.status(200).json(project);
     } catch (error) {
       console.error("Error getting project:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
   };
 
@@ -177,7 +183,10 @@ const setupproyectos = () => {
       res.status(200).json({ message: "project updated successfully", project: updatedproject });
     } catch (error) {
       console.error("Error updating project:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
   };
 
@@ -261,7 +270,10 @@ const setupproyectos = () => {
       res.status(201).json({ message: "invitation created successfully", invitation: invitation });
     } catch (error) {
       console.error("Error creating invitation:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
   };
 
@@ -345,13 +357,19 @@ const setupproyectos = () => {
 
       if (!mailresult.success) {
         console.error("Failed to resend invitation mail:", mailresult.error);
-        return res.status(500).json({ error: "Failed to resend invitation email" });
+        res.status(500).json({ 
+          error: "Internal Server Error",
+          retry: true 
+        });
       };
 
       res.status(200).json({ message: "Invitation email resent successfully", invitation: updatedInvitation });
     } catch (error) {
       console.error("Error resending invitation:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
   };
 
@@ -440,7 +458,10 @@ const setupproyectos = () => {
       res.status(200).json({ message: "joined project successfully" });
     } catch (error) {
       console.error("Error joining project:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
   };
 
@@ -481,7 +502,10 @@ const setupproyectos = () => {
       res.status(200).json(chats);
     } catch (error) {
       console.error("Error getting project chats:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+       res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
   };
 
@@ -527,7 +551,10 @@ const setupproyectos = () => {
       res.status(200).json(files);
     } catch (error) {
       console.error("Error getting project files:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
   };
 
@@ -570,7 +597,10 @@ const setupproyectos = () => {
       res.status(200).json(members.map((m) => m.persona));
     } catch (error) {
       console.error("Error getting project members:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
   };
 
@@ -630,7 +660,10 @@ const setupproyectos = () => {
       res.status(200).json({ message: "Member removed from project successfully" });
     } catch (error) {
       console.error("Error removing member from project:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
   };
 
@@ -733,7 +766,10 @@ const setupproyectos = () => {
       res.status(200).json({ message: "Project deleted successfully" });
     } catch (error) {
       console.error("Error deleting project:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
   };
 
@@ -779,14 +815,18 @@ const setupproyectos = () => {
       res.status(200).json(invitations);
     } catch (error) {
       console.error("Error getting user invitations:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
   };
 
   const reassignmembertasks = async (req, res) => {
     const { proyectoId } = req.params;
     const { toPersonaId } = req.body;
-    const { personaId: fromPersonaId } = req.personaId;
+    const { personaId: fromPersonaId } = req.params;
+    const personaId = req.personaId;
 
     try {
       if (!proyectoId || !fromPersonaId) {
@@ -837,7 +877,10 @@ const setupproyectos = () => {
       res.status(200).json({ message: "Tasks reassigned successfully" });
     } catch (error) {
       console.error("Error reassigning tasks:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
   };
 
