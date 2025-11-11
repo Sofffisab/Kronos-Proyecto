@@ -645,6 +645,23 @@ const setupchat = () => {
                 return res.status(404).json({ error: "Member not found in this chat" });
             };
 
+            await prisma.mensajes.updateMany({
+                where: {
+                    id_persona: Number.parseInt(memberToRemove, 10),
+                    id_chat: Number.parseInt(chatId, 10),
+                },
+                data: {
+                    id_persona: null,
+                },
+            });
+
+            await prisma.leido.deleteMany({
+                where: {
+                    id_persona: Number.parseInt(memberToRemove, 10),
+                    mensaje: { id_chat: Number.parseInt(chatId, 10)},
+                },
+            });
+
             await prisma.tiene_pc.delete({
                 where: {
                     id: memberinchat.id,
@@ -656,8 +673,8 @@ const setupchat = () => {
             console.error("Error removing member from chat:", error);
             res.status(500).json({ error: "Internal Server Error" });
         };
-    }; //bien pero no maneja eliminado y los mensajes
-//
+    };
+
     return { createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, markmessageasread, getmessagereaders, deletechat, renamechat, addmembertochat, deletemessage, removememberfromchat };
 };
 

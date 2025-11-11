@@ -81,9 +81,14 @@ function setupwebsocketserver(app, JWT_SECRET, prisma, wsInstance) {
         });
       } catch (error) {
         console.error("Error saving message to database or broadcasting:", error);
+        ws.send(JSON.stringify({ 
+          error: 'Failed to send message', 
+          retry: true,
+          details: 'Message could not be saved. Please try again.'
+        }));
       };
 
-      });
+    });
 
     ws.on('close', () => {
         console.log('someone left the chat');
