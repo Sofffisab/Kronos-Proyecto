@@ -18,7 +18,7 @@ return(
         <SearchBar/>
         <div id='rightIcons'>
         <img id='rightIcon1' src='../../public/questionIcon.svg'/>
-        <img onClick={()=>setModal(true)} id='rightIcon2' src='../../public/UserDropDown.svg'/>,
+        <img onClick={()=>setModal(!modal)} id='rightIcon2' src='../../public/UserDropDown.svg'/>,
         </div>
 
     </div>

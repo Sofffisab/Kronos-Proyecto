@@ -20,7 +20,8 @@ const router = createBrowserRouter([
   { path: '/project/:id', element: <ProjectPage/>},
   { path: '/project', element: <ProjectPage/>},
   { path: '/recover', element: <Recover /> },
-  { path: '/create', element: <CreateProjectPage/>}
+  { path: '/create', element: <CreateProjectPage/>},
+  { path: '/project/ia', element: <ProjectPage ia={true}/>}
   
 ]);
 createRoot(document.getElementById("root")).render(

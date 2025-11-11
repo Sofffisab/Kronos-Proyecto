@@ -86,6 +86,12 @@ gap: 2vh;
   font-family: var(--font);
   font-size: var(--headerSize);
 }
+.userName p {
+  white-space: nowrap;
+    max-width: 9rem;
+    text-overflow: ellipsis;      
+    overflow: hidden;
+}
 
 .userName img{
 height: 7rem;
@@ -149,7 +155,7 @@ width: auto;
 }
 
 .email {
- 
+  
   opacity: 0.7;
   font-size: .9rem
 }

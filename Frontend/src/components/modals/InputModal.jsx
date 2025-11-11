@@ -20,13 +20,14 @@ export default function InputModal(props) {
         <label>prioridad</label>
         <select id="pri">
           <option value="high">High</option>
-          <option value="mid">Mid</option>
+          <option value="medium">Medium</option>
           <option value="low">Low</option>
         </select>
         <label>Estado</label>
         <select id="state">
           <option value="pending">Pending</option>
-          <option value='resolved'>Resolved</option>
+          <option value="in-progress">In-progress</option>
+          <option value='done'>Done</option>
         </select></div>} buttonTxt='Crear' submit={props.submit}/>
       }
     />
