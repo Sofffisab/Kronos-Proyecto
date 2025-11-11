@@ -357,7 +357,7 @@ const setupproyectos = () => {
 
       if (!mailresult.success) {
         console.error("Failed to resend invitation mail:", mailresult.error);
-        res.status(500).json({ 
+        return res.status(500).json({ 
           error: "Internal Server Error",
           retry: true 
         });
@@ -823,9 +823,8 @@ const setupproyectos = () => {
   };
 
   const reassignmembertasks = async (req, res) => {
-    const { proyectoId } = req.params;
+    const { proyectoId, personaId: fromPersonaId } = req.params;
     const { toPersonaId } = req.body;
-    const { personaId: fromPersonaId } = req.params;
     const personaId = req.personaId;
 
     try {
@@ -867,10 +866,12 @@ const setupproyectos = () => {
         },
         data: {
           id_responsable: toPersonaId ? Number.parseInt(toPersonaId, 10) : null,
-          nombre_responsable: toPersonaId ? (await prisma.persona.findUnique({
+          nombre_responsable: toPersonaId 
+          ? (await prisma.persona.findUnique({
             where: {id: Number.parseInt(toPersonaId, 10)},
             select: {nombre: true},
-          })).nombre : null,
+          }))?.nombre || null
+          : null,
         },
       });
 

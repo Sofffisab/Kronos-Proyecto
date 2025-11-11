@@ -208,7 +208,7 @@ const setupsesiones = (JWT_SECRET) => {
             });
 
             if (!persona) {
-                return res.json(401).json({ error: "Authentication required" });
+                return res.status(401).json({ error: "Authentication required" });
             }
 
             const ownedprojects = await prisma.proyecto.findMany({

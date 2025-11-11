@@ -118,7 +118,7 @@ model proyecto {
   invitaciones    invitaciones[]
   chats_tiene_rc  tiene_rc[]
   
-  creador         persona? @relation("ProyectoCreador", fields: [creadorId], references: [id], onDelete: Restrict)
+  creador         persona? @relation("ProyectoCreador", fields: [creadorId], references: [id], onDelete: SetNull)
 }
 
 model invitaciones {

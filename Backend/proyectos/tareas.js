@@ -399,7 +399,7 @@ const setuptareas = () => {
         return res.status(404).json({ error: "task not found" });
       }
 
-      const creador = tarea.id_creador 
+      const creador = tarea.id_creador  
         ? await prisma.persona.findUnique({
             where: { id: tarea.id_creador },
             select: { id: true, usuario: true, nombre: true }
