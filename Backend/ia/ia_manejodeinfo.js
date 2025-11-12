@@ -70,9 +70,7 @@ const setupia = () => {
       });
     }
   };
-  const lookfor = () =>{}
-  const getdata = () =>{}
-  const updatetime = () =>{}
+
   const sendToPython = async (req, res) => {
     const { paginaId } = req.params;
     const personaId = req.personaId;
@@ -186,7 +184,7 @@ const setupia = () => {
     }
   };
 
-  const saveresponse = async (req, res) => {
+  const saveResponse = async (req, res) => {
     const { paginaId, tabla_analisis, codigo_mejorado, referencia_diseno } = req.body;
     const personaId = req.personaId;
 
