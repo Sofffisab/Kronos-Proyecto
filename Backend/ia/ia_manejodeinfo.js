@@ -80,7 +80,7 @@ const setupia = () => {
         return res.status(400).json({ error: "missing data" });
       }
 
-      const pagina = await prisma.ia_paginas.findFirst({
+      const paginas = await prisma.ia_paginas.findMany({
         where: {
           pagina_id: Number.parseInt(paginaId, 10),
         },
@@ -150,7 +150,7 @@ const setupia = () => {
 
         pythonProcess.on("error", (error) => {
           console.error("Error spawning Python process:", error);
-           return res.status(500).json({
+           reject({
             error: "Error processing with IA",
             details: stderrData || `Process exited with code ${code}`,
           });
