@@ -32,7 +32,7 @@
     width: 12vw;
     height: min-content;
     padding: .5vw;
-    border: var(--fontContrast) inset 2px;
+    border: var(--fontContrast) solid 2px;
     border-radius: 10px;
 }
 .agregarBtn button {
@@ -160,4 +160,8 @@ cursor: pointer;
 }
 .resolved {
     background-color: #758136C7;
+}
+
+.progress {
+    background-color: #E5E579;
 }

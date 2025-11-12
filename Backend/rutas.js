@@ -8,8 +8,16 @@ const setuprouter = ({ login, signup, authentication, getevents, permision, redi
     console.log('[DEBUG] signup function:', typeof signup);
     console.log('[DEBUG] login function:', typeof login);
     
+
+    const handlers = [ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, joinproject, createtarea, gettareas, gettarea, updatetarea, deletetarea, getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones, save, lookfor, saveresponse, getdata, updatetime, updateuserprofile, deletefile, markmessageasread, getmessagereaders, deletechat, renamechat, getprojectchats, getprojectfiles, getprojectmembers, removefromproject, deleteproject, getuserinvitations, resendinvitation, deleteaccount, getcurrentuser, transferprojectownership, reassignmembertasks,  addmembertochat,  deletemessage, removememberfromchat]
+    for (const [key, value] of Object.entries(handlers)) {
+        if (typeof value !== "function") {
+          console.error(`❌ ${key} NO es una función:`, value);
+        }}
+    
     const router = Router();
 
+    
 
     router.get("/", (req, res) => {
         res.json({

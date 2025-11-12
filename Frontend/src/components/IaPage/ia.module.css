@@ -25,6 +25,7 @@
 .section input, textarea {
     border: none;
     padding: 1.5%;
+    box-sizing: border-box;
     resize: none;
     font-family: var(--font);
     font-size: var(--mediumSize);
