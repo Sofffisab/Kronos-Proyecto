@@ -599,6 +599,7 @@ button {
   color: var(--fontContrast);
   display: flex;
   gap: 5%;
+  justify-content: space-between;
   align-items: center
 }
 .projectColorBox {
@@ -610,7 +611,7 @@ button {
 .projectBoxName {
 
   white-space: nowrap;
-    max-width: 10rem;
+    max-width: 8rem;
     text-overflow: ellipsis;      
     overflow: hidden;
 

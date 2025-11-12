@@ -2,11 +2,14 @@ import SimpleButton from '../components/SimpleButton.jsx'
 import Separator from './Separator.jsx'
 import {Link} from 'react-router'
 import FancyTitle from './FancyTitle.jsx'
-import { stringToColor } from '../../api/project.js'
+import ProjectItem from './ProjectItem.jsx'
+import Task from './Project Page/List/Task.jsx'
+
+
 export default function SideBar(props) {
     
 const projects = props.projects? props.projects.map((item)=> (
-<Link className='project' key={item.id}to={'/project/'+item.id}> <div><div className='projectColorBox' style={{backgroundColor: stringToColor(item.nombre)}}/><p className='projectBoxName'>{item.nombre}</p></div></Link>
+    <ProjectItem id={item.id} nombre={item.nombre} date={item.fechaInicio} miembros={item.personas_tiene}/>
 )) : 'Nothing to see here...'
 
 const teams = props.teams? props.teams.map((item)=> (

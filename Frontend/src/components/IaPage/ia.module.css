@@ -41,3 +41,25 @@
 .section textarea:focus {
     outline: none;
 }
+.section input {
+    cursor: pointer;
+}
+
+.imageBox img {
+    height: 10rem;
+    width: auto;
+    opacity: 0.8;
+    border-radius: 10px;
+}
+.imageBox {
+    position: relative;
+    width: min-content;
+}
+.imageBox span {
+    position: absolute;
+    top: .5rem;
+    right: .5rem;
+    z-index: 2;
+    cursor: pointer;
+    opacity: 0.8;
+}

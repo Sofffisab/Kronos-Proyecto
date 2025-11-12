@@ -366,6 +366,11 @@ const setupia = () => {
     }
   };
 
+  const lookfor = ()=> {}
+  const saveresponse = ()=> {}
+  const getdata = () => {}
+  const updatetime = () => {}
+
   const updateSchedule = async (req, res) => {
     const { proyectoId } = req.params;
     const { tareas_actualizadas } = req.body;
@@ -413,7 +418,7 @@ const setupia = () => {
     }
   };
 
-  return { save, sendToPython, saveResponse, getDataForScheduling, sendToPythonToo, updateSchedule};
+  return { save, lookfor, saveresponse, getdata, updatetime, sendToPython, saveResponse, getDataForScheduling, sendToPythonToo, updateSchedule};
 };
 
 export default setupia;
