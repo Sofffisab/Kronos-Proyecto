@@ -239,7 +239,7 @@ const setupia = () => {
     const personaId = req.personaId;
 
     try {
-      // <CHANGE> Verificar permisos primero
+      // Verificar permisos primero
       const ismember = await prisma.tiene.findFirst({
         where: {
           id_persona: personaId,
@@ -249,9 +249,9 @@ const setupia = () => {
 
       if (!ismember) {
         return res.status(403).json({ error: "You don't have permission to access this project" });
-      }
+      };
 
-      // <CHANGE> Obtener horario del usuario desde la base de datos
+      // Obtener horario del usuario desde la base de datos
       const persona = await prisma.persona.findUnique({
         where: { id: personaId },
         select: {
@@ -260,7 +260,7 @@ const setupia = () => {
         },
       });
 
-      // <CHANGE> Obtener tareas con toda la información necesaria
+      // Obtener tareas con toda la información necesaria
       const tareas = await prisma.tareas.findMany({
         where: {
           id_proyecto: Number.parseInt(proyectoId, 10),
@@ -279,17 +279,16 @@ const setupia = () => {
         },
       });
 
-      // <CHANGE> Formatear datos para la IA
+      // Formatear datos para la IA
       const datosparaia = {
         horario_inicio: persona.horario_inicio,
         horario_fin: persona.horario_fin,
-        tareas: tareas.map(t => ({
+        tareas: tareas.map((t) => ({
           id: t.id,
           nombre: t.nombre,
-          fecha_limite: t.limite.toISOString().split('T')[0], // Formato YYYY-MM-DD
+          fecha_limite: t.limite.toISOString().split("T")[0], // Formato YYYY-MM-DD
           importancia: t.importancia,
           orden: t.orden,
-          duracion: 60 // Duración estimada en minutos, puedes agregar este campo a tu schema
         })),
       };
 
@@ -297,7 +296,7 @@ const setupia = () => {
     } catch (error) {
       console.error("Error getting data for July:", error);
       res.status(500).json({ error: "Internal Server Error" });
-    }
+    };
   };
 
   const sendToPythonToo = async (req, res) => {
@@ -305,7 +304,9 @@ const setupia = () => {
     const personaId = req.personaId;
 
     try {
-      // <CHANGE> Primero obtener los datos usando la función anterior
+      console.log(`[v0] Sending to Python for proyecto: ${proyectoId}`);
+
+      // Verificar permisos
       const ismember = await prisma.tiene.findFirst({
         where: {
           id_persona: personaId,
@@ -315,8 +316,9 @@ const setupia = () => {
 
       if (!ismember) {
         return res.status(403).json({ error: "You don't have permission to access this project" });
-      }
+      };
 
+      // Obtener horario del usuario
       const persona = await prisma.persona.findUnique({
         where: { id: personaId },
         select: {
@@ -325,6 +327,11 @@ const setupia = () => {
         },
       });
 
+      if (!persona) {
+        return res.status(404).json({ error: "User not found" });
+      };
+
+      // Obtener tareas pendientes
       const tareas = await prisma.tareas.findMany({
         where: {
           id_proyecto: Number.parseInt(proyectoId, 10),
@@ -334,47 +341,119 @@ const setupia = () => {
           id: true,
           nombre: true,
           limite: true,
-          duracion: true, // Asegúrate de tener este campo
+          importancia: true,
+          orden: true,
+
+        },
+        orderBy: {
+          limite: "asc",
         },
       });
 
-      // <CHANGE> Enviar a Python
-      const response = await fetch("http://localhost:5000/organizar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          tareas: tareas.map(t => ({
-            nombre: t.nombre,
-            fecha_limite: t.limite.toISOString().split('T')[0],
-            duracion: t.duracion || 60,
-          })),
-          horario_inicio: persona.horario_inicio,
-          horario_fin: persona.horario_fin,
-        }),
+      // Preparar datos para Python
+      const datosParaPython = {
+        horario_inicio: persona.horario_inicio,
+        horario_fin: persona.horario_fin,
+        tareas: tareas.map((t) => ({
+          id: t.id,
+          nombre: t.nombre,
+          fecha_limite: t.limite.toISOString().split("T")[0],
+          importancia: t.importancia,
+          orden: t.orden,
+        })),
+        proyectoId: Number.parseInt(proyectoId, 10),
+      };
+
+      const pythonScript = join(__dirname, "../../IA/organizar_tareas.py");
+      console.log("[v0] Executing Python script:", pythonScript);
+
+      const pythonProcess = spawn("python", [pythonScript]);
+
+      let stdoutData = "";
+      let stderrData = "";
+
+      // Enviar datos por stdin
+      pythonProcess.stdin.write(JSON.stringify(datosParaPython));
+      pythonProcess.stdin.end();
+
+      const resultado = await new Promise((resolve, reject) => {
+        pythonProcess.stdout.on("data", (data) => {
+          stdoutData += data.toString();
+        });
+
+        pythonProcess.stderr.on("data", (data) => {
+          stderrData += data.toString();
+          console.error("Python stderr:", data.toString());
+        });
+
+        pythonProcess.on("close", (code) => {
+          if (code !== 0) {
+            console.error(`Python process exited with code ${code}`);
+            console.error("stderr:", stderrData);
+            reject({
+              error: "Error processing schedule with IA",
+              details: stderrData || `Process exited with code ${code}`,
+            });
+          } else {
+            try {
+              const parsed = JSON.parse(stdoutData);
+              resolve(parsed);
+            } catch (parseError) {
+              console.error("Error parsing Python result:", parseError);
+              console.error("stdout:", stdoutData);
+              reject({
+                error: "Error parsing IA response",
+                details: parseError.message,
+                raw_output: stdoutData.substring(0, 500),
+              });
+            };
+          };
+        });
+
+        pythonProcess.on("error", (error) => {
+          console.error("Error spawning Python process:", error);
+          reject({
+            error: "Error executing Python script",
+            details: error.message,
+          });
+        });
       });
 
-      if (!response.ok) {
-        throw new Error("Python server error");
-      }
+      if (!resultado.success) {
+        return res.status(500).json({
+          error: "IA scheduling failed",
+          details: resultado.error,
+          retry: true,
+        });
+      };
 
-      const data = await response.json();
-      res.status(200).json(data);
-      
+      res.status(200).json({
+        message: "Schedule suggestion generated successfully",
+        plan_sugerido: resultado.plan,
+        nota: "Este es un plan sugerido. Use updateSchedule con plan_aceptado para guardarlo.",
+      })
     } catch (error) {
       console.error("Error sending to Python:", error);
-      res.status(500).json({ error: "Internal Server Error" });
-    }
+      res.status(500).json({
+        error: error.error || "Internal Server Error",
+        details: error.details || error.message,
+        retry: true,
+      });
+    };
   };
 
   const updateSchedule = async (req, res) => {
     const { proyectoId } = req.params;
-    const { tareas_actualizadas } = req.body;
+    const { plan_aceptado, agregar_a_calendario } = req.body;
     const personaId = req.personaId;
 
     try {
-      if (!proyectoId || !tareas_actualizadas || !Array.isArray(tareas_actualizadas)) {
-        return res.status(400).json({ error: "missing data" });
-      }
+      if (!plan_aceptado || !Array.isArray(plan_aceptado) || plan_aceptado.length === 0) {
+        return res.status(400).json({
+          error: "missing data or plan not confirmed",
+          message: "You must accept the suggested plan before saving",
+        });
+      };
 
       const ismember = await prisma.tiene.findFirst({
         where: {
@@ -385,18 +464,25 @@ const setupia = () => {
 
       if (!ismember) {
         return res.status(403).json({ error: "You don't have permission to update this project" });
-      }
+      };
 
-      // <CHANGE> Actualizar cada tarea con Promise.all
-      const actualizaciones = tareas_actualizadas.map(async (tarea) => {
+      for (const tarea of plan_aceptado) {
+        if (!tarea.id || !tarea.nombre) {
+          return res.status(400).json({
+            error: "Invalid plan structure",
+            message: "Each task must have 'id' and 'nombre'",
+          });
+        };
+      };
+
+      const actualizaciones = plan_aceptado.map(async (tarea) => {
         const updateData = {};
+
         if (tarea.importancia !== undefined) updateData.importancia = tarea.importancia;
         if (tarea.orden !== undefined) updateData.orden = tarea.orden;
-        
-        // <CHANGE> Si la IA devuelve dia_recomendado, actualizar el límite
         if (tarea.dia_recomendado !== undefined) {
           updateData.limite = new Date(tarea.dia_recomendado);
-        }
+        };
 
         return prisma.tareas.update({
           where: { id: tarea.id },
@@ -404,16 +490,75 @@ const setupia = () => {
         });
       });
 
-      await Promise.all(actualizaciones);
+      const tareasActualizadas = await Promise.all(actualizaciones);
 
-      res.status(200).json({ message: "schedule updated successfully" });
+      const eventosCreados = [];
+      if (agregar_a_calendario === true) {
+        const calendario = setupcalendario();
+
+        for (const tarea of tareasActualizadas) {
+          try {
+            const eventDetails = {
+              summary: tarea.nombre,
+              description: `Tarea del proyecto - Importancia: ${tarea.importancia || "Media"}`,
+              start: {
+                dateTime: tarea.limite.toISOString(),
+                timeZone: "America/Argentina/Buenos_Aires",
+              },
+              end: {
+                dateTime: new Date(tarea.limite.getTime() + 60 * 60 * 1000).toISOString(), // +1 hora
+                timeZone: "America/Argentina/Buenos_Aires",
+              },
+            };
+
+            await new Promise((resolve, reject) => {
+              const mockReq = {
+                personaId,
+                body: eventDetails,
+              };
+              const mockRes = {
+                status: (code) => ({
+                  json: (data) => {
+                    if (code === 201) {
+                      eventosCreados.push({ tareaId: tarea.id, eventId: data.id })
+                      resolve(data)
+                    } else {
+                      reject(new Error(data.error || "Failed to create event"))
+                    };
+                  },
+                }),
+              };
+              calendario.createevents(mockReq, mockRes);
+            });
+
+            await prisma.tareas.update({
+              where: { id: tarea.id },
+              data: { eventId: eventosCreados[eventosCreados.length - 1].eventId },
+            });
+          } catch (calendarError) {
+            console.error(`Error adding task ${tarea.id} to calendar:`, calendarError);
+            // Continuar con otras tareas aunque falle una
+          };
+        };
+      };
+
+      res.status(200).json({
+        message: "Schedule updated successfully",
+        tareas_actualizadas: tareasActualizadas.length,
+        eventos_creados: eventosCreados.length,
+        calendario_integrado: agregar_a_calendario === true,
+      });
     } catch (error) {
       console.error("Error updating schedule:", error);
-      res.status(500).json({ error: "Internal Server Error" });
-    }
+      res.status(500).json({
+        error: "Internal Server Error",
+        details: error.message,
+        retry: true,
+      });
+    };
   };
 
-  return { save, sendToPython, saveResponse, getDataForScheduling, sendToPythonToo, updateSchedule};
-};
+  return { save, sendToPython, saveResponse, getDataForScheduling, sendToPythonToo, updateSchedule }
+}
 
-export default setupia;
+export default setupia
