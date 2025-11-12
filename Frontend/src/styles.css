@@ -104,18 +104,20 @@ button {
 }
 
 .LandingTitle {
-  width: 100%;
-  font-family: var(--classyFont);
+  width: 50%;
+  font-family: var(--font);
   margin-top: 10rem;
   text-align: center;
   margin-bottom: 4rem;
 }
 .LandingTitle h1 {
   font-size: 4.5rem;
-  font-weight: 50;
+  font-weight: 200;
+ color:var(--tertiaryColor);
   margin-bottom: 1rem;
 }
 .LandingTitle p {
+  color: var(--secondaryColor);
   font-size: var(--headerSize);
 }
 
@@ -138,6 +140,7 @@ button {
 .EmpezarBtn button {
   font-size: var(--HeaderSize);
   color: var(--textColor);
+  font-family: var(--font);
 }
 
 .gallery {
@@ -538,7 +541,7 @@ button {
 #addBtn {
   background-color: var(--tertiaryColor);
   width: min-content;
-  padding: 0 2% 0 2%;
+  padding: 0 4% 0 4%;
 }
 .separator {
   margin: 0%;

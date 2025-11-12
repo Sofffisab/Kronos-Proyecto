@@ -19,7 +19,7 @@ export const postTask = async (nombre, limite, responsable, token, projectId, es
 
 export const markTask = async (tareaId, estado, token) => {
     const response = await fetch(`http://localhost:3000/api/tasks/${tareaId}`,{
-        method: 'PUT',
+        'method': 'PUT',
         'headers': {
             'Content-Type': 'application/json',
             'Authorization': `bearer ${token}`},
@@ -37,8 +37,8 @@ export const markTask = async (tareaId, estado, token) => {
 
 export const deleteTask = async (id, token) => {
    const response = await fetch(`http://localhost:3000/api/tasks/${id}`,{
-    method: 'DELETE',
-    headers: {'Content-Type': 'application/json',
+    'method': 'DELETE',
+    'headers' : {'Content-Type': 'application/json',
             'Authorization': `bearer ${token}`}}
    )
 

@@ -2,7 +2,6 @@ import { prisma } from "../prisma/prisma.js";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
 import { spawn } from 'child_process';
-import { join } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -77,7 +76,9 @@ const setupia = () => {
       });
     };
   };
-
+  const lookfor = () =>{}
+  const getdata = () =>{}
+  const updatetime = () =>{}
   const sendToPython = async (req, res) => {
     const { paginaId } = req.params;
     const personaId = req.personaId;
@@ -198,7 +199,7 @@ const setupia = () => {
     }
   };
 
-  const saveResponse = async (req, res) => {
+  const saveresponse = async (req, res) => {
     const { paginaId, tabla_analisis, codigo_mejorado, referencia_diseno } = req.body;
     const personaId = req.personaId;
 
@@ -250,7 +251,7 @@ const setupia = () => {
     };
   };
 
-  return { save, sendToPython, saveResponse }
+  return { save, sendToPython, saveresponse, lookfor, updatetime, getdata }
 }
 
 export default setupia

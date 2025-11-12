@@ -34,9 +34,9 @@ const images= [{src:'../../public/coconut.jpg', row: 20, id: 1},
     titleLink='/' 
     />
     <div className='LandingPage'>
-<FancyTitle text='EL TIEMPO ES TUYO' subTitle='Nunca fue tan fácil trabajar en equipo' class='LandingTitle'/>
+<FancyTitle text='El tiempo es tuyo' subTitle='Nunca fue tan fácil trabajar en equipo' class='LandingTitle'/>
 <SimpleButton text='Empezar' class='EmpezarBtn' link='/register'/>
-<FancyTitle text='TODO LO QUE TU EQUIPO NECESITA' class='LandingTitle'/>
+<FancyTitle text='Todo lo que tu equipo necesita' class='LandingTitle'/>
 <ImageGallery images={images}/>
 </div>
 <Footer/>
