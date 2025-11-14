@@ -366,6 +366,11 @@ const setupia = () => {
     }
   };
 
+  const lookfor = ()=> {}
+  const saveresponse = ()=> {}
+  const getdata = () => {}
+  const updatetime = () => {}
+
   const updateSchedule = async (req, res) => {
     const { proyectoId } = req.params;
     const { tareas_actualizadas } = req.body;
