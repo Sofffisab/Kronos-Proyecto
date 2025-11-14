@@ -2,15 +2,19 @@ import DisabledBg from './DisabledBg'
 import BaseModal from'./BaseModal'
 import SimpleButton from '../SimpleButton'
 import { deleteTask } from '../../../api/tasks'
-import { getTasks } from '../../../api/project'
+import { deleteProject } from '../../../api/project'
 import style from './modals.module.css'
+import { useNavigate } from 'react-router'
 import { useTasks } from '../../context/ProjectContext'
 export default function TaskModal(props) {
+    const nav = useNavigate()
     const {fetchProject, currentId} = useTasks()
-    const handleDelete = (id)=> {
+    const handleDelete = async (id)=> {
         try {
-           const res = deleteTask(id, localStorage.getItem('token'))
-           if(res) fetchProject(currentId)
+    
+           const res =  props.project?  await deleteProject(id, localStorage.getItem('token')) : await deleteTask(id, localStorage.getItem('token'))
+           if(res && !props.project) fetchProject(currentId)
+            if(res && props.project) nav('/')
             props.disableBg
         }
     catch(e) {console.log(e)}

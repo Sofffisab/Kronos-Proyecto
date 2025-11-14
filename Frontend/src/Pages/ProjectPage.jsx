@@ -14,7 +14,7 @@ import IaPage from '../components/IaPage/IaPage.jsx'
 export default function ProjectPage(props) {
     const params = useParams()
     const navigate = useNavigate()
-    const { setCurrentId, contextProject}= useTasks()
+    const { setCurrentId, contextProject, error}= useTasks()
 const [sbStatus, setSbStatus] = useState(false)
 const [projects, setProjects] = useState([])
 const [loading,setLoading]= useState(true)
@@ -42,6 +42,7 @@ useEffect(()=> {
 const style = {left : sbStatus?  '-100%' : '0px'}
 
 if(loading) return(<LoadingScreen/>)
+if(error) navigate('/*')
 
 return(
  <>

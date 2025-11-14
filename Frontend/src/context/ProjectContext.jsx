@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { getChatMessages } from "../../api/messages.js";
 import { getProjects } from "../../api/project.js";
 import {jwtDecode} from 'jwt-decode'
+import { useNavigate } from "react-router";
 import {
   connectChatSocket,
   onChatMessage,
@@ -21,11 +22,17 @@ export function TaskProvider({ children }) {
   const [currentId, setCurrentId] = useState(null);
   const [contextChat, setContextChat] = useState([]);
   const [userPhoto, setUserPhoto] = useState()
+  const [error, setError] = useState(null)
 const [variables, setVariables] = useState()
   async function fetchProject(id) {
-    const project = await getProjects(localStorage.getItem("token"), id);
+    try {
+      setError(false)
+      const project = await getProjects(localStorage.getItem("token"), id);
     setProject(project);
-    setTasks(project.tareas ||[]);
+    setTasks(project.tareas ||[]);}
+    catch(e) {
+      setError(true)
+    }
   }
 
   function setCSSVariables(name, value) {
@@ -112,9 +119,10 @@ const [variables, setVariables] = useState()
 
   useEffect(() => {
 
-    if (currentId) {fetchProject(currentId)
+    if (currentId)  fetchProject(currentId)
+    
 
-    };
+    
   }, [currentId]);
 
   return (
@@ -132,7 +140,9 @@ const [variables, setVariables] = useState()
         setUser,
         userPhoto,
         setUserPhoto,
-        setVariables
+        setVariables,
+        error,
+        setError
       }}
     >
       {children}

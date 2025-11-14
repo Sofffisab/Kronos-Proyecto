@@ -61,6 +61,18 @@ export const inviteToProject = async (projId, mail, token) => {
     return(responseData )
 }
 
+export const deleteProject = async (id, token) => {
+
+    const response = await fetch(`http://localhost:3000/api/projects/${id}`,{
+        method: 'DELETE',
+            headers: {'Content-Type': 'application/json',
+        'authorization': `bearer ${token}`}
+    })
+    const responseData = await response.json()
+    if(!response.ok) throw new Error(responseData.error || `error ${responseData.status}`)
+    return(responseData )
+
+}
 
 export const stringToColor = (str)=> {
     let hash = 0;

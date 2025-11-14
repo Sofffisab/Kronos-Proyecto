@@ -616,3 +616,33 @@ button {
     overflow: hidden;
 
 }
+
+.errorPage {
+
+  background-color: var(--mainColor);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--font);
+  height: 100vh;
+  gap: 5rem;
+  color: var(--darkerTertiaryColor);
+  font-size: var(--biggerHeaderSize);
+}
+.errorPage a{
+ color: var(--fontContrast);
+ font-size: var(--headerSize);
+ background-color: var(--secondaryColor);
+ padding: 2rem;
+ width: 10%;
+text-align:center;
+border-radius: 25px;
+transition: var(--easeTransition);
+}
+.errorPage a:hover {
+
+  
+  background-color: var(--tertiaryColor);
+
+}
