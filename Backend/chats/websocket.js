@@ -2,6 +2,7 @@ import { WebSocket } from 'ws';
 import jwt from 'jsonwebtoken';
 
 
+
 function setupwebsocketserver(app, JWT_SECRET, prisma, wsInstance) {
   
   app.ws('/chat', async (ws, req) => {
@@ -61,9 +62,16 @@ function setupwebsocketserver(app, JWT_SECRET, prisma, wsInstance) {
           },
         });
 
+        const personaData = await prisma.persona.findUnique({
+  where: { id: personaId },
+  select: { nombre: true } 
+});
+
+
         const messageWithSender = {
           ...mensajesguardados,
           personaId: personaId,
+          persona: personaData
         };
 
         const chatMembers = await prisma.tiene_pc.findMany({
