@@ -68,8 +68,15 @@ export const deleteProject = async (id, token) => {
             headers: {'Content-Type': 'application/json',
         'authorization': `bearer ${token}`}
     })
-    const responseData = await response.json()
-    if(!response.ok) throw new Error(responseData.error || `error ${responseData.status}`)
+    const contentType = response.headers.get('content-type') || ''
+    let responseData = null
+    if (contentType.includes('application/json')) {
+        responseData = await response.json()
+    } else {
+        responseData = { success: true, status: response.status }
+    }
+
+    if(!response.ok) throw new Error((responseData && (responseData.error || responseData.message)) || `error ${response.status}`)
     return(responseData )
 
 }

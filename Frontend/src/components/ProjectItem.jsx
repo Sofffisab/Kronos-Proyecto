@@ -13,7 +13,7 @@ export default function ProjectItem(props) {
 
     return(
         <>
-        {modal && <TaskModal id={props.id} project={true} disableBg={()=>setModal(false)} date={new Date (props.date).toDateString()} responsable={personas}/> }
+        {modal && <TaskModal id={props.id} title={props.nombre}project={true} disableBg={()=>setModal(false)} date={new Date (props.date).toDateString()} responsable={personas}/> }
         <Link className='project' key={props.id}to={'/project/'+props.id}> 
         
         <div>

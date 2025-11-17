@@ -26,9 +26,9 @@ const setuptareas = () => {
         return res.status(400).json({ error: "missing data" });
       };
 
-      if (duracion && (isNaN(parseInt(duracion)) || parseInt(duracion) <= 0)) {
-        return res.status(400).json({ error: "duracion must be a positive number" });
-      }
+    //  if (duracion && (isNaN(parseInt(duracion)) || parseInt(duracion) <= 0)) {
+    //    return res.status(400).json({ error: "duracion must be a positive number" });
+    //  }
 
       const validEstados = ["pending", "in-progress", "done"];
       const validImportancia = ["low", "medium", "high"];
