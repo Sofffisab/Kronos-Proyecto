@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Test IA Kronos</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Arial; 
+            max-width: 1200px; 
+            margin: 30px auto; 
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 { color: #333; }
+        .section { 
+            background: white; 
+            padding: 20px; 
+            margin: 20px 0; 
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        input, textarea { 
+            width: 100%; 
+            padding: 10px; 
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button { 
+            padding: 12px 24px; 
+            margin: 10px 5px; 
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        button:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-primary { background: #007bff; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-warning { background: #ffc107; color: black; }
+        #resultado { 
+            background: #f8f9fa; 
+            padding: 20px; 
+            margin-top: 20px; 
+            white-space: pre-wrap; 
+            max-height: 600px; 
+            overflow-y: auto;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+        .loading { 
+            color: #ff9800; 
+            border-left: 4px solid #ff9800;
+            animation: pulse 1.5s infinite;
+        }
+        .success { 
+            color: #28a745; 
+            border-left: 4px solid #28a745;
+        }
+        .error { 
+            color: #dc3545; 
+            border-left: 4px solid #dc3545;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+        .step {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            background: #e9ecef;
+            margin: 0 5px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .step.active { background: #007bff; color: white; }
+        .step.completed { background: #28a745; color: white; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test IA Kronos - Mirkin (Análisis Web)</h1>
+    
+    <div class="warning-box">
+        <strong>⚠️ IMPORTANTE:</strong> Este proceso puede tardar 60-90 segundos. 
+        Las APIs de IA (Gemini + OpenAI) procesan imágenes, analizan código y generan mejoras.
+    </div>
+
+    <div class="step-indicator">
+        <div class="step" id="step1">1. Guardar</div>
+        <div class="step" id="step2">2. Procesar IA</div>
+        <div class="step" id="step3">3. Guardar Respuesta</div>
+    </div>
+
+    <div class="section">
+        <h3>📋 Configuración</h3>
+        <label>JWT Token (obtenerlo de login):</label>
+        <input type="password" id="token" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+        
+        <label>ID de Página:</label>
+        <input type="number" id="paginaId" placeholder="1" value="1">
+        
+        <label>Tema del Sitio Web:</label>
+        <input type="text" id="tema" placeholder="e-commerce de tecnología" value="e-commerce de tecnología">
+    </div>
+
+    <div class="section">
+        <h3>🚀 Flujo Completo</h3>
+        <button class="btn-primary" onclick="testSave()" id="btnSave">
+            1️⃣ Guardar Página en BD
+        </button>
+        <button class="btn-warning" onclick="testProcess()" id="btnProcess" disabled>
+            2️⃣ Procesar con IA (60-90s)
+        </button>
+        <button class="btn-success" onclick="testSaveResponse()" id="btnSaveResp" disabled>
+            3️⃣ Guardar Respuesta IA
+        </button>
+    </div>
+
+    <div class="section">
+        <h3>📊 Resultado</h3>
+        <div id="resultado">Esperando acción...</div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000';
+        let ultimaRespuestaIA = null;
+        let currentStep = 0;
+
+        function updateStep(step) {
+            currentStep = step;
+            for (let i = 1; i <= 3; i++) {
+                const el = document.getElementById(`step${i}`);
+                el.classList.remove('active', 'completed');
+                if (i < step) el.classList.add('completed');
+                if (i === step) el.classList.add('active');
+            }
+        }
+
+        function getHeaders() {
+            const token = document.getElementById('token').value.trim();
+            if (!token) {
+                alert('⚠️ Por favor ingresa un token JWT válido');
+                throw new Error('Token requerido');
+            }
+            return {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            };
+        }
+
+        function setLoading(isLoading, message) {
+            const btns = ['btnSave', 'btnProcess', 'btnSaveResp'];
+            btns.forEach(id => {
+                document.getElementById(id).disabled = isLoading;
+            });
+            
+            if (isLoading) {
+                const resultado = document.getElementById('resultado');
+                resultado.className = 'loading';
+                resultado.textContent = message;
+            }
+        }
+
+        async function testSave() {
+            updateStep(1);
+            setLoading(true, '💾 Guardando página en la base de datos...');
+
+            try {
+                const paginaId = parseInt(document.getElementById('paginaId').value);
+                const tema = document.getElementById('tema').value.trim();
+
+                if (!tema) {
+                    throw new Error('El tema no puede estar vacío');
+                }
+
+                // Imagen de prueba (1x1 pixel transparente)
+                const testImageBase64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==";
+
+                const response = await fetch(`${API_URL}/api/ia/analize/pages`, {
+                    method: 'POST',
+                    headers: getHeaders(),
+                    body: JSON.stringify({
+                        pagina_id: paginaId,
+                        tema: tema,
+                        archivos: [
+                            {
+                                nombre: "index.html",
+                                lenguaje: "html",
+                                codigo: `<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Page</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Mi Sitio Web</h1>
+        <nav>
+            <a href="#home">Inicio</a>
+            <a href="#about">Nosotros</a>
+        </nav>
+    </header>
+    <main>
+        <p>Contenido de prueba</p>
+    </main>
+</body>
+</html>`
+                            },
+                            {
+                                nombre: "styles.css",
+                                lenguaje: "css",
+                                codigo: `body { 
+    font-family: Arial, sans-serif; 
+    margin: 0;
+    padding: 20px;
+}
+header { 
+    background: #333; 
+    color: white; 
+    padding: 1rem;
+}`
+                            }
+                        ],
+                        foto_pagina_jpg: testImageBase64
+                    })
+                });
+
+                const data = await response.json();
+                const resultado = document.getElementById('resultado');
+                
+                if (response.ok) {
+                    resultado.className = 'success';
+                    resultado.textContent = '✅ Página guardada exitosamente:\n\n' + JSON.stringify(data, null, 2);
+                    document.getElementById('btnProcess').disabled = false;
+                } else {
+                    throw new Error(data.error || 'Error desconocido');
+                }
+            } catch (error) {
+                const resultado = document.getElementById('resultado');
+                resultado.className = 'error';
+                resultado.textContent = `❌ Error: ${error.message}`;
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        async function testProcess() {
+            updateStep(2);
+            setLoading(true, '🤖 Procesando con IA (Gemini + OpenAI)...\n\nEsto puede tardar 60-90 segundos.\nPor favor espera...');
+
+            try {
+                const paginaId = document.getElementById('paginaId').value;
+                const startTime = Date.now();
+
+                const response = await fetch(`${API_URL}/api/ia/analize/pages/${paginaId}`, {
+                    method: 'GET',
+                    headers: getHeaders()
+                });
+
+                const data = await response.json();
+                const resultado = document.getElementById('resultado');
+                const timeElapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+
+                if (response.ok) {
+                    ultimaRespuestaIA = data.resultado;
+                    resultado.className = 'success';
+                    resultado.textContent = `✅ IA procesó exitosamente en ${timeElapsed}s:\n\n` + 
+                        JSON.stringify(data, null, 2).substring(0, 3000) + '\n\n[Respuesta completa guardada en memoria]';
+                    document.getElementById('btnSaveResp').disabled = false;
+                } else {
+                    throw new Error(data.error || 'Error en procesamiento IA');
+                }
+            } catch (error) {
+                const resultado = document.getElementById('resultado');
+                resultado.className = 'error';
+                resultado.textContent = `❌ Error: ${error.message}\n\nPosibles causas:\n- Token inválido\n- Página no existe (ejecutar paso 1 primero)\n- Error en Python/IA\n- Timeout de API`;
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        async function testSaveResponse() {
+            if (!ultimaRespuestaIA) {
+                alert('⚠️ Primero ejecuta "Procesar con IA"');
+                return;
+            }
+
+            updateStep(3);
+            setLoading(true, '💾 Guardando respuesta de IA en BD...');
+
+            try {
+                const response = await fetch(`${API_URL}/api/ia/analize/pages/${ultimaRespuestaIA.paginaId}/response`, {
+                    method: 'PUT',
+                    headers: getHeaders(),
+                    body: JSON.stringify(ultimaRespuestaIA)
+                });
+
+                const data = await response.json();
+                const resultado = document.getElementById('resultado');
+
+                if (response.ok) {
+                    resultado.className = 'success';
+                    resultado.textContent = '✅ Respuesta guardada exitosamente:\n\n' + JSON.stringify(data, null, 2);
+                } else {
+                    throw new Error(data.error || 'Error al guardar');
+                }
+            } catch (error) {
+                const resultado = document.getElementById('resultado');
+                resultado.className = 'error';
+                resultado.textContent = `❌ Error: ${error.message}`;
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        // Auto-focus en el token al cargar
+        window.onload = () => {
+            document.getElementById('token').focus();
+            updateStep(1);
+        };
+    </script>
+</body>
+</html>

@@ -88,8 +88,8 @@ const setuprouter = ({ login, signup, authentication, getevents, permision, redi
     router.post("/api/chats/:chatId/members", authentication, addmembertochat)
     router.delete("/api/messages/:messageId", authentication, deletemessage)
     router.delete("/api/chats/:chatId/members/:personaId", authentication, removememberfromchat)
-    router.post("/api/ia/analize/pages", authentication, sendToPython);
-    router.get("/api/ia/analize/pages/:paginaId", authentication, save);
+    router.post("/api/ia/analize/pages", authentication, save);
+    router.get("/api/ia/analize/pages/:paginaId", authentication, sendToPython);
     router.put("/api/ia/analize/pages/:paginaId/response", authentication, saveResponse);
     router.get("/api/ia/organize/projects/:proyectoId/data", authentication, getDataForScheduling);
     router.put("/api/ia/organize/projects/:proyectoId/schedule", authentication, updateSchedule);
