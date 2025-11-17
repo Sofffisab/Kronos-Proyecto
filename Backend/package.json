@@ -21,6 +21,10 @@
   "description": "Proyecto TIC 4° año 2025",
   "main": "index.js",
   "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC"

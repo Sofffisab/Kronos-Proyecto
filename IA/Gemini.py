@@ -12,9 +12,7 @@ from typing import List
 from openai import OpenAI
 from dotenv import load_dotenv
 
-# ============================================================================
 # CONFIGURACIÓN INICIAL
-# ============================================================================
 
 load_dotenv()
 
@@ -26,9 +24,7 @@ grounding_tool = types.Tool(
     google_search=types.GoogleSearch()
 )
 
-# ============================================================================
 # MODELOS DE DATOS (PYDANTIC)
-# ============================================================================
 
 class WebsiteValue(BaseModel):
     criterion: str
@@ -44,9 +40,7 @@ class TableRow(BaseModel):
 class TableData(BaseModel):
     rows: List[TableRow]
 
-# ============================================================================
 # FUNCIONES DE UTILIDAD
-# ============================================================================
 
 def load_data_from_stdin():
     """Carga datos enviados desde el backend Node.js por stdin"""
@@ -74,9 +68,8 @@ def base64_to_image(base64_string):
     except Exception as e:
         raise Exception(f"Error al convertir imagen: {str(e)}")
 
-# ============================================================================
 # FUNCIONES DE REINTENTOS
-# ============================================================================
+
 
 def retry_request(func, *args, max_retries=3, **kwargs):
     """Reintenta una función en caso de error"""
@@ -89,9 +82,7 @@ def retry_request(func, *args, max_retries=3, **kwargs):
             print(f"Intento {attempt + 1} falló: {str(e)}. Reintentando...", file=sys.stderr)
     return None
 
-# ============================================================================
 # FUNCIONES DE GENERACIÓN CON IA
-# ============================================================================
 
 def createJson(prompt, img):
     """Crea un JSON con análisis de la página web usando Gemini (por la capacidad de visión)"""
@@ -240,9 +231,7 @@ def createTxt(design_reference, conclusions_json, codigo_json, language_map):
     except Exception as e:
         raise Exception(f"Error en createTxt: {str(e)}")
 
-# ============================================================================
 # FUNCIÓN PRINCIPAL
-# ============================================================================
 
 def main():
     """Función principal que procesa los datos del backend (desde stdin)"""
@@ -320,9 +309,7 @@ def main():
         print(json.dumps(error_response, ensure_ascii=False), file=sys.stderr)
         sys.exit(1)
 
-# ============================================================================
 # PUNTO DE ENTRADA
-# ============================================================================
 
 if __name__ == "__main__":
     main()
