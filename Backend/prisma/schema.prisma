@@ -72,6 +72,7 @@ model tareas {
   limite      DateTime
   eventId   String?
   importancia         String?  
+  duracion    Int?
   orden               Int?
   id_asignado         Int?
 

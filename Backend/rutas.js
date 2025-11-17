@@ -3,16 +3,16 @@ import multer from 'multer';
 const upload = multer()
 const { Router } = pkg;
 
-const setuprouter = ({ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, joinproject, createtarea, gettareas, gettarea, updatetarea, deletetarea, getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones, save, lookfor, saveresponse, getdata, updatetime, updateuserprofile, deletefile, markmessageasread, getmessagereaders, deletechat, renamechat, getprojectchats, getprojectfiles, getprojectmembers, removefromproject, deleteproject, getuserinvitations, resendinvitation, deleteaccount, getcurrentuser, transferprojectownership, reassignmembertasks,  addmembertochat,  deletemessage, removememberfromchat}) => { 
+const setuprouter = ({ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, joinproject, createtarea, gettareas, gettarea, updatetarea, deletetarea, getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones, save, sendToPython, saveResponse, getDataForScheduling, sendToPythonToo, updateSchedule, updateuserprofile, deletefile, markmessageasread, getmessagereaders, deletechat, renamechat, getprojectchats, getprojectfiles, getprojectmembers, removefromproject, deleteproject, getuserinvitations, resendinvitation, deleteaccount, getcurrentuser, transferprojectownership, reassignmembertasks,  addmembertochat,  deletemessage, removememberfromchat}) => { 
     console.log('[DEBUG] setuprouter called');
     console.log('[DEBUG] signup function:', typeof signup);
     console.log('[DEBUG] login function:', typeof login);
     
 
-    const handlers = [ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, joinproject, createtarea, gettareas, gettarea, updatetarea, deletetarea, getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones, save, lookfor, saveresponse, getdata, updatetime, updateuserprofile, deletefile, markmessageasread, getmessagereaders, deletechat, renamechat, getprojectchats, getprojectfiles, getprojectmembers, removefromproject, deleteproject, getuserinvitations, resendinvitation, deleteaccount, getcurrentuser, transferprojectownership, reassignmembertasks,  addmembertochat,  deletemessage, removememberfromchat]
+    const handlers = [ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, joinproject, createtarea, gettareas, gettarea, updatetarea, deletetarea, getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones, save, sendToPython, saveResponse, getDataForScheduling, sendToPythonToo, updateSchedule, updateuserprofile, deletefile, markmessageasread, getmessagereaders, deletechat, renamechat, getprojectchats, getprojectfiles, getprojectmembers, removefromproject, deleteproject, getuserinvitations, resendinvitation, deleteaccount, getcurrentuser, transferprojectownership, reassignmembertasks,  addmembertochat,  deletemessage, removememberfromchat]
     for (const [key, value] of Object.entries(handlers)) {
         if (typeof value !== "function") {
-          console.error(`❌ ${key} NO es una función:`, value);
+          console.error(`${key} NO es una función:`, value);
         }}
     
     const router = Router();
@@ -68,11 +68,6 @@ const setuprouter = ({ login, signup, authentication, getevents, permision, redi
     router.get("/api/customizations", authentication, getpersonalizaciones);
     router.put("/api/customizations", authentication, updatepersonalizaciones);
     router.delete("/api/customizations", authentication, deletepersonalizaciones);
-    router.post("/api/ia/analize/pages", authentication, save);
-    router.get("/api/ia/analize/pages/:paginaId", authentication, lookfor);
-    router.put("/api/ia/analize/pages/:paginaId/response", authentication, saveresponse);
-    router.get("/api/ia/organize/projects/:proyectoId/data", authentication, getdata);
-    router.put("/api/ia/organize/projects/:proyectoId/schedule", authentication, updatetime);
     router.put("/api/users/me", authentication, updateuserprofile);
     router.delete("/api/files/:nombrearchivo", authentication, deletefile);
     router.post("/api/messages/:messageId/read", authentication, markmessageasread);
@@ -90,11 +85,15 @@ const setuprouter = ({ login, signup, authentication, getevents, permision, redi
     router.delete("/api/users/me", authentication, deleteaccount)
     router.put("/api/projects/:proyectoId/transfer-ownership", authentication, transferprojectownership)
     router.put("/api/projects/:proyectoId/members/:personaId/reassign-tasks", authentication, reassignmembertasks)
-    
     router.post("/api/chats/:chatId/members", authentication, addmembertochat)
     router.delete("/api/messages/:messageId", authentication, deletemessage)
     router.delete("/api/chats/:chatId/members/:personaId", authentication, removememberfromchat)
-
+    router.post("/api/ia/analize/pages", authentication, sendToPython);
+    router.get("/api/ia/analize/pages/:paginaId", authentication, save);
+    router.put("/api/ia/analize/pages/:paginaId/response", authentication, saveResponse);
+    router.get("/api/ia/organize/projects/:proyectoId/data", authentication, getDataForScheduling);
+    router.put("/api/ia/organize/projects/:proyectoId/schedule", authentication, updateSchedule);
+    router.post("/api/ia/organize/projects/:proyectoId/process", authentication, sendToPythonToo);
 
     console.log('[DEBUG] All routes registered. Total routes:', router.stack?.length);
     

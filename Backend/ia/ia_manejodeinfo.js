@@ -305,7 +305,6 @@ const setupia = () => {
     const personaId = req.personaId;
 
     try {
-      // <CHANGE> Primero obtener los datos usando la función anterior
       const ismember = await prisma.tiene.findFirst({
         where: {
           id_persona: personaId,
@@ -334,49 +333,97 @@ const setupia = () => {
           id: true,
           nombre: true,
           limite: true,
-          duracion: true, // Asegúrate de tener este campo
+          importancia: true,
+          duracion: true,
         },
       });
 
-      // <CHANGE> Enviar a Python
-      const response = await fetch("http://localhost:5000/organizar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          tareas: tareas.map(t => ({
-            nombre: t.nombre,
-            fecha_limite: t.limite.toISOString().split('T')[0],
-            duracion: t.duracion || 60,
-          })),
-          horario_inicio: persona.horario_inicio,
-          horario_fin: persona.horario_fin,
-        }),
+      const datosParaPython = {
+        tareas: tareas.map(t => ({
+          id: t.id,
+          nombre: t.nombre,
+          fecha_limite: t.limite.toISOString().split('T')[0],
+          importancia: t.importancia,
+          duracion: t.duracion || 60,
+        })),
+        horario_inicio: persona.horario_inicio,
+        horario_fin: persona.horario_fin,
+      };
+
+      const pythonScript = join(__dirname, "../../IA/July.py");
+      const pythonProcess = spawn("python", [pythonScript]);
+
+      let stdoutData = "";
+      let stderrData = "";
+
+      pythonProcess.stdin.write(JSON.stringify(datosParaPython));
+      pythonProcess.stdin.end();
+
+      const resultado = await new Promise((resolve, reject) => {
+        pythonProcess.stdout.on("data", (data) => {
+          stdoutData += data.toString();
+        });
+
+        pythonProcess.stderr.on("data", (data) => {
+          stderrData += data.toString();
+          console.error("Python stderr:", data.toString());
+        });
+
+        pythonProcess.on("close", (code) => {
+          if (code !== 0) {
+            reject({
+              error: "Error processing with IA",
+              details: stderrData || `Process exited with code ${code}`,
+            });
+          } else {
+            try {
+              const parsed = JSON.parse(stdoutData);
+              resolve(parsed);
+            } catch (parseError) {
+              reject({
+                error: "Error parsing IA response",
+                details: parseError.message,
+                raw_output: stdoutData.substring(0, 500),
+              });
+            }
+          }
+        });
+
+        pythonProcess.on("error", (error) => {
+          reject({
+            error: "Error spawning Python process",
+            details: error.message,
+          });
+        });
       });
 
-      if (!response.ok) {
-        throw new Error("Python server error");
-      }
-
-      const data = await response.json();
-      res.status(200).json(data);
+      res.status(200).json(resultado);
       
     } catch (error) {
       console.error("Error sending to Python:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ 
+        error: error.error || "Internal Server Error",
+        details: error.details || error.message,
+        retry: true 
+      });
     }
   };
 
-  const lookfor = ()=> {}
-  const saveresponse = ()=> {}
-  const getdata = () => {}
-  const updatetime = () => {}
-
   const updateSchedule = async (req, res) => {
+    const { tareas_actualizadas, confirmado } = req.body;
     const { proyectoId } = req.params;
-    const { tareas_actualizadas } = req.body;
     const personaId = req.personaId;
 
     try {
+
+  // <CHANGE> Requerir confirmación explícita del usuario
+      if (confirmado !== true) {
+        return res.status(400).json({ 
+          error: "User confirmation required",
+          message: "El usuario debe confirmar los cambios antes de aplicarlos"
+        });
+      }
+
       if (!proyectoId || !tareas_actualizadas || !Array.isArray(tareas_actualizadas)) {
         return res.status(400).json({ error: "missing data" });
       }
@@ -418,7 +465,7 @@ const setupia = () => {
     }
   };
 
-  return { save, lookfor, saveresponse, getdata, updatetime, sendToPython, saveResponse, getDataForScheduling, sendToPythonToo, updateSchedule};
+  return { save, sendToPython, saveResponse, getDataForScheduling, sendToPythonToo, updateSchedule};
 };
 
 export default setupia;
