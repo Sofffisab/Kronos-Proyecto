@@ -19,6 +19,8 @@ export default function Messages() {
   }, [chatId]);
 
   const handleSend = () => {
+
+    console.log('bege')
     if (input.trim()) {
       sendChatMessage(chatId, input);
       setInput("");

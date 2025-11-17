@@ -6,9 +6,12 @@ import { deleteProject } from '../../../api/project'
 import style from './modals.module.css'
 import { useNavigate } from 'react-router'
 import { useTasks } from '../../context/ProjectContext'
+import { useState } from 'react'
 export default function TaskModal(props) {
     const nav = useNavigate()
     const {fetchProject, currentId} = useTasks()
+    const [modal, setModal] = useState(false)
+    const [message, setMessage] = useState('')
     const handleDelete = async (id)=> {
         try {
     
@@ -17,17 +20,23 @@ export default function TaskModal(props) {
             if(res && props.project) nav('/')
             props.disableBg
         }
-    catch(e) {console.log(e)}
+    catch(e) {console.log(e)
+        setMessage(e.message)
+        setModal(true)
+    }
 
     }
 
+    const responsables = props.project && props.responsable.map((p)=>(<li key={Math.random()}>{p}</li>))
+
     return(
 
-        <DisabledBg onClick={props.disableBg} modal={<BaseModal title={props.title} inputs={
+        <DisabledBg onClick={props.disableBg} modal={modal? <BaseModal title={message}/> : <BaseModal title={props.title} inputs={
             <>
-            <div>
+            <div>   
             <p>Limite: {props.date}</p>
-            <p>{props.project? 'Miembros' : 'Responsable'}: {props.responsable}</p>
+            <p>{props.project? 'Miembros' : 'Responsable'}:</p>
+            {props.project &&  <ul>{responsables}</ul>}
             </div>
             <SimpleButton class={style.deleteTaskBtn}text='delete' icon='delete' onClick={()=>handleDelete(props.id)}/>
                 </>

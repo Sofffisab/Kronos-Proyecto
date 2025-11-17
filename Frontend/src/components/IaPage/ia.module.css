@@ -10,7 +10,7 @@
     justify-content: flex-start;
     gap: 2%;
     align-items: center;
-    padding: 2%;
+    
     box-sizing: border-box;
     font-family: var(--font);
     font-size: calc(var(--headerSize) * 1.2)
@@ -20,6 +20,7 @@
     
 }
 .section p {
+    margin-left: .5rem;
     color: var(--tertiaryColor);
 }
 .section input, textarea {
@@ -62,4 +63,25 @@
     z-index: 2;
     cursor: pointer;
     opacity: 0.8;
+}
+.sendBtn {
+    transition: var(--easeTransition);
+    background-color: var(--darkerTertiaryColor);
+    width: 8rem;
+    padding: 1.5%;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.sendBtn button {
+    font-family: var(--font);
+    font-size: var(--mediumSize);
+}
+.topBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1% 2% 1% 2%
 }
