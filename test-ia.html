@@ -176,15 +176,11 @@
         <label>JWT Token (obtener después de login):</label>
         <input type="password" id="token" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
         
-        <div class="grid-2">
-            <div>
-                <label>ID de Página:</label>
-                <input type="number" id="paginaId" placeholder="1" value="1">
-            </div>
-            <div>
-                <label>Tema del Sitio Web:</label>
-                <input type="text" id="tema" placeholder="e-commerce de tecnología" value="e-commerce de tecnología">
-            </div>
+        <label>Tema del Sitio Web:</label>
+        <input type="text" id="tema" placeholder="e-commerce de tecnología" value="e-commerce de tecnología">
+        
+        <div class="info-box" style="margin-top: 15px;">
+            ℹ️ El ID de página se genera automáticamente en el backend
         </div>
     </div>
 
@@ -412,7 +408,6 @@ main {
             setLoading(true, '💾 Guardando página en la base de datos...');
 
             try {
-                const paginaId = parseInt(document.getElementById('paginaId').value);
                 const tema = document.getElementById('tema').value.trim();
                 const imagenBase64 = document.getElementById('imagenBase64').value;
                 const archivos = recolectarArchivos();
@@ -425,7 +420,6 @@ main {
                     method: 'POST',
                     headers: getHeaders(),
                     body: JSON.stringify({
-                        pagina_id: paginaId,
                         tema: tema,
                         archivos: archivos,
                         foto_pagina_jpg: imagenBase64
@@ -439,6 +433,8 @@ main {
                     resultado.className = 'success';
                     resultado.textContent = '✅ Página guardada exitosamente:\n\n' + JSON.stringify(data, null, 2);
                     document.getElementById('btnProcess').disabled = false;
+                    // Guardar el pagina_id recibido del backend
+                    document.getElementById('resultado').dataset.paginaId = data.pagina.pagina_id;
                     updateStep(3);
                 } else {
                     throw new Error(data.error || 'Error desconocido');
@@ -458,7 +454,13 @@ main {
             setLoading(true, '🤖 Procesando con IA (Gemini + OpenAI)...\n\nEsto puede tardar 60-90 segundos.\nPor favor espera...');
 
             try {
-                const paginaId = document.getElementById('paginaId').value;
+                // Obtener el pagina_id guardado del paso anterior
+                const paginaId = document.getElementById('resultado').dataset.paginaId;
+                
+                if (!paginaId) {
+                    throw new Error('Primero debes guardar la página en la BD (Paso 1)');
+                }
+                
                 const startTime = Date.now();
 
                 const response = await fetch(`${API_URL}/api/ia/analize/pages/${paginaId}`, {

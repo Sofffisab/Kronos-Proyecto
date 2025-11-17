@@ -29,9 +29,27 @@ const wsInstance = expressWs(app);
 
 app.use(helmet());
 
+// Configuración CORS que permite múltiples orígenes
+const allowedOrigins = [
+  'http://localhost:5173',      // Frontend Vite
+  'http://127.0.0.1:5173',
+  'http://localhost:5500',      // Live Server
+  'http://127.0.0.1:5500',
+  process.env.FRONTEND_URL
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    origin: function (origin, callback) {
+      // Permitir peticiones sin origin (como Postman, curl, scripts)
+      if (!origin) return callback(null, true);
+      
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']

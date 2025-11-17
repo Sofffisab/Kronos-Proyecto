@@ -2,7 +2,7 @@
 # Uso: .\test-backend-gemini.ps1
 
 $API_URL = "http://localhost:3000"
-$TOKEN = "TU_JWT_TOKEN_AQUI"  # Reemplaza con tu token
+$TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwZXJzb25hSWQiOjI4LCJtYWlsIjoiNDg4MDMxNjJAZXN0Lm9ydC5lZHUuYXIiLCJub21icmUiOiJtYXRoaWFzIiwiaWF0IjoxNzYzMzk4NzM2LCJleHAiOjE3NjM0Mjc1MzZ9.g0xD-WiSa3eKV8speXQ85Wx2Qpg8tYDCivSZ2ZiPE7o"  # Reemplaza con tu token
 
 Write-Host "🧪 Test Backend <-> Gemini.py" -ForegroundColor Cyan
 Write-Host "================================" -ForegroundColor Cyan
@@ -13,7 +13,6 @@ Write-Host "`n📝 Paso 1: Guardando página de prueba..." -ForegroundColor Yell
 $testImageBase64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
 
 $body = @{
-    pagina_id = 1
     tema = "e-commerce de tecnología"
     archivos = @(
         @{
@@ -53,12 +52,16 @@ try {
 
     Write-Host "✅ Página guardada exitosamente" -ForegroundColor Green
     Write-Host ($response1 | ConvertTo-Json -Depth 5) -ForegroundColor Gray
+    
+    # Extraer el pagina_id generado por el backend
+    $paginaId = $response1.pagina.pagina_id
+    Write-Host "📌 ID de página generado: $paginaId" -ForegroundColor Cyan
 
     # Paso 2: Procesar con IA
     Write-Host "`n🤖 Paso 2: Procesando con Gemini.py (esto puede tardar 60-90s)..." -ForegroundColor Yellow
     
     $startTime = Get-Date
-    $response2 = Invoke-RestMethod -Uri "$API_URL/api/ia/analize/pages/1" `
+    $response2 = Invoke-RestMethod -Uri "$API_URL/api/ia/analize/pages/$paginaId" `
         -Method GET `
         -Headers @{
             "Authorization" = "Bearer $TOKEN"
@@ -71,7 +74,7 @@ try {
     # Paso 3: Guardar respuesta
     Write-Host "`n💾 Paso 3: Guardando respuesta de IA..." -ForegroundColor Yellow
     
-    $response3 = Invoke-RestMethod -Uri "$API_URL/api/ia/analize/pages/1/response" `
+    $response3 = Invoke-RestMethod -Uri "$API_URL/api/ia/analize/pages/$paginaId/response" `
         -Method PUT `
         -Headers @{
             "Content-Type" = "application/json"

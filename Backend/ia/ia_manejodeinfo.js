@@ -14,12 +14,12 @@ const setupia = () => {
   // ============================================================================
 
   const save = async (req, res) => {
-    const { pagina_id, archivos, foto_pagina_jpg, tema } = req.body;
+    const { archivos, foto_pagina_jpg, tema } = req.body;
     const personaId = req.personaId;
 
     try {
-      if (!pagina_id || !archivos || !Array.isArray(archivos) || archivos.length === 0 || !foto_pagina_jpg || !tema) {
-        return res.status(400).json({ error: "missing data" });
+      if (!archivos || !Array.isArray(archivos) || archivos.length === 0 || !foto_pagina_jpg || !tema) {
+        return res.status(400).json({ error: "Missing required fields: archivos, foto_pagina_jpg, tema" });
       }
 
       const language_map = {};
@@ -42,9 +42,16 @@ const setupia = () => {
 
       const fotoBuffer = Buffer.from(foto_pagina_jpg, "base64");
 
+      // Auto-generar pagina_id basado en el último registro
+      const lastPage = await prisma.ia_paginas.findFirst({
+        orderBy: { pagina_id: 'desc' },
+        select: { pagina_id: true }
+      });
+      const nextPaginaId = lastPage ? lastPage.pagina_id + 1 : 1;
+
       const nuevapagina = await prisma.ia_paginas.create({
         data: {
-          pagina_id: Number.parseInt(pagina_id, 10),
+          pagina_id: nextPaginaId,
           language_map: language_map,
           codigo_json: codigo_json,
           imagen_jpg: fotoBuffer,
