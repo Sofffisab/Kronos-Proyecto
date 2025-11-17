@@ -35,7 +35,7 @@ export default function TaskModal(props) {
             <>
             <div>   
             <p>Limite: {props.date}</p>
-            <p>{props.project? 'Miembros' : 'Responsable'}:</p>
+            <p>{props.project? 'Miembros' : `Responsable: ${props.responsable}`}</p>
             {props.project &&  <ul>{responsables}</ul>}
             </div>
             <SimpleButton class={style.deleteTaskBtn}text='delete' icon='delete' onClick={()=>handleDelete(props.id)}/>
