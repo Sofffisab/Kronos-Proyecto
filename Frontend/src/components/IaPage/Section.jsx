@@ -30,7 +30,8 @@ export default function Section(props) {
             <Separator/>
             <p>{props.title}</p>
             <Separator/>
-           {props.file? <input ref={fileRef} onChange={handleImageChange} placeholder={props.placeholder} type='file' accept='image/*'/> : <textarea value={props.value} onChange={(e)=>props.onChange(e.target.value)}placeholder={props.placeholder}/>}
+           {props.file? <input ref={fileRef} onChange={props.onChange || handleImageChange} placeholder={props.placeholder} type='file' multiple={props.accept?true:false} accept={props.accept}/> :
+            <textarea value={props.value} onChange={(e)=>props.onChange(e.target.value)}placeholder={props.placeholder}/>}
            {props.file && imagePreview && <div className={style.imageBox}><span onClick={deleteImage}className='material-symbols-outlined'>close</span><img src={imagePreview}/></div>}
         </div>
     )

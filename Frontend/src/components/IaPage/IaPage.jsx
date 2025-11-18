@@ -7,13 +7,13 @@ export default function IaPage(props) {
 
     const [disabled, setDisabled] = useState(true)
     const [topic, setTopic] = useState('');
-    const [code, setCode] = useState('')
+    const [code, setCode] = useState(null)
     const [image, setImage] = useState(null)
     const [modal, setModal] = useState(false)
 
     useEffect(()=>{
 
-        if(image && topic.length>5 && code.length>5) {
+        if(image && topic.length>5 && code) {
 
             setDisabled(false)
 
@@ -32,8 +32,8 @@ export default function IaPage(props) {
     <SimpleButton onClick={()=>setModal(true)}text='Enviar' class={style.sendBtn} icon='upload' disabled={disabled}/>
     </div>
     <Section value={topic} onChange={setTopic} title='Tema de tu página web' placeholder='Tema de pagina...'/>
-    <Section file={true} title='Imágen de una pantalla de tu página' placeholder='Inserte un archivo...' setImage={setImage}/>
-    <Section value={code} onChange={setCode} title='Código de tu página' placeholder='Código de página...'/>
+    <Section accept='image/*' file={true} title='Imágen de una pantalla de tu página' placeholder='Inserte un archivo...' setImage={setImage}/>
+    <Section accept='.html, .css, .js, .jsx, .ts, .py' value={code} file={true} onChange={setCode} title='Código de tu página' placeholder='Código de página...'/>
 
 </div>
 </>
