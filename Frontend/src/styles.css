@@ -521,14 +521,14 @@ button {
   padding-left: 0px;
 }
 .tabs div {
-  width: 100%;
+  width: 14rem;
   box-sizing: border-box;
   font-size: var(--smallerheaderSize);
   display: flex;
   cursor: pointer;
   align-items: center;
   gap: 3%;
-  padding: 0%;
+  padding: .4rem;
   border-radius: 25px;
   transition: var(--easeTransition);
 }
@@ -540,8 +540,8 @@ button {
 }
 #addBtn {
   background-color: var(--tertiaryColor);
-  width: min-content;
-  padding: 0 4% 0 4%;
+  width: 7rem;
+  padding: .4rem;
 }
 .separator {
   margin: 0%;
@@ -592,7 +592,9 @@ button {
   width: 100%;
   display: flex;
   align-items: center;
+  opacity: 0.7;
   justify-content: center;
+  font-style: italic;
   font-family: var(--font);
 }
 .project div{
@@ -659,4 +661,9 @@ transition: var(--easeTransition);
 .landingImages img {
   width: 50rem;
   height: auto;
+}
+
+#inicioBtn {
+  color: var(--fontContrast);
+  ;
 }

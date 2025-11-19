@@ -94,6 +94,10 @@ font-size: var(--mediumSize);
     width: 100%;
     
 }
+.listTableTitle {
+    font-weight: bold;
+    margin: 0.5%;
+}
 .table span {
 cursor: pointer;
 }

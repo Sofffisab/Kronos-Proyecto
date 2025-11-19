@@ -8,7 +8,6 @@ import TokenAuth from "./components/TokenAuth.jsx";
 import coconut from '../Public/coconut.jpg'
 import Register from "./Pages/Register.jsx";
 import ProjectPage from "./Pages/ProjectPage.jsx";
-import Recover from "./Pages/Recover.jsx";
 import CreateProjectPage from './Pages/CreateProjectPage.jsx'
 import './global.css'
 import { TaskProvider } from "./context/ProjectContext.jsx";
@@ -19,7 +18,6 @@ const router = createBrowserRouter([
   { path: "/Register", element: <Register /> },
   { path: '/project/:id', element: <ProjectPage/>},
   { path: '/project', element: <ProjectPage/>},
-  { path: '/recover', element: <Recover /> },
   { path: '/create', element: <CreateProjectPage/>},
   { path: '/project/ia', element: <ProjectPage ia={true}/>}
   

@@ -14,7 +14,9 @@ export default function Table(props) {
         >
           keyboard_arrow_{toggleTasks ? "down" : "up"}
         </span>
+        <p className={styles.listTableTitle}>
         {props.name}
+        </p>
       </div>
       <div className={styles[style]}>{props.tasks}</div>
       <Separator />

@@ -1,4 +1,4 @@
-export const postTask = async (nombre, limite, responsable, token, projectId, estado, priority) => {
+export const postTask = async (nombre, limite, responsable, token, projectId, estado, priority, isKanban) => {
     const response = await fetch(`http://localhost:3000/api/projects/${projectId}/tasks`, {
         'method': 'POST',
         'headers': {
@@ -10,7 +10,7 @@ export const postTask = async (nombre, limite, responsable, token, projectId, es
                 id_persona_responsable: responsable,
                 estado: estado,
                 importancia: priority,
-            })
+                isKanban: isKanban            })
     })
     const responseData = await response.json()
     if(!response.ok) throw new Error(responseData.error || 'error '+responseData.status)

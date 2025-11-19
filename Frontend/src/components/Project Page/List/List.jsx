@@ -30,7 +30,7 @@ export default function List(props) {
   }, [modal]);
 const uploadTask = async (obj) => {
   try {
-   await postTask(obj.name, obj.date, obj.person, localStorage.getItem('token'), props.projectId, obj.state, obj.priority)}
+   await postTask(obj.name, obj.date, obj.person, localStorage.getItem('token'), props.projectId, obj.state, obj.priority, obj.isKanban)}
   
   catch(e) {console.log(e)}
   finally {await fetchProject(props.projectId)}
@@ -50,6 +50,7 @@ const uploadTask = async (obj) => {
       state: state,
       priority: pri,
       date: date,
+      isKanban: false,
      
     };
 
@@ -59,7 +60,7 @@ const uploadTask = async (obj) => {
   };
 const mapTasks = (taskState)=>{
 
-  const mappedTasks = tasks.filter((task)=>(task.estado==taskState ))
+  const mappedTasks = tasks.filter((task)=>(task.estado==taskState && task.isKanban === false ))
   
   return mappedTasks.map((task) => (
     <Task
@@ -89,7 +90,7 @@ const mapTasks = (taskState)=>{
       />
       <Table
         onClick={props.selectable && (() => toggleModal(true))}
-        name="Tareas Realizadas"
+        name="Tareas en progreso"
         tasks={mapTasks('in-progress')}
       />
       <Table
