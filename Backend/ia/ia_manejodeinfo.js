@@ -4,9 +4,71 @@ import { dirname, join } from "path";
 import { spawn } from "child_process";
 import setupcalendario from "../calendario/calendario.js";
 
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+// ============================================================================
+// FUNCIÓN REUTILIZABLE PARA EJECUTAR SCRIPTS PYTHON
+// ============================================================================
+
+const executePythonScript = (scriptPath, datosParaPython, options = {}) => {
+  return new Promise((resolve, reject) => {
+    const pythonProcess = spawn("python", [scriptPath], {
+      timeout: options.timeout || 600000, // 10 minutos
+      maxBuffer: 10 * 1024 * 1024 // 10MB
+    });
+
+    let stdoutData = "";
+    let stderrData = "";
+
+    pythonProcess.stdin.write(JSON.stringify(datosParaPython));
+    pythonProcess.stdin.end();
+
+    pythonProcess.stdout.on("data", (data) => {
+      stdoutData += data.toString();
+    });
+
+    pythonProcess.stderr.on("data", (data) => {
+      stderrData += data.toString();
+      console.error("[Python stderr]:", data.toString());
+    });
+
+    pythonProcess.on("close", (code) => {
+      if (code !== 0) {
+        // Si hay stderr, intenta parsearlo como JSON de error
+        const errorMessage = stderrData || stdoutData;
+        try {
+          const parsed = JSON.parse(errorMessage);
+          reject(parsed);
+        } catch {
+          reject({
+            error: "Error processing with IA",
+            details: errorMessage.substring(0, 500) || `Process exited with code ${code}`,
+            code: code,
+          });
+        }
+      } else {
+        try {
+          const parsed = JSON.parse(stdoutData);
+          resolve(parsed);
+        } catch (parseError) {
+          reject({
+            error: "Error parsing IA response",
+            details: parseError.message,
+            raw_output: stdoutData.substring(0, 500),
+          });
+        }
+      }
+    });
+
+    pythonProcess.on("error", (error) => {
+      reject({
+        error: "Error spawning Python process",
+        details: error.message,
+      });
+    });
+  });
+};
 
 const setupia = () => {
   // ============================================================================
@@ -84,7 +146,7 @@ const setupia = () => {
 
     try {
       if (!paginaId) {
-        return res.status(400).json({ error: "missing data" });
+        return res.status(400).json({ error: "missing data: paginaId" });
       }
 
       const paginas = await prisma.ia_paginas.findMany({
@@ -97,71 +159,28 @@ const setupia = () => {
         return res.status(404).json({ error: "page not found" });
       }
 
-      const language_map = paginas[0].language_map;
-      const codigo_json = paginas[0].codigo_json;
-      const foto_pagina_jpg = paginas[0].imagen_jpg.toString("base64");
-      const tema = paginas[0].tema;
+      const page = paginas[0];
+      if (!page.language_map || !page.codigo_json || !page.imagen_jpg || !page.tema) {
+        return res.status(400).json({ 
+          error: "page data incomplete",
+          details: "Missing required fields in page data"
+        });
+      }
+
       const datosParaPython = {
-        language_map,
-        codigo_json,
-        image_base64: foto_pagina_jpg,
-        theme: tema,
+        language_map: page.language_map,
+        codigo_json: page.codigo_json,
+        image_base64: page.imagen_jpg.toString("base64"),
+        theme: page.tema,
         paginaId: Number.parseInt(paginaId, 10),
       };
 
       const pythonScript = join(__dirname, "../../IA/Gemini.py");
 
-      console.log(`Ejecutando Python con paginaId: ${paginaId}`);
+      console.log(`[MIRKIN] Iniciando procesamiento para paginaId: ${paginaId}`);
 
-      const pythonProcess = spawn("python", [pythonScript]);
-
-      let stdoutData = "";
-      let stderrData = "";
-
-      pythonProcess.stdin.write(JSON.stringify(datosParaPython));
-      pythonProcess.stdin.end();
-
-      const resultado = await new Promise((resolve, reject) => {
-        pythonProcess.stdout.on("data", (data) => {
-          stdoutData += data.toString();
-        });
-
-        pythonProcess.stderr.on("data", (data) => {
-          stderrData += data.toString();
-          console.error("Python stderr:", data.toString());
-        });
-
-        pythonProcess.on("close", (code) => {
-          if (code !== 0) {
-            console.error(`Python process exited with code ${code}`);
-            console.error("stderr:", stderrData);
-            reject({
-              error: "Error processing with IA",
-              details: stderrData || `Process exited with code ${code}`,
-            });
-          } else {
-            try {
-              const parsed = JSON.parse(stdoutData);
-              resolve(parsed);
-            } catch (parseError) {
-              console.error("Error parseando resultado de Python:", parseError);
-              console.error("stdout:", stdoutData);
-              reject({
-                error: "Error parsing IA response",
-                details: parseError.message,
-                raw_output: stdoutData.substring(0, 500),
-              });
-            }
-          }
-        });
-
-        pythonProcess.on("error", (error) => {
-          console.error("Error spawning Python process:", error);
-           reject({
-            error: "Error processing with IA",
-            details: stderrData || `Process exited with code ${code}`,
-          });
-        });
+      const resultado = await executePythonScript(pythonScript, datosParaPython, {
+        timeout: 600000 // 10 minutos
       });
 
       if (!resultado.success) {
@@ -186,7 +205,7 @@ const setupia = () => {
       res.status(500).json({
         error: error.error || "Internal Server Error",
         details: error.details || error.message,
-        retry: true,
+        retry: error.retry || false,
       });
     }
   };
@@ -207,14 +226,12 @@ const setupia = () => {
         fecha_procesamiento: new Date().toISOString(),
       };
 
-      const respuesta_ia_string = JSON.stringify(respuesta_ia_json);
-
       const paginaActualizada = await prisma.ia_paginas.updateMany({
         where: {
           pagina_id: Number.parseInt(paginaId, 10),
         },
         data: {
-          respuesta_ia: respuesta_ia_string,
+          respuesta_ia: JSON.stringify(respuesta_ia_json),
         },
       });
 
@@ -358,51 +375,11 @@ const setupia = () => {
       };
 
       const pythonScript = join(__dirname, "../../IA/July.py");
-      const pythonProcess = spawn("python", [pythonScript]);
 
-      let stdoutData = "";
-      let stderrData = "";
-
-      pythonProcess.stdin.write(JSON.stringify(datosParaPython));
-      pythonProcess.stdin.end();
-
-      const resultado = await new Promise((resolve, reject) => {
-        pythonProcess.stdout.on("data", (data) => {
-          stdoutData += data.toString();
-        });
-
-        pythonProcess.stderr.on("data", (data) => {
-          stderrData += data.toString();
-          console.error("Python stderr:", data.toString());
-        });
-
-        pythonProcess.on("close", (code) => {
-          if (code !== 0) {
-            reject({
-              error: "Error processing with IA",
-              details: stderrData || `Process exited with code ${code}`,
-            });
-          } else {
-            try {
-              const parsed = JSON.parse(stdoutData);
-              resolve(parsed);
-            } catch (parseError) {
-              reject({
-                error: "Error parsing IA response",
-                details: parseError.message,
-                raw_output: stdoutData.substring(0, 500),
-              });
-            }
-          }
-        });
-
-        pythonProcess.on("error", (error) => {
-          reject({
-            error: "Error spawning Python process",
-            details: error.message,
-          });
-        });
-      });
+      // Ejecutar script Python con función reutilizable
+      const resultado = await executePythonScript(pythonScript, datosParaPython, {
+          timeout: 600000 // 10 minutos
+    });
 
       res.status(200).json(resultado);
       
@@ -472,7 +449,7 @@ const setupia = () => {
     }
   };
 
-  return { save, sendToPython, saveResponse, getDataForScheduling, sendToPythonToo, updateSchedule};
+  return { save, sendToPython, saveResponse, getDataForScheduling, sendToPythonToo, updateSchedule };
 };
 
 export default setupia;
