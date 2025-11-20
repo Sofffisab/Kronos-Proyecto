@@ -144,6 +144,10 @@ width: auto;
 .baseModalTitle {
   font-size: calc(var(--headerSize) * 0.9);
   font-weight: bold;
+  white-space: nowrap;
+    max-width: 8rem;
+    text-overflow: ellipsis;      
+    overflow: hidden;
 }
 
 .deleteTaskBtn {

@@ -10,7 +10,7 @@ import Table from "./table";
 import Task from "./Task";
 import { useTasks } from "../../../context/ProjectContext";
 export default function List(props) {
-  const {contextTasks, contextProject, fetchProject} = useTasks()
+  const {contextTasks, contextProject, currentId, fetchProject} = useTasks()
   const [modal, toggleModal] = useState(false);
   const tasks = contextTasks
 
@@ -30,7 +30,7 @@ export default function List(props) {
   }, [modal]);
 const uploadTask = async (obj) => {
   try {
-   await postTask(obj.name, obj.date, obj.person, localStorage.getItem('token'), props.projectId, obj.state, obj.priority, obj.isKanban)}
+   await postTask(obj.name, obj.date, obj.person, localStorage.getItem('token'), currentId, obj.state, obj.priority, false)}
   
   catch(e) {console.log(e)}
   finally {await fetchProject(props.projectId)}
@@ -50,7 +50,7 @@ const uploadTask = async (obj) => {
       state: state,
       priority: pri,
       date: date,
-      isKanban: false,
+      
      
     };
 
@@ -94,10 +94,12 @@ const mapTasks = (taskState)=>{
         tasks={mapTasks('in-progress')}
       />
       <Table
+      bottom={true}
         onClick={props.selectable && (() => toggleModal(true))}
         name="Tareas pendientes"
         tasks={mapTasks('pending')}
       />
+      
      
     </>
   );

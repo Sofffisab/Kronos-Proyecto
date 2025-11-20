@@ -75,7 +75,7 @@ model tareas {
   duracion    Int?
   orden               Int?
   id_asignado         Int?
-  isKanban            Boolean @default('false)
+  isKanban            Boolean @default(false)
 
 
   responsable         persona?  @relation("TareaResponsable", fields: [id_responsable], references: [id], onDelete: SetNull)

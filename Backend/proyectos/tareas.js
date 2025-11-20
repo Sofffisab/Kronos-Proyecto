@@ -22,7 +22,7 @@ const setuptareas = () => {
     const personaId = req.personaId;
 
     try {
-      if (!nombre || !limite || !proyectoId || !estado || !importancia || !isKanban) {
+      if (!nombre || !limite || !proyectoId || !estado || !importancia || isKanban=== null || isKanban === undefined) {
         return res.status(400).json({ error: "missing data" });
       };
 
