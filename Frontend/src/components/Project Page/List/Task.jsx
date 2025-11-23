@@ -29,7 +29,7 @@ useEffect(()=>{if(props.state === 'pending') setToggled(false)
         <div>{props.icon}</div>
         <div>{props.date}</div>
         <div>
-        <p className={`${style.colored} ${props.priority=='high'? style.high : props.priority=='mid'? style.mid : props.priority=='low'? style.low : null}`}>{props.priority}</p>
+        <p className={`${style.colored} ${props.priority=='high'? style.high : props.priority=='medium'? style.mid : props.priority=='low'? style.low : null}`}>{props.priority}</p>
         </div>
         <div>
         <p className={`${style.colored} ${props.state=='pending'? style.pending : props.state=='done'? style.resolved : props.state=='in-progress'? style.progress : null}`}>{props.state}</p>

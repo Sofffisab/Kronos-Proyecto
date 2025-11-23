@@ -2,6 +2,8 @@ import style from'./kanban.module.css'
 
 export default function Categorias(props) {
 
+    
+
     return(
         <div className={style['table']}>
             <div className={style['top']}>

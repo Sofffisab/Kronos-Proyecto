@@ -18,7 +18,7 @@ export default function TaskModal(props) {
            const res =  props.project?  await deleteProject(id, localStorage.getItem('token')) : await deleteTask(id, localStorage.getItem('token'))
            if(res && !props.project) fetchProject(currentId)
             if(res && props.project) nav('/')
-            props.disableBg
+            props.disableBg()
         }
     catch(e) {console.log(e)
         setMessage(e.message)
@@ -33,11 +33,11 @@ export default function TaskModal(props) {
 
         <DisabledBg onClick={props.disableBg} modal={modal? <BaseModal title={message}/> : <BaseModal title={props.title} inputs={
             <>
-            <div>   
+            {!props.kanBan && <div>   
             <p>Limite: {props.date}</p>
-            <p>{props.project? 'Miembros' : `Responsable: ${props.responsable}`}</p>
+            <p>{props.project? 'Miembros:' : `Responsable: ${props.responsable}`}</p>
             {props.project &&  <ul>{responsables}</ul>}
-            </div>
+            </div>}
             <SimpleButton class={style.deleteTaskBtn}text='delete' icon='delete' onClick={()=>handleDelete(props.id)}/>
                 </>
         }/>}/>

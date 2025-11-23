@@ -17,12 +17,12 @@ const setuptareas = () => {
   };
 
   const createtarea = async (req, res) => {
-    const { nombre, limite, id_persona_responsable, estado, importancia } = req.body;
+    const { nombre, limite, id_persona_responsable, estado, importancia, isKanban } = req.body;
     const { proyectoId } = req.params;
     const personaId = req.personaId;
 
     try {
-      if (!nombre || !limite || !proyectoId || !estado || !importancia) {
+      if (!nombre || !limite || !proyectoId || !estado || !importancia || isKanban=== null || isKanban === undefined) {
         return res.status(400).json({ error: "missing data" });
       };
 
@@ -30,11 +30,11 @@ const setuptareas = () => {
     //    return res.status(400).json({ error: "duracion must be a positive number" });
     //  }
 
-      const validEstados = ["pending", "in-progress", "done"];
+      const validEstados = ["pending", "in-progress", "done", "delayed"];
       const validImportancia = ["low", "medium", "high"];
     
       if (!validEstados.includes(estado)) {
-        return res.status(400).json({ error: "Invalid estado. Must be: pending, in-progress, or done" });
+        return res.status(400).json({ error: "Invalid estado. Must be: pending, in-progress, delayed,  or done" });
       };
     
       if (!validImportancia.includes(importancia)) {
@@ -81,6 +81,7 @@ const setuptareas = () => {
           id_responsable: responsableId,
           nombre_responsable: nombre_responsable.nombre,
           importancia: importancia,
+          isKanban: isKanban
         },
       });
 

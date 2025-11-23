@@ -36,8 +36,8 @@ const projects = props.projects? props.projects.map((item)=> (
     <ProjectItem id={item.id} nombre={item.nombre} date={item.fechaInicio} miembros={item.personas_tiene}/>
 )) : 'Nothing to see here...'
 
-const teams = props.teams? props.teams.map((item)=> (
-    <Link to={item.link}><div className='project'><div style={{backgroundColor: item.color}}/><p>{item.title}</p></div></Link>
+const chats = props.chats? props.chats.map((item)=> (
+    <ProjectItem id={item.id} nombre={item.tema}/>
 )) : 'Nothing to see here...'
 
 return(
@@ -46,7 +46,7 @@ return(
 <div className='sideBar' style={props.style} >
 <ul className='tabs'>
     <div onClick={()=>setModal(true)}id='addBtn'><span className='material-symbols-outlined'>add_circle</span>Unirse</div>
-    <div id='inicioBtn'><span className='material-symbols-outlined'>home</span>Inicio</div>
+   <Link to='/project'><div id='inicioBtn'><span className='material-symbols-outlined'>home</span>Inicio</div></Link>
     <div id='tareasBtn'><span className='material-symbols-outlined'>list_alt_add</span>Mis tareas</div>
 </ul>
 
@@ -60,11 +60,11 @@ return(
 </div>
 
 <div className='titleSbContainer'>
-<FancyTitle class='proyectosTitle' text='Equipos'/>
+<FancyTitle class='proyectosTitle' text='Chats'/>
 <SimpleButton icon='add'class='teamBtn'/>
 </div>
 <ul className='equipos'>
-{teams}
+{chats}
 </ul>
 <Separator/>
 <SimpleButton class='invitarBtn' icon='mail' text='Invitar'/>

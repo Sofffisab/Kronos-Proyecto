@@ -17,7 +17,7 @@ return(
         </div>
         <SearchBar/>
         <div id='rightIcons'>
-        <img id='rightIcon1' src='../../public/questionIcon.svg'/>
+        <a href='https://github.com/Sofffisab/Kronos-Proyecto/blob/main/README.md' target='_blank'><img id='rightIcon1' src='../../public/questionIcon.svg'/></a>
         <img onClick={()=>setModal(!modal)} id='rightIcon2' src='../../public/UserDropDown.svg'/>,
         </div>
 
