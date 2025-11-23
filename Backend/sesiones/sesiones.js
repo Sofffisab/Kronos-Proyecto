@@ -116,6 +116,12 @@ const setupsesiones = (JWT_SECRET) => {
     }
     
     const updateuserprofile = async (req, res) => {
+        
+        if (!req.body || Object.keys(req.body).length === 0) {
+            console.error('[v0] req.body is undefined or empty');
+            return res.status(400).json({ error: "No data provided in request body" });
+        };
+
         const personaId = req.personaId;
         const { usuario, nombre, horario_inicio, horario_fin } = req.body;
 
