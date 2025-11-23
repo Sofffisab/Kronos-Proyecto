@@ -80,8 +80,6 @@ const setuprouter = ({ login, signup, authentication, getevents, permision, redi
     router.get("/api/customizations", authentication, getpersonalizaciones);
     router.put("/api/customizations", authentication, updatepersonalizaciones);
     router.delete("/api/customizations", authentication, deletepersonalizaciones);
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
     router.put("/api/users/me", authentication, updateuserprofile);
     router.delete("/api/files/:nombrearchivo", authentication, deletefile);
     router.post("/api/messages/:messageId/read", authentication, markmessageasread);
@@ -104,12 +102,8 @@ const setuprouter = ({ login, signup, authentication, getevents, permision, redi
     router.delete("/api/chats/:chatId/members/:personaId", authentication, removememberfromchat)
     router.post("/api/ia/analize/pages", authentication, save);
     router.get("/api/ia/analize/pages/:paginaId", authentication, sendToPython);
-=======
-=======
->>>>>>> Stashed changes
     router.post("/api/ia/analize/pages", authentication, sendToPython);
     router.get("/api/ia/analize/pages/:paginaId", authentication, save);
->>>>>>> Stashed changes
     router.put("/api/ia/analize/pages/:paginaId/response", authentication, saveResponse);
     router.get("/api/ia/organize/projects/:proyectoId/data", authentication, getDataForScheduling);
     router.post("/api/ia/organize/projects/:proyectoId/process", authentication, sendToPythonToo);
