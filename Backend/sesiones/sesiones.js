@@ -113,12 +113,16 @@ const setupsesiones = (JWT_SECRET) => {
                 retry: true 
             });
         };
-    }
+    };
     
     const updateuserprofile = async (req, res) => {
-        
+        console.log("[v0] Inside updateuserprofile function")
+        console.log("[v0] req.body:", req.body)
+        console.log("[v0] Content-Type:", req.headers["content-type"])
+        console.log("[v0] req.body keys:", Object.keys(req.body || {}))
+
         if (!req.body || Object.keys(req.body).length === 0) {
-            console.error('[v0] req.body is undefined or empty');
+            console.error("[v0] req.body is undefined or empty");
             return res.status(400).json({ error: "No data provided in request body" });
         };
 
@@ -150,15 +154,14 @@ const setupsesiones = (JWT_SECRET) => {
             });
 
             res.status(200).json({ message: "User profile updated successfully", user: updatedpersona });
-
         } catch (error) {
             if (error.code === "P2002") {
                 return res.status(409).json({ error: "Username already taken" });
             };
             console.error("Error updating user profile:", error);
-            res.status(500).json({ 
+            res.status(500).json({
                 error: "Internal Server Error",
-                retry: true 
+                retry: true,
             });
         };
     };
@@ -201,7 +204,7 @@ const setupsesiones = (JWT_SECRET) => {
                 retry: true 
             });
         };
-    }
+    };
 
     const deleteaccount = async (req, res) => {
         const personaId = req.personaId;
