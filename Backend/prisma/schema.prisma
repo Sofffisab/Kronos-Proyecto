@@ -5,7 +5,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model persona {
@@ -77,7 +76,6 @@ model tareas {
   orden               Int?
   id_asignado         Int?
   isKanban            Boolean @default(false)
-
 
   responsable         persona?  @relation("TareaResponsable", fields: [id_responsable], references: [id], onDelete: SetNull)
   proyecto            proyecto @relation(fields: [id_proyecto], references: [id], onDelete: Cascade)
