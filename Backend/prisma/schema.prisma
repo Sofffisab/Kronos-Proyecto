@@ -185,6 +185,6 @@ model ia_paginas {
   tema            String
   respuesta_ia    String?
 
-  persona       persona  @relation(fields: [id_persona], references: [id], onDelete: Cascade)
+  id_persona       id_persona  @relation(fields: [id_persona], references: [id], onDelete: Cascade)
   @@index([pagina_id])
 }

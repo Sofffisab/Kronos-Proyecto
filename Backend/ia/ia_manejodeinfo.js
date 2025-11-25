@@ -75,6 +75,7 @@ const setupia = () => {
   // FUNCIONES PARA MIRKIN - ANÁLISIS DE PÁGINAS WEB
   // ============================================================================
 
+
   const save = async (req, res) => {
     const { archivos, foto_pagina_jpg, tema } = req.body;
     const personaId = req.personaId;
@@ -104,15 +105,15 @@ const setupia = () => {
 
       const fotoBuffer = Buffer.from(foto_pagina_jpg, "base64");
 
-      // Auto-generar pagina_id basado en el último registro
       const lastPage = await prisma.ia_paginas.findFirst({
-        orderBy: { pagina_id: 'desc' },
-        select: { pagina_id: true }
-      });
-      const nextPaginaId = lastPage ? lastPage.pagina_id + 1 : 1;
+        orderBy: { pagina_id: "desc" },
+        select: { pagina_id: true },
+      })
+      const nextPaginaId = lastPage ? lastPage.pagina_id + 1 : 1
 
       const nuevapagina = await prisma.ia_paginas.create({
         data: {
+          id_persona: personaId,
           pagina_id: nextPaginaId,
           language_map: language_map,
           codigo_json: codigo_json,
@@ -152,20 +153,21 @@ const setupia = () => {
       const paginas = await prisma.ia_paginas.findMany({
         where: {
           pagina_id: Number.parseInt(paginaId, 10),
+          id_persona: personaId,
         },
       });
 
       if (!paginas || paginas.length === 0) {
-        return res.status(404).json({ error: "page not found" });
-      }
+        return res.status(404).json({ error: "page not found or you don't have permission to access it" });
+      };
 
       const page = paginas[0];
       if (!page.language_map || !page.codigo_json || !page.imagen_jpg || !page.tema) {
-        return res.status(400).json({ 
+        return res.status(400).json({
           error: "page data incomplete",
-          details: "Missing required fields in page data"
+          details: "Missing required fields in page data",
         });
-      }
+      };
 
       const datosParaPython = {
         language_map: page.language_map,
@@ -180,7 +182,7 @@ const setupia = () => {
       console.log(`[MIRKIN] Iniciando procesamiento para paginaId: ${paginaId}`);
 
       const resultado = await executePythonScript(pythonScript, datosParaPython, {
-        timeout: 600000 // 10 minutos
+        timeout: 600000, // 10 minutos
       });
 
       if (!resultado.success) {
@@ -189,7 +191,7 @@ const setupia = () => {
           details: resultado.error,
           retry: true,
         });
-      }
+      };
 
       res.status(200).json({
         message: "IA processing completed successfully",
@@ -207,7 +209,7 @@ const setupia = () => {
         details: error.details || error.message,
         retry: error.retry || false,
       });
-    }
+    };
   };
 
   const saveResponse = async (req, res) => {
@@ -217,7 +219,18 @@ const setupia = () => {
     try {
       if (!paginaId || !tabla_analisis || !codigo_mejorado || !referencia_diseno) {
         return res.status(400).json({ error: "missing data" });
-      }
+      };
+
+      const paginaExistente = await prisma.ia_paginas.findFirst({
+        where: {
+          pagina_id: Number.parseInt(paginaId, 10),
+          id_persona: personaId,
+        },
+      });
+
+      if (!paginaExistente) {
+        return res.status(404).json({ error: "page not found or you don't have permission to update it" });
+      };
 
       const respuesta_ia_json = {
         tabla_analisis: tabla_analisis,
@@ -229,6 +242,7 @@ const setupia = () => {
       const paginaActualizada = await prisma.ia_paginas.updateMany({
         where: {
           pagina_id: Number.parseInt(paginaId, 10),
+          id_persona: personaId,
         },
         data: {
           respuesta_ia: JSON.stringify(respuesta_ia_json),
@@ -237,7 +251,7 @@ const setupia = () => {
 
       if (paginaActualizada.count === 0) {
         return res.status(404).json({ error: "page not found" });
-      }
+      };
 
       res.status(200).json({
         message: "response saved successfully",
