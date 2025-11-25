@@ -47,7 +47,7 @@ return(
 <ul className='tabs'>
     <div onClick={()=>setModal(true)}id='addBtn'><span className='material-symbols-outlined'>add_circle</span>Unirse</div>
    <Link to='/project'><div id='inicioBtn'><span className='material-symbols-outlined'>home</span>Inicio</div></Link>
-    <div id='tareasBtn'><span className='material-symbols-outlined'>list_alt_add</span>Mis tareas</div>
+    
 </ul>
 
 <Separator/>
@@ -61,7 +61,7 @@ return(
 
 <div className='titleSbContainer'>
 <FancyTitle class='proyectosTitle' text='Chats'/>
-<SimpleButton icon='add'class='teamBtn'/>
+<SimpleButton link='/project/ia'icon='add'class='teamBtn'/>
 </div>
 <ul className='equipos'>
 {chats}

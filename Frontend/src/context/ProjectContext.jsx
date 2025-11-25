@@ -8,6 +8,7 @@ import {
   onChatMessage,
   disconnectChatSocket,
 } from "../../api/messages.js";
+import { fetchIaChats } from "../../api/ia.js";
 
 const TaskContext = createContext();
 
@@ -23,7 +24,21 @@ export function TaskProvider({ children }) {
   const [contextChat, setContextChat] = useState([]);
   const [userPhoto, setUserPhoto] = useState()
   const [error, setError] = useState(null)
+  const [iaChats, setIaChats] = useState([]);
 const [variables, setVariables] = useState()
+
+
+async function getIaChats() {
+  try {
+    const res = await fetchIaChats(localStorage.getItem('token'))
+    console.log(res)
+    setIaChats(res)
+  }
+  catch(e) {
+    console.log(e)
+  }
+}
+
   async function fetchProject(id) {
     try {
       setError(false)
@@ -142,7 +157,9 @@ const [variables, setVariables] = useState()
         setUserPhoto,
         setVariables,
         error,
-        setError
+        setError,
+        getIaChats,
+        iaChats
       }}
     >
       {children}

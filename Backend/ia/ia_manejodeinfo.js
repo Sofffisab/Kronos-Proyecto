@@ -268,6 +268,38 @@ const setupia = () => {
     }
   };
 
+  const fetchPages = async (req, res) => {
+    const personaId = req.personaId;
+
+    try {
+      const paginas = await prisma.ia_paginas.findMany({
+        where: {
+          id_persona: personaId,
+        },
+        select: {
+          id: true,
+          pagina_id: true,
+          tema: true,
+          respuesta_ia: true,
+        },
+        orderBy: {
+          pagina_id: 'desc',
+        },
+      });
+
+      res.status(200).json({
+        message: "pages fetched successfully",
+        paginas: paginas,
+      });
+    } catch (error) {
+      console.error("Error fetching pages:", error);
+      res.status(500).json({
+        error: "Internal Server Error",
+        details: error.message,
+      });
+    }
+  };
+
   // ============================================================================
   // FUNCIONES PARA JULY - ORGANIZACIÓN DE HORARIOS Y TAREAS
   // ============================================================================
@@ -463,7 +495,7 @@ const setupia = () => {
     }
   };
 
-  return { save, sendToPython, saveResponse, getDataForScheduling, sendToPythonToo, updateSchedule };
+  return { save, sendToPython, saveResponse, fetchPages, getDataForScheduling, sendToPythonToo, updateSchedule };
 };
 
 export default setupia;

@@ -14,13 +14,16 @@ import IaPage from '../components/IaPage/IaPage.jsx'
 export default function ProjectPage(props) {
     const params = useParams()
     const navigate = useNavigate()
-    const { setCurrentId, contextProject, error}= useTasks()
+    const { setCurrentId, contextProject, error, iaPages, getIaChats}= useTasks()
 const [sbStatus, setSbStatus] = useState(false)
 const [projects, setProjects] = useState([])
 const [loading,setLoading]= useState(true)
+const [chats, setChats] = useState(iaPages)
 useEffect(()=> {
     async function fetchData() {
     try{
+        const chats = getIaChats();
+        setChats(chats)
         const data = await getProjects(localStorage.getItem('token'))
         setProjects(data)
         
@@ -47,7 +50,7 @@ if(error) navigate('/*')
 return(
  <>
 <NavBarWSearch menuFunc={() => setSbStatus(!sbStatus)}/>
-<SideBar  projects={projects}style={style}/>
+<SideBar  chats={chats}projects={projects}style={style}/>
  {props.ia? <IaPage SbOpen={sbStatus}/> : <PageContent projName={contextProject.nombre}projectId={params.id} SbOpen={sbStatus}/>}
 </>
 )
