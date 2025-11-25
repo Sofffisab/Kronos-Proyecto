@@ -177,6 +177,7 @@ model leido {
 
 model ia_paginas {
   id              Int      @id @default(autoincrement())
+  id_persona      Int
   pagina_id       Int
   language_map    Json
   codigo_json     Json
@@ -184,5 +185,6 @@ model ia_paginas {
   tema            String
   respuesta_ia    String?
 
+  persona       persona  @relation(fields: [id_persona], references: [id], onDelete: Cascade)
   @@index([pagina_id])
 }
