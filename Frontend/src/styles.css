@@ -613,7 +613,7 @@ button {
 .projectBoxName {
 
   white-space: nowrap;
-    max-width: 8rem;
+    max-width: 6.5rem;
     text-overflow: ellipsis;      
     overflow: hidden;
 

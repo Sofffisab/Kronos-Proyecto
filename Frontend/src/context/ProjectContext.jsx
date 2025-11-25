@@ -31,8 +31,9 @@ const [variables, setVariables] = useState()
 async function getIaChats() {
   try {
     const res = await fetchIaChats(localStorage.getItem('token'))
-    console.log(res)
-    setIaChats(res)
+    
+    setIaChats(res || [])
+    return res
   }
   catch(e) {
     console.log(e)

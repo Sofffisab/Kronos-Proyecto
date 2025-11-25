@@ -53,6 +53,7 @@
     border-radius: 10px;
 }
 .imageBox {
+    margin: 1rem;
     position: relative;
     width: min-content;
 }
@@ -84,3 +85,14 @@
     justify-content: space-between;
     padding: 1% 2% 1% 2%
 }
+
+.uploadedImage {
+    height: 12rem;
+    width: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 1rem;}
+
+    .uploadedTitle {
+        color: var(--fontContrast) !important;
+    }

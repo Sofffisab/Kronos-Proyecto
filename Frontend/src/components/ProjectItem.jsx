@@ -7,14 +7,14 @@ export default function ProjectItem(props) {
   
     const [modal, setModal] = useState(false)
 
-    const personas = props.miembros.map((p)=>(
+    const personas = props.miembros ? props.miembros.map((p)=>(
         p.persona.nombre
-    ))
+    )) : []
 
     return(
         <>
         {modal && <TaskModal id={props.id} title={props.nombre}project={true} disableBg={()=>setModal(false)} date={new Date (props.date).toDateString()} responsable={personas}/> }
-        <Link className='project' key={props.id}to={'/project/'+props.id}> 
+        <Link className='project' key={props.id}to={props.project? '/project/'+props.id : '/project/ia/'+props.id}> 
         
         <div>
             <div className='projectColorBox' style={{backgroundColor: stringToColor(props.nombre)}}/>

@@ -300,6 +300,59 @@ const setupia = () => {
     }
   };
 
+  const fetchPageById = async (req, res) => {
+    const { paginaId } = req.params;
+    const personaId = req.personaId;
+
+    try {
+      if (!paginaId) {
+        return res.status(400).json({ error: "missing data: paginaId" });
+      }
+
+      const pagina = await prisma.ia_paginas.findFirst({
+        where: {
+          pagina_id: Number.parseInt(paginaId, 10),
+          id_persona: personaId,
+        },
+        select: {
+          id: true,
+          pagina_id: true,
+          tema: true,
+          language_map: true,
+          codigo_json: true,
+          imagen_jpg: true,
+          respuesta_ia: true,
+        },
+      });
+
+      if (!pagina) {
+        return res.status(404).json({ error: "page not found or you don't have permission to access it" });
+      }
+
+      
+     
+
+      res.status(200).json({
+        message: "page fetched successfully",
+        pagina: {
+          id: pagina.id,
+          pagina_id: pagina.pagina_id,
+          tema: pagina.tema,
+          language_map: pagina.language_map,
+          codigo_json: pagina.codigo_json,
+          imagen_jpg: `data:image/jpeg;base64,${Buffer.from(pagina.imagen_jpg).toString('base64')}`,
+          respuesta_ia: pagina.respuesta_ia,
+        },
+      });
+    } catch (error) {
+      console.error("Error fetching page by id:", error);
+      res.status(500).json({
+        error: "Internal Server Error",
+        details: error.message,
+      });
+    }
+  };
+
   // ============================================================================
   // FUNCIONES PARA JULY - ORGANIZACIÓN DE HORARIOS Y TAREAS
   // ============================================================================
@@ -495,7 +548,7 @@ const setupia = () => {
     }
   };
 
-  return { save, sendToPython, saveResponse, fetchPages, getDataForScheduling, sendToPythonToo, updateSchedule };
+  return { save, sendToPython, saveResponse, fetchPages, fetchPageById, getDataForScheduling, sendToPythonToo, updateSchedule };
 };
 
 export default setupia;

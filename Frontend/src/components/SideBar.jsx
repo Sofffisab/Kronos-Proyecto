@@ -33,11 +33,11 @@ const handleSubmit = async () => {
 
 
 const projects = props.projects? props.projects.map((item)=> (
-    <ProjectItem id={item.id} nombre={item.nombre} date={item.fechaInicio} miembros={item.personas_tiene}/>
+    <ProjectItem project={true} key={item.id} id={item.id} nombre={item.nombre} date={item.fechaInicio} miembros={item.personas_tiene}/>
 )) : 'Nothing to see here...'
 
 const chats = props.chats? props.chats.map((item)=> (
-    <ProjectItem id={item.id} nombre={item.tema}/>
+    <ProjectItem key={item.id} id={item.id} nombre={item.tema}/>
 )) : 'Nothing to see here...'
 
 return(

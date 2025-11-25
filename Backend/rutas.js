@@ -3,12 +3,13 @@ import multer from 'multer';
 const upload = multer();
 const { Router } = pkg;
 
-const setuprouter = ({ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, joinproject, createtarea, gettareas, gettarea, updatetarea, deletetarea, getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones, save, sendToPython, saveResponse, fetchPages, getDataForScheduling, sendToPythonToo, updateSchedule, updateuserprofile, deletefile, markmessageasread, getmessagereaders, deletechat, renamechat, getprojectchats, getprojectfiles, getprojectmembers, removefromproject, deleteproject, getuserinvitations, resendinvitation, deleteaccount, getcurrentuser, transferprojectownership, reassignmembertasks,  addmembertochat,  deletemessage, removememberfromchat }) => {
+const setuprouter = ({ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, joinproject, createtarea, gettareas, gettarea, updatetarea, deletetarea, getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones, save, sendToPython, saveResponse, fetchPages, fetchPageById, getDataForScheduling, sendToPythonToo, updateSchedule, updateuserprofile, deletefile, markmessageasread, getmessagereaders, deletechat, renamechat, getprojectchats, getprojectfiles, getprojectmembers, removefromproject, deleteproject, getuserinvitations, resendinvitation, deleteaccount, getcurrentuser, transferprojectownership, reassignmembertasks,  addmembertochat,  deletemessage, removememberfromchat }) => {
     console.log("[DEBUG] setuprouter called");
     console.log("[DEBUG] signup function:", typeof signup);
     console.log("[DEBUG] login function:", typeof login);
     console.log("[DEBUG] getcurrentuser function:", typeof getcurrentuser);
     console.log("[DEBUG] updateuserprofile function:", typeof updateuserprofile);
+
 
     const router = Router();
 
@@ -77,6 +78,7 @@ const setuprouter = ({ login, signup, authentication, getevents, permision, redi
                 "POST /api/ia/analize/pages",
                 "GET /api/ia/analize/pages",
                 "GET /api/ia/analize/pages/:paginaId",
+                "GET /api/ia/analize/pages/:paginaId/fetch",
                 "PUT /api/ia/analize/pages/:paginaId/response",
                 "GET /api/ia/organize/projects/:proyectoId/data",
                 "PUT /api/ia/organize/projects/:proyectoId/schedule",
@@ -164,6 +166,7 @@ const setuprouter = ({ login, signup, authentication, getevents, permision, redi
     router.post("/api/ia/analize/pages", authentication, save);
     router.get("/api/ia/analize/pages", authentication, fetchPages);
     router.get("/api/ia/analize/pages/:paginaId", authentication, sendToPython);
+    router.get("/api/ia/analize/pages/:paginaId/fetch", authentication, fetchPageById);
     router.put("/api/ia/analize/pages/:paginaId/response", authentication, saveResponse);
     router.get("/api/ia/organize/projects/:proyectoId/data", authentication, getDataForScheduling);
     router.post("/api/ia/organize/projects/:proyectoId/process", authentication, sendToPythonToo);
