@@ -298,7 +298,7 @@ def main():
         }
         
         # 7. Enviar resultado al backend (via stdout)
-        print(json.dumps(resultado_final, ensure_ascii=False))
+        return(json.dumps(resultado_final, ensure_ascii=False))
         
     except Exception as e:
         # En caso de error, enviar respuesta de error

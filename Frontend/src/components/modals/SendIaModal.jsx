@@ -7,7 +7,7 @@ export default function SendIaModal(props) {
     return(
         <DisabledBg onClick={props.disableBg}
         modal={
-            <BaseModal
+            <BaseModal nowrap={true}
             title='¿Seguro que queres subir estos datos?'
             inputs={
                 <p className={style.IaSubText}>Esta acción no podrá ser deshecha</p>
