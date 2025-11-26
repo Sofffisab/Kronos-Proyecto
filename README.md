@@ -6,7 +6,7 @@ Proyecto TIC 4° año 2025
 ### -Julian Mirkin (IA)
 ### -Julieta Weber (IA)
 ### -Mayte Calvert De Bohun (UX/UI)
-### -Sofia Schnaidman (Backend)
+### -Sofia Isabella Schnaidman (Backend)
 ### -Mathias Fogolin Lagares (Frontend)
 
 ## Instalación
@@ -17,7 +17,18 @@ Proyecto TIC 4° año 2025
 kronos-proyecto>cd frontend
 kronos-proyecto\frontend>npm i
 ```
+2) Abrir el directorio de Backend
+
+```bash
+kronos-proyecto\Frontend>cd.. Frontend
+kronos-proyecto>cd Backend
+kronos-proyecto\Backend> npm i
+```
 ## Ejecución:
 ```bash
-kronos-proyecto\frontend>npm run dev
+kronos-proyecto>cd Frontend
+kronos-proyecto\Frontend>npm run dev
+
+kronos-proyecto>cd Backend
+kronos-proyecto\Backend>node index.js
 ```
