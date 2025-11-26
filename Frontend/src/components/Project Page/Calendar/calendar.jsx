@@ -21,14 +21,14 @@ export default function Calendar(props) {
         toggleEModal(true);
          setModalData( {
             title: info.event.title,
-            date: info.event.start+' - '+info.event.end,
+            date: toDateOnly(info.event.start)+' - '+toDateOnly(info.event.end),
             desc: info.event.extendedProps.desc,
+            id: info.event.id
         })
+        console.log(modalData)
 
     }
-
-    useEffect(()=>{
-        const load = async()=>{
+const load = async()=>{
         try {
             setLoggedIn(true)
         const event = await fetchEvents(localStorage.getItem('token'))
@@ -36,6 +36,8 @@ export default function Calendar(props) {
         catch(e) {console.log(e)
             setLoggedIn(false)
         }}
+    useEffect(()=>{
+        
         load()
     },[currentId])
 
@@ -43,11 +45,22 @@ export default function Calendar(props) {
         toggleModal(true);
         setDate({start: info.date? info.date : info.start, end: info.end})
     }
-    const createTask = async (title, date)=> {
+    const toDateOnly = (value)=> {
+        if(!value) return null;
+        const parsed = value instanceof Date? value : new Date(value);
+        return parsed.toISOString().split('T')[0];
+    }
+    const createTask = async (title, desc, selectedDate)=> {
+        const targetDate = selectedDate || date;
+        if(!targetDate?.start) {
+            console.error('No date selected for the new event');
+            return;
+        }
         const event = {
             summary: title,
-            start: date.start,
-            end: date.end? date.end : date.start,
+            description: desc,
+            start: {date: toDateOnly(targetDate.start)},
+            end: {date: toDateOnly(targetDate.end? targetDate.end : targetDate.start)},
             
         }
         try{
@@ -63,7 +76,7 @@ export default function Calendar(props) {
 
     if( loggedIn || props.noLogin) return(
         <>
-        {eModal && <EventModal title={modalData.title} date={modalData.date} desc={modalData.desc} disable={()=> toggleEModal(false)}/>}
+        {eModal && <EventModal id={modalData.id} title={modalData.title} date={modalData.date} desc={modalData.desc} fetch={load} disable={()=> toggleEModal(false)}/>}
         {modal && <CalendarModal disableModal={()=>toggleModal(false)} submit={(title, desc)=>createTask(title, desc, date)}/>}
         <FullCalendar
         plugins={[ dayGridPlugin, interactionPlugin ]}

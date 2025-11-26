@@ -172,7 +172,7 @@ const setupia = () => {
       // Convert image to base64 string
       let imageBase64;
       try {
-        // Prisma returns Bytes as Buffer, but might be wrapped
+        
         const imageBuffer = Buffer.from(page.imagen_jpg);
         imageBase64 = imageBuffer.toString("base64");
         console.log(`[MIRKIN] Image converted to base64, length: ${imageBase64.length} bytes`);
