@@ -8,6 +8,7 @@ import EventModal from '../../modals/eventModal'
 import { useTasks } from '../../../context/ProjectContext.jsx'
 import { connectGoogleCalendar, fetchEvents, postEvent } from '../../../../api/calendar.js'
 import SimpleButton from '../../SimpleButton.jsx'
+import LoadingScreen from '../../LoadingScreen.jsx'
 export default function Calendar(props) {
 
     const {currentId} = useTasks()
@@ -17,6 +18,7 @@ export default function Calendar(props) {
     const [eModal, toggleEModal] = useState(false)
     const [modalData, setModalData ]= useState({})
     const [loggedIn, setLoggedIn] = useState(null)
+    const [loading, setLoading] = useState(false)
     const triggerEModal = (info)=> {
         toggleEModal(true);
          setModalData( {
@@ -29,13 +31,17 @@ export default function Calendar(props) {
 
     }
 const load = async()=>{
+    
         try {
+            
             setLoggedIn(true)
         const event = await fetchEvents(localStorage.getItem('token'))
         setTasks(event)}
         catch(e) {console.log(e)
             setLoggedIn(false)
-        }}
+        }
+    
+    }
     useEffect(()=>{
         
         load()
@@ -63,7 +69,9 @@ const load = async()=>{
             end: {date: toDateOnly(targetDate.end? targetDate.end : targetDate.start)},
             
         }
+        setLoading(true)
         try{
+            
         const result = await postEvent(localStorage.getItem('token'),event)
         console.log(result)
         const events = await fetchEvents(localStorage.getItem('token'))
@@ -72,7 +80,11 @@ const load = async()=>{
         catch(e) {
             console.log(e)
         }
+        finally {
+            setLoading(false)}
     }
+
+    if(loading) return <LoadingScreen/>
 
     if( loggedIn || props.noLogin) return(
         <>

@@ -14,15 +14,9 @@ export default function Bar(props) {
           text="Ordenar"
           class={style["ordenarBtn"]}
           icon="swap_vert"
-          onclick={props.sort}
+          onClick={() => props.setSorted(!props.sorted)}
         />
-        <SimpleButton
-          text="Filtrar"
-          class={style["ordenarBtn"]}
-          icon="filter_list"
-          onclick={props.filter}
-        />
-        <SimpleButton class={style["ordenarBtn"]} icon="search" onclick={props.search} />
+        
       </div>
     </div>
   );

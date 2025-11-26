@@ -44,6 +44,7 @@
     font-size: var(--mediumSize);
 }
 .ordenarBtn {
+    cursor: pointer;
     display: flex;
     height: min-content;
     width: min-content;

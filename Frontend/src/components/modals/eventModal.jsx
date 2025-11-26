@@ -2,18 +2,29 @@ import { deleteEvent } from "../../../api/calendar";
 import BaseModal from "./BaseModal";
 import DisabledBg from "./DisabledBg";
 import style from './modals.module.css'
+import LoadingScreen from "../LoadingScreen";
+import { useState } from "react";
 
 export default function EventModal(props) {
 
-    const eraseEvent = async () => {
+    const [loading, setLoading] = useState(false)
 
+    const eraseEvent = async () => {
+        setLoading(true)
+try {
         await deleteEvent(props.id, localStorage.getItem('token'))
 
-        props.disable()
-        props.fetch()
+        }
+        catch(e) {console.log(e)}
+        finally {
+            props.disable()
+            props.fetch()
+            setLoading(false)
+        }
 
         
     }
+    if(loading) return <LoadingScreen/>
 
     return(
         <DisabledBg onClick={props.disable} modal={

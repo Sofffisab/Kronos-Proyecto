@@ -12,6 +12,7 @@ import { useTasks } from "../../../context/ProjectContext";
 export default function List(props) {
   const {contextTasks, contextProject, currentId, fetchProject} = useTasks()
   const [modal, toggleModal] = useState(false);
+  const [sorted, setSorted] = useState(false)
   const tasks = contextTasks
 
   const miembros = contextProject?.personas_tiene?.map((persona)=>(
@@ -81,12 +82,12 @@ const mapTasks = (taskState)=>{
       {modal && (
         <InputModal members={miembros}submit={submitModal} bgOnClick={() => toggleModal(false)} />
       )}
-      {props.selectable && <Bar onClick={() => toggleModal(true)} />}
+      {props.selectable && <Bar sorted={sorted} setSorted={setSorted} onClick={() => toggleModal(true)} />}
       <Category />
       <Table
         onClick={props.selectable && (() => toggleModal(true))}
-        name="Tareas Realizadas"
-        tasks={mapTasks('done')}
+        name={`tareas ${sorted? 'terminadas':'pendientes'}`}
+        tasks={mapTasks(sorted? 'done':'pending')}
       />
       <Table
         onClick={props.selectable && (() => toggleModal(true))}
@@ -96,8 +97,8 @@ const mapTasks = (taskState)=>{
       <Table
       bottom={true}
         onClick={props.selectable && (() => toggleModal(true))}
-        name="Tareas pendientes"
-        tasks={mapTasks('pending')}
+        name={`tareas ${sorted? 'pendientes':'terminadas'}`}
+        tasks={mapTasks(sorted? 'pending':'done')}
       />
       
      

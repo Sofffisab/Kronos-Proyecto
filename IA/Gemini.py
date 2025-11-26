@@ -38,6 +38,22 @@ class TableRow(BaseModel):
 class TableData(BaseModel):
     rows: List[TableRow]
 
+
+def _extract_json_payload(content: str) -> str:
+    """Remove common markdown fences from LLM output before json.loads."""
+    cleaned = content.strip()
+    if cleaned.startswith("```"):
+        # Drop opening fence such as ```json or ```
+        first_newline = cleaned.find("\n")
+        if first_newline != -1:
+            cleaned = cleaned[first_newline + 1 :]
+        else:
+            cleaned = cleaned.lstrip("`")
+        # Drop closing fence if present
+        if cleaned.endswith("```"):
+            cleaned = cleaned[:-3]
+    return cleaned.strip()
+
 # FUNCIONES DE UTILIDAD
 
 def load_data_from_stdin():
@@ -88,7 +104,7 @@ def createJson(prompt, img):
         # Llamada a Gemini con búsqueda en Google (solo Gemini puede analizar imágenes)
         response = retry_request(
             client.models.generate_content,
-            model='gemini-2.0-flash-exp',
+            model='gemini-3-pro-preview',
             contents=[prompt, img],
             config=types.GenerateContentConfig(
                 tools=[grounding_tool],
@@ -223,7 +239,9 @@ def createTxt(design_reference, conclusions_json, codigo_json, language_map):
         )
         
         # Parsear respuesta
-        codigo_mejorado = json.loads(response.choices[0].message.content)
+        raw_content = response.choices[0].message.content
+        cleaned_content = _extract_json_payload(raw_content)
+        codigo_mejorado = json.loads(cleaned_content)
         return codigo_mejorado
         
     except Exception as e:

@@ -12,6 +12,7 @@ export default function ProjectPageContent(props) {
 const [selected, setSelected] = useState(1) 
 const id = props.projectId
 
+
 return (<div className={style['PgContent']} style={props.SbOpen?{marginLeft: '0px', width: '100%'} : {}}>
     {!id?<div className='emptyProjPage'><p>Load a project to begin...</p></div> :<>
 <SelectBar projName={props.projName}setSelected={setSelected} selected={selected} SbOpen={props.SbOpen}/>
