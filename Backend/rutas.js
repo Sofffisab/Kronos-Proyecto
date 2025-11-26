@@ -3,7 +3,7 @@ import multer from 'multer';
 const upload = multer();
 const { Router } = pkg;
 
-const setuprouter = ({ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, joinproject, createtarea, gettareas, gettarea, updatetarea, deletetarea, getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones, save, sendToPython, saveResponse, fetchPages, fetchPageById, deletePage, getDataForScheduling, sendToPythonToo, updateSchedule, updateuserprofile, deletefile, markmessageasread, getmessagereaders, deletechat, renamechat, getprojectchats, getprojectfiles, getprojectmembers, removefromproject, deleteproject, getuserinvitations, resendinvitation, deleteaccount, getcurrentuser, transferprojectownership, reassignmembertasks,  addmembertochat,  deletemessage, removememberfromchat }) => {
+const setuprouter = ({ login, signup, authentication, getevents, permision, redirectwithgoogle, getgoogleauthurl, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, joinproject, createtarea, gettareas, gettarea, updatetarea, deletetarea, getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones, save, sendToPython, saveResponse, fetchPages, fetchPageById, deletePage, getDataForScheduling, sendToPythonToo, updateSchedule, updateuserprofile, deletefile, markmessageasread, getmessagereaders, deletechat, renamechat, getprojectchats, getprojectfiles, getprojectmembers, removefromproject, deleteproject, getuserinvitations, resendinvitation, deleteaccount, getcurrentuser, transferprojectownership, reassignmembertasks,  addmembertochat,  deletemessage, removememberfromchat }) => {
     console.log("[DEBUG] setuprouter called");
     console.log("[DEBUG] signup function:", typeof signup);
     console.log("[DEBUG] login function:", typeof login);
@@ -119,6 +119,7 @@ const setuprouter = ({ login, signup, authentication, getevents, permision, redi
     router.get("/api/users/me", authentication, getcurrentuser);
  //   router.put("/api/users/me", authentication, upload.none(), updateuserprofile)
     router.delete("/api/users/me", authentication, deleteaccount);
+    router.get("/auth/google/url", authentication, getgoogleauthurl);
     router.get("/auth/google", authentication, redirectwithgoogle);
     router.get("/auth/google/callback", permision);
     router.get("/api/calendar/events", authentication, getevents);

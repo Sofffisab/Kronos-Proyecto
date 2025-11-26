@@ -685,3 +685,7 @@ transition: var(--easeTransition);
   color: var(--fontContrast);
   ;
 }
+
+.fc-event-title-container {
+  cursor: pointer;
+}

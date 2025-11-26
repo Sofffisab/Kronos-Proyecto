@@ -128,7 +128,7 @@ def createImgSearching(conclusion_text):
         # Llamada a OpenAI (mejor para generar texto detallado)
         response = retry_request(
             clientChat.chat.completions.create,
-            model="gpt-4o",
+            model="gpt-4o-mini",
             messages=[
                 {
                     "role": "system",

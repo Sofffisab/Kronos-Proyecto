@@ -134,6 +134,20 @@ const setupcalendario = () => {
     const url = authorization(personaId);
     res.redirect(url);
   };
+
+  const getgoogleauthurl = async (req, res) => {
+    try {
+      const personaId = req.personaId;
+      if (!personaId) {
+        return res.status(400).json({ error: 'Missing user context for Google auth' });
+      }
+      const url = authorization(personaId);
+      res.json({ url });
+    } catch (error) {
+      console.error('Failed to generate Google auth URL:', error);
+      res.status(500).json({ error: 'Failed to generate Google auth URL' });
+    }
+  };
  
   const createevents = async (req, res) => {
     try {
@@ -249,6 +263,7 @@ const setupcalendario = () => {
     permision,
     getevents,
     redirectwithgoogle,
+    getgoogleauthurl,
     createevents,
     deleteevents,
     updateevents,

@@ -23,7 +23,7 @@ useEffect(()=>{if(props.state === 'pending') setToggled(false)
         
     return(
         <>
-        {modal && <TaskModal date={props.date} responsable={props.icon}id={props.id}title={props.name} disableBg={()=>setModal(false)}/>}
+        {modal && <TaskModal project='task'date={props.date} responsable={props.icon}id={props.id}title={props.name} disableBg={()=>setModal(false)}/>}
         <div className={style['category']}>
         <div ><span onClick={ toggleTask} className='material-symbols-outlined'>check_box{!toggled && '_outline_blank'}</span><p className={toggled? style['title-checked'] : style['title']}>{props.name}</p></div>
         <div>{props.icon}</div>

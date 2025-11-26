@@ -10,16 +10,18 @@ import { useState } from 'react'
 import { deleteIaPage } from '../../../api/ia'
 export default function TaskModal(props) {
     const nav = useNavigate()
+    const {getIaChats} = useTasks()
     const {fetchProject, currentId} = useTasks()
     const [modal, setModal] = useState(false)
     const [message, setMessage] = useState('')
     const handleDelete = async (id)=> {
         try {
     
-           const res =  props.project?  await deleteProject(id, localStorage.getItem('token')) : props.kanBan ? await deleteTask(id, localStorage.getItem('token')) : 
-           await deleteIaPage(props.id, localStorage.getItem('token'))
-           if(res && !props.project) fetchProject(currentId)
-            if(res ) nav('/')
+           const res =  props.project=='project'?  await deleteProject(id, localStorage.getItem('token')) : props.ia ?   await deleteIaPage(props.id, localStorage.getItem('token')) : 
+           await deleteTask(id, localStorage.getItem('token'))
+           if(res && props.project=='task') fetchProject(currentId)
+            if(res && (props.project=='project' || props.ia) ) nav('/')
+                
             props.disableBg()
         }
     catch(e) {console.log(e)
@@ -29,15 +31,15 @@ export default function TaskModal(props) {
 
     }
 
-    const responsables = props.project && props.responsable.map((p)=>(<li key={Math.random()}>{p}</li>))
+    const responsables = props.project=='project' && props.responsable.map((p)=>(<li key={Math.random()}>{p}</li>))
 
     return(
 
         <DisabledBg onClick={props.disableBg} modal={modal? <BaseModal title={message}/> : <BaseModal title={props.title} inputs={
             <>
-            {!props.kanBan || !props.ia && <div>   
+            {props.project && <div>   
             <p>Limite: {props.date}</p>
-            <p>{props.project? 'Miembros:' : `Responsable: ${props.responsable}`}</p>
+            <p>{props.project=='project'? 'Miembros:' : `Responsable: ${props.responsable}`}</p>
             {props.project &&  <ul>{responsables}</ul>}
             </div>}
             <SimpleButton class={style.deleteTaskBtn}text='delete' icon='delete' onClick={()=>handleDelete(props.id)}/>
