@@ -17,11 +17,11 @@ export default function UploadedSection(props) {
                     props.code.map((file, index) => (
                         <div key={index}>
                             <h4>{file.name}</h4>
-                            <pre><code>{file.content}</code></pre>
+                            <pre className={style.codeFormat}><code>{file.content}</code></pre>
                         </div>
                     ))
                 ) : (
-                    <pre><code>{props.code}</code></pre>
+                    <pre className={style.codeFormat}><code >{props.code}</code></pre>
                 )}
             </div> : null}
            

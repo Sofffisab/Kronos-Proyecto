@@ -1,3 +1,5 @@
+
+
 export const saveIaData = async (tema, foto, codigo, token) => {
 
     const response = await fetch('http://localhost:3000/api/ia/analize/pages', {
@@ -54,3 +56,34 @@ export const getIaChat = async (paginaId, token) => {
     }
     return data;
 }   
+
+export const sendChatToPython = async (chatId, token) => { 
+    const response = await fetch((`http://localhost:3000/api/ia/analize/pages/${chatId}`), {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    });
+
+    const data = await response.json();
+   if(!response.ok) {
+        throw new Error(data.message || 'Error fetching chat');
+    }
+    return data;}
+
+    export const deleteIaPage = async (pageId, token)=> {
+        const response = await fetch(`http://localhost:3000/api/ia/analize/pages/${pageId}`, {
+            method: 'DELETE',
+            headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+            
+        })
+         const data = await response.json();
+   if(!response.ok) {
+        throw new Error(data.message || 'Error fetching chat');
+    }
+    return data;
+    }

@@ -169,10 +169,25 @@ const setupia = () => {
         });
       };
 
+      // Convert image to base64 string
+      let imageBase64;
+      try {
+        // Prisma returns Bytes as Buffer, but might be wrapped
+        const imageBuffer = Buffer.from(page.imagen_jpg);
+        imageBase64 = imageBuffer.toString("base64");
+        console.log(`[MIRKIN] Image converted to base64, length: ${imageBase64.length} bytes`);
+      } catch (conversionError) {
+        console.error("[MIRKIN] Error converting image:", conversionError);
+        return res.status(500).json({
+          error: "Error processing image data",
+          details: conversionError.message,
+        });
+      }
+
       const datosParaPython = {
         language_map: page.language_map,
         codigo_json: page.codigo_json,
-        image_base64: page.imagen_jpg.toString("base64"),
+        image_base64: imageBase64,
         theme: page.tema,
         paginaId: Number.parseInt(paginaId, 10),
       };
@@ -548,7 +563,47 @@ const setupia = () => {
     }
   };
 
-  return { save, sendToPython, saveResponse, fetchPages, fetchPageById, getDataForScheduling, sendToPythonToo, updateSchedule };
+  const deletePage = async (req, res) => {
+    const { paginaId } = req.params;
+    const personaId = req.personaId;
+
+    try {
+      if (!paginaId) {
+        return res.status(400).json({ error: "missing data: paginaId" });
+      }
+
+      const paginaExistente = await prisma.ia_paginas.findFirst({
+        where: {
+          pagina_id: Number.parseInt(paginaId, 10),
+          id_persona: personaId,
+        },
+      });
+
+      if (!paginaExistente) {
+        return res.status(404).json({ error: "page not found or you don't have permission to delete it" });
+      }
+
+      await prisma.ia_paginas.deleteMany({
+        where: {
+          pagina_id: Number.parseInt(paginaId, 10),
+          id_persona: personaId,
+        },
+      });
+
+      res.status(200).json({
+        message: "page deleted successfully",
+        paginaId: paginaId,
+      });
+    } catch (error) {
+      console.error("Error deleting page:", error);
+      res.status(500).json({
+        error: "Internal Server Error",
+        details: error.message,
+      });
+    }
+  };
+
+  return { save, sendToPython, saveResponse, fetchPages, fetchPageById, deletePage, getDataForScheduling, sendToPythonToo, updateSchedule };
 };
 
 export default setupia;

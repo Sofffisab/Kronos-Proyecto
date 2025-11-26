@@ -7,6 +7,7 @@ import style from './modals.module.css'
 import { useNavigate } from 'react-router'
 import { useTasks } from '../../context/ProjectContext'
 import { useState } from 'react'
+import { deleteIaPage } from '../../../api/ia'
 export default function TaskModal(props) {
     const nav = useNavigate()
     const {fetchProject, currentId} = useTasks()
@@ -15,9 +16,10 @@ export default function TaskModal(props) {
     const handleDelete = async (id)=> {
         try {
     
-           const res =  props.project?  await deleteProject(id, localStorage.getItem('token')) : await deleteTask(id, localStorage.getItem('token'))
+           const res =  props.project?  await deleteProject(id, localStorage.getItem('token')) : props.kanBan ? await deleteTask(id, localStorage.getItem('token')) : 
+           await deleteIaPage(props.id, localStorage.getItem('token'))
            if(res && !props.project) fetchProject(currentId)
-            if(res && props.project) nav('/')
+            if(res ) nav('/')
             props.disableBg()
         }
     catch(e) {console.log(e)
@@ -33,7 +35,7 @@ export default function TaskModal(props) {
 
         <DisabledBg onClick={props.disableBg} modal={modal? <BaseModal title={message}/> : <BaseModal title={props.title} inputs={
             <>
-            {!props.kanBan && <div>   
+            {!props.kanBan || !props.ia && <div>   
             <p>Limite: {props.date}</p>
             <p>{props.project? 'Miembros:' : `Responsable: ${props.responsable}`}</p>
             {props.project &&  <ul>{responsables}</ul>}

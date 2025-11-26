@@ -96,3 +96,10 @@
     .uploadedTitle {
         color: var(--fontContrast) !important;
     }
+
+    .codeFormat {
+
+        background-color: black;
+        color: green;
+        padding: 2rem
+    }

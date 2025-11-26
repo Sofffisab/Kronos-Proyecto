@@ -3,8 +3,12 @@ import Section from './Section'
 import SimpleButton from '../SimpleButton.jsx'
 import { useEffect, useState } from 'react'
 import SendIaModal from '../modals/SendIaModal'
-import { getIaChat, saveIaData } from '../../../api/ia.js'
+import { getIaChat, sendChatToPython,saveIaData } from '../../../api/ia.js'
 import UploadedSection from './UploadedSection.jsx'
+import LoadingScreen from '../LoadingScreen.jsx'
+import { useNavigate } from 'react-router'
+import { useTasks } from '../../context/ProjectContext.jsx'
+
 export default function IaPage(props) {
     const [disabled, setDisabled] = useState(true)
     const [topic, setTopic] = useState('');
@@ -12,9 +16,15 @@ export default function IaPage(props) {
     const [image, setImage] = useState(null)
     const [imageBase64, setImageBase64] = useState(null)
     const [modal, setModal] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [result, setResult] = useState('procesar')
+    const nav = useNavigate()
+    const {getIaChats} = useTasks()
 
     useEffect(()=> {
         async function getChat() {
+            setLoading(true);
+            await getIaChats()
             try {
                 const res = await getIaChat(props.pageId, localStorage.getItem('token'));
                 console.log(res)
@@ -37,6 +47,9 @@ export default function IaPage(props) {
                 }
             } catch (error) {
                 console.error('Error fetching page:', error);
+            }
+            finally {
+                setLoading(false);
             }
         }
         
@@ -86,6 +99,7 @@ export default function IaPage(props) {
            const res = await saveIaData(topic, imageBase64, code, localStorage.getItem('token'))
             console.log('Response:', res)
             console.log('Datos enviados exitosamente!');
+            nav('/project/ia/'+res.pagina.pagina_id)
         }
         catch(e) {
             console.error('Error:', e)
@@ -102,7 +116,25 @@ export default function IaPage(props) {
         }
         else setDisabled(true)
     }, [topic, imageBase64, code])
+
+    const uploadToPython = async () => {  
+
+        console.log('data uploaded')
+
+        try {
+           const res  = await sendChatToPython(props.pageId, localStorage.getItem('token'));
+           console.log('Response from Python:', res);
+           setResult('pending')
+        }
+        catch(e) {
+            console.error('Error:', e)
+            console.log('Error al enviar datos: ' + e.message);
+        }
+      }
     
+
+    if(loading)    return <LoadingScreen/>
+
     return(
         <>
         {modal && <SendIaModal submit={sendIaFiles}disableBg={()=> setModal(false)}/>}
@@ -110,6 +142,7 @@ export default function IaPage(props) {
     <div className={style.topBar}>
     <div className={style.title}><img src='/public/graph.svg'/><p>Análisis de tu página web</p></div>
     {!props.pageId && <SimpleButton onClick={()=>setModal(true)}text='Enviar' class={style.sendBtn} icon='upload' disabled={disabled}/>}
+    {props.pageId && <SimpleButton onClick={uploadToPython}text={result} class={style.sendBtn} icon='upload' />}
     </div>
     {props.pageId?
     <>

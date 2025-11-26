@@ -13,15 +13,17 @@ export default function ProjectItem(props) {
 
     return(
         <>
-        {modal && <TaskModal id={props.id} title={props.nombre}project={true} disableBg={()=>setModal(false)} date={new Date (props.date).toDateString()} responsable={personas}/> }
-        <Link className='project' key={props.id}to={props.project? '/project/'+props.id : '/project/ia/'+props.id}> 
+        {modal && <TaskModal ia={props.ia?true:false}id={props.id} title={props.nombre}project={props.project?true:false} disableBg={()=>setModal(false)} date={new Date (props.date).toDateString()} responsable={personas}/> }
+        <div className='project' key={props.id}> 
+            <div>
+        <Link to={props.project? '/project/'+props.id : '/project/ia/'+props.id}>
         
-        <div>
             <div className='projectColorBox' style={{backgroundColor: stringToColor(props.nombre)}}/>
                 <p className='projectBoxName'>{props.nombre}</p>
-                <span onClick={()=>setModal(true)}className='material-symbols-outlined'>more_vert</span>
-            </div>
         </Link>
+                <span onClick={(e)=>{e.stopPropagation(); setModal(true)}} className='material-symbols-outlined'>more_vert</span>
+            </div>
+        </div>
         </>
     )
 }

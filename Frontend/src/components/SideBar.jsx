@@ -37,7 +37,7 @@ const projects = props.projects? props.projects.map((item)=> (
 )) : 'Nothing to see here...'
 
 const chats = props.chats? props.chats.map((item)=> (
-    <ProjectItem key={item.id} id={item.id} nombre={item.tema}/>
+    <ProjectItem ia={true} key={item.id} id={item.id} nombre={item.tema}/>
 )) : 'Nothing to see here...'
 
 return(

@@ -56,8 +56,8 @@ app.use(
   }),
 );
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -74,8 +74,8 @@ const { createchat, sendmessage, getchatmessages, updatemessagestatus, getchatpe
 const { createtarea, gettarea, gettareas, updatetarea, deletetarea } = setuptareas();
 const { getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones } = setuppersonalizaciones();
 const { createproject, getprojects, getproject, updateproject, invitetoproject, resendinvitation, joinproject, getprojectchats, getprojectfiles, getprojectmembers, removefromproject, deleteproject, getuserinvitations, reassignmembertasks } = setupproyectos()
-const {save, sendToPython, saveResponse, getDataForScheduling, fetchPages, fetchPageById, sendToPythonToo, updateSchedule} = setupia()
-const router = setuprouter({ login, signup, updateuserprofile, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, deletefile, createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, resendinvitation, joinproject, createtarea, gettareas, updatetarea, gettarea, deletetarea, getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones, save, sendToPython, saveResponse, getDataForScheduling, fetchPageById, sendToPythonToo, updateSchedule, createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, markmessageasread, getmessagereaders, deletechat, renamechat, getprojectchats, getprojectfiles, getprojectmembers, removefromproject, deleteproject, getuserinvitations, deleteaccount, getcurrentuser, transferprojectownership, reassignmembertasks,  addmembertochat,  deletemessage, removememberfromchat, fetchPages, fetchPageById });
+const {save, sendToPython, saveResponse, fetchPages, fetchPageById, deletePage, getDataForScheduling, sendToPythonToo, updateSchedule} = setupia()
+const router = setuprouter({ login, signup, updateuserprofile, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, deletefile, createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, resendinvitation, joinproject, createtarea, gettareas, updatetarea, gettarea, deletetarea, getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones, save, sendToPython, saveResponse, fetchPages, fetchPageById, deletePage, getDataForScheduling, sendToPythonToo, updateSchedule, createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, markmessageasread, getmessagereaders, deletechat, renamechat, getprojectchats, getprojectfiles, getprojectmembers, removefromproject, deleteproject, getuserinvitations, deleteaccount, getcurrentuser, transferprojectownership, reassignmembertasks,  addmembertochat,  deletemessage, removememberfromchat });
 
 console.log('[DEBUG] Router created:', router);
 console.log('[DEBUG] Router stack:', router.stack?.length, 'routes');
