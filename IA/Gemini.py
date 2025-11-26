@@ -12,8 +12,6 @@ from typing import List
 from openai import OpenAI
 from dotenv import load_dotenv
 
-# CONFIGURACIÓN INICIAL
-
 load_dotenv()
 
 client = genai.Client(api_key=os.getenv("GEMINI_KEY"))
