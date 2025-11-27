@@ -14,13 +14,17 @@ import IaPage from '../components/IaPage/IaPage.jsx'
 export default function ProjectPage(props) {
     const params = useParams()
     const navigate = useNavigate()
-    const { setCurrentId, contextProject, error}= useTasks()
+    const { setCurrentId, contextProject, error, iaChats, getIaChats}= useTasks()
 const [sbStatus, setSbStatus] = useState(false)
 const [projects, setProjects] = useState([])
 const [loading,setLoading]= useState(true)
+const [chats, setChats] = useState([])
+
 useEffect(()=> {
     async function fetchData() {
     try{
+        const res =await getIaChats();
+        setChats(res.paginas || [])
         const data = await getProjects(localStorage.getItem('token'))
         setProjects(data)
         
@@ -35,7 +39,7 @@ fetchData()
 
 useEffect(()=> {
     
-    setCurrentId(params.id)
+    if(!props.ia) setCurrentId(params.id)
     
 }, [params.id])
 
@@ -47,8 +51,8 @@ if(error) navigate('/*')
 return(
  <>
 <NavBarWSearch menuFunc={() => setSbStatus(!sbStatus)}/>
-<SideBar  projects={projects}style={style}/>
- {props.ia? <IaPage SbOpen={sbStatus}/> : <PageContent projName={contextProject.nombre}projectId={params.id} SbOpen={sbStatus}/>}
+<SideBar  chats={chats}projects={projects}style={style}/>
+ {props.ia? <IaPage pageId={params.id} SbOpen={sbStatus}/> : <PageContent projName={contextProject.nombre}projectId={params.id} SbOpen={sbStatus}/>}
 </>
 )
 }

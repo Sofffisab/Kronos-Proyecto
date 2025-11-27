@@ -3,12 +3,13 @@ import multer from 'multer';
 const upload = multer();
 const { Router } = pkg;
 
-const setuprouter = ({ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, joinproject, createtarea, gettareas, gettarea, updatetarea, deletetarea, getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones, save, sendToPython, saveResponse, getDataForScheduling, sendToPythonToo, updateSchedule, updateuserprofile, deletefile, markmessageasread, getmessagereaders, deletechat, renamechat, getprojectchats, getprojectfiles, getprojectmembers, removefromproject, deleteproject, getuserinvitations, resendinvitation, deleteaccount, getcurrentuser, transferprojectownership, reassignmembertasks,  addmembertochat,  deletemessage, removememberfromchat }) => {
+const setuprouter = ({ login, signup, authentication, getevents, permision, redirectwithgoogle, getgoogleauthurl, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, joinproject, createtarea, gettareas, gettarea, updatetarea, deletetarea, getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones, save, sendToPython, saveResponse, fetchPages, fetchPageById, deletePage, getDataForScheduling, sendToPythonToo, updateSchedule, updateuserprofile, deletefile, markmessageasread, getmessagereaders, deletechat, renamechat, getprojectchats, getprojectfiles, getprojectmembers, removefromproject, deleteproject, getuserinvitations, resendinvitation, deleteaccount, getcurrentuser, transferprojectownership, reassignmembertasks,  addmembertochat,  deletemessage, removememberfromchat }) => {
     console.log("[DEBUG] setuprouter called");
     console.log("[DEBUG] signup function:", typeof signup);
     console.log("[DEBUG] login function:", typeof login);
     console.log("[DEBUG] getcurrentuser function:", typeof getcurrentuser);
     console.log("[DEBUG] updateuserprofile function:", typeof updateuserprofile);
+
 
     const router = Router();
 
@@ -75,8 +76,11 @@ const setuprouter = ({ login, signup, authentication, getevents, permision, redi
                 customizations: ["GET /api/customizations", "PUT /api/customizations", "DELETE /api/customizations"],
                 ia: [
                 "POST /api/ia/analize/pages",
+                "GET /api/ia/analize/pages",
                 "GET /api/ia/analize/pages/:paginaId",
+                "GET /api/ia/analize/pages/:paginaId/fetch",
                 "PUT /api/ia/analize/pages/:paginaId/response",
+                "DELETE /api/ia/analize/pages/:paginaId",
                 "GET /api/ia/organize/projects/:proyectoId/data",
                 "PUT /api/ia/organize/projects/:proyectoId/schedule",
                 ],
@@ -115,6 +119,7 @@ const setuprouter = ({ login, signup, authentication, getevents, permision, redi
     router.get("/api/users/me", authentication, getcurrentuser);
  //   router.put("/api/users/me", authentication, upload.none(), updateuserprofile)
     router.delete("/api/users/me", authentication, deleteaccount);
+    router.get("/auth/google/url", authentication, getgoogleauthurl);
     router.get("/auth/google", authentication, redirectwithgoogle);
     router.get("/auth/google/callback", permision);
     router.get("/api/calendar/events", authentication, getevents);
@@ -161,8 +166,11 @@ const setuprouter = ({ login, signup, authentication, getevents, permision, redi
     router.put("/api/customizations", authentication, updatepersonalizaciones);
     router.delete("/api/customizations", authentication, deletepersonalizaciones);
     router.post("/api/ia/analize/pages", authentication, save);
+    router.get("/api/ia/analize/pages", authentication, fetchPages);
     router.get("/api/ia/analize/pages/:paginaId", authentication, sendToPython);
+    router.get("/api/ia/analize/pages/:paginaId/fetch", authentication, fetchPageById);
     router.put("/api/ia/analize/pages/:paginaId/response", authentication, saveResponse);
+    router.delete("/api/ia/analize/pages/:paginaId", authentication, deletePage);
     router.get("/api/ia/organize/projects/:proyectoId/data", authentication, getDataForScheduling);
     router.post("/api/ia/organize/projects/:proyectoId/process", authentication, sendToPythonToo);
     router.put("/api/ia/organize/projects/:proyectoId/schedule", authentication, updateSchedule);

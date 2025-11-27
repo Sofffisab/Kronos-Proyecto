@@ -597,12 +597,30 @@ button {
   font-style: italic;
   font-family: var(--font);
 }
+.project {
+  width: 100%
+}
+.project span {
+  cursor: pointer
+}
+.project a {
+
+  color: var(--fontContrast);
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+  align-items: center
+}
 .project div{
   color: var(--fontContrast);
   display: flex;
   gap: 5%;
   justify-content: space-between;
   align-items: center
+}
+.equipos {
+
+  padding-left: 0rem;
 }
 .projectColorBox {
   height: 2rem;
@@ -613,7 +631,7 @@ button {
 .projectBoxName {
 
   white-space: nowrap;
-    max-width: 8rem;
+    max-width: 6.5rem;
     text-overflow: ellipsis;      
     overflow: hidden;
 
@@ -666,4 +684,8 @@ transition: var(--easeTransition);
 #inicioBtn {
   color: var(--fontContrast);
   ;
+}
+
+.fc-event-title-container {
+  cursor: pointer;
 }

@@ -15,7 +15,7 @@ return(
         <p className={style.title}>{props.title}</p>
         </div>
         {(props.step== 1 || props.step== 2) && (
-    <input className={style.input}placeholder= {props.step == 1 ?'ej: Plan para reducir consumo de plastico ' : 'ej: Reunion inicial para hacer brainstorming '}
+    <input maxLength={50} className={style.input}placeholder= {props.step == 1 ?'ej: Plan para reducir consumo de plastico ' : 'ej: Reunion inicial para hacer brainstorming '}
      onChange={(event)=>props.setInput(event.target.value)} value={props.input}  onKeyDown={props.step == 2? (e) => e.key === "Enter" && props.addTask() : undefined}/>
         )}{props.step == 3 && (
 <div className={style.selectBtnBox}>
