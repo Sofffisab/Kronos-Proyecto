@@ -1,0 +1,101 @@
+[
+    {
+        "criterion_or_website": "Typography & Readability",
+        "Hotdog King (Steam)": "Texto claro y legible. El sitio emplea fuentes estándar de Steam, asegurando una buena legibilidad en la plataforma de distribución digital para todos los jugadores.",
+        "Hot Dog Clicker Idle (Google Play)": "Fuentes sencillas y directas. Utiliza tipografías básicas de Android, favoreciendo una comprensión rápida y sin esfuerzo en pantallas de dispositivos móviles de diversos tamaños.",
+        "Hotdog Clicker (itch.io)": "Estilo retro evidente. La tipografía complementa una estética pixelada, aunque en ocasiones el contraste puede dificultar una lectura fluida durante periodos prolongados.",
+        "Cookie Clicker (Oficial)": "Fuentes elegantes y temáticas. La tipografía escogida realza la atmósfera del juego, manteniendo una excelente legibilidad a pesar de su estilo visual distintivo y único.",
+        "": "",
+        "conclusion": "Considerar una fuente más moderna y nítida para los elementos principales, mejorando la claridad en pantallas de alta resolución sin sacrificar el encanto."
+    },
+    {
+        "criterion_or_website": "Colors & Branding",
+        "Hotdog King (Steam)": "Colores vibrantes y atractivos. Predominan tonos cálidos y llamativos, reflejando la temática de comida rápida y la diversión inherente a la experiencia del juego.",
+        "Hot Dog Clicker Idle (Google Play)": "Diseño funcional y colorido. Los colores brillantes se usan para distinguir elementos interactivos, logrando una interfaz intuitiva y muy amigable para usuarios móviles.",
+        "Hotdog Clicker (itch.io)": "Paleta vintage y limitada. Emplea una combinación de colores que evoca los juegos de 8 bits, creando una identidad visual coherente y profundamente nostálgica para el jugador.",
+        "Cookie Clicker (Oficial)": "Esquema cromático coherente. Predominan los tonos tierra y azules oscuros, creando una atmósfera misteriosa que se alinea perfectamente con la estética general del juego.",
+        "": "",
+        "conclusion": "Reforzar la paleta con acentos más vivos para elementos clave y promociones, atrayendo visualmente a nuevos usuarios mientras se mantiene la identidad existente."
+    },
+    {
+        "criterion_or_website": "Visual Elements",
+        "Hotdog King (Steam)": "Gráficos detallados y apetitosos. Presenta imágenes de alta calidad de panchos y elementos culinarios, incitando al usuario a probar la divertida experiencia del producto digital.",
+        "Hot Dog Clicker Idle (Google Play)": "Iconos sencillos y animados. Los elementos visuales son directos y refuerzan la jugabilidad, optimizados para una experiencia móvil fluida y muy amigable para todos.",
+        "Hotdog Clicker (itch.io)": "Estilo pixel art nostálgico. Destaca por sus gráficos retro, ofreciendo una experiencia visual única que apela directamente a los aficionados a los videojuegos clásicos con encanto.",
+        "Cookie Clicker (Oficial)": "Iconos icónicos y detallados. Los elementos visuales son reconocibles al instante y contribuyen significativamente a la inmersión del jugador, manteniendo una calidad constante.",
+        "": "",
+        "conclusion": "Actualizar ciertos íconos y animaciones para que se sientan más modernos y dinámicos, manteniendo la estética original pero mejorando la fluidez visual general."
+    },
+    {
+        "criterion_or_website": "Navigation & UX",
+        "Hotdog King (Steam)": "Flujo de usuario estándar. La navegación sigue los patrones habituales de Steam, facilitando a los jugadores encontrar información crucial y realizar sus compras de manera eficiente.",
+        "Hot Dog Clicker Idle (Google Play)": "Interfaz táctil intuitiva. La navegación está optimizada para gestos, permitiendo a los usuarios interactuar con gran facilidad desde sus dispositivos móviles en todo momento.",
+        "Hotdog Clicker (itch.io)": "Estructura directa y básica. La navegación es mínima y se centra en el juego, lo que simplifica el acceso para los usuarios que buscan una experiencia clicker rápida y sin complicaciones.",
+        "Cookie Clicker (Oficial)": "Menús claros y accesibles. La interfaz de usuario es sencilla y eficiente, permitiendo a los jugadores acceder rápidamente a las opciones y estadísticas importantes del juego.",
+        "": "",
+        "conclusion": "Mejorar la organización de algunos paneles, quizás agrupando opciones similares para reducir la sobrecarga cognitiva y agilizar la toma de decisiones del jugador."
+    },
+    {
+        "criterion_or_website": "Organization & Structure",
+        "Hotdog King (Steam)": "Contenido bien segmentado. La página de Steam organiza la información en secciones lógicas, guiando al usuario desde la descripción detallada hasta las valiosas reseñas de otros jugadores.",
+        "Hot Dog Clicker Idle (Google Play)": "Diseño compacto y eficiente. La estructura se adapta muy bien a pantallas pequeñas, presentando la información esencial sin saturar al usuario móvil con datos innecesarios.",
+        "Hotdog Clicker (itch.io)": "Disposición concisa y enfocada. La organización de la página es minimalist, priorizando el acceso inmediato al juego y a la información básica vital del desarrollador fácilmente.",
+        "Cookie Clicker (Oficial)": "Layout clásico y funcional. La estructura principal del juego divide la pantalla en áreas distintas para la producción, tienda y estadísticas, facilitando el seguimiento constante.",
+        "": "",
+        "conclusion": "Revisar la jerarquía de la información en ciertas secciones secundarias, asegurando que los datos más importantes sean prominentes y fáciles de localizar para los jugadores nuevos."
+    },
+    {
+        "criterion_or_website": "Accessibility",
+        "Hotdog King (Steam)": "Cumplimiento de estándares Steam. La plataforma ofrece opciones de accesibilidad inherentes, beneficiando a una audiencia amplia con diversas necesidades y preferencias de uso.",
+        "Hot Dog Clicker Idle (Google Play)": "Funciones de accesibilidad móvil. El juego se beneficia de características del sistema operativo Android, aunque la propia aplicación podría mejorar sus configuraciones internas.",
+        "Hotdog Clicker (itch.io)": "Opciones básicas disponibles. El sitio ofrece una experiencia generalmente accesible, pero con margen para mejorar el contraste o tamaño de texto para usuarios específicos.",
+        "Cookie Clicker (Oficial)": "Traducciones extensas presentes. El juego ofrece un menú para cambiar de idioma, lo cual mejora notablemente la accesibilidad lingüística para una audiencia global muy diversa.",
+        "": "",
+        "conclusion": "Añadir opciones de personalización como contraste de color o tamaño de fuente, permitiendo a más usuarios disfrutar plenamente del juego independientemente de sus capacidades visuales."
+    },
+    {
+        "criterion_or_website": "Functionality",
+        "Hotdog King (Steam)": "Funciones robustas de juego. La aplicación ofrece una experiencia fluida con mecánicas clicker complejas, entregando todo lo prometido en su descripción oficial sin fallos.",
+        "Hot Dog Clicker Idle (Google Play)": "Mecánicas de juego sólidas. El juego cumple su propósito de clicker inactivo, permitiendo a los jugadores progresar con interacciones simples y recompensas inmediatas.",
+        "Hotdog Clicker (itch.io)": "Operatividad sencilla y directa. El juego se carga rápidamente y sus funcionalidades básicas están operativas, brindando una experiencia de juego instantánea y sin complicaciones.",
+        "Cookie Clicker (Oficial)": "Juego estable y completo. La aplicación funciona impecablemente, procesando clics y mejoras de manera eficiente, proporcionando una experiencia de juego ininterrumpida y adictiva.",
+        "": "",
+        "conclusion": "Investigar y corregir posibles micro-errores en actualizaciones, asegurando que todas las nuevas características se integren sin afectar la estabilidad general ni el rendimiento."
+    },
+    {
+        "criterion_or_website": "Interactivity",
+        "Hotdog King (Steam)": "Alto grado de interacción. El juego fomenta la participación constante del jugador a través de clics, mejoras y decisiones estratégicas para optimizar la valiosa producción.",
+        "Hot Dog Clicker Idle (Google Play)": "Interacción constante y progresiva. Los usuarios participan mediante toques continuos y decisiones sobre mejoras, manteniendo un compromiso activo y muy gratificante.",
+        "Hotdog Clicker (itch.io)": "Interactividad básica y constante. La mecánica central de clics es el eje principal, ofreciendo una experiencia directa y gratificante para los amantes del género clicker.",
+        "Cookie Clicker (Oficial)": "Engagement adictivo garantizado. La interacción principal es el clic, complementada con mejoras estratégicas que mantienen al jugador enganchado por horas de diversión.",
+        "": "",
+        "conclusion": "Introducir minijuegos o eventos temporales con mecánicas de interacción diferentes, añadiendo variedad y frescura a la experiencia de juego principal para mantener el interés a largo plazo."
+    },
+    {
+        "criterion_or_website": "SEO",
+        "Hotdog King (Steam)": "Optimizado para la plataforma. El juego utiliza palabras clave relevantes dentro de Steam, mejorando su visibilidad y alcanzando a una audiencia específica de jugadores potenciales.",
+        "Hot Dog Clicker Idle (Google Play)": "Metadatos específicos para tienda. La descripción y las etiquetas están bien optimizadas para búsquedas en la Play Store, facilitando su descubrimiento móvil fácilmente.",
+        "Hotdog Clicker (itch.io)": "Presencia básica online. El juego se apoya principalmente en la plataforma itch.io para su visibilidad, con oportunidades para expandir su valioso alcance SEO externo.",
+        "Cookie Clicker (Oficial)": "Dominio reconocido y autoridad. El sitio se beneficia de años de existencia y enlaces externos, posicionándose fuertemente en búsquedas relacionadas con juegos clicker.",
+        "": "",
+        "conclusion": "Implementar un blog o sección de noticias con contenido regular y optimizado, usando palabras clave relevantes para atraer tráfico orgánico y mantener a la comunidad informada."
+    },
+    {
+        "criterion_or_website": "Mobile Experience",
+        "Hotdog King (Steam)": "Adaptabilidad en Steam Deck. Aunque no es móvil nativo, se beneficia de la compatibilidad con Steam Deck, ofreciendo una experiencia portátil de calidad superior.",
+        "Hot Dog Clicker Idle (Google Play)": "Optimizado para smartphones. El diseño responsivo y los controles táctiles garantizan una experiencia fluida y muy agradable en cualquier dispositivo móvil.",
+        "Hotdog Clicker (itch.io)": "Experiencia web responsiva. Aunque no es una aplicación nativa, el juego se adapta razonablemente bien a diferentes tamaños de pantalla en navegadores móviles.",
+        "Cookie Clicker (Oficial)": "Versión móvil dedicada. Aunque existen versiones en tiendas de apps, la experiencia web actual podría beneficiarse de un diseño más adaptable a pantallas pequeñas.",
+        "": "",
+        "conclusion": "Desarrollar una interfaz más responsiva para la versión web, asegurando que todos los elementos se escalen y reorganicen correctamente en dispositivos móviles para una jugabilidad óptima."
+    },
+    {
+        "criterion_or_website": "",
+        "Hotdog King (Steam)": "",
+        "Hot Dog Clicker Idle (Google Play)": "",
+        "Hotdog Clicker (itch.io)": "",
+        "Cookie Clicker (Oficial)": "",
+        "": "",
+        "conclusion": "La aplicación sobresale por su jugabilidad adictiva y su estética coherente. Podría mejorar su atractivo visual mediante la actualización de algunos activos gráficos, expandir la interactividad con nuevos modos de juego y optimizar la versión web para dispositivos móviles."
+    }
+]

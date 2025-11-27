@@ -15,7 +15,11 @@ const executePythonScript = (scriptPath, datosParaPython, options = {}) => {
   return new Promise((resolve, reject) => {
     const pythonProcess = spawn("python", [scriptPath], {
       timeout: options.timeout || 600000, // 10 minutos
-      maxBuffer: 10 * 1024 * 1024 // 10MB
+      maxBuffer: 10 * 1024 * 1024, // 10MB
+      env: {
+        ...process.env,
+        PYTHONIOENCODING: "utf-8",
+      },
     });
 
     let stdoutData = "";
@@ -144,6 +148,23 @@ const setupia = () => {
   const sendToPython = async (req, res) => {
     const { paginaId } = req.params;
     const personaId = req.personaId;
+    const paginaIdNumber = Number.parseInt(paginaId, 10);
+
+    const persistIaStatus = async (payload) => {
+      try {
+        await prisma.ia_paginas.updateMany({
+          where: {
+            pagina_id: paginaIdNumber,
+            id_persona: personaId,
+          },
+          data: {
+            respuesta_ia: JSON.stringify(payload),
+          },
+        });
+      } catch (persistError) {
+        console.error("[MIRKIN] Error updating IA status:", persistError);
+      }
+    };
 
     try {
       if (!paginaId) {
@@ -152,7 +173,7 @@ const setupia = () => {
 
       const paginas = await prisma.ia_paginas.findMany({
         where: {
-          pagina_id: Number.parseInt(paginaId, 10),
+          pagina_id: paginaIdNumber,
           id_persona: personaId,
         },
       });
@@ -169,6 +190,11 @@ const setupia = () => {
         });
       };
 
+      await persistIaStatus({
+        status: "standby",
+        started_at: new Date().toISOString(),
+      });
+
       // Convert image to base64 string
       let imageBase64;
       try {
@@ -178,6 +204,12 @@ const setupia = () => {
         console.log(`[MIRKIN] Image converted to base64, length: ${imageBase64.length} bytes`);
       } catch (conversionError) {
         console.error("[MIRKIN] Error converting image:", conversionError);
+        await persistIaStatus({
+          status: "failed",
+          error: "Error processing image data",
+          details: conversionError.message,
+          completed_at: new Date().toISOString(),
+        });
         return res.status(500).json({
           error: "Error processing image data",
           details: conversionError.message,
@@ -201,6 +233,12 @@ const setupia = () => {
       });
 
       if (!resultado.success) {
+        await persistIaStatus({
+          status: "failed",
+          error: resultado.error || "IA processing failed",
+          details: resultado.details,
+          completed_at: new Date().toISOString(),
+        });
         return res.status(500).json({
           error: "IA processing failed",
           details: resultado.error,
@@ -208,79 +246,35 @@ const setupia = () => {
         });
       };
 
+      const successPayload = {
+        status: "completed",
+        paginaId: resultado.paginaId || paginaIdNumber,
+        tabla_analisis: resultado.tabla_analisis,
+        codigo_mejorado: resultado.codigo_mejorado,
+        referencia_diseno: resultado.referencia_diseno,
+        completed_at: new Date().toISOString(),
+      };
+
+      await persistIaStatus(successPayload);
+
       res.status(200).json({
         message: "IA processing completed successfully",
-        resultado: {
-          paginaId: resultado.paginaId,
-          tabla_analisis: resultado.tabla_analisis,
-          codigo_mejorado: resultado.codigo_mejorado,
-          referencia_diseno: resultado.referencia_diseno,
-        },
+        resultado: successPayload,
       });
     } catch (error) {
       console.error("Error sending to Python:", error);
+      await persistIaStatus({
+        status: "failed",
+        error: error.error || "Internal Server Error",
+        details: error.details || error.message,
+        completed_at: new Date().toISOString(),
+      });
       res.status(500).json({
         error: error.error || "Internal Server Error",
         details: error.details || error.message,
         retry: error.retry || false,
       });
     };
-  };
-
-  const saveResponse = async (req, res) => {
-    const { paginaId, tabla_analisis, codigo_mejorado, referencia_diseno } = req.body;
-    const personaId = req.personaId;
-
-    try {
-      if (!paginaId || !tabla_analisis || !codigo_mejorado || !referencia_diseno) {
-        return res.status(400).json({ error: "missing data" });
-      };
-
-      const paginaExistente = await prisma.ia_paginas.findFirst({
-        where: {
-          pagina_id: Number.parseInt(paginaId, 10),
-          id_persona: personaId,
-        },
-      });
-
-      if (!paginaExistente) {
-        return res.status(404).json({ error: "page not found or you don't have permission to update it" });
-      };
-
-      const respuesta_ia_json = {
-        tabla_analisis: tabla_analisis,
-        codigo_mejorado: codigo_mejorado,
-        referencia_diseno: referencia_diseno,
-        fecha_procesamiento: new Date().toISOString(),
-      };
-
-      const paginaActualizada = await prisma.ia_paginas.updateMany({
-        where: {
-          pagina_id: Number.parseInt(paginaId, 10),
-          id_persona: personaId,
-        },
-        data: {
-          respuesta_ia: JSON.stringify(respuesta_ia_json),
-        },
-      });
-
-      if (paginaActualizada.count === 0) {
-        return res.status(404).json({ error: "page not found" });
-      };
-
-      res.status(200).json({
-        message: "response saved successfully",
-        paginaId: paginaId,
-        registros_actualizados: paginaActualizada.count,
-      });
-    } catch (error) {
-      console.error("Error saving IA response:", error);
-      res.status(500).json({
-        error: "Internal Server Error",
-        details: error.message,
-        retry: true,
-      });
-    }
   };
 
   const fetchPages = async (req, res) => {
@@ -603,7 +597,7 @@ const setupia = () => {
     }
   };
 
-  return { save, sendToPython, saveResponse, fetchPages, fetchPageById, deletePage, getDataForScheduling, sendToPythonToo, updateSchedule };
+  return { save, sendToPython, fetchPages, fetchPageById, deletePage, getDataForScheduling, sendToPythonToo, updateSchedule };
 };
 
 export default setupia;

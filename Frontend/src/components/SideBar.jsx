@@ -67,7 +67,7 @@ return(
 {chats}
 </ul>
 <Separator/>
-<SimpleButton class='invitarBtn' icon='mail' text='Invitar'/>
+    
 </div>
 </>
 )

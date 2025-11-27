@@ -24,6 +24,13 @@ load_dotenv()
 
 client = genai.Client(api_key=os.getenv("GEMINI_KEY"))
 clientChat = OpenAI(api_key=os.getenv("CHAT_KEY"))
+
+def log(*args, **kwargs):
+    """Send diagnostic output to stderr so stdout stays JSON-only."""
+    print(*args, file=sys.stderr, **kwargs)
+
+# Centraliza el modelo usado para generar imágenes para poder sustituirlo fácilmente
+IMAGE_GENERATION_MODEL = os.getenv("GEMINI_IMAGE_MODEL", "gemini-2.0-flash-exp")
 #DATABASE_URL = os.getenv("DATABASE_URL")
 
 # Conectarse a la base de datos
@@ -78,30 +85,38 @@ def retry_request(func, *args, **kwargs):
         except genai.errors.ServerError as e:
             if "503" in str(e) and attempt < max_retries - 1:
                 sleep_time = delay * (2 ** attempt) + random.uniform(0, 1)
-                print(f"Server sobrecargado (503). Retrying in {sleep_time:.1f} seconds...")
+                log(f"Server sobrecargado (503). Retrying in {sleep_time:.1f} seconds...")
                 time.sleep(sleep_time)
             else:
                 raise
 
 #crear img
 def createImg(prompt):
-    response = retry_request(
-        client.models.generate_content,
-        model="gemini-2.0-flash-preview-image-generation",
-        contents=[
-            {"role": "user", "parts": [{"text": prompt}]}
-        ],
-        config=types.GenerateContentConfig(
-        response_modalities=['TEXT', 'IMAGE']
+    try:
+        response = retry_request(
+            client.models.generate_content,
+            model=IMAGE_GENERATION_MODEL,
+            contents=[
+                {"role": "user", "parts": [{"text": prompt}]}
+            ],
+            config=types.GenerateContentConfig(
+                response_modalities=['TEXT', 'IMAGE']
+            )
         )
-    )
+    except Exception as e:
+        log(f"No se pudo generar imagen con {IMAGE_GENERATION_MODEL}: {e}")
+        return None
+
     for part in response.candidates[0].content.parts:
         if part.text is not None:
-            print(part.text)
+            log(part.text)
         elif part.inline_data is not None:
             image = Image.open(BytesIO((part.inline_data.data)))
             image.save('gemini-image.png')
             image.show()
+            return image
+
+    return None
 
 
 def createImgSearching(conclusion_text, img_path):
@@ -112,7 +127,7 @@ def createImgSearching(conclusion_text, img_path):
     if isinstance(img_path, str):
         # Es una ruta de archivo
         if not os.path.exists(img_path):
-            print(f"Imagen no encontrada: {img_path}")
+            log(f"Imagen no encontrada: {img_path}")
             return None
         img = Image.open(img_path).convert("RGB")
 
@@ -121,7 +136,7 @@ def createImgSearching(conclusion_text, img_path):
         img = img_path.convert("RGB")
 
     else:
-        print("Tipo de imagen no válido. Se esperaba ruta (str) o imagen PIL.")
+        log("Tipo de imagen no válido. Se esperaba ruta (str) o imagen PIL.")
         return None
 
 
@@ -163,18 +178,22 @@ def createImgSearching(conclusion_text, img_path):
     """
     
     # Generar imagen
-    response_img = client.models.generate_content(
-        model="gemini-2.0-flash-preview-image-generation",
-        contents=[
-            types.Part.from_text(text=prompt_final),
-            types.Part.from_bytes(data=img_bytes, mime_type=mime_type)
-        ],
-        config=types.GenerateContentConfig(
-        response_modalities=["TEXT", "IMAGE"],
-        temperature=0.8,
-        top_p=0.95
+    try:
+        response_img = client.models.generate_content(
+            model=IMAGE_GENERATION_MODEL,
+            contents=[
+                types.Part.from_text(text=prompt_final),
+                types.Part.from_bytes(data=img_bytes, mime_type=mime_type)
+            ],
+            config=types.GenerateContentConfig(
+                response_modalities=["TEXT", "IMAGE"],
+                temperature=0.8,
+                top_p=0.95
+            )
         )
-    )
+    except Exception as e:
+        log(f"No se pudo generar imagen mejorada con {IMAGE_GENERATION_MODEL}: {e}")
+        return None
 
     # Extraer imagen generada
     for part in response_img.candidates[0].content.parts:
@@ -183,6 +202,8 @@ def createImgSearching(conclusion_text, img_path):
             edited_img.save("imagen_editada.png")
             edited_img.show()
             return edited_img
+
+    return None
 
 
 language_map = {
@@ -237,7 +258,7 @@ def createTxt(img_from_ai,conclusions_json, codigo_json, language_map):
 
     # Si no se pudo obtener la imagen
     if not img_b64:
-        print("No se pudo codificar la imagen, usando solo texto.")
+        log("No se pudo codificar la imagen, usando solo texto.")
         img_b64 = ""  # Evita el UnboundLocalError
 
     prompt = f"""
@@ -250,7 +271,7 @@ def createTxt(img_from_ai,conclusions_json, codigo_json, language_map):
     {json.dumps(conclusions_json, indent=2, ensure_ascii=False)}
     """
     
-    print("✅ request de createTxt hecho")
+    log("✅ request de createTxt hecho")
     # Llamada al modelo
     response = clientChat.responses.create(
         model="gpt-5",
@@ -270,7 +291,7 @@ def createTxt(img_from_ai,conclusions_json, codigo_json, language_map):
                     ]
         }]
     )
-    print("✅Request de texto hecho")
+    log("✅Request de texto hecho")
 
     output_text = response.output_text
 
@@ -309,7 +330,7 @@ def createJson(prompt, img_path, codigo_json, language_map):
         input=contents_buscar_paginas
     )
 
-    print("Response de tabla hecho")
+    log("Response de tabla hecho")
 
     prompt_board = response.output_text + prompt
 
@@ -320,7 +341,7 @@ def createJson(prompt, img_path, codigo_json, language_map):
             img_format = img.format.lower()
             mime_type = f"image/{img_format}" if img_format != "jpg" else "image/jpeg"
     else:
-        print(f"Imagen no encontrada: {img_path}")
+        log(f"Imagen no encontrada: {img_path}")
         return
 
 
@@ -401,17 +422,17 @@ def createJson(prompt, img_path, codigo_json, language_map):
     json_path = os.path.join(SAVE_DIR, "tablita.json")
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(rows, f, ensure_ascii=False, indent=4)
-    print("JSON creado")
+    log("JSON creado")
 
     with open("tablas_generadas/tablita.json", "r", encoding="utf-8") as f:
         data = json.load(f)
 
-    print("tabla guardada")
+    log("tabla guardada")
 
     # Guardar Excel
     xlsx_path = os.path.join(SAVE_DIR, "tablita.xlsx")
     df.to_excel(xlsx_path, index=False)
-    print("Excel creado")
+    log("Excel creado")
 
     #por si cambiamos de lugar las filas y columnas 
     conclusion = None
@@ -420,7 +441,7 @@ def createJson(prompt, img_path, codigo_json, language_map):
     else:
         conclusion = " ".join(df.iloc[-1].dropna().tolist())
 
-    print("Conclusión de tabla hecho")
+    log("Conclusión de tabla hecho")
 
     if not conclusion.strip():
         conclusion = "No hubo sugerencias claras, pero mejora la navegación y la accesibilidad visual."
@@ -434,7 +455,7 @@ def createJson(prompt, img_path, codigo_json, language_map):
         language_map
     )
 
-    print("Markdown generado:\n", resultado_txt["markdown"])
+    log("Markdown generado:\n", resultado_txt["markdown"])
     return rows, resultado_txt, edited_img
 
 
@@ -503,6 +524,10 @@ if __name__ == "__main__":
             codigo_json,
             language_map
         )
+
+        if edited_img is None:
+            log("No se generó imagen nueva; usando captura original como referencia.")
+            edited_img = img_pagina
 
         # Convertir imagen editada a Base64
         buffer = BytesIO()

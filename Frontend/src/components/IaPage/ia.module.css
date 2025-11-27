@@ -52,6 +52,12 @@
     opacity: 0.5;
     border-radius: 10px;
 }
+.cell {
+    outline: 2px solid black;
+}
+.codeTitle {
+    padding: .6rem;
+}
 .imageBox {
     margin: 1rem;
     position: relative;
@@ -68,7 +74,7 @@
     transition: var(--easeTransition);
     background-color: var(--darkerTertiaryColor);
     width: 8rem;
-    padding: 1.5%;
+    padding: 1.25rem;
     border-radius: 15px;
     display: flex;
     align-items: center;
@@ -84,6 +90,11 @@
     align-items: center;
     justify-content: space-between;
     padding: 1% 2% 1% 2%
+}
+.topBar div {
+    display: flex;
+    align-items: center;
+    gap: 1%;
 }
 
 .uploadedImage {
@@ -101,5 +112,44 @@
 
         background-color: black;
         color: green;
-        padding: 2rem
+        padding: 2rem;
+        overflow: hidden;
+    }
+
+    .analysisTableContainer {
+        margin: 1rem 0;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .analysisTableWrapper {
+        overflow-x: auto;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+    }
+
+    .analysisTable {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: var(--font);
+        font-size: calc(var(--mediumSize) * 0.9);
+        min-width: 600px;
+    }
+
+    .analysisTable thead {
+        background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .analysisTable th,
+    .analysisTable td {
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 0.75rem;
+        text-align: left;
+        vertical-align: top;
+        color: var(--fontContrast);
+    }
+
+    .analysisTable tbody tr:nth-child(even) {
+        background-color: rgba(255, 255, 255, 0.02);
     }
