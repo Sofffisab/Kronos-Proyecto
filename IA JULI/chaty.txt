@@ -1,3 +1,7 @@
+# ===========================================================
+# ARCHIVO PRINCIPAL DE IA + BACKEND
+# ===========================================================
+
 #python -m pip install openai python-dotenv flask pandas psycopg2
 #pip install openai python-dotenv flask pandas psycopg2
 #PS C:\Users\juliw\OneDrive\Documents\GitHub\Kronos-Proyecto\IA JULI> py ChatGPT.py>>
@@ -12,17 +16,17 @@ from typing import List
 import pandas as pd
 import time
 import psycopg2
-import hashlib 
-from datetime import datetime, timedelta 
-import requests 
-
-# importamos todo lo necesario para laburarr
+import hashlib   # ← agregado para detectar cambios en tareas
+from datetime import datetime, timedelta  # ← IMPORTANTE
+import requests  # para traer horario laboral del backend
 
 load_dotenv()  # para traer las variables del env
 app = Flask(__name__)
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))  # usamos la apikey que esta bien guardadita en el env
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))  # usamos la apikey del env
 
-# convertir minutos y distribuir días
+# ===========================================================
+# NUEVAS FUNCIONES: convertir minutos y distribuir días
+# ===========================================================
 
 def convertir_minutos_legibles(minutos):
     if minutos == 30:
@@ -41,10 +45,8 @@ def convertir_minutos_legibles(minutos):
         return "4 horas"
     return f"{minutos // 60} horas"
 
-
 def distribuir_tarea_en_dias(descripcion, horario_laboral, fecha_limite, prioridad):
     desc = descripcion.lower()
-
     if "largo" in desc or "grande" in desc or "extenso" in desc:
         horas_totales = 6
     elif "investigar" in desc:
@@ -57,15 +59,12 @@ def distribuir_tarea_en_dias(descripcion, horario_laboral, fecha_limite, priorid
         horas_totales = 2
 
     minutos_totales = horas_totales * 60
-
     dias_ordenados = ["lunes", "martes", "miércoles", "jueves", "viernes", "sábado", "domingo"]
-
     fecha_limite_dt = datetime.strptime(fecha_limite, "%Y-%m-%d")
     hoy = datetime.now()
 
     dias_disponibles = []
     f = hoy
-
     while f <= fecha_limite_dt:
         nombre = dias_ordenados[f.weekday()]
         if nombre in horario_laboral and horario_laboral[nombre] > 0:
@@ -76,16 +75,13 @@ def distribuir_tarea_en_dias(descripcion, horario_laboral, fecha_limite, priorid
         f += timedelta(days=1)
 
     plan = []
-
     peso = 1.5 if prioridad == "alta" else 1 if prioridad == "media" else 0.8
 
     for dia in dias_disponibles:
         if minutos_totales <= 0:
             break
-
         asignable = min(int(dia["minutos"] * peso), minutos_totales)
         asignable = (asignable // 30) * 30
-
         if asignable > 0:
             minutos_totales -= asignable
             plan.append({
@@ -95,14 +91,13 @@ def distribuir_tarea_en_dias(descripcion, horario_laboral, fecha_limite, priorid
 
     return plan
 
-
-
-# Funciones para hacer que la predicción sea ESTABLE
+# ===========================================================
+# Funciones para predicción estable
+# ===========================================================
 
 def calcular_hash_tareas(tareas):
     tareas_json = json.dumps(tareas, sort_keys=True, ensure_ascii=False)
     return hashlib.md5(tareas_json.encode()).hexdigest()
-
 
 def cargar_hash_anterior():
     if os.path.exists("tareas_hash.txt"):
@@ -110,11 +105,9 @@ def cargar_hash_anterior():
             return f.read().strip()
     return None
 
-
 def guardar_hash(hash_nuevo):
     with open("tareas_hash.txt", "w", encoding="utf-8") as f:
         f.write(hash_nuevo)
-
 
 def cargar_prediccion_guardada():
     if os.path.exists("prediccion_guardada.json"):
@@ -122,12 +115,13 @@ def cargar_prediccion_guardada():
             return json.load(f)
     return None
 
-
 def guardar_prediccion(pred):
     with open("prediccion_guardada.json", "w", encoding="utf-8") as f:
         json.dump(pred, f, indent=4, ensure_ascii=False)
 
-# Función que obtiene un atributo o clave de un objeto de forma segura
+# ===========================================================
+# Funciones originales
+# ===========================================================
 
 def _safe_getattr_or_key(obj, name):
     try:
@@ -137,8 +131,6 @@ def _safe_getattr_or_key(obj, name):
             return obj[name]
         except:
             return None
-
-# Función que extrae el texto limpio de la respuesta de OpenAI
 
 def extract_text_from_response(response):
     try:
@@ -167,29 +159,38 @@ def extract_text_from_response(response):
             return txt.strip()
 
         return ""
-
     except Exception as e:
         return f"ERROR_EXTRACTING_TEXT: {str(e)}"
 
+# ===========================================================
 # RUTA PRINCIPAL /organizar
+# ===========================================================
 
 @app.route("/organizar", methods=["POST"])
 def organizar_tareas():
-    data = request.json  # lo que nos manda el front
-
-    # Traer usuario logueado del backend
-    usuario_logueado = request.headers.get("Usuario")  # se espera que el frontend envíe el usuario en headers
+    data = request.json
+    usuario_logueado = request.headers.get("Usuario")
     if not usuario_logueado:
         return jsonify({"error":"No se encontró usuario logueado"}), 400
 
-    # Traer horario laboral real del backend según el usuario logueado
+    # ⚡ Traer horario laboral real del backend según el usuario logueado
     try:
-        res_horario = requests.get(f"http://localhost:5000/horario/{usuario_logueado}")
-        if res_horario.status_code != 200:
-            return jsonify({"error":"No se pudo obtener horario laboral"}), 500
-        horario_laboral_usuario = res_horario.json()
+        # Si la tarea ya tiene horario_laboral, lo usamos
+        horario_laboral_usuario = None
+        for tarea in data:
+            if tarea.get("responsable") == usuario_logueado and tarea.get("horario_laboral"):
+                horario_laboral_usuario = tarea["horario_laboral"]
+                break
+        
+        # Si no hay horario en la tarea, intentamos traerlo del backend
+        if not horario_laboral_usuario:
+            res_horario = requests.get(f"http://localhost:5000/horario/{usuario_logueado}")
+            if res_horario.status_code != 200:
+                return jsonify({"error":"No se pudo obtener horario laboral"}), 500
+            horario_laboral_usuario = res_horario.json()
+
     except Exception as e:
-        return jsonify({"error": f"No se pudo conectar al backend para horario: {str(e)}"}), 500
+        return jsonify({"error": f"No se pudo obtener horario laboral: {str(e)}"}), 500
 
     # Filtrar solo tareas del usuario logueado
     tareas_usuario = []
@@ -201,15 +202,13 @@ def organizar_tareas():
     # Detectar si cambió
     hash_actual = calcular_hash_tareas(tareas_usuario)
     hash_anterior = cargar_hash_anterior()
-
     if hash_actual == hash_anterior:
         pred = cargar_prediccion_guardada()
         if pred:
             print("Usando predicción anterior (tareas NO cambiaron)")
             return jsonify({"plan": pred})
 
-    # PROMPT NUEVO para chatyyyyyyy
-
+    # PROMPT NUEVO
     prompt = f"""
 Soy una IA que organiza tareas distribuyéndolas en varios días.
 Debo devolver TODOS los días necesarios para completar cada tarea antes de la fecha límite.
@@ -233,25 +232,14 @@ Reglas:
 Formato EXACTO:
 
 [
-    {{
-        "nombre": "...",
-        "responsable": "...",
-        "fecha_limite": "...",
-        "prioridad": "...",
-        "estado": "...",
-        "planificacion": [
-            {{
-                "dia": "YYYY-MM-DD",
-                "tiempo_asignado": "1 hora"
-            }}
-        ]
-    }}
+    {{"nombre": "...", "responsable": "...", "fecha_limite": "...",
+      "prioridad": "...", "estado": "...",
+      "planificacion":[{{"dia":"YYYY-MM-DD","tiempo_asignado":"1 hora"}}]}}
 ]
 
 Tareas (datos exactos):
 {json.dumps(tareas_usuario, ensure_ascii=False)}
 """
-# Llamada a la API de OpenAI para generar la organización de tareas
 
     try:
         response = client.chat.completions.create(
@@ -265,51 +253,35 @@ Tareas (datos exactos):
         )
 
         plan_text = extract_text_from_response(response)
-
         if plan_text.startswith("```"):
             plan_text = plan_text.split("```json")[-1].split("```")[-1].strip()
 
         try:
             plan_json = json.loads(plan_text)
-
-# Guardo hash y predicción para detectar si cambian las tareas la próxima vez
-
             guardar_hash(hash_actual)
             guardar_prediccion(plan_json)
-
             return jsonify({"plan": plan_json})
-
         except json.JSONDecodeError:
             return jsonify({"plan_text": plan_text})
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
-
-# END-POINT PARA CALENDARIZAR PLAN APROBADO
-
+# ===========================================================
+# ENDPOINT PARA CALENDARIZAR PLAN APROBADO
+# ===========================================================
 
 @app.route("/calendarizar", methods=["POST"])
 def calendarizar_plan():
-    """
-    Recibe un plan de tareas aprobado por el usuario logueado.
-    Se intentan crear todos los eventos en Google Calendar.
-    Si falla alguno, NO se crea ningún evento (todo o nada).
-    """
-    plan = request.json  
+    plan = request.json
     usuario_logueado = request.headers.get("Usuario")
-
     if not usuario_logueado:
         return jsonify({"error": "No se encontró usuario logueado"}), 400
-
     if not plan or len(plan) == 0:
         return jsonify({"error": "No se recibió plan para calendarizar"}), 400
 
-    # Preparamos los eventos para Google Calendar
     eventos_google = []
     for tarea in plan:
-        # Convertimos el tiempo asignado a horas y minutos
         horas = 0
         minutos = 0
         tiempo = tarea.get("tiempo_asignado", "")
@@ -324,11 +296,9 @@ def calendarizar_plan():
         elif "30 minutos" in tiempo:
             minutos = 30
 
-        # Creamos objeto evento
         fecha = tarea.get("dia")
         start = datetime.strptime(fecha, "%Y-%m-%d")
         end = start + timedelta(hours=horas, minutes=minutos)
-
         eventos_google.append({
             "summary": tarea.get("nombre"),
             "description": f"Tarea: {tarea.get('nombre')}",
@@ -336,21 +306,20 @@ def calendarizar_plan():
             "end": {"dateTime": end.isoformat(), "timeZone": "America/Argentina/Buenos_Aires"},
         })
 
-    # Enviamos todos los eventos al backend de calendario Node
     try:
         res = requests.post(
             "http://localhost:5000/calendar/create",
             json={"usuario": usuario_logueado, "eventos": eventos_google},
             timeout=10
         )
-
         if res.status_code != 201:
             return jsonify({"error": "No se pudieron crear los eventos, inténtalo de nuevo"}), 500
-
         return jsonify({"message": "Todos los eventos se calendarizaron correctamente"}), 201
-
     except Exception as e:
         return jsonify({"error": f"Error al conectar con Google Calendar: {str(e)}"}), 500
 
+# ===========================================================
+# RUN
+# ===========================================================
 if __name__ == "__main__":
     app.run(debug=True)
