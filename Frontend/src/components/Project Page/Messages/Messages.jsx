@@ -6,17 +6,21 @@ import { useTasks } from "../../../context/ProjectContext";
 import { sendChatMessage } from "../../../../api/messages";
 
 export default function Messages() {
-  const { contextProject, contextChat, fetchMessages } = useTasks();
+  const { contextProject, contextChat, fetchMessages, setContextChat } = useTasks();
   const [input, setInput] = useState("");
 
   const chatId = contextProject.chats?.[0]?.id;
 
 
   useEffect(() => {
-    if (chatId) fetchMessages(chatId);
+    if (chatId) {fetchMessages(chatId)
+       console.log('chat loaded')}
+      else setContextChat([]);
   }, [chatId]);
 
   const handleSend = () => {
+
+    console.log('bege')
     if (input.trim()) {
       sendChatMessage(chatId, input);
       setInput("");

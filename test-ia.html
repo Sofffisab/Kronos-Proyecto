@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Test IA Kronos - Mirkin</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Arial; 
+            max-width: 1400px; 
+            margin: 30px auto; 
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        h1 { color: #333; margin-bottom: 10px; }
+        h2 { color: #555; font-size: 1.2rem; margin-top: 0; }
+        .section { 
+            background: white; 
+            padding: 20px; 
+            margin: 20px 0; 
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        label { 
+            display: block; 
+            font-weight: 600; 
+            margin-top: 15px; 
+            margin-bottom: 5px;
+            color: #333;
+        }
+        input[type="text"], input[type="number"], input[type="password"], input[type="file"] { 
+            width: 100%; 
+            padding: 10px; 
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        textarea { 
+            width: 100%; 
+            padding: 10px; 
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+            min-height: 200px;
+        }
+        button { 
+            padding: 12px 24px; 
+            margin: 10px 5px 10px 0; 
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        button:hover:not(:disabled) { 
+            transform: translateY(-2px); 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2); 
+        }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-primary { background: #007bff; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-warning { background: #ffc107; color: black; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-secondary { background: #6c757d; color: white; }
+        #resultado { 
+            background: #f8f9fa; 
+            padding: 20px; 
+            margin-top: 20px; 
+            white-space: pre-wrap; 
+            max-height: 600px; 
+            overflow-y: auto;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+        .loading { 
+            color: #ff9800; 
+            border-left: 4px solid #ff9800;
+            animation: pulse 1.5s infinite;
+        }
+        .success { 
+            color: #28a745; 
+            border-left: 4px solid #28a745;
+        }
+        .error { 
+            color: #dc3545; 
+            border-left: 4px solid #dc3545;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .warning-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .info-box {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+        .step {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            background: #e9ecef;
+            margin: 0 5px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .step.active { background: #007bff; color: white; }
+        .step.completed { background: #28a745; color: white; }
+        .archivo-item {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .archivo-item h4 {
+            margin-top: 0;
+            color: #495057;
+        }
+        .preview-image {
+            max-width: 300px;
+            max-height: 300px;
+            margin-top: 10px;
+            border: 2px solid #dee2e6;
+            border-radius: 4px;
+        }
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .grid-2 { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test IA Kronos - Mirkin (Análisis Web)</h1>
+    <h2>Ingresa tu código, tema e imagen manualmente</h2>
+    
+    <div class="warning-box">
+        <strong>⚠️ IMPORTANTE:</strong> El procesamiento puede tardar 60-90 segundos. 
+        Las APIs de IA (Gemini + OpenAI) analizan imágenes y generan código mejorado.
+    </div>
+
+    <div class="step-indicator">
+        <div class="step active" id="step1">1. Configurar Datos</div>
+        <div class="step" id="step2">2. Guardar en BD</div>
+        <div class="step" id="step3">3. Procesar IA</div>
+        <div class="step" id="step4">4. Guardar Resultado</div>
+    </div>
+
+    <!-- CONFIGURACIÓN BÁSICA -->
+    <div class="section">
+        <h3>🔑 Autenticación</h3>
+        <label>JWT Token (obtener después de login):</label>
+        <input type="password" id="token" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+        
+        <label>Tema del Sitio Web:</label>
+        <input type="text" id="tema" placeholder="e-commerce de tecnología" value="e-commerce de tecnología">
+        
+        <div class="info-box" style="margin-top: 15px;">
+            ℹ️ El ID de página se genera automáticamente en el backend
+        </div>
+    </div>
+
+    <!-- CÓDIGO FUENTE -->
+    <div class="section">
+        <h3>💻 Archivos de Código</h3>
+        <div class="info-box">
+            💡 <strong>Tip:</strong> Agrega todos los archivos de tu sitio web (HTML, CSS, JS, etc.)
+        </div>
+        
+        <div id="archivosContainer">
+            <!-- Archivo 1 (HTML) -->
+            <div class="archivo-item">
+                <h4>📄 Archivo 1</h4>
+                <div class="grid-2">
+                    <div>
+                        <label>Nombre del archivo:</label>
+                        <input type="text" class="archivo-nombre" placeholder="index.html" value="index.html">
+                    </div>
+                    <div>
+                        <label>Lenguaje:</label>
+                        <input type="text" class="archivo-lenguaje" placeholder="html" value="html">
+                    </div>
+                </div>
+                <label>Código:</label>
+                <textarea class="archivo-codigo" placeholder="Tu código aquí..."><!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Sitio Web</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Mi Sitio Web</h1>
+        <nav>
+            <a href="#home">Inicio</a>
+            <a href="#about">Nosotros</a>
+            <a href="#contact">Contacto</a>
+        </nav>
+    </header>
+    <main>
+        <p>Bienvenido a mi sitio web de ejemplo.</p>
+    </main>
+</body>
+</html></textarea>
+                <button class="btn-danger btn-sm" onclick="eliminarArchivo(this)">🗑️ Eliminar</button>
+            </div>
+
+            <!-- Archivo 2 (CSS) -->
+            <div class="archivo-item">
+                <h4>📄 Archivo 2</h4>
+                <div class="grid-2">
+                    <div>
+                        <label>Nombre del archivo:</label>
+                        <input type="text" class="archivo-nombre" placeholder="styles.css" value="styles.css">
+                    </div>
+                    <div>
+                        <label>Lenguaje:</label>
+                        <input type="text" class="archivo-lenguaje" placeholder="css" value="css">
+                    </div>
+                </div>
+                <label>Código:</label>
+                <textarea class="archivo-codigo" placeholder="Tu código aquí...">body { 
+    font-family: Arial, sans-serif; 
+    margin: 0;
+    padding: 0;
+}
+
+header { 
+    background: #333; 
+    color: white; 
+    padding: 1rem;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+main {
+    padding: 20px;
+}</textarea>
+                <button class="btn-danger btn-sm" onclick="eliminarArchivo(this)">🗑️ Eliminar</button>
+            </div>
+        </div>
+
+        <button class="btn-secondary" onclick="agregarArchivo()">➕ Agregar Archivo</button>
+    </div>
+
+    <!-- IMAGEN -->
+    <div class="section">
+        <h3>🖼️ Screenshot del Sitio Web</h3>
+        <label>Selecciona una imagen (JPG, PNG):</label>
+        <input type="file" id="imagenInput" accept="image/*" onchange="previewImagen()">
+        <div id="imagenPreview"></div>
+        <input type="hidden" id="imagenBase64">
+    </div>
+
+    <!-- ACCIONES -->
+    <div class="section">
+        <h3>🚀 Acciones</h3>
+        <button class="btn-primary" onclick="guardarEnBD()" id="btnSave">
+            1️⃣ Guardar Página en BD
+        </button>
+        <button class="btn-warning" onclick="procesarConIA()" id="btnProcess" disabled>
+            2️⃣ Procesar con IA (60-90s)
+        </button>
+        <button class="btn-success" onclick="guardarRespuesta()" id="btnSaveResp" disabled>
+            3️⃣ Guardar Respuesta IA
+        </button>
+    </div>
+
+    <!-- RESULTADO -->
+    <div class="section">
+        <h3>📊 Resultado</h3>
+        <div id="resultado">Esperando acción...</div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000';
+        let ultimaRespuestaIA = null;
+
+        function updateStep(step) {
+            for (let i = 1; i <= 4; i++) {
+                const el = document.getElementById(`step${i}`);
+                el.classList.remove('active', 'completed');
+                if (i < step) el.classList.add('completed');
+                if (i === step) el.classList.add('active');
+            }
+        }
+
+        function getHeaders() {
+            const token = document.getElementById('token').value.trim();
+            if (!token) {
+                alert('⚠️ Por favor ingresa un token JWT válido');
+                throw new Error('Token requerido');
+            }
+            return {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            };
+        }
+
+        function setLoading(isLoading, message) {
+            const btns = ['btnSave', 'btnProcess', 'btnSaveResp'];
+            btns.forEach(id => {
+                document.getElementById(id).disabled = isLoading;
+            });
+            
+            if (isLoading) {
+                const resultado = document.getElementById('resultado');
+                resultado.className = 'loading';
+                resultado.textContent = message;
+            }
+        }
+
+        function agregarArchivo() {
+            const container = document.getElementById('archivosContainer');
+            const numArchivos = container.children.length + 1;
+            
+            const nuevoArchivo = document.createElement('div');
+            nuevoArchivo.className = 'archivo-item';
+            nuevoArchivo.innerHTML = `
+                <h4>📄 Archivo ${numArchivos}</h4>
+                <div class="grid-2">
+                    <div>
+                        <label>Nombre del archivo:</label>
+                        <input type="text" class="archivo-nombre" placeholder="archivo.js" value="script.js">
+                    </div>
+                    <div>
+                        <label>Lenguaje:</label>
+                        <input type="text" class="archivo-lenguaje" placeholder="javascript" value="javascript">
+                    </div>
+                </div>
+                <label>Código:</label>
+                <textarea class="archivo-codigo" placeholder="Tu código aquí...">// Tu código JavaScript aquí</textarea>
+                <button class="btn-danger btn-sm" onclick="eliminarArchivo(this)">🗑️ Eliminar</button>
+            `;
+            container.appendChild(nuevoArchivo);
+        }
+
+        function eliminarArchivo(btn) {
+            if (confirm('¿Eliminar este archivo?')) {
+                btn.parentElement.remove();
+            }
+        }
+
+        function previewImagen() {
+            const input = document.getElementById('imagenInput');
+            const preview = document.getElementById('imagenPreview');
+            const file = input.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const base64 = e.target.result.split(',')[1];
+                    document.getElementById('imagenBase64').value = base64;
+                    preview.innerHTML = `<img src="${e.target.result}" class="preview-image" alt="Preview">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function recolectarArchivos() {
+            const archivos = [];
+            const items = document.querySelectorAll('.archivo-item');
+            
+            items.forEach(item => {
+                const nombre = item.querySelector('.archivo-nombre').value.trim();
+                const lenguaje = item.querySelector('.archivo-lenguaje').value.trim();
+                const codigo = item.querySelector('.archivo-codigo').value.trim();
+                
+                if (nombre && lenguaje && codigo) {
+                    archivos.push({ nombre, lenguaje, codigo });
+                }
+            });
+            
+            return archivos;
+        }
+
+        async function guardarEnBD() {
+            updateStep(2);
+            setLoading(true, '💾 Guardando página en la base de datos...');
+
+            try {
+                const tema = document.getElementById('tema').value.trim();
+                const imagenBase64 = document.getElementById('imagenBase64').value;
+                const archivos = recolectarArchivos();
+
+                if (!tema) throw new Error('El tema es requerido');
+                if (archivos.length === 0) throw new Error('Debes agregar al menos un archivo');
+                if (!imagenBase64) throw new Error('Debes seleccionar una imagen');
+
+                const response = await fetch(`${API_URL}/api/ia/analize/pages`, {
+                    method: 'POST',
+                    headers: getHeaders(),
+                    body: JSON.stringify({
+                        tema: tema,
+                        archivos: archivos,
+                        foto_pagina_jpg: imagenBase64
+                    })
+                });
+
+                const data = await response.json();
+                const resultado = document.getElementById('resultado');
+                
+                if (response.ok) {
+                    resultado.className = 'success';
+                    resultado.textContent = '✅ Página guardada exitosamente:\n\n' + JSON.stringify(data, null, 2);
+                    document.getElementById('btnProcess').disabled = false;
+                    // Guardar el pagina_id recibido del backend
+                    document.getElementById('resultado').dataset.paginaId = data.pagina.pagina_id;
+                    updateStep(3);
+                } else {
+                    throw new Error(data.error || 'Error desconocido');
+                }
+            } catch (error) {
+                const resultado = document.getElementById('resultado');
+                resultado.className = 'error';
+                resultado.textContent = `❌ Error: ${error.message}`;
+                updateStep(2);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        async function procesarConIA() {
+            updateStep(3);
+            setLoading(true, '🤖 Procesando con IA (Gemini + OpenAI)...\n\nEsto puede tardar 60-90 segundos.\nPor favor espera...');
+
+            try {
+                // Obtener el pagina_id guardado del paso anterior
+                const paginaId = document.getElementById('resultado').dataset.paginaId;
+                
+                if (!paginaId) {
+                    throw new Error('Primero debes guardar la página en la BD (Paso 1)');
+                }
+                
+                const startTime = Date.now();
+
+                const response = await fetch(`${API_URL}/api/ia/analize/pages/${paginaId}`, {
+                    method: 'GET',
+                    headers: getHeaders()
+                });
+
+                const data = await response.json();
+                const resultado = document.getElementById('resultado');
+                const timeElapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+
+                if (response.ok) {
+                    ultimaRespuestaIA = data.resultado;
+                    resultado.className = 'success';
+                    resultado.textContent = `✅ IA procesó exitosamente en ${timeElapsed}s:\n\n` + 
+                        JSON.stringify(data, null, 2).substring(0, 3000) + '\n\n[Respuesta completa guardada en memoria]';
+                    document.getElementById('btnSaveResp').disabled = false;
+                    updateStep(4);
+                } else {
+                    throw new Error(data.error || 'Error en procesamiento IA');
+                }
+            } catch (error) {
+                const resultado = document.getElementById('resultado');
+                resultado.className = 'error';
+                resultado.textContent = `❌ Error: ${error.message}\n\nPosibles causas:\n- Token inválido\n- Página no existe (ejecutar paso 1 primero)\n- Error en Python/IA\n- Timeout de API`;
+                updateStep(3);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        async function guardarRespuesta() {
+            if (!ultimaRespuestaIA) {
+                alert('⚠️ Primero ejecuta "Procesar con IA"');
+                return;
+            }
+
+            setLoading(true, '💾 Guardando respuesta de IA en BD...');
+
+            try {
+                const response = await fetch(`${API_URL}/api/ia/analize/pages/${ultimaRespuestaIA.paginaId}/response`, {
+                    method: 'PUT',
+                    headers: getHeaders(),
+                    body: JSON.stringify(ultimaRespuestaIA)
+                });
+
+                const data = await response.json();
+                const resultado = document.getElementById('resultado');
+
+                if (response.ok) {
+                    resultado.className = 'success';
+                    resultado.textContent = '✅ Respuesta guardada exitosamente:\n\n' + JSON.stringify(data, null, 2);
+                } else {
+                    throw new Error(data.error || 'Error al guardar');
+                }
+            } catch (error) {
+                const resultado = document.getElementById('resultado');
+                resultado.className = 'error';
+                resultado.textContent = `❌ Error: ${error.message}`;
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        window.onload = () => {
+            updateStep(1);
+            document.getElementById('token').focus();
+        };
+    </script>
+</body>
+</html>

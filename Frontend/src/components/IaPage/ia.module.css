@@ -1,0 +1,105 @@
+.iaPage {
+    height: calc(100vh - 12.5vh);
+    margin-top: 12.5vh;
+    width: 77.5%;
+    margin-left: 22.5%;
+}
+
+.title {
+    display: flex;
+    justify-content: flex-start;
+    gap: 2%;
+    align-items: center;
+    
+    box-sizing: border-box;
+    font-family: var(--font);
+    font-size: calc(var(--headerSize) * 1.2)
+}
+.section {
+    font-family: var(--font);
+    
+}
+.section p {
+    margin-left: .5rem;
+    color: var(--tertiaryColor);
+}
+.section input, textarea {
+    border: none;
+    padding: 1.5%;
+    box-sizing: border-box;
+    resize: none;
+    font-family: var(--font);
+    font-size: var(--mediumSize);
+    width: 100%;
+    height: auto;
+    min-height: 8rem;
+    display: flex;  
+    white-space: pre-wrap; 
+    word-wrap: break-word; 
+    overflow-wrap: break-word;
+    
+}
+.section textarea:focus {
+    outline: none;
+}
+.section input {
+    cursor: pointer;
+}
+
+.imageBox img {
+    height: 10rem;
+    width: auto;
+    opacity: 0.5;
+    border-radius: 10px;
+}
+.imageBox {
+    margin: 1rem;
+    position: relative;
+    width: min-content;
+}
+.imageBox span {
+    position: absolute;
+    top: .5rem;
+    right: .5rem;
+    z-index: 2;
+    cursor: pointer;
+}
+.sendBtn {
+    transition: var(--easeTransition);
+    background-color: var(--darkerTertiaryColor);
+    width: 8rem;
+    padding: 1.5%;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.sendBtn button {
+    font-family: var(--font);
+    font-size: var(--mediumSize);
+}
+.topBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1% 2% 1% 2%
+}
+
+.uploadedImage {
+    height: 12rem;
+    width: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 1rem;}
+
+    .uploadedTitle {
+        color: var(--fontContrast) !important;
+    }
+
+    .codeFormat {
+
+        background-color: black;
+        color: green;
+        padding: 2rem
+    }

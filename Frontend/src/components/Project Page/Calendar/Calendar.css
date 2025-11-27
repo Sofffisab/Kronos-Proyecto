@@ -30,3 +30,20 @@
     opacity: 70%;
     color: var(--fontContrast);
 }
+.googleSyncButton {
+
+    background-color: var(--secondaryColor);
+    padding: 1.5%;
+    box-sizing: border-box;
+    border-radius:100px;
+    margin-top: 5%;
+    cursor: pointer;
+    transition: var(--easeTransition);
+}
+.googleSyncButton button {
+     font-family: var(--font);
+
+}
+.googleSyncButton:hover {
+    background-color: var(--darkerTertiaryColor);
+}

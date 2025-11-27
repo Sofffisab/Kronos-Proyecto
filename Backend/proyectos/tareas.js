@@ -3,15 +3,42 @@ import setupcalendario from "../calendario/calendario.js";
 
 const setuptareas = () => {
   const { lookfortoken } = setupcalendario();
+  
+  const calcularColorTarea = (tarea) => {
+    const now = new Date();
+    const limiteDate = new Date(tarea.limite);
+      
+    if (tarea.estado === "done") return "green";
+    if (tarea.estado === "in-progress") return "yellow";
+    if (tarea.estado === "pending") {
+      return now > limiteDate ? "black" : "red";
+    }
+    return "yellow";
+  };
 
   const createtarea = async (req, res) => {
-    const { nombre, limite, id_persona_responsable, estado } = req.body;
+    const { nombre, limite, id_persona_responsable, estado, importancia, isKanban } = req.body;
     const { proyectoId } = req.params;
     const personaId = req.personaId;
 
     try {
-      if (!nombre || !limite || !proyectoId || !estado) {
+      if (!nombre || !limite || !proyectoId || !estado || !importancia || typeof isKanban !== 'boolean' || (!id_persona_responsable && !personaId)) {
         return res.status(400).json({ error: "missing data" });
+      };
+
+    //  if (duracion && (isNaN(parseInt(duracion)) || parseInt(duracion) <= 0)) {
+    //    return res.status(400).json({ error: "duracion must be a positive number" });
+    //  }
+
+      const validEstados = ["pending", "in-progress", "done", "delayed"];
+      const validImportancia = ["low", "medium", "high"];
+    
+      if (!validEstados.includes(estado)) {
+        return res.status(400).json({ error: "Invalid estado. Must be: pending, in-progress, delayed,  or done" });
+      };
+    
+      if (!validImportancia.includes(importancia)) {
+        return res.status(400).json({ error: "Invalid importancia. Must be: low, medium, or high" });
       };
 
       const ismember = await prisma.tiene.findFirst({
@@ -38,13 +65,23 @@ const setuptareas = () => {
         return res.status(400).json({ error: "responsible person is not a member of this project" });
       };
 
+      const nombre_responsable = await prisma.persona.findUnique({
+        where: {id: responsableId},
+        select: {nombre: true}
+      });
+      
+
       const newtarea = await prisma.tareas.create({
         data: {
           nombre: nombre,
           estado: estado,
           limite: limite,
           id_proyecto: Number.parseInt(proyectoId, 10),
-          id_persona: responsableId,
+          id_creador: personaId,
+          id_responsable: responsableId,
+          nombre_responsable: nombre_responsable.nombre,
+          importancia: importancia,
+          isKanban: isKanban
         },
       });
 
@@ -81,12 +118,26 @@ const setuptareas = () => {
         };
       } catch (calendarError) {
         console.error("Error creating calendar event:", calendarError);
-      };
+        return res.status(201).json({ 
+          message: "task created successfully but calendar event failed", 
+          tarea: newtarea,
+          calendarFailed: true,
+          calendarError: "Failed to add to Google Calendar. You can add it manually."
+        });
+      }
 
-      res.status(201).json({ message: "task created successfully", tarea: newtarea });
+      res.status(201).json({ 
+        message: "task created successfully", 
+        tarea: newtarea,
+        calendarAdded: !!newtarea.eventId
+      });    
+    
     } catch (error) {
       console.error("Error creating task:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
   };
 
@@ -115,7 +166,7 @@ const setuptareas = () => {
           id_proyecto: Number.parseInt(proyectoId, 10),
         },
         include: {
-          persona: {
+          responsable: {
             select: {
               id: true,
               usuario: true,
@@ -128,43 +179,24 @@ const setuptareas = () => {
         },
       });
 
-      const tareasconcolor = tareas.map((tarea) => {
-        const now = new Date();
-        const limiteDate = new Date(tarea.limite);
-        let color = "yellow";
-
-        if (tarea.estado === "done") {
-          if (now > limiteDate) {
-            color = "green";
-          } else {
-            color = "green";
-          };
-        } else if (tarea.estado === "in-progress") {
-          color = "yellow";
-        } else if (tarea.estado === "pending") {
-          if (now > limiteDate) {
-            color = "black";
-          } else {
-            color = "red";
-          };
-        };
-
-        return {
-          ...tarea,
-          color: color,
-        };
-      });
+      const tareasconcolor = tareas.map((tarea) => ({
+        ...tarea,
+        color: calcularColorTarea(tarea),
+      }));
 
       res.status(200).json(tareasconcolor);
     } catch (error) {
       console.error("Error getting tasks:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
   };
 
   const updatetarea = async (req, res) => {
     const { tareaId } = req.params;
-    const { estado, nombre, limite, } = req.body;
+    const { estado, nombre, limite, id_persona_responsable} = req.body;
     const personaId = req.personaId;
 
     try {
@@ -197,6 +229,26 @@ const setuptareas = () => {
       if (estado) updateData.estado = estado;
       if (nombre) updateData.nombre = nombre;
       if (limite) updateData.limite = limite;
+      if (id_persona_responsable) {
+        const isresponsablemember = await prisma.tiene.findFirst({
+          where: {
+            id_persona: Number.parseInt(id_persona_responsable, 10),
+            id_proyecto: tarea.id_proyecto,
+          },
+        });
+
+        if (!isresponsablemember) {
+          return res.status(400).json({ error: "New responsible person is not a member of this project" });
+        };
+
+        const nombre_responsable = await prisma.persona.findUnique({
+          where: {id: Number.parseInt(id_persona_responsable, 10)},
+          select: {nombre: true}
+        });
+
+        updateData.id_responsable = Number.parseInt(id_persona_responsable, 10);
+        updateData.nombre_responsable = nombre_responsable.nombre;
+      };
 
       const updatedtarea = await prisma.tareas.update({
         where: {
@@ -208,7 +260,7 @@ const setuptareas = () => {
       if (tarea.eventId && (nombre || limite)) {
         try {
           const persona = await prisma.persona.findUnique({
-            where: { id: tarea.id_persona },
+            where: { id: tarea.id_responsable },
             select: { googleRefreshToken: true },
           });
 
@@ -234,13 +286,22 @@ const setuptareas = () => {
           };
         } catch (calendarError) {
           console.error("Error updating calendar event:", calendarError);
+          return res.status(200).json({ 
+            message: "task updated successfully but calendar sync failed", 
+            tarea: updatedtarea,
+            calendarSyncFailed: true,
+            calendarError: "Calendar update failed. Changes not reflected in Google Calendar."
+          });
         };
       };
 
       res.status(200).json({ message: "task updated successfully", tarea: updatedtarea });
     } catch (error) {
       console.error("Error updating task:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
   };
 
@@ -277,7 +338,7 @@ const setuptareas = () => {
       if (tarea.eventId) {
         try {
           const persona = await prisma.persona.findUnique({
-            where: { id: tarea.id_persona },
+            where: { id: tarea.id_responsable },
             select: { googleRefreshToken: true },
           });
 
@@ -302,7 +363,10 @@ const setuptareas = () => {
       res.status(204).json();
     } catch (error) {
       console.error("Error deleting task:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
   };
 
@@ -320,13 +384,6 @@ const setuptareas = () => {
           id: Number.parseInt(tareaId, 10),
         },
         include: {
-          asignado: {
-            select: {
-              id: true,
-              usuario: true,
-              nombre: true,
-            },
-          },
           responsable: {
             select: {
               id: true,
@@ -347,6 +404,13 @@ const setuptareas = () => {
         return res.status(404).json({ error: "task not found" });
       }
 
+      const creador = tarea.id_creador  
+        ? await prisma.persona.findUnique({
+            where: { id: tarea.id_creador },
+            select: { id: true, usuario: true, nombre: true }
+          })
+        : null;
+
       const ismember = await prisma.tiene.findFirst({
         where: {
           id_persona: personaId,
@@ -358,26 +422,13 @@ const setuptareas = () => {
         return res.status(403).json({ error: "You don't have permission to view this task" });
       }
 
-      const now = new Date();
-      const limiteDate = new Date(tarea.limite);
-      let color = "yellow";
-
-      if (tarea.estado === "done") {
-        color = "green";
-      } else if (tarea.estado === "in-progress") {
-        color = "yellow";
-      } else if (tarea.estado === "pending") {
-        if (now > limiteDate) {
-          color = "black";
-        } else {
-          color = "red";
-        }
-      }
-
-      res.status(200).json({ ...tarea, color });
+      res.status(200).json({ ...tarea, color: calcularColorTarea(tarea), creador });    
     } catch (error) {
       console.error("Error getting task:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     }
   };
 

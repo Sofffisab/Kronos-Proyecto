@@ -10,8 +10,9 @@ import Table from "./table";
 import Task from "./Task";
 import { useTasks } from "../../../context/ProjectContext";
 export default function List(props) {
-  const {contextTasks, contextProject, fetchProject} = useTasks()
+  const {contextTasks, contextProject, currentId, fetchProject} = useTasks()
   const [modal, toggleModal] = useState(false);
+  const [sorted, setSorted] = useState(false)
   const tasks = contextTasks
 
   const miembros = contextProject?.personas_tiene?.map((persona)=>(
@@ -30,7 +31,7 @@ export default function List(props) {
   }, [modal]);
 const uploadTask = async (obj) => {
   try {
-   await postTask(obj.name, obj.date, obj.person, localStorage.getItem('token'), props.projectId, obj.state)}
+   await postTask(obj.name, obj.date, obj.person, localStorage.getItem('token'), currentId, obj.state, obj.priority, false)}
   
   catch(e) {console.log(e)}
   finally {await fetchProject(props.projectId)}
@@ -50,6 +51,7 @@ const uploadTask = async (obj) => {
       state: state,
       priority: pri,
       date: date,
+      
      
     };
 
@@ -59,14 +61,14 @@ const uploadTask = async (obj) => {
   };
 const mapTasks = (taskState)=>{
 
-  const mappedTasks = tasks.filter((task)=>(task.estado==taskState ))
+  const mappedTasks = tasks.filter((task)=>(task.estado==taskState && task.isKanban === false ))
   
   return mappedTasks.map((task) => (
     <Task
       id={task.id}
       name={task.nombre}
-      icon={task.id_persona}
-      priority={task.priority}
+      icon={task.nombre_responsable}
+      priority={task.importancia}
       date={new Date (task.limite).toDateString()}
       state={task.estado}
       key={task.id}
@@ -80,18 +82,25 @@ const mapTasks = (taskState)=>{
       {modal && (
         <InputModal members={miembros}submit={submitModal} bgOnClick={() => toggleModal(false)} />
       )}
-      {props.selectable && <Bar onClick={() => toggleModal(true)} />}
+      {props.selectable && <Bar sorted={sorted} setSorted={setSorted} onClick={() => toggleModal(true)} />}
       <Category />
       <Table
         onClick={props.selectable && (() => toggleModal(true))}
-        name="Tareas Realizadas"
-        tasks={mapTasks('resolved')}
+        name={`tareas ${sorted? 'terminadas':'pendientes'}`}
+        tasks={mapTasks(sorted? 'done':'pending')}
       />
       <Table
         onClick={props.selectable && (() => toggleModal(true))}
-        name="Tareas pendientes"
-        tasks={mapTasks('pending')}
+        name="Tareas en progreso"
+        tasks={mapTasks('in-progress')}
       />
+      <Table
+      bottom={true}
+        onClick={props.selectable && (() => toggleModal(true))}
+        name={`tareas ${sorted? 'pendientes':'terminadas'}`}
+        tasks={mapTasks(sorted? 'pending':'done')}
+      />
+      
      
     </>
   );

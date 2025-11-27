@@ -9,3 +9,4 @@ fetch("http://localhost:5000/organizar", {
   .then(res => res.json())
   .then(data => console.log("Orden sugerido:", data.plan));
 
+

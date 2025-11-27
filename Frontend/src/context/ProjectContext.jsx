@@ -2,11 +2,13 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { getChatMessages } from "../../api/messages.js";
 import { getProjects } from "../../api/project.js";
 import {jwtDecode} from 'jwt-decode'
+import { useNavigate } from "react-router";
 import {
   connectChatSocket,
   onChatMessage,
   disconnectChatSocket,
 } from "../../api/messages.js";
+import { fetchIaChats } from "../../api/ia.js";
 
 const TaskContext = createContext();
 
@@ -20,25 +22,92 @@ export function TaskProvider({ children }) {
   const [contextTasks, setTasks] = useState([]);
   const [currentId, setCurrentId] = useState(null);
   const [contextChat, setContextChat] = useState([]);
-  async function fetchProject(id) {
-    const project = await getProjects(localStorage.getItem("token"), id);
-    setProject(project);
-    setTasks(project.tareas);
+  const [userPhoto, setUserPhoto] = useState()
+  const [error, setError] = useState(null)
+  const [iaChats, setIaChats] = useState([]);
+const [variables, setVariables] = useState()
+
+
+async function getIaChats() {
+  try {
+    const res = await fetchIaChats(localStorage.getItem('token'))
+    
+    setIaChats(res || [])
+    return res
   }
+  catch(e) {
+    console.log(e)
+  }
+}
+
+  async function fetchProject(id) {
+    try {
+      setError(false)
+      const project = await getProjects(localStorage.getItem("token"), id);
+    setProject(project);
+    setTasks(project.tareas ||[]);}
+    catch(e) {
+      setError(true)
+    }
+  }
+
+  function setCSSVariables(name, value) {
+    document.documentElement.style.setProperty(name, value);
+    localStorage.setItem(name, value); 
+    
+  } 
+
+  const updateVariables = (pallete) => {
+    
+   const colors =  pallete=='blue'? {secondary: '#AFC8BD', tertiary: '#678C99', darkerTertiary: '#C3CCAE'} :
+                    pallete=='gray'? {secondary: '#D6C292', tertiary: '#FFF1CF', darkerTertiary: '#B8C7CC'} :
+                    pallete=='orange'? {secondary: '#FFD137', tertiary: '#D98C2D', darkerTertiary: '#FF5E45'} : 
+                    pallete=='pink'? {secondary: '#EC89A5', tertiary: '#A25C78', darkerTertiary: '#6F3A51'} :
+                    pallete=='purple'? {secondary: '#B854A7', tertiary: '#654085', darkerTertiary: '#283464'} :
+                    pallete=='yellow'? {secondary: '#F3FFCB', tertiary: '#FFFC94', darkerTertiary: '#FFD650'} : 
+                   null
+                   
+  if(colors) {setCSSVariables('--secondaryColor', colors.secondary);
+  setCSSVariables('--tertiaryColor', colors.tertiary);
+  setCSSVariables('--darkerTertiaryColor', colors.darkerTertiary);}
+  }
+
+
+  useEffect(()=> {
+   
+    const pallete = localStorage.getItem('pallete')
+    if(pallete) setVariables(pallete)
+    updateVariables(pallete)
+  },[])
+
+  useEffect(()=>{
+    if (!variables) return;
+    localStorage.setItem('pallete', variables)
+    updateVariables(variables)
+  },[variables])
+
 
  
   async function fetchMessages(chatId) {
     const messages = await getChatMessages(localStorage.getItem("token"), chatId);
-    setContextChat(messages);
-  }
+    setContextChat(messages)
+    }
+  
+  
+
+
 
   useEffect(()=>{
-    const token = localStorage.getItem('token')
-    if(!token) return
 
+    if(userPhoto) localStorage.setItem('pfp', userPhoto)
+    const token = localStorage.getItem('token')
+    if(token) {
     const decoded = jwtDecode(token)
-    setUser(decoded)
-  },[contextProject])
+    setUser(decoded)}
+  },[userPhoto])
+
+  
+
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -65,7 +134,11 @@ export function TaskProvider({ children }) {
 
 
   useEffect(() => {
-    if (currentId) fetchProject(currentId);
+
+    if (currentId)  fetchProject(currentId)
+    
+
+    
   }, [currentId]);
 
   return (
@@ -81,6 +154,13 @@ export function TaskProvider({ children }) {
         setContextChat, 
         user,
         setUser,
+        userPhoto,
+        setUserPhoto,
+        setVariables,
+        error,
+        setError,
+        getIaChats,
+        iaChats
       }}
     >
       {children}

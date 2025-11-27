@@ -2,10 +2,12 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { Link} from "react-router";
 import { useNavigate } from "react-router";
+import { useTasks } from "../context/ProjectContext";
+import LoadingScreen from './LoadingScreen.jsx'
 export default function RegisterForm(props) {
-
+  const {setUserPhoto} = useTasks()
   const navigate = useNavigate()
-
+const [loading, setLoading] = useState(false)
     const {
         register,
         handleSubmit,
@@ -28,12 +30,17 @@ export default function RegisterForm(props) {
         else {
           console.log(data);
           try{
-      
+      setLoading(true)
       const result = props.onSubmit && await props.onSubmit(data.nombre, data.email, data.password, data.pfp)
       console.log(result)
+     if (result.photo) {
+  setUserPhoto(result.photo); 
+}
+
       localStorage.setItem("token",result.token); // hacer dsp con cookies 🍪🍪
        navigate('/')}
       catch(e){
+        setLoading(false)
         setError("password",{type: "500", message:e.message})
 
       }}} 
@@ -44,6 +51,7 @@ export default function RegisterForm(props) {
 return(
 
 <>
+{loading && <LoadingScreen/>}
 {email && <div className='gmailIngresado'>
   <span id="userNameIco" className="material-symbols-outlined">account_circle</span>
         <p>Te registraste como {email}</p>
@@ -54,8 +62,14 @@ return(
 <form onSubmit={handleSubmit(onSubmit)} className={props.class}>
 
        {step==1 &&  ( <div className='inputBox'>
-        <input id='firstInputRegister' 
-         {...register('email', {required:'inserte un email'})}
+        <input type='email'id='firstInputRegister' 
+         {...register('email', {required:'inserte un email',
+        
+         pattern: {
+          value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+          message: "Please enter a valid email address"
+         },
+        })}
         placeholder='nombre@empresa.com'/> 
          <button type='submit'style={step==1 ?{borderTopLeftRadius: '0px', borderBottomLeftRadius: '0px'} : null}> {step==1 ? 'Continuar' : 'Registrate'}</button>
 </div>)}
@@ -65,7 +79,7 @@ return(
   <div className='biggerRegisterContainer'>
         <div className="imgInput">
           <img id='imgRegister' src="public/userPicInsert.svg"/>
-        <input id='registerImg' type='file' accept='image/*'
+        <input id='registerImg' type='file' accept='image/jpeg'
         {...register('pfp', {required: 'inserte una imagen'})}/>
         </div>
         <div className='smallerRegisterContainer'>

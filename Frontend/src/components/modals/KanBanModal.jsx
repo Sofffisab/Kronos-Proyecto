@@ -13,10 +13,10 @@ return(
          <input id="name" />
          <label>Responsable</label>
          <select id="type"  defaultValue={props.value}>
-          <option value="riesgo">En riesgo</option>
-          <option value="atrasada">Atrasada</option>
-          <option value="proceso">En proceso</option>
-          <option value="terminado">Terminada</option>
+          <option value="pending">En riesgo</option>
+          <option value="delayed">Atrasada</option>
+          <option value="in-progress">En proceso</option>
+          <option value="done">Terminada</option>
         </select>
      </div>
                     }

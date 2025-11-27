@@ -104,18 +104,20 @@ button {
 }
 
 .LandingTitle {
-  width: 100%;
-  font-family: var(--classyFont);
+  width: 50%;
+  font-family: var(--font);
   margin-top: 10rem;
   text-align: center;
   margin-bottom: 4rem;
 }
 .LandingTitle h1 {
   font-size: 4.5rem;
-  font-weight: 50;
+  font-weight: 200;
+ color:var(--tertiaryColor);
   margin-bottom: 1rem;
 }
 .LandingTitle p {
+  color: var(--secondaryColor);
   font-size: var(--headerSize);
 }
 
@@ -138,6 +140,7 @@ button {
 .EmpezarBtn button {
   font-size: var(--HeaderSize);
   color: var(--textColor);
+  font-family: var(--font);
 }
 
 .gallery {
@@ -329,7 +332,7 @@ button {
   height: 100vh;
   width: 98.9vw;
   display: flex;
-  position: relative;
+  position: fixed;
   top: 0px;
   left: 0px;
   justify-content: center;
@@ -518,14 +521,14 @@ button {
   padding-left: 0px;
 }
 .tabs div {
-  width: 100%;
+  width: 14rem;
   box-sizing: border-box;
   font-size: var(--smallerheaderSize);
   display: flex;
   cursor: pointer;
   align-items: center;
   gap: 3%;
-  padding: 0%;
+  padding: .4rem;
   border-radius: 25px;
   transition: var(--easeTransition);
 }
@@ -537,8 +540,8 @@ button {
 }
 #addBtn {
   background-color: var(--tertiaryColor);
-  width: min-content;
-  padding: 0 2% 0 2%;
+  width: 7rem;
+  padding: .4rem;
 }
 .separator {
   margin: 0%;
@@ -589,17 +592,100 @@ button {
   width: 100%;
   display: flex;
   align-items: center;
+  opacity: 0.7;
   justify-content: center;
+  font-style: italic;
   font-family: var(--font);
+}
+.project {
+  width: 100%
+}
+.project span {
+  cursor: pointer
+}
+.project a {
+
+  color: var(--fontContrast);
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+  align-items: center
 }
 .project div{
   color: var(--fontContrast);
   display: flex;
   gap: 5%;
+  justify-content: space-between;
   align-items: center
+}
+.equipos {
+
+  padding-left: 0rem;
 }
 .projectColorBox {
   height: 2rem;
   width: 2rem;
   border-radius: 10px;
+}
+
+.projectBoxName {
+
+  white-space: nowrap;
+    max-width: 6.5rem;
+    text-overflow: ellipsis;      
+    overflow: hidden;
+
+}
+
+.errorPage {
+
+  background-color: var(--mainColor);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--font);
+  height: 100vh;
+  gap: 5rem;
+  color: var(--darkerTertiaryColor);
+  font-size: var(--biggerHeaderSize);
+}
+.errorPage a{
+ color: var(--fontContrast);
+ font-size: var(--headerSize);
+ background-color: var(--secondaryColor);
+ padding: 2rem;
+ width: 10%;
+text-align:center;
+border-radius: 25px;
+transition: var(--easeTransition);
+}
+.errorPage a:hover {
+
+  
+  background-color: var(--tertiaryColor);
+
+}
+
+.landingImages {
+
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap:1rem
+}
+.landingImages img {
+  width: 50rem;
+  height: auto;
+}
+
+#inicioBtn {
+  color: var(--fontContrast);
+  ;
+}
+
+.fc-event-title-container {
+  cursor: pointer;
 }

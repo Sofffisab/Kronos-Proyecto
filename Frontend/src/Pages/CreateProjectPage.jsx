@@ -53,7 +53,7 @@ export default function CreateProjectPage() {
           const project = await postProject(nombre, '2025-11-30', localStorage.getItem('token'), )
           console.log(project)
            for (const task of tasks) {
-            await postTask(task.name,  '2025-11-30',user.id,  localStorage.getItem('token'),project.project.id, 'pending')
+            await postTask(task.name,  '2025-11-30',user.id,  localStorage.getItem('token'),project.project.id, 'pending', 'medium', false)
             
            }
            
@@ -61,7 +61,8 @@ export default function CreateProjectPage() {
         }
         catch(e) {
             console.log(e)
-            navigate('/create')
+            navigate(`../project/${project.project.id}`)
+            setLoading(false)
         }
     }
     const [rawTasks,setRawTasks] = useState([])

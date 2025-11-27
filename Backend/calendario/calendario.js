@@ -90,7 +90,10 @@ const setupcalendario = () => {
       res.json({ message: 'Authorization successful' });
     } catch (error) {
       console.error('Authorization failed:', error);
-      res.status(500).json({ error: 'Authorization failed.' });
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
 
   };
@@ -106,12 +109,14 @@ const setupcalendario = () => {
       if (!persona || !persona.googleRefreshToken) {
         return res.status(401).json('User not linked to a Google account');
       };
-
+      const now = new Date();
+      const twoMonthsAgo = new Date(now); // clone
+      twoMonthsAgo.setMonth(now.getMonth() - 2);
       const calendar = await lookfortoken(persona.googleRefreshToken);
       const events = await calendar.events.list({
         calendarId: 'primary',
-        timeMin: (new Date()).toISOString(),
-        maxResults: 10,
+        timeMin: twoMonthsAgo.toISOString(),
+        maxResults:20,
         singleEvents: true,
         orderBy: 'startTime',
       });
@@ -119,7 +124,10 @@ const setupcalendario = () => {
 
     } catch (error) {
       console.error('Failed to get events:', error);
-      res.status(500).json({ error: 'Failed to get events'});
+      res.status(500).json({ 
+        error: "Internal Server Error",
+        retry: true 
+      });
     };
   };
 
@@ -127,6 +135,20 @@ const setupcalendario = () => {
     const personaId = req.personaId;
     const url = authorization(personaId);
     res.redirect(url);
+  };
+
+  const getgoogleauthurl = async (req, res) => {
+    try {
+      const personaId = req.personaId;
+      if (!personaId) {
+        return res.status(400).json({ error: 'Missing user context for Google auth' });
+      }
+      const url = authorization(personaId);
+      res.json({ url });
+    } catch (error) {
+      console.error('Failed to generate Google auth URL:', error);
+      res.status(500).json({ error: 'Failed to generate Google auth URL' });
+    }
   };
  
   const createevents = async (req, res) => {
@@ -160,7 +182,12 @@ const setupcalendario = () => {
 
     } catch (error) {
       console.error('Failed to create event:', error);
-      res.status(500).json({ error: 'Failed to create event' });
+      const isAuthError = error.code === 401 || error.message?.includes('invalid_grant');
+      res.status(isAuthError ? 401 : 500).json({ 
+        error: isAuthError ? 'Calendar access expired. Please reconnect' : 'Failed to create event',
+        retry: !isAuthError, 
+        needsReauth: isAuthError
+      });
     };
   };
 
@@ -187,7 +214,12 @@ const setupcalendario = () => {
       res.status(204).json();
     } catch (error) {
       console.error('Failed to delete event:', error);
-      res.status(500).json({ error: 'Failed to delete event' });
+      const isAuthError = error.code === 401 || error.message?.includes('invalid_grant');
+      res.status(isAuthError ? 401 : 500).json({ 
+        error: isAuthError ? 'Calendar access expired. Please reconnect' : 'Failed to create event',
+        retry: !isAuthError, 
+        needsReauth: isAuthError
+      });
     };
   };
 
@@ -217,7 +249,12 @@ const setupcalendario = () => {
 
     } catch (error) {
       console.error('Failed to update event:', error);
-      res.status(500).json({error:'Failed to update event'});
+      const isAuthError = error.code === 401 || error.message?.includes('invalid_grant');
+      res.status(isAuthError ? 401 : 500).json({ 
+        error: isAuthError ? 'Calendar access expired. Please reconnect' : 'Failed to create event',
+        retry: !isAuthError, 
+        needsReauth: isAuthError
+      });
     };
   };
 
@@ -228,6 +265,7 @@ const setupcalendario = () => {
     permision,
     getevents,
     redirectwithgoogle,
+    getgoogleauthurl,
     createevents,
     deleteevents,
     updateevents,

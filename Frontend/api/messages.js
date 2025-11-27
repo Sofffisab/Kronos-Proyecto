@@ -1,6 +1,6 @@
 export const createChat = async (nombre, token, projectId) =>{
 
-    const response = await fetch(`http://localhost:3000/projects/${projectId}/chat/create`,{
+    const response = await fetch(`http://localhost:3000/api/projects/${projectId}/chat/create`,{
     'method': 'POST',
     'headers': {
         'Content-Type': 'application/json',
@@ -16,10 +16,10 @@ export const createChat = async (nombre, token, projectId) =>{
 }
 
 export const getChatMessages = async (token, chatId) => {
-    const response = await fetch(`http://localhost:3000/chat/${chatId}/messages`, {
+    const response = await fetch(`http://localhost:3000/api/chat/${chatId}/messages`, {
         'method': 'GET',
         'headers': {
-            'Content-Type': 'appliciation/json',
+            'Content-Type': 'application/json',
             'Authorization': `bearer ${token}`
         }
     })

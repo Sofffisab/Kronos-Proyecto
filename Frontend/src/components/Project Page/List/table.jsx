@@ -14,11 +14,14 @@ export default function Table(props) {
         >
           keyboard_arrow_{toggleTasks ? "down" : "up"}
         </span>
+        <p className={styles.listTableTitle}>
         {props.name}
+        </p>
       </div>
       <div className={styles[style]}>{props.tasks}</div>
       <Separator />
       <p className={styles.agregarTxt}onClick={()=>props.onClick()}>Agregar tarea...</p>
+      {props.bottom &&<div className={styles.bottom}/>}
     </div>
   );
 }

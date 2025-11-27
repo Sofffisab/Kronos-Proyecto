@@ -41,7 +41,6 @@
     margin: 0px
 }
 .leftMsg {
-    background-color: tomato;
     justify-content: flex-start;
 }
 .rightMsg {
@@ -50,6 +49,11 @@
 .txtBubble {
     width: min-content;
     min-width: 20%;
+    font-family: var(--font);
+}
+.txtBubble label {
+    opacity: 0.5;
+    margin-left: .5rem;
 }
 .inputContainer {
     background-color: var(--mainColor);

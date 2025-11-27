@@ -2,11 +2,15 @@ import {useForm} from 'react-hook-form'
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Link } from 'react-router';
+import { useTasks } from '../context/ProjectContext';
+import LoadingScreen from './LoadingScreen';
 export default function(props) {
     const formFields = props.fields;
+    const {setUserPhoto} = useTasks()
     const navigate = useNavigate()
     const [step, setStep] = useState(0)
     const [email, setEmail] =useState();
+    const [loading, setLoading] = useState(false)
     const {
         register,
         handleSubmit,
@@ -28,11 +32,14 @@ export default function(props) {
           else {
         console.log(data);
         try {
+          setLoading(true)
        const bege = await props.onSubmit(data.username, data.password)
        console.log(bege)
           localStorage.setItem("token",bege.token); // hacer dsp con cookies 🍪🍪
+          setUserPhoto(bege.photo)
          navigate('/')}
          catch(e) {
+           setLoading(false)
            setError("password",{type: "500", message:e.message})
          }
     }
@@ -42,6 +49,7 @@ export default function(props) {
         
 return(
 <>
+{loading && <LoadingScreen/>}
 <form onSubmit={handleSubmit(onSubmit)} className={props.class}>
   {email && <div className='gmailIngresado'>
   <span id="userNameIco" className="material-symbols-outlined">account_circle</span>

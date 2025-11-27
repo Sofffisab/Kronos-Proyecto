@@ -5,7 +5,6 @@ import expressWs from 'express-ws';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import cors from 'cors';
-
 import setuprouter from './rutas.js';
 import setupsesiones from './sesiones/sesiones.js';
 import setupcalendario from './calendario/calendario.js';
@@ -30,16 +29,35 @@ const wsInstance = expressWs(app);
 
 app.use(helmet());
 
+// Configuración CORS que permite múltiples orígenes
+const allowedOrigins = [
+  'http://localhost:5173',      // Frontend Vite
+  'http://127.0.0.1:5173',
+  'http://localhost:5500',      // Live Server
+  'http://127.0.0.1:5500',
+  process.env.FRONTEND_URL
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    origin: function (origin, callback) {
+      // Permitir peticiones sin origin (como Postman, curl, scripts)
+      if (!origin) return callback(null, true);
+      
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
   }),
 );
 
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -48,16 +66,16 @@ const limiter = rateLimit({
 
 app.use('/api/', limiter);
 
-const { login, signup } = setupsesiones(JWT_SECRET);
+const { login, signup, updateuserprofile, deleteaccount, getcurrentuser, transferprojectownership } = setupsesiones(JWT_SECRET);
 const { authentication } = setupautenticacion(JWT_SECRET);
-const { authorization, getatoken, lookfortoken, permision, getevents, redirectwithgoogle, createevents, deleteevents, updateevents } = setupcalendario();
-const { seefile, uploadfile } = setuparchivos();
-const { createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers } = setupchat();
+const { authorization, getatoken, lookfortoken, permision, getevents, redirectwithgoogle, getgoogleauthurl, createevents, deleteevents, updateevents } = setupcalendario();
+const { seefile, uploadfile, deletefile} = setuparchivos();
+const { createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, markmessageasread, getmessagereaders, deletechat, renamechat, addmembertochat, deletemessage, removememberfromchat } = setupchat();
 const { createtarea, gettarea, gettareas, updatetarea, deletetarea } = setuptareas();
 const { getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones } = setuppersonalizaciones();
-const { createproject, getprojects, getproject, updateproject, invitetoproject, joinproject } = setupproyectos()
-const {save, lookfor, saveresponse, getdata, updatetime} = setupia()
-const router = setuprouter({ login, signup, authentication, getevents, permision, redirectwithgoogle, createevents, deleteevents, updateevents, seefile, uploadfile, createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, joinproject, createtarea, gettareas, updatetarea, gettarea, deletetarea, getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones,save, lookfor, saveresponse, getdata, updatetime,});
+const { createproject, getprojects, getproject, updateproject, invitetoproject, resendinvitation, joinproject, getprojectchats, getprojectfiles, getprojectmembers, removefromproject, deleteproject, getuserinvitations, reassignmembertasks } = setupproyectos()
+const {save, sendToPython, saveResponse, fetchPages, fetchPageById, deletePage, getDataForScheduling, sendToPythonToo, updateSchedule} = setupia()
+const router = setuprouter({ login, signup, updateuserprofile, authentication, getevents, permision, redirectwithgoogle, getgoogleauthurl, createevents, deleteevents, updateevents, seefile, uploadfile, deletefile, createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, createproject, getprojects, getproject, updateproject, invitetoproject, resendinvitation, joinproject, createtarea, gettareas, updatetarea, gettarea, deletetarea, getpersonalizaciones, updatepersonalizaciones, deletepersonalizaciones, save, sendToPython, saveResponse, fetchPages, fetchPageById, deletePage, getDataForScheduling, sendToPythonToo, updateSchedule, createchat, sendmessage, getchatmessages, updatemessagestatus, getchatperperson, getchatmembers, markmessageasread, getmessagereaders, deletechat, renamechat, getprojectchats, getprojectfiles, getprojectmembers, removefromproject, deleteproject, getuserinvitations, deleteaccount, getcurrentuser, transferprojectownership, reassignmembertasks,  addmembertochat,  deletemessage, removememberfromchat });
 
 console.log('[DEBUG] Router created:', router);
 console.log('[DEBUG] Router stack:', router.stack?.length, 'routes');
@@ -69,7 +87,10 @@ console.log('[DEBUG] Router mounted to app');
 
 app.use((err, req, res, next) => {
   console.error('Unhandled error:', err);
-  res.status(500).json({ error: 'Internal Server Error' });
+  res.status(500).json({ 
+    error: "Internal Server Error",
+    retry: true 
+  });
 });
 
 app.use((req, res) => {
