@@ -30,7 +30,6 @@ export default function kanban(props) {
         name: document.getElementById('name').value,
         date: '2024-12-31',
         state: document.getElementById('type').value,
-        person: user.personaId,
         priority:'high',
         isKanban: true
         }
@@ -48,7 +47,7 @@ export default function kanban(props) {
 
     return(
         <>
-        {modal2 && <TaskModal kanBan={true} id={selectedTask.id} title={selectedTask.nombre} disableBg={()=>setModal2(false)}/>}
+        {modal2 && <TaskModal project='task'kanBan={true} id={selectedTask.id} title={selectedTask.nombre} disableBg={()=>setModal2(false)}/>}
         {modal && <KanbanModal value={type}submit={submit} bgOnClick={()=> toggleModal(false)}/>}
         <Categorias 
         rTasks={mappedTasks.rTasks}

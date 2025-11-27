@@ -37,7 +37,7 @@ export default function TaskModal(props) {
 
         <DisabledBg onClick={props.disableBg} modal={modal? <BaseModal title={message}/> : <BaseModal title={props.title} inputs={
             <>
-            {props.project && <div>   
+            {(props.project && !props.kanBan) && <div>   
             <p>Limite: {props.date}</p>
             <p>{props.project=='project'? 'Miembros:' : `Responsable: ${props.responsable}`}</p>
             {props.project &&  <ul>{responsables}</ul>}
