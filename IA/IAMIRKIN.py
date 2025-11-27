@@ -448,7 +448,6 @@ def load_data_from_stdin():
             'codigo_json': data['codigo_json'],
             'image_base64': data['image_base64'],
             'theme': data['theme'],
-            'paginaId': data.get('paginaId'),
         }
     except Exception as e:
         raise Exception(f"Error al cargar datos del backend: {str(e)}")
@@ -475,7 +474,6 @@ if __name__ == "__main__":
         language_map = data['language_map']
         codigo_json = data['codigo_json']
         theme = data['theme']
-        paginaId = data['paginaId']
 
         # --- Procesar imagen ---
         img_pagina = base64_to_image(data['image_base64'])
@@ -515,7 +513,6 @@ if __name__ == "__main__":
         # --- Preparar salida JSON para el backend ---
         output = {
             "success": True,
-            "paginaId": paginaId,
             "tabla_analisis": rows,
             "codigo_mejorado": resultado_txt,
             "referencia_diseno": referencia_data_uri
