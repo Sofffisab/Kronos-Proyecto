@@ -285,7 +285,7 @@ def createTxt(img_from_ai,conclusions_json, codigo_json, language_map):
 
 
 #crear tabla e img buscando en internet
-def createJson(prompt, img_path):
+def createJson(prompt, img_path, codigo_json, language_map):
 
     contents_buscar_paginas = [
     {
@@ -425,18 +425,17 @@ def createJson(prompt, img_path):
     if not conclusion.strip():
         conclusion = "No hubo sugerencias claras, pero mejora la navegación y la accesibilidad visual."
 
-    imagen_b64 = createImgSearching(conclusion, img_path)
+    edited_img = createImgSearching(conclusion, img_path)
     
     resultado_txt = createTxt(
-            imagen_b64,
-            rows,
-            codigo_json,
-            language_map
-        )
-
+        edited_img,
+        rows,
+        codigo_json,
+        language_map
+    )
 
     print("Markdown generado:\n", resultado_txt["markdown"])
-    return(rows, resultado_txt, image_base64)
+    return rows, resultado_txt, edited_img
 
 
 def load_data_from_stdin():
@@ -449,6 +448,7 @@ def load_data_from_stdin():
             'codigo_json': data['codigo_json'],
             'image_base64': data['image_base64'],
             'theme': data['theme'],
+            'paginaId': data.get('paginaId'),
         }
     except Exception as e:
         raise Exception(f"Error al cargar datos del backend: {str(e)}")
@@ -499,7 +499,12 @@ if __name__ == "__main__":
         """
 
         # CORRECTO: esta es la única llamada a createJson
-        rows, resultado_txt, edited_img = createJson(prompt, pagina_image_path)
+        rows, resultado_txt, edited_img = createJson(
+            prompt,
+            pagina_image_path,
+            codigo_json,
+            language_map
+        )
 
         # Convertir imagen editada a Base64
         buffer = BytesIO()

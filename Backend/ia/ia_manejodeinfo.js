@@ -192,7 +192,7 @@ const setupia = () => {
         paginaId: Number.parseInt(paginaId, 10),
       };
 
-      const pythonScript = join(__dirname, "../../IA/Gemini.py");
+      const pythonScript = join(__dirname, "../../IA/IAMIRKIN.py");
 
       console.log(`[MIRKIN] Iniciando procesamiento para paginaId: ${paginaId}`);
 
