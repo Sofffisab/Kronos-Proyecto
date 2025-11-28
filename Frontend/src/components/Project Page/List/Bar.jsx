@@ -16,6 +16,12 @@ export default function Bar(props) {
           icon="swap_vert"
           onClick={() => props.setSorted(!props.sorted)}
         />
+        <SimpleButton
+          text="Reorganizar"
+          class={style["ordenarBtn"]}
+          icon="wand_stars"
+          onClick={() => {}}
+        />
         
       </div>
     </div>
