@@ -60,7 +60,7 @@ return(
         </div>}
         <label style={errors[currentField.name] && {color: "#B20000"}}>{currentField.label}</label>
         <div className='inputBox'>
-        <input className={errors[currentField.name] && "errorInput"}
+        <input autoComplete={currentField.isPassword ? "off" : "on"} className={errors[currentField.name] && "errorInput"}
         type={currentField.isPassword && !passwordVisibility && 'password'} {...register(currentField.name, {required: currentField.requireMsg,minLength: {value: currentField.minLength, message: currentField.minLengthMsg}})}
         placeholder={currentField.placeholder}/>
         
@@ -77,7 +77,7 @@ return(
      
       </form>
       {errors[currentField.name] && (
-               <p className="formError">{errors[currentField.name].message}{errors[currentField.name].type== "minLength"? null : <Link style={{color: "#4240BE", textDecoration: "underline", }} to="/register">  Registrarse</Link>}</p>
+               <p className="formError">{errors[currentField.name].message} {errors[currentField.name].type== "minLength"? null : <Link style={{color: "#4240BE", textDecoration: "underline", }} to="/register">Registrarse</Link>}</p>
              )}
      
     </>

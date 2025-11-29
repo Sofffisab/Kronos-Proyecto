@@ -62,7 +62,7 @@ return(
 <form onSubmit={handleSubmit(onSubmit)} className={props.class}>
 
        {step==1 &&  ( <div className='inputBox'>
-        <input type='email'id='firstInputRegister' 
+        <input autoComplete="off" type='email'id='firstInputRegister' 
          {...register('email', {required:'inserte un email',
         
          pattern: {
@@ -84,11 +84,11 @@ return(
         </div>
         <div className='smallerRegisterContainer'>
         <label>Tu nombre completo</label>
-        <input 
+        <input autoComplete="off"
          {...register('nombre', {required: 'Inserte un nombre'})}
       /> 
       <label>Contraseña</label>
-        <input type={passwordVisibility ? null : 'password'} 
+        <input autoComplete="off" type={passwordVisibility ? null : 'password'} 
          {...register('password', {required: 'Inserte una constraseña',minLength: {value: 7, message: "La contraseña debe tener un minimo de 7 caracteres"}})}
       /> 
       <span style={{cursor: 'pointer'}}className="material-symbols-outlined" onClick={ () => setPasswordVisibility(!passwordVisibility)}>
