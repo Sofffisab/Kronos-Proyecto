@@ -689,3 +689,7 @@ transition: var(--easeTransition);
 .fc-event-title-container {
   cursor: pointer;
 }
+
+.simpleButton {
+  cursor: pointer;
+}

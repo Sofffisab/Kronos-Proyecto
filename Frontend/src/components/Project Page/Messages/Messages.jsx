@@ -13,8 +13,7 @@ export default function Messages() {
 
 
   useEffect(() => {
-    if (chatId) {fetchMessages(chatId)
-       console.log('chat loaded')}
+    if (chatId) {fetchMessages(chatId)}
       else setContextChat([]);
   }, [chatId]);
 
