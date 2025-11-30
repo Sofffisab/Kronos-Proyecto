@@ -366,99 +366,40 @@ const setupia = () => {
   // FUNCIONES PARA JULY - ORGANIZACIÓN DE HORARIOS Y TAREAS
   // ============================================================================
 
-  const getDataForScheduling = async (req, res) => {
-    const { proyectoId } = req.params;
-    const personaId = req.personaId;
-
-    try {
-      // <CHANGE> Verificar permisos primero
-      const ismember = await prisma.tiene.findFirst({
-        where: {
-          id_persona: personaId,
-          id_proyecto: Number.parseInt(proyectoId, 10),
-        },
-      });
-
-      if (!ismember) {
-        return res.status(403).json({ error: "You don't have permission to access this project" });
-      }
-
-      // <CHANGE> Obtener horario del usuario desde la base de datos
-      const persona = await prisma.persona.findUnique({
-        where: { id: personaId },
-        select: {
-          horario_inicio: true,
-          horario_fin: true,
-        },
-      });
-
-      // <CHANGE> Obtener tareas con toda la información necesaria
-      const tareas = await prisma.tareas.findMany({
-        where: {
-          id_proyecto: Number.parseInt(proyectoId, 10),
-          estado: { not: "done" }, // Solo tareas pendientes o en progreso
-        },
-        select: {
-          id: true,
-          nombre: true,
-          limite: true,
-          importancia: true,
-          orden: true,
-          estado: true,
-        },
-        orderBy: {
-          limite: "asc",
-        },
-      });
-
-      // <CHANGE> Formatear datos para la IA
-      const datosparaia = {
-        horario_inicio: persona.horario_inicio,
-        horario_fin: persona.horario_fin,
-        tareas: tareas.map(t => ({
-          id: t.id,
-          nombre: t.nombre,
-          fecha_limite: t.limite.toISOString().split('T')[0], // Formato YYYY-MM-DD
-          importancia: t.importancia,
-          orden: t.orden,
-          duracion: 60 // Duración estimada en minutos, puedes agregar este campo a tu schema
-        })),
-      };
-
-      res.status(200).json(datosparaia);
-    } catch (error) {
-      console.error("Error getting data for July:", error);
-      res.status(500).json({ error: "Internal Server Error" });
-    }
-  };
-
   const sendToPythonToo = async (req, res) => {
     const { proyectoId } = req.params;
     const personaId = req.personaId;
 
     try {
+      const proyectoIdNum = Number.parseInt(proyectoId, 10);
+
       const ismember = await prisma.tiene.findFirst({
         where: {
           id_persona: personaId,
-          id_proyecto: Number.parseInt(proyectoId, 10),
+          id_proyecto: proyectoIdNum,
         },
       });
 
       if (!ismember) {
         return res.status(403).json({ error: "You don't have permission to access this project" });
       }
-
+      
       const persona = await prisma.persona.findUnique({
         where: { id: personaId },
         select: {
           horario_inicio: true,
           horario_fin: true,
+          googleRefreshToken: true,
         },
       });
 
+      if (!persona) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
       const tareas = await prisma.tareas.findMany({
         where: {
-          id_proyecto: Number.parseInt(proyectoId, 10),
+          id_proyecto: proyectoIdNum,
           estado: { not: "done" },
         },
         select: {
@@ -467,137 +408,215 @@ const setupia = () => {
           limite: true,
           importancia: true,
           duracion: true,
+          descripcion: true,
+        },
+        orderBy: {
+          limite: "asc",
         },
       });
+
+      if (!tareas || tareas.length === 0) {
+        return res.status(200).json({
+          message: "No pending tasks to organize",
+          plan: [],
+        });
+      }
 
       const datosParaPython = {
         tareas: tareas.map(t => ({
           id: t.id,
           nombre: t.nombre,
+          descripcion: t.descripcion || "",
           fecha_limite: t.limite.toISOString().split('T')[0],
-          importancia: t.importancia,
+          importancia: t.importancia || "media",
           duracion: t.duracion || 60,
         })),
-        horario_inicio: persona.horario_inicio,
-        horario_fin: persona.horario_fin,
+        horario_inicio: persona.horario_inicio ? persona.horario_inicio.toISOString() : null,
+        horario_fin: persona.horario_fin ? persona.horario_fin.toISOString() : null,
+        proyectoId: proyectoIdNum,
+        personaId: personaId,
       };
 
-      const pythonScript = join(__dirname, "../../IA/July.py");
+      const pythonScript = join(__dirname, "../../IA JULI/ChatGPT.py");
+      console.log(`Starting processing for project: ${proyectoId}`);
 
-      // Ejecutar script Python con función reutilizable
+      // Ejecutar script Python usando la función reutilizable
       const resultado = await executePythonScript(pythonScript, datosParaPython, {
-          timeout: 600000 // 10 minutos
-    });
+        timeout: 600000, // 10 minutos
+      });
 
-      res.status(200).json(resultado);
-      
+      if (!resultado.success && !resultado.plan) {
+        return res.status(500).json({
+          error: "IA processing failed",
+          details: resultado.error || resultado.details,
+          retry: true,
+        });
+      };
+
+      const successPayload = {
+        status: "completed",
+        proyectoId: proyectoIdNum,
+        plan: resultado.plan || resultado,
+        completed_at: new Date().toISOString(),
+      };
+
+      res.status(200).json({
+        message: "Schedule organized successfully",
+        plan: resultado.plan || resultado,
+        proyectoId: proyectoIdNum,
+      });
+
     } catch (error) {
-      console.error("Error sending to Python:", error);
-      res.status(500).json({ 
+      console.error("Error processing schedule:", error);
+      res.status(500).json({
         error: error.error || "Internal Server Error",
         details: error.details || error.message,
-        retry: true 
+        retry: true,
       });
     }
   };
 
   const updateSchedule = async (req, res) => {
-    const { tareas_actualizadas, confirmado } = req.body;
+    const { plan, confirmado } = req.body;
     const { proyectoId } = req.params;
     const personaId = req.personaId;
 
     try {
-
-  // <CHANGE> Requerir confirmación explícita del usuario
       if (confirmado !== true) {
-        return res.status(400).json({ 
+        return res.status(400).json({
           error: "User confirmation required",
           message: "El usuario debe confirmar los cambios antes de aplicarlos"
         });
+      };
+
+      if (!proyectoId || !plan || !Array.isArray(plan)) {
+        return res.status(400).json({ error: "Missing data: proyectoId or plan" });
       }
 
-      if (!proyectoId || !tareas_actualizadas || !Array.isArray(tareas_actualizadas)) {
-        return res.status(400).json({ error: "missing data" });
-      }
+      const proyectoIdNum = Number.parseInt(proyectoId, 10);
 
       const ismember = await prisma.tiene.findFirst({
         where: {
           id_persona: personaId,
-          id_proyecto: Number.parseInt(proyectoId, 10),
+          id_proyecto: proyectoIdNum,
         },
       });
 
       if (!ismember) {
         return res.status(403).json({ error: "You don't have permission to update this project" });
+      };
+
+      const persona = await prisma.persona.findUnique({
+        where: { id: personaId },
+        select: { googleRefreshToken: true },
+      });
+
+      if (persona && persona.googleRefreshToken) {
+        const { lookfortoken } = setupcalendario();
+        
+        try {
+          const calendar = await lookfortoken(persona.googleRefreshToken);
+
+          for (const item of plan) {
+            if (item.planificacion && Array.isArray(item.planificacion)) {
+              for (const dia of item.planificacion) {
+                const fecha = new Date(dia.dia);
+                
+                let duracionMinutos = 60; // default
+                const tiempoStr = dia.tiempo_asignado || "";
+                
+                if (tiempoStr.includes("30 minutos")) {
+                  duracionMinutos = 30;
+                } else if (tiempoStr.includes("hora y media")) {
+                  duracionMinutos = 90;
+                } else if (tiempoStr.includes("2 horas y media")) {
+                  duracionMinutos = 150;
+                } else if (tiempoStr.includes("2 horas")) {
+                  duracionMinutos = 120;
+                } else if (tiempoStr.includes("3 horas")) {
+                  duracionMinutos = 180;
+                } else if (tiempoStr.includes("4 horas")) {
+                  duracionMinutos = 240;
+                } else if (tiempoStr.match(/(\d+)\s*hora/)) {
+                  const horas = parseInt(tiempoStr.match(/(\d+)\s*hora/)[1]);
+                  duracionMinutos = horas * 60;
+                }
+
+                const fechaFin = new Date(fecha.getTime() + duracionMinutos * 60000);
+
+                const evento = {
+                  summary: item.nombre,
+                  description: `Tarea del proyecto - Prioridad: ${item.prioridad}`,
+                  start: {
+                    dateTime: fecha.toISOString(),
+                    timeZone: "America/Argentina/Buenos_Aires",
+                  },
+                  end: {
+                    dateTime: fechaFin.toISOString(),
+                    timeZone: "America/Argentina/Buenos_Aires",
+                  },
+                };
+
+                await calendar.events.insert({
+                  calendarId: 'primary',
+                  resource: evento,
+                });
+
+                console.log(`Event created for task: ${item.nombre} on ${dia.dia}`);
+              }
+            }
+          }
+
+          console.log(`All events created in Google Calendar for project ${proyectoId}`);
+        } catch (calendarError) {
+          console.error("Error creating calendar events:", calendarError);
+        }
       }
 
-      // <CHANGE> Actualizar cada tarea con Promise.all
-      const actualizaciones = tareas_actualizadas.map(async (tarea) => {
+      const actualizaciones = plan.map(async (tarea) => {
         const updateData = {};
-        if (tarea.importancia !== undefined) updateData.importancia = tarea.importancia;
-        if (tarea.orden !== undefined) updateData.orden = tarea.orden;
         
-        // <CHANGE> Si la IA devuelve dia_recomendado, actualizar el límite
-        if (tarea.dia_recomendado !== undefined) {
-          updateData.limite = new Date(tarea.dia_recomendado);
+        if (tarea.importancia !== undefined) {
+          updateData.importancia = tarea.importancia;
+        }
+        
+        if (tarea.orden !== undefined) {
+          updateData.orden = tarea.orden;
         }
 
-        return prisma.tareas.update({
-          where: { id: tarea.id },
-          data: updateData,
-        });
+        if (tarea.planificacion && tarea.planificacion.length > 0) {
+          const ultimoDia = tarea.planificacion[tarea.planificacion.length - 1];
+          if (ultimoDia.dia) {
+            updateData.limite = new Date(ultimoDia.dia);
+          }
+        }
+
+        if (Object.keys(updateData).length > 0 && tarea.id) {
+          return prisma.tareas.update({
+            where: { id: tarea.id },
+            data: updateData,
+          });
+        }
       });
 
-      await Promise.all(actualizaciones);
+      await Promise.all(actualizaciones.filter(Boolean));
 
-      res.status(200).json({ message: "schedule updated successfully" });
+      res.status(200).json({ 
+        message: "Schedule updated and events created successfully",
+        eventsCreated: !!persona?.googleRefreshToken,
+      });
+
     } catch (error) {
       console.error("Error updating schedule:", error);
-      res.status(500).json({ error: "Internal Server Error" });
-    }
-  };
-
-  const deletePage = async (req, res) => {
-    const { paginaId } = req.params;
-    const personaId = req.personaId;
-
-    try {
-      if (!paginaId) {
-        return res.status(400).json({ error: "missing data: paginaId" });
-      }
-
-      const paginaExistente = await prisma.ia_paginas.findFirst({
-        where: {
-          pagina_id: Number.parseInt(paginaId, 10),
-          id_persona: personaId,
-        },
-      });
-
-      if (!paginaExistente) {
-        return res.status(404).json({ error: "page not found or you don't have permission to delete it" });
-      }
-
-      await prisma.ia_paginas.deleteMany({
-        where: {
-          pagina_id: Number.parseInt(paginaId, 10),
-          id_persona: personaId,
-        },
-      });
-
-      res.status(200).json({
-        message: "page deleted successfully",
-        paginaId: paginaId,
-      });
-    } catch (error) {
-      console.error("Error deleting page:", error);
       res.status(500).json({
         error: "Internal Server Error",
         details: error.message,
+        retry: true,
       });
     }
   };
 
-  return { save, sendToPython, fetchPages, fetchPageById, deletePage, getDataForScheduling, sendToPythonToo, updateSchedule };
+  return { save, sendToPython, fetchPages, fetchPageById, sendToPythonToo, updateSchedule };
 };
 
 export default setupia;
