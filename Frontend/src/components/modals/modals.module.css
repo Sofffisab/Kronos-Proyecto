@@ -165,11 +165,10 @@ gap: 2vh;
     overflow: hidden;
 }
 
-.userName img{
+.userName {img, input{
 height: 7rem;
 width: auto;
-
-}
+}}
 .accountModalBody{
   display: flex;
   justify-content: flex-start;
@@ -243,4 +242,28 @@ width: auto;
   
   opacity: 0.7;
   font-size: .9rem
+}
+.configModalBody {
+  display: flex;
+  flex-direction: column;
+  gap: 3vh;
+}
+.configModalBody div {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+width: 25rem  }
+.configModalBody input {
+  padding: 2%;
+  border-radius: 10px;
+  border: solid black 2px;
+  font-family: var(--font);
+}
+
+.workHours {
+  flex-direction: row !important;
+  gap: .5rem !important;
+}
+.workHours input {
+  width: 7rem;
 }

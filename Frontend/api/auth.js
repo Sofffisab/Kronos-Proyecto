@@ -56,3 +56,25 @@ return responseData;
        if(!response.ok) return false
        else return true
    }}
+
+   export const updateProfile = async (token, nombre, horario_inicio, horario_fin ) => {
+    const baseDate = '1970-01-01';
+
+    const response = await fetch('http://localhost:3000/api/users/me', {
+        method: 'PUT',
+        
+        headers: {
+            'Content-Type': 'application/json',
+            'authorization':`bearer ${token}`},
+        body: JSON.stringify({
+            nombre: nombre,
+            horario_inicio: new Date(`${baseDate}T${horario_inicio}:00Z`),
+            horario_fin: new Date(`${baseDate}T${horario_fin}:00Z`)
+        })
+    })
+    const responseData = await response.json();
+    if(!response.ok) throw new Error(responseData.error ||'error '+response.status)
+        return responseData
+    } 
+
+   

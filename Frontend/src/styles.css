@@ -338,7 +338,7 @@ button {
   justify-content: center;
   align-items: center;
   background-color: var(--mainColor);
-  z-index: 100;
+  z-index: 100000;
 }
 .svg {
   height: 10rem;
@@ -687,5 +687,9 @@ transition: var(--easeTransition);
 }
 
 .fc-event-title-container {
+  cursor: pointer;
+}
+
+.simpleButton {
   cursor: pointer;
 }

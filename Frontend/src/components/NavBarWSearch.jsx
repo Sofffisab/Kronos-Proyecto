@@ -9,7 +9,7 @@ const {user} = useTasks()
 const [modal, setModal] = useState(false)
 return(
     <>
-    {modal && <AccountModal name={user.nombre} mail={user.mail} disableBg={()=>setModal(false)}/>}
+    {modal && <AccountModal name={user.nombre} workHoursStart={user.horario_inicio} workHoursEnd={user.horario_fin} mail={user.mail} disableBg={()=>setModal(false)}/>}
     <div className="NavSearch">
         <div id='leftIcons'>
         <span onClick={props.menuFunc} className='material-symbols-outlined'>menu</span>

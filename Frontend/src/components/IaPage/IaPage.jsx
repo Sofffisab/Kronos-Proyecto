@@ -167,7 +167,7 @@ export default function IaPage(props) {
                         setCode(res.pagina.codigo_json);
                     }
                     if(res.pagina.respuesta_ia) {setResult( JSON.parse(res.pagina.respuesta_ia))
-                        console.log(res.pagina.respuesta_ia)
+                        
                     }
                 }
             } catch (error) {
