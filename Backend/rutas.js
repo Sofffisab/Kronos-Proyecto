@@ -169,7 +169,6 @@ const setuprouter = ({ login, signup, authentication, getevents, permision, redi
     router.get("/api/ia/analize/pages/:paginaId", authentication, sendToPython);
     router.get("/api/ia/analize/pages/:paginaId/fetch", authentication, fetchPageById);
     router.delete("/api/ia/analize/pages/:paginaId", authentication, deletePage);
-    router.get("/api/ia/organize/projects/:proyectoId/data", authentication, getDataForScheduling);
     router.post("/api/ia/organize/projects/:proyectoId/process", authentication, sendToPythonToo);
     router.put("/api/ia/organize/projects/:proyectoId/schedule", authentication, updateSchedule);
 
