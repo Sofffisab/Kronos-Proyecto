@@ -1,4 +1,3 @@
-# pip install -r lib.txt --no-warn-script-location
 import os
 import re
 import json
@@ -11,17 +10,17 @@ from typing import List
 import base64
 import pandas as pd
 from tabulate import tabulate
-import json
 import time
 import random
+import requests  # NUEVO: Para interactuar con la API gratuita de Hugging Face
 from openai import OpenAI
 from dotenv import load_dotenv, dotenv_values
 import psycopg2
 import sys
 
-
 load_dotenv()
 
+# Inicialización de clientes
 client = genai.Client(api_key=os.getenv("GEMINI_KEY"))
 clientChat = OpenAI(api_key=os.getenv("CHAT_KEY"))
 
@@ -29,32 +28,10 @@ def log(*args, **kwargs):
     """Send diagnostic output to stderr so stdout stays JSON-only."""
     print(*args, file=sys.stderr, **kwargs)
 
-# Centraliza el modelo usado para generar imágenes para poder sustituirlo fácilmente
-IMAGE_GENERATION_MODEL = os.getenv("GEMINI_IMAGE_MODEL", "gemini-2.0-flash-exp")
-#DATABASE_URL = os.getenv("DATABASE_URL")
+# Centraliza el modelo y la URL de Hugging Face de forma gratuita
+HF_API_URL = "https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell"
 
-# Conectarse a la base de datos
-"""
-try:
-    conn = psycopg2.connect(DATABASE_URL)
-    cursor = conn.cursor()
-
-    cursor.execute("SELECT version();")
-    version = cursor.fetchone()
-    print("Conectado a:", version)
-
-    cursor.close()
-    conn.close()
-    print("Conexión cerrada correctamente.")
-
-except Exception as e:
-    print("Error al conectar:", e)
-    """
-
-
-
-
-#modelo de la tabla
+# modelo de la tabla
 class WebsiteValue(BaseModel):
     name: str
     text: str
@@ -70,19 +47,19 @@ class TableData(BaseModel):
 SAVE_DIR = "tablas_generadas"
 os.makedirs(SAVE_DIR, exist_ok=True)
 
-#acceso a buscar en google
+# acceso a buscar en google
 grounding_tool = types.Tool(
     google_search=types.GoogleSearch()
 )
 
-#ERROR
+# ERROR
 def retry_request(func, *args, **kwargs):
     max_retries = 5
     delay = 2
     for attempt in range(max_retries):
         try:
             return func(*args, **kwargs)
-        except genai.errors.ServerError as e:
+        except Exception as e:
             if "503" in str(e) and attempt < max_retries - 1:
                 sleep_time = delay * (2 ** attempt) + random.uniform(0, 1)
                 log(f"Server sobrecargado (503). Retrying in {sleep_time:.1f} seconds...")
@@ -90,176 +67,104 @@ def retry_request(func, *args, **kwargs):
             else:
                 raise
 
-#crear img
+# crear img (Corregido: Usa la API Gratuita de Hugging Face mediante peticiones HTTP estándar)
 def createImg(prompt):
     try:
-        response = retry_request(
-            client.models.generate_content,
-            model=IMAGE_GENERATION_MODEL,
-            contents=[
-                {"role": "user", "parts": [{"text": prompt}]}
-            ],
-            config=types.GenerateContentConfig(
-                response_modalities=['TEXT', 'IMAGE']
-            )
-        )
-    except Exception as e:
-        log(f"No se pudo generar imagen con {IMAGE_GENERATION_MODEL}: {e}")
-        return None
+        headers = {"Authorization": f"Bearer {os.getenv('HUGGINGFACE_API_KEY')}"}
+        payload = {"inputs": prompt}
+        
+        # Petición POST directa para obtener los bytes de la imagen generada
+        response = requests.post(HF_API_URL, headers=headers, json=payload)
+        
+        # Si el modelo está "durmiendo" en los servidores gratuitos de Hugging Face, esperamos a que cargue
+        if response.status_code == 503:
+            log("El modelo gratuito se está cargando en Hugging Face, esperando 10 segundos...")
+            time.sleep(10)
+            response = requests.post(HF_API_URL, headers=headers, json=payload)
 
-    for part in response.candidates[0].content.parts:
-        if part.text is not None:
-            log(part.text)
-        elif part.inline_data is not None:
-            image = Image.open(BytesIO((part.inline_data.data)))
+        if response.status_code == 200:
+            image = Image.open(BytesIO(response.content))
             image.save('gemini-image.png')
             image.show()
             return image
-
-    return None
-
+        else:
+            log(f"Error de la API de Hugging Face ({response.status_code}): {response.text}")
+            return None
+            
+    except Exception as e:
+        log(f"No se pudo generar imagen en Hugging Face: {e}")
+        return None
 
 def createImgSearching(conclusion_text, img_path):
     """
-    Genera una nueva imagen basada en img_path aplicando únicamente las mejoras de conclusion_text.
+    Genera una nueva imagen basada en las conclusiones aplicando el prompt en texto a Hugging Face.
     """
-        # --- Detectar tipo de input ---
     if isinstance(img_path, str):
-        # Es una ruta de archivo
         if not os.path.exists(img_path):
             log(f"Imagen no encontrada: {img_path}")
             return None
-        img = Image.open(img_path).convert("RGB")
-
-    elif isinstance(img_path, Image.Image):
-        # Es una imagen ya cargada (por ejemplo, resultado de una generación anterior)
-        img = img_path.convert("RGB")
-
-    else:
+    elif not isinstance(img_path, Image.Image):
         log("Tipo de imagen no válido. Se esperaba ruta (str) o imagen PIL.")
         return None
 
-
-    # Reducir resolución si es muy grande (mejor interpretación de layout)
-    target_width = 1280
-    if img.width > target_width:
-        new_height = int(target_width * img.height / img.width)
-        img = img.resize((target_width, new_height), Image.LANCZOS)
-
-    # Mejorar color y contraste (facilita detección de secciones)
-    img = ImageEnhance.Color(img).enhance(1.15)
-    img = ImageEnhance.Contrast(img).enhance(1.1)
-
-    # Guardar imagen preprocesada temporalmente
-    preprocessed_path = "preprocesada.png"
-    img.save(preprocessed_path)
-
-    with open(preprocessed_path, "rb") as f:
-        img_bytes = f.read()
-
-    mime_type = "image/png"
-    width, height = img.size
-
-    # Generar prompt dinámico según creatividad
-    prompt_final = f"""
-    Rediseñá visualmente esta página web para hacerla mucho más atractiva, moderna y creativa,
-    manteniendo el propósito general de la interfaz pero reinterpretando libremente su estilo visual.
+    # Generamos un prompt robusto para el modelo de texto a imagen gratuito
+    prompt_final = f"A professional UI/UX mobile web design style redesign, high quality, modern design. Guidelines: {conclusion_text}."
     
-    ✦ Podés reacomodar la disposición de los elementos, cambiar proporciones, jugar con espacios vacíos.
-    ✦ Usá una paleta de colores equilibrada, con contraste claro y buena legibilidad.
-    ✦ Incorporá ideas actuales de diseño UI/UX (2025): sombras suaves, degradados, glassmorphism, neón o minimalismo moderno.
-    ✦ Tipografía limpia y legible; nada de símbolos o letras irreconocibles.
-    ✦ Si el sitio parece de tecnología o mercado (por ejemplo, "PC Market"), dale un estilo tech-futurista con energía visual.
-    ✦ Evitá deformar textos existentes; mantenelos realistas y legibles
-    
-    Tené en cuenta lo siguiente para guiar el rediseño:
-    {conclusion_text}
-    
-    """
-    
-    # Generar imagen
     try:
-        response_img = client.models.generate_content(
-            model=IMAGE_GENERATION_MODEL,
-            contents=[
-                types.Part.from_text(text=prompt_final),
-                types.Part.from_bytes(data=img_bytes, mime_type=mime_type)
-            ],
-            config=types.GenerateContentConfig(
-                response_modalities=["TEXT", "IMAGE"],
-                temperature=0.8,
-                top_p=0.95
-            )
-        )
-    except Exception as e:
-        log(f"No se pudo generar imagen mejorada con {IMAGE_GENERATION_MODEL}: {e}")
-        return None
+        headers = {"Authorization": f"Bearer {os.getenv('HUGGINGFACE_API_KEY')}"}
+        payload = {"inputs": prompt_final}
+        
+        response = requests.post(HF_API_URL, headers=headers, json=payload)
+        
+        if response.status_code == 503:
+            log("El modelo gratuito se está cargando en Hugging Face, esperando 10 segundos...")
+            time.sleep(10)
+            response = requests.post(HF_API_URL, headers=headers, json=payload)
 
-    # Extraer imagen generada
-    for part in response_img.candidates[0].content.parts:
-        if part.inline_data:
-            edited_img = Image.open(BytesIO(part.inline_data.data))
+        if response.status_code == 200:
+            edited_img = Image.open(BytesIO(response.content))
             edited_img.save("imagen_editada.png")
             edited_img.show()
             return edited_img
-
-    return None
-
+        else:
+            log(f"Error en createImgSearching ({response.status_code}): {response.text}")
+            return None
+            
+    except Exception as e:
+        log(f"No se pudo generar imagen mejorada: {e}")
+        return None
 
 language_map = {
     "index.html": "html",
     "style.css": "css",
 }
 
-
-#CREAR CODIGO ARREGLADO
-def createTxt(img_from_ai,conclusions_json, codigo_json, language_map):
-    """
-    img_from_ai: ruta a la imagen generada
-    conclusions_json: JSON con conclusiones/sugerencias
-    codigo_json: lista de dicts con "name" y "content"
-    language_map: dict que indica lenguaje de cada archivo, ej:
-                  {"index.html": "html", "style.css": "css", "script.js": "javascript"}
-    """
-
+# CREAR CODIGO ARREGLADO
+def createTxt(img_from_ai, conclusions_json, codigo_json, language_map):
     codigo_blocks = []
     for c in codigo_json:
-        # Cada c debe tener al menos "name" y "content"
         name = c.get("name", "archivo")
         content = c.get("content", "")
-        lang = language_map.get(name, "text")  # usa el lenguaje definido por usuario, sino "text"
+        lang = language_map.get(name, "text")
         codigo_blocks.append(f"🔧 Archivo: {name}\n```{lang}\n{content}\n```")
 
     codigo_str = "\n\n".join(codigo_blocks)
-
-
-    # Preparar contents para el prompt
     img_b64 = None
 
-    if isinstance(img_from_ai, str):
-        if img_from_ai.startswith("data:image"):
-            img_b64 = img_from_ai.split(",", 1)[1]
-        elif len(img_from_ai) > 1000:
-            img_b64 = img_from_ai
-
-
-    # Preparar contents para el prompt
     if img_from_ai:
         if isinstance(img_from_ai, Image.Image):
             buffered = BytesIO()
             img_from_ai.save(buffered, format="PNG")
             img_bytes = buffered.getvalue()
             img_b64 = base64.b64encode(img_bytes).decode("utf-8")
-
         elif isinstance(img_from_ai, str) and os.path.exists(img_from_ai):
             with open(img_from_ai, "rb") as f:
                 img_bytes = f.read()
             img_b64 = base64.b64encode(img_bytes).decode("utf-8")
 
-    # Si no se pudo obtener la imagen
     if not img_b64:
         log("No se pudo codificar la imagen, usando solo texto.")
-        img_b64 = ""  # Evita el UnboundLocalError
+        img_b64 = ""
 
     prompt = f"""
     Vas a recibir: (A) código del sitio SIN cambios aplicados, (B) img de la página CON los cambios aplicados, (C) JSON DE conclusiones de las mejoras y cambios realizados en la img.
@@ -272,30 +177,26 @@ def createTxt(img_from_ai,conclusions_json, codigo_json, language_map):
     """
     
     log("✅ request de createTxt hecho")
-    # Llamada al modelo
-    response = clientChat.responses.create(
-        model="gpt-5",
-        tools=[{"type": "web_search"}],
-        input=[
+    
+    response = clientChat.chat.completions.create(
+        model="gpt-4o", 
+        messages=[
             {
                 "role": "user",
                 "content": [
+                    {"type": "text", "text": prompt},
                     {
-                        "type": "input_text",
-                        "text": (prompt)
-                    },
-                    {
-                        "type": "input_image", 
-                        "image_url": img_b64 if img_b64.startswith("data:image") else f"data:image/png;base64,{img_b64}"
+                        "type": "image_url",
+                        "image_url": {"url": f"data:image/png;base64,{img_b64}"}
                     }
-                    ]
-        }]
+                ]
+            }
+        ]
     )
-    log("✅Request de texto hecho")
+    log("✅ Request de texto hecho")
 
-    output_text = response.output_text
+    output_text = response.choices[0].message.content
 
-    # Parse bloques
     pattern = r"(?:🔧\s*)?Archivo:\s*(.*?)\n```([\w+\-]+)\n(.*?)```"
     matches = re.findall(pattern, output_text, re.DOTALL)
     parsed = []
@@ -304,35 +205,22 @@ def createTxt(img_from_ai,conclusions_json, codigo_json, language_map):
 
     return {"markdown": output_text, "files": parsed}
 
-
-#crear tabla e img buscando en internet
+# crear tabla e img buscando en internet
 def createJson(prompt, img_path, codigo_json, language_map):
-
     contents_buscar_paginas = [
-    {
-        "role": "user",
-        "content": [
-            {
-                "type": "input_text",
-                "text": (
-                    "Crea un prompt en base a tu función de búsqueda en internet para poder conseguir información "
-                    "acerca del siguiente prompt y dárselo a otra IA generadora de tablas: " + prompt
-                )
-            }
-        ]
-    }
-]
-
+        {
+            "role": "user",
+            "content": "Crea un prompt en base a tu función de búsqueda en internet para poder conseguir información acerca del siguiente prompt y dárselo a otra IA generadora de tablas: " + prompt
+        }
+    ]
     
-    response = clientChat.responses.create(
-        model="gpt-5",
-        tools=[{"type": "web_search"}],
-        input=contents_buscar_paginas
+    response = clientChat.chat.completions.create(
+        model="gpt-4o",
+        messages=contents_buscar_paginas
     )
 
     log("Response de tabla hecho")
-
-    prompt_board = response.output_text + prompt
+    prompt_board = response.choices[0].message.content + prompt
 
     if os.path.exists(img_path):
         with open(img_path, "rb") as f:
@@ -344,98 +232,63 @@ def createJson(prompt, img_path, codigo_json, language_map):
         log(f"Imagen no encontrada: {img_path}")
         return
 
-
-
     contents_tabla = [
-        {
-            "role":"user",
-            "parts": [
-                types.Part.from_text(text=prompt_board),
-                types.Part.from_bytes(data=inserted_img, mime_type=mime_type)
-            ]
-        }
+        types.Part.from_text(text=prompt_board),
+        types.Part.from_bytes(data=inserted_img, mime_type=mime_type)
     ]
 
-
- #hacer tablita
     response = retry_request(
         client.models.generate_content,
         model="gemini-2.5-flash",
         contents=contents_tabla,
-        config={
-            "response_mime_type": "application/json",
-            "response_schema": TableData.model_json_schema()
-        },
+        config=types.GenerateContentConfig(
+            response_mime_type="application/json",
+            response_schema=TableData,
+        ),
     )
 
-    # Tomamos el primer candidato
     candidate = response.candidates[0]
-
-    # Recorremos las partes del contenido
+    tabla_json_str = ""
     for part in candidate.content.parts:
         if part.text:
-            tabla_json_str = part.text  # Aquí tenemos el JSON como string
+            tabla_json_str = part.text
             break
 
-    # Parseamos a dict
     tabla_generada_dict = json.loads(tabla_json_str)
-
-    # Convertimos a Pydantic
     tabla_generada = TableData.model_validate(tabla_generada_dict)
 
-    # Filtrar fila de final conclusion
     tabla_generada.table_data = [
         row for row in tabla_generada.table_data 
         if row.criterion_or_website.lower() != "conclusion"
     ]
 
-
-
- #ajustar los datos a las filas y columnas
     all_websites = []
     for row in tabla_generada.table_data:
         for w in row.websites:
             if w.name not in all_websites:
                 all_websites.append(w.name)
 
-    # 2. Construir filas por criterio
     rows = []
     for row in tabla_generada.table_data:
         row_dict = {"criterion_or_website": row.criterion_or_website}
         for site in all_websites:
             text = next((w.text for w in row.websites if w.name == site), "")
             row_dict[site] = text
-        # Solo Website4 es la “conclusion” de mejoras
         row_dict["conclusion"] = row.conclusion or ""
         rows.append(row_dict)
 
-
-    # 3. Crear DataFrame con columnas fijas
     cols = ["criterion_or_website"] + all_websites + ["conclusion"]
     df = pd.DataFrame(rows)[cols]
 
-
-
-
-
-    # Guardar JSON
     json_path = os.path.join(SAVE_DIR, "tablita.json")
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(rows, f, ensure_ascii=False, indent=4)
     log("JSON creado")
 
-    with open("tablas_generadas/tablita.json", "r", encoding="utf-8") as f:
-        data = json.load(f)
-
-    log("tabla guardada")
-
-    # Guardar Excel
     xlsx_path = os.path.join(SAVE_DIR, "tablita.xlsx")
     df.to_excel(xlsx_path, index=False)
     log("Excel creado")
 
-    #por si cambiamos de lugar las filas y columnas 
-    conclusion = None
     if "conclusion" in df.columns:
         conclusion = " ".join(df["conclusion"].dropna().tolist())
     else:
@@ -460,7 +313,6 @@ def createJson(prompt, img_path, codigo_json, language_map):
 
 
 def load_data_from_stdin():
-    """Lee datos JSON del stdin y devuelve un diccionario."""
     try:
         input_data = sys.stdin.read()
         data = json.loads(input_data)
@@ -474,34 +326,25 @@ def load_data_from_stdin():
         raise Exception(f"Error al cargar datos del backend: {str(e)}")
 
 def base64_to_image(base64_string):
-    """Convierte una cadena Base64 a una imagen PIL."""
     try:
-        from io import BytesIO
-        import base64
         image_data = base64.b64decode(base64_string)
         img = Image.open(BytesIO(image_data))
         return img
     except Exception as e:
         raise Exception(f"Error al convertir imagen: {str(e)}")
 
-# (Se asume que las funciones createImgSearching, createTxt y createJson
-#  están definidas en este mismo script o importadas adecuadamente,
-#  y que code_json y language_map vienen del input.)
 
 if __name__ == "__main__":
     try:
-        # --- Leer entrada ---
         data = load_data_from_stdin()
         language_map = data['language_map']
         codigo_json = data['codigo_json']
         theme = data['theme']
 
-        # --- Procesar imagen ---
         img_pagina = base64_to_image(data['image_base64'])
         pagina_image_path = "pagina_image.png"
         img_pagina.save(pagina_image_path)
 
-        # --- Generar tabla, código y diseño ---
         prompt = f"""
         The JSON returned must be an array of 11 rows (objects).  
         Each row has in this order:  
@@ -517,7 +360,6 @@ if __name__ == "__main__":
         The response must be in spanish. 
         """
 
-        # CORRECTO: esta es la única llamada a createJson
         rows, resultado_txt, edited_img = createJson(
             prompt,
             pagina_image_path,
@@ -529,13 +371,11 @@ if __name__ == "__main__":
             log("No se generó imagen nueva; usando captura original como referencia.")
             edited_img = img_pagina
 
-        # Convertir imagen editada a Base64
         buffer = BytesIO()
         edited_img.save(buffer, format="PNG")
         img_bytes = buffer.getvalue()
         referencia_data_uri = f"data:image/png;base64,{base64.b64encode(img_bytes).decode('utf-8')}"
 
-        # --- Preparar salida JSON para el backend ---
         output = {
             "success": True,
             "tabla_analisis": rows,
