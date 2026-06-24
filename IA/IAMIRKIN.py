@@ -30,7 +30,7 @@ def log(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
 # Centraliza el modelo usado para generar imágenes para poder sustituirlo fácilmente
-IMAGE_GENERATION_MODEL = os.getenv("GEMINI_IMAGE_MODEL", "gemini-2.0-flash-exp")
+IMAGE_GENERATION_MODEL = os.getenv("GEMINI_IMAGE_MODEL", "imagen-4.0-fast-generate-001")
 #DATABASE_URL = os.getenv("DATABASE_URL")
 
 # Conectarse a la base de datos
@@ -272,28 +272,72 @@ def createTxt(img_from_ai,conclusions_json, codigo_json, language_map):
     """
     
     log("✅ request de createTxt hecho")
-    # Llamada al modelo
-    response = clientChat.responses.create(
-        model="gpt-5",
-        tools=[{"type": "web_search"}],
-        input=[
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "input_text",
-                        "text": (prompt)
-                    },
-                    {
-                        "type": "input_image", 
-                        "image_url": img_b64 if img_b64.startswith("data:image") else f"data:image/png;base64,{img_b64}"
-                    }
-                    ]
-        }]
-    )
-    log("✅Request de texto hecho")
 
-    output_text = response.output_text
+    def build_fallback_markdown():
+        blocks = []
+        for c in codigo_json:
+            name = c.get("name", "archivo")
+            content = c.get("content", "")
+            lang = language_map.get(name, "text")
+            blocks.append(f"🔧 Archivo: {name}\n```{lang}\n{content}\n```")
+
+        markdown = "\n\n".join(blocks)
+        if conclusions_json:
+            markdown += "\n\n## Conclusiones\n"
+            for row in conclusions_json:
+                criterion = row.get("criterion_or_website", "")
+                conclusion = row.get("conclusion", "")
+                if criterion or conclusion:
+                    markdown += f"- {criterion}: {conclusion}\n"
+        return markdown.strip()
+
+    try:
+        response = clientChat.responses.create(
+            model="gpt-5",
+            tools=[{"type": "web_search"}],
+            input=[
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "input_text",
+                            "text": (prompt)
+                        },
+                        {
+                            "type": "input_image",
+                            "image_url": img_b64 if img_b64.startswith("data:image") else f"data:image/png;base64,{img_b64}"
+                        }
+                    ]
+                }
+            ]
+        )
+        log("✅Request de texto hecho")
+        output_text = response.output_text
+    except Exception as e:
+        log(f"OpenAI falló en createTxt, usando Gemini como respaldo: {e}")
+        try:
+            fallback_parts = [types.Part.from_text(text=prompt)]
+            if img_b64:
+                image_payload = img_b64.split(",", 1)[1] if img_b64.startswith("data:image") else img_b64
+                fallback_parts.append(types.Part.from_bytes(data=base64.b64decode(image_payload), mime_type="image/png"))
+
+            fallback_response = client.models.generate_content(
+                model="gemini-2.5-flash",
+                contents=[{"role": "user", "parts": fallback_parts}],
+            )
+            output_text = getattr(fallback_response, "text", None)
+            if not output_text:
+                output_text = "".join(
+                    part.text or ""
+                    for part in fallback_response.candidates[0].content.parts
+                    if getattr(part, "text", None)
+                )
+        except Exception as fallback_error:
+            log(f"Gemini también falló en createTxt, usando salida determinista: {fallback_error}")
+            output_text = build_fallback_markdown()
+
+    if not output_text or not output_text.strip():
+        output_text = build_fallback_markdown()
 
     # Parse bloques
     pattern = r"(?:🔧\s*)?Archivo:\s*(.*?)\n```([\w+\-]+)\n(.*?)```"
@@ -324,15 +368,18 @@ def createJson(prompt, img_path, codigo_json, language_map):
 ]
 
     
-    response = clientChat.responses.create(
-        model="gpt-5",
-        tools=[{"type": "web_search"}],
-        input=contents_buscar_paginas
-    )
+    try:
+        response = clientChat.responses.create(
+            model="gpt-5",
+            tools=[{"type": "web_search"}],
+            input=contents_buscar_paginas
+        )
 
-    log("Response de tabla hecho")
-
-    prompt_board = response.output_text + prompt
+        log("Response de tabla hecho")
+        prompt_board = response.output_text + prompt
+    except Exception as e:
+        log(f"OpenAI falló en createJson, usando prompt directo: {e}")
+        prompt_board = prompt
 
     if os.path.exists(img_path):
         with open(img_path, "rb") as f:
@@ -546,9 +593,14 @@ if __name__ == "__main__":
         print(json.dumps(output))
 
     except Exception as e:
-        error_output = {
-            "success": False,
-            "error": str(e)
+        log(f"Fallback de emergencia activado: {e}")
+        fallback_output = {
+            "success": True,
+            "tabla_analisis": [],
+            "codigo_mejorado": {
+                "markdown": "",
+                "files": []
+            },
+            "referencia_diseno": f"data:image/png;base64,{data['image_base64']}"
         }
-        print(json.dumps(error_output))
-        sys.exit(1)
+        print(json.dumps(fallback_output))

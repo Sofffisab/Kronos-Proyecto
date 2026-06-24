@@ -11,10 +11,10 @@ const __dirname = dirname(__filename);
 // FUNCIÓN REUTILIZABLE PARA EJECUTAR SCRIPTS PYTHON
 // ============================================================================
 
-const executePythonScript = (scriptPath, datosParaPython, options = {}) => {
+const executePythonScript = async (scriptPath, datosParaPython, options = {}) => {
   return new Promise((resolve, reject) => {
     const pythonProcess = spawn("python", [scriptPath], {
-      timeout: options.timeout || 600000, // 10 minutos
+      timeout: options.timeout || 450000, // 10 minutos
       maxBuffer: 10 * 1024 * 1024, // 10MB
       env: {
         ...process.env,
@@ -251,7 +251,14 @@ const setupia = () => {
         paginaId: resultado.paginaId || paginaIdNumber,
         tabla_analisis: resultado.tabla_analisis,
         codigo_mejorado: resultado.codigo_mejorado,
-        referencia_diseno: resultado.referencia_diseno,
+        referencia_diseno: () => {
+          try {
+            return createImgSearching(theme) || image_base64;
+          } catch (error) {
+            console.error("Error in createImgSearching:", error);
+            return image_base64;
+          }
+        },
         completed_at: new Date().toISOString(),
       };
 
@@ -302,6 +309,54 @@ const setupia = () => {
       });
     } catch (error) {
       console.error("Error fetching pages:", error);
+      res.status(500).json({
+        error: "Internal Server Error",
+        details: error.message,
+      });
+    }
+  };
+
+  const deletePage = async (req, res) => {
+    const { paginaId } = req.params;
+    const personaId = req.personaId;
+
+    try {
+      if (!paginaId) {
+        return res.status(400).json({ error: "missing data: paginaId" });
+      }
+
+      const pagina = await prisma.ia_paginas.findFirst({
+        where: {
+          pagina_id: Number.parseInt(paginaId, 10),
+          id_persona: personaId,
+        },
+        select: {
+          id: true,
+          pagina_id: true,
+          tema: true,
+        },
+      });
+
+      if (!pagina) {
+        return res.status(404).json({ error: "page not found or you don't have permission to access it" });
+      }
+
+      await prisma.ia_paginas.delete({
+        where: {
+          id: pagina.id,
+        },
+      });
+
+      res.status(200).json({
+        message: "page deleted successfully",
+        pagina: {
+          id: pagina.id,
+          pagina_id: pagina.pagina_id,
+          tema: pagina.tema,
+        },
+      });
+    } catch (error) {
+      console.error("Error deleting page:", error);
       res.status(500).json({
         error: "Internal Server Error",
         details: error.message,
@@ -616,7 +671,7 @@ const setupia = () => {
     }
   };
 
-  return { save, sendToPython, fetchPages, fetchPageById, sendToPythonToo, updateSchedule };
+  return { save, sendToPython, fetchPages, fetchPageById, sendToPythonToo, updateSchedule, deletePage };
 };
 
 export default setupia;

@@ -4,12 +4,21 @@ const { google } = pkg;
 import dotenv from 'dotenv';
 dotenv.config();
 
+const normalizeEnv = (value) => (typeof value === 'string' ? value.trim() : value);
+
+const GOOGLE_CLIENT_ID = normalizeEnv(process.env.GOOGLE_CLIENT_ID);
+const GOOGLE_CLIENT_SECRET = normalizeEnv(process.env.GOOGLE_CLIENT_SECRET);
+const REDIRECT_URI = normalizeEnv(process.env.REDIRECT_URI);
+
+if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET || !REDIRECT_URI) {
+  throw new Error('Google Calendar OAuth configuration is incomplete. Check GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, and REDIRECT_URI.');
+}
 
 
 const oAuth2Client = new google.auth.OAuth2(
-  process.env.GOOGLE_CLIENT_ID,
-  process.env.GOOGLE_CLIENT_SECRET,
-  process.env.REDIRECT_URI
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
+  REDIRECT_URI
 );
 
 const SCOPES = ['https://www.googleapis.com/auth/calendar.events'];
@@ -90,9 +99,13 @@ const setupcalendario = () => {
       res.json({ message: 'Authorization successful' });
     } catch (error) {
       console.error('Authorization failed:', error);
+      const isInvalidClient = error?.response?.data?.error === 'invalid_client';
       res.status(500).json({ 
-        error: "Internal Server Error",
-        retry: true 
+        error: isInvalidClient
+          ? 'Google OAuth client secret is invalid. Verify GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in Backend/.env.'
+          : "Internal Server Error",
+        retry: !isInvalidClient,
+        needsReauth: !isInvalidClient
       });
     };
 
@@ -116,7 +129,7 @@ const setupcalendario = () => {
       const events = await calendar.events.list({
         calendarId: 'primary',
         timeMin: twoMonthsAgo.toISOString(),
-        maxResults:20,
+        maxResults:50,
         singleEvents: true,
         orderBy: 'startTime',
       });

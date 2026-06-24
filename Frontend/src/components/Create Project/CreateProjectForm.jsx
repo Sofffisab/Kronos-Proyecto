@@ -11,7 +11,7 @@ return(
         style={props.step==1? {width:'33.33%'} : props.step==2? {width:'66.66%'} : props.step==3?{width:'100%'}: {}}
         />
         <div>
-        <p className={`${style.mainTitle} ${ props.step!==1 && style.hidden }`}>¡Hagamos un royecto!</p>
+        <p className={`${style.mainTitle} ${ props.step!==1 && style.hidden }`}>¡Hagamos un proyecto!</p>
         <p className={style.title}>{props.title}</p>
         </div>
         {(props.step== 1 || props.step== 2) && (

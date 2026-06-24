@@ -222,6 +222,7 @@ export default function IaPage(props) {
 
     const sendIaFiles = async ()=> {
         console.log('Sending IA files:', { topic, imageBase64, code });
+        setLoading(true)
 
         try {
            const res = await saveIaData(topic, imageBase64, code, localStorage.getItem('token'))
@@ -235,6 +236,7 @@ export default function IaPage(props) {
         }
         finally {
             setModal(false)
+            setLoading(false)
         }
     }
 
@@ -246,7 +248,7 @@ export default function IaPage(props) {
     }, [topic, imageBase64, code])
 
     const uploadToPython = async () => {  
-
+        setLoading(true)
         console.log('data uploaded')
 
         

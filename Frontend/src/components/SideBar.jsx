@@ -60,7 +60,7 @@ return(
 </div>
 
 <div className='titleSbContainer'>
-<FancyTitle class='proyectosTitle' text='Chats'/>
+<FancyTitle class='proyectosTitle' text='Chats IA'/>
 <SimpleButton link='/project/ia'icon='add'class='teamBtn'/>
 </div>
 <ul className='equipos'>

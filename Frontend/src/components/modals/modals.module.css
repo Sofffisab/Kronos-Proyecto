@@ -17,8 +17,8 @@
 }
 .eventModal span {
   position: absolute;
-  top: -7rem;
-  right: -5rem;
+  top: -50%;
+  right: -25%;
   cursor: pointer;
   color: red
 }
@@ -160,7 +160,7 @@ gap: 2vh;
 }
 .userName p {
   white-space: nowrap;
-    max-width: 9rem;
+    max-width: 8rem;
     text-overflow: ellipsis;      
     overflow: hidden;
 }
@@ -187,7 +187,7 @@ width: auto;
   box-shadow: var(--dfBoxShadow);
 }
 .baseModalTitle {
-  font-size: calc(var(--headerSize) * 0.9);
+  font-size: calc(var(--headerSize) * 1.2);
   font-weight: bold;
  
 }

@@ -4,16 +4,30 @@ dotenv.config();
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+const getFromAddress = () => {
+  const configuredFrom = process.env.MAIL_FROM?.trim();
+
+  if (configuredFrom && /<[^<>]+@[^<>]+>/.test(configuredFrom)) {
+    return configuredFrom;
+  }
+
+  if (configuredFrom && /^[^<>@]+@[^<>]+$/.test(configuredFrom)) {
+    return `Kronos Proyecto <${configuredFrom}>`;
+  }
+
+  return "Kronos Proyecto <proyectokronos25@gmail.com>";
+};
+
 const setupmail = () => {
   const sendinvitationmail = async (tomail, codigo, projectname) => {
     try {
       if (!process.env.RESEND_API_KEY) {
         console.error("RESEND_API_KEY not configured");
-        return { success: false, error: "Mail service not configureid" };
+        return { success: false, error: "Mail service not configured" };
       };
 
       const { data, error } = await resend.emails.send({
-        from: process.env.MAIL_FROM || "onboarding@resend.dev",
+        from: "Kronos Proyecto <noreply@kronos-proyecto.me>",
         to: tomail,
         subject: `Invitation to join project: ${projectname}`,
         html: `

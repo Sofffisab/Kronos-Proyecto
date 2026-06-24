@@ -5,9 +5,11 @@ import KanbanModal from "../../modals/KanBanModal";
 import { useTasks } from "../../../context/ProjectContext";
 import TaskModal from '../../modals/TaskModal'
 import { postTask } from "../../../../api/tasks";
+import LoadingScreen from "../../LoadingScreen"
 export default function kanban(props) {
 
      const {contextTasks, user, fetchProject} = useTasks()
+     const [loading, setLoading] = useState(false)
      const [modal, toggleModal] = useState(false)
     const [modal2, setModal2] = useState(false)
       const tasks = contextTasks.filter((task)=>(task.isKanban  === true))
@@ -33,7 +35,7 @@ export default function kanban(props) {
         priority:'high',
         isKanban: true
         }
-
+        setLoading(true)
         try {
            await postTask(task.name, task.date, task.person, localStorage.getItem('token'), props.projectId, task.state, task.priority, task.isKanban)}
           
@@ -44,7 +46,7 @@ export default function kanban(props) {
        
         
     }
-
+    loading && <LoadingScreen/>
     return(
         <>
         {modal2 && <TaskModal project='task'kanBan={true} id={selectedTask.id} title={selectedTask.nombre} disableBg={()=>setModal2(false)}/>}
